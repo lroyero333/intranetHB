@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="Webpixels">
+<link rel="icon" href="{{ url_for('static', filename='images/isotipohb.svg') }}" type="image/x-icon">
+<title>:: Human Bionics :: Calendar</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/themify-icons/themify-icons.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/fullcalendar/fullcalendar.min.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
+</head>
+<body class="theme-indigo">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="m-t-30"><img src="{{ url_for('static', filename='images/isotipohb.svg') }}" width="48" height="48" alt="ArrOw"></div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    {% include 'templates/light/navbar/navbar.html' %}
+    <div class="main_content" id="main-content">
+
+        <div class="left_sidebar">
+            <nav class="sidebar">
+                <div class="user-info">
+                    <div class="image"><a href="javascript:void(0);"><img src="{{ url_for('static', filename='images/daviduser.png') }}" alt="User"></a></div>
+                    <div class="detail mt-3">
+                        <h5 class="mb-0">David Barrera</h5>
+                        <small>Practicante</small>
+                    </div>
+                    <div class="social">
+                        <a href="javascript:void(0);" title="facebook"><i class="ti-twitter-alt"></i></a>
+                        <a href="javascript:void(0);" title="twitter"><i class="ti-linkedin"></i></a>
+                        <a href="javascript:void(0);" title="instagram"><i class="ti-facebook"></i></a>
+                    </div>
+                </div>
+                <ul id="main-menu" class="metismenu">
+                    <li class="g_heading">Inicio</li>
+                    <li ><a href="/inicio"><i class="ti-home"></i><span>Inicio/Noticias</span></a></li>
+                    
+                    <li class="g_heading">Application</li>
+                    <li><a href="/calendario"><i class="ti-calendar"></i><span>Calendar</span></a></li>
+                    <li><a href="https://trello.com/login" target="_blank"><i class="ti-notepad"></i><span>TaskBoard</span></a></li>
+                    
+                    
+                    <li><a href="/contactos"><i class="ti-id-badge"></i><span>Contact List</span></a></li>
+                   
+                    <li class="g_heading">Users</li>
+                    <li><a href="page-profile.html"><i class="ti-user"></i><span>Profile</span></a></li>
+                  
+                </ul>            
+            </nav>
+        </div>
+        {% block content %}
+
+        {% endblock %}
+          
+    </div>
+ 
+    
+
+<!-- Core -->
+<script src="{{ url_for('static', filename='bundles/libscripts.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='bundles/vendorscripts.bundle.js') }}"></script>
+
+<script src="{{ url_for('static', filename='bundles/fullcalendarscripts.bundle.js') }}"></script><!--/ calender javascripts --> 
+
+<!-- Theme JS -->
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+<script src="{{ url_for('static', filename='js/pages/calendar.js') }}"></script>
+</body>
+</html>

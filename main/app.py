@@ -4,6 +4,7 @@ from flaskext.mysql import MySQL
 import bcrypt
 
 app=Flask(__name__, static_url_path='/static')
+app.config['DEBUG'] = True
 app.secret_key="develoteca"
 mysql=MySQL()
 app.config['MYSQL_DATABASE_HOST']='localhost'

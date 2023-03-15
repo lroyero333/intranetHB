@@ -1,6 +1,6 @@
 from main.routes import request, app,mysql,bcrypt,session,redirect,render_template,url_for
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         # Validar credenciales de usuario
@@ -10,7 +10,7 @@ def login():
 
         conexion=mysql.connect()
         cursor=conexion.cursor()
-        cursor.execute("SELECT * FROM registro WHERE Usuario = %s", (username))
+        cursor.execute("SELECT * FROM general_users WHERE usuario = %s", (username))
         row = cursor.fetchone()
         conexion.commit()
         

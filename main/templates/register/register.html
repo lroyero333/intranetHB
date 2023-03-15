@@ -1,76 +1,93 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Registro</title>
-	<!-- Bootstrap 5 CSS -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
-	<!-- Estilos personalizados -->
-	<style>
-		body {
-			background-color: #f5f5f5;
-			height: 100vh;
-			display: flex;
-			align-items: center;
-		}
-		.card {
-			margin: auto;
-			max-width: 400px;
-			padding: 2rem;
-		}
-		.card-title {
-			font-size: 2rem;
-			font-weight: bold;
-			text-align: center;
-			margin-bottom: 2rem;
-		}
-		.form-label {
-			font-weight: bold;
-		}
-	</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeMakker">
+    <link rel="icon" href="{{ url_for('static', filename='images/isotipohb.svg') }}" type="image/x-icon">
+    <title>:: Human :: Bionics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/themify-icons/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/font-awesome.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
 </head>
-<body>
-	<div class="card">
-		<h1 class="card-title">Registro</h1>
-		{% if error %}
+
+<body class="theme-indigo">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="m-t-30"><img src="{{ url_for('static', filename='images/isotipohb.svg') }}" width="48" height="48" alt="ArrOw"></div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+
+
+        {% if error %}
 			<div class="alert alert-danger" role="alert">
 				{{ error }}
 			</div>
 		{% endif %}
-		<form method="POST">
 
-			<div class="mb-3">
-				<label for="fullname" class="form-label">Nombre Completo</label>
-				<input type="text" class="form-control" id="fullname" name="fullname" required>
+		<div class="vertical-align-wrap">
+			<div class="vertical-align-middle auth-main">
+				<div class="auth-box">
+                    <div class="top">
+                        <img src="{{ url_for('static', filename='images/isotipohb.svg') }}" alt="logoHB">
+                        <strong>Human</strong> <span>Bionics</span>
+                    </div>
+					<div class="card">
+                        <div class="header">
+                            <p class="lead">Crear una Cuenta</p>
+                        </div>
+                        <div class="body">
+                            <form class="form-auth-small" method="POST">
+                                <div class="form-group">
+                                    <label for="fullname" class="control-label sr-only">Nombre</label>
+                                    <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Nombre" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fulllastname" class="control-label sr-only">Nombre</label>
+                                    <input type="text" class="form-control" id="fulllastname" name="fulllastname" placeholder="Apellido" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="control-label sr-only">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Correo" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="username" class="control-label sr-only">Usuario</label>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="control-label sr-only">Confirmar Contraseña</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm_password" class="control-label sr-only">Confirmar Contraseña</label>
+                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirmar Contraseña" required>
+                                </div>
+                                <!--button type="submit" class="btn btn-primary btn-lg btn-block">REGISTER</button-->
+                                <button type="submit" class="btn btn-primary w-100">Registrarse</button>
+                                <div class="bottom">
+                                    <span class="helper-text">¿Ya tienes una cuenta? <a href="/">Iniciar sesion</a></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+				</div>
 			</div>
+		</div>
 
-			<div class="mb-3">
-				<label for="email" class="form-label">Correo electrónico</label>
-				<input type="email" class="form-control" id="email" name="email" required>
-			</div>
-
-            <div class="mb-3">
-				<label for="username" class="form-label">Nombre de usuario</label>
-				<input type="text" class="form-control" id="username" name="username" required>
-			</div>
-            
-            
-            
-			<div class="mb-3">
-				<label for="password" class="form-label">Contraseña</label>
-				<input type="password" class="form-control" id="password" name="password" required>
-			</div>
-			<div class="mb-3">
-				<label for="confirm_password" class="form-label">Confirmar contraseña</label>
-				<input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-			</div>
-			<button type="submit" class="btn btn-primary w-100">Registrarse</button>
-		</form>
 	</div>
+    <!-- END WRAPPER -->
+    
+<!-- Core -->
+<script src="{{ url_for('static', filename='bundles/libscripts.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='bundles/vendorscripts.bundle.js') }}"></script>
 
-	<!-- Bootstrap 5 JS -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.min.js"></script>
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 </body>
 </html>
