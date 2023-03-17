@@ -6,11 +6,15 @@
 <meta name="description" content="">
 <meta name="author" content="Webpixels">
 <link rel="icon" href="{{ url_for('static', filename='images/isotipohb.svg') }}" type="image/x-icon">
-<title>:: Human Bionics :: Calendar</title>
+<title>:: Human  :: Bionics</title>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/themify-icons/themify-icons.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/font-awesome.min.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fullcalendar/fullcalendar.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/rtl.css') }}">
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
 </head>
@@ -28,10 +32,12 @@
         <div class="left_sidebar">
             <nav class="sidebar">
                 <div class="user-info">
-                    <div class="image"><a href="javascript:void(0);"><img src="{{ url_for('static', filename='images/daviduser.png') }}" alt="User"></a></div>
+                    <div class="image"><a href="javascript:void(0);"><img src="{{ url_for('static', filename=session['foto']) }}" href="/myProfile" alt="User"></a></div>
                     <div class="detail mt-3">
-                        <h5 class="mb-0">David Barrera</h5>
-                        <small>Practicante</small>
+                        
+                        <h5 class="mb-0">{{session["nombre"]}} {{session["apellido"]}}</h5>
+                        
+                        <small>{{session["profesion"]}}</small>
                     </div>
                     <div class="social">
                         <a href="javascript:void(0);" title="facebook"><i class="ti-twitter-alt"></i></a>
@@ -51,7 +57,7 @@
                     <li><a href="/contactos"><i class="ti-id-badge"></i><span>Contact List</span></a></li>
                    
                     <li class="g_heading">Users</li>
-                    <li><a href="page-profile.html"><i class="ti-user"></i><span>Profile</span></a></li>
+                    <li><a href="/myProfile"><i class="ti-user"></i><span>Profile</span></a></li>
                   
                 </ul>            
             </nav>
@@ -73,5 +79,57 @@
 <!-- Theme JS -->
 <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 <script src="{{ url_for('static', filename='js/pages/calendar.js') }}"></script>
+
+<script src="{{ url_for('static', filename='bundles/knob.bundle.js') }}"></script> <!-- Jquery Knob-->
+<script src="{{ url_for('static', filename='vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+
+<script>
+$(function () {
+    $('.knob').knob({
+        draw: function () {
+            // "tron" case
+            if (this.$.data('skin') == 'tron') {
+
+                var a = this.angle(this.cv)  // Angle
+                    , sa = this.startAngle          // Previous start angle
+                    , sat = this.startAngle         // Start angle
+                    , ea                            // Previous end angle
+                    , eat = sat + a                 // End angle
+                    , r = true;
+
+                this.g.lineWidth = this.lineWidth;
+
+                this.o.cursor
+                    && (sat = eat - 0.3)
+                    && (eat = eat + 0.3);
+
+                if (this.o.displayPrevious) {
+                    ea = this.startAngle + this.angle(this.value);
+                    this.o.cursor
+                        && (sa = ea - 0.3)
+                        && (ea = ea + 0.3);
+                    this.g.beginPath();
+                    this.g.strokeStyle = this.previousColor;
+                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                    this.g.stroke();
+                }
+
+                this.g.beginPath();
+                this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
+                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+                this.g.stroke();
+
+                this.g.lineWidth = 2;
+                this.g.beginPath();
+                this.g.strokeStyle = this.o.fgColor;
+                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                this.g.stroke();
+
+                return false;
+            }
+        }
+    });
+});
+</script>
 </body>
 </html>
