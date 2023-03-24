@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="Webpixels">
-<link rel="icon" href="{{ url_for('static', filename='images/isotipohb.svg') }}" type="image/x-icon">
-<title>:: Human  :: Bionics</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Webpixels">
+    <link rel="icon" href="{{ url_for('static', filename='images/isotipohb.svg') }}" type="image/x-icon">
+    <title>:: Human :: Bionics</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/themify-icons/themify-icons.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/font-awesome.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/fullcalendar/fullcalendar.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/rtl.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/themify-icons/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fullcalendar/fullcalendar.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rtl.css') }}">
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
 </head>
+
 <body class="theme-indigo">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
-            <div class="m-t-30"><img src="{{ url_for('static', filename='images/isotipohb.svg') }}" width="48" height="48" alt="ArrOw"></div>
+            <div class="m-t-30"><img src="{{ url_for('static', filename='images/isotipohb.svg') }}" width="48"
+                    height="48" alt="ArrOw"></div>
             <p>Please wait...</p>
         </div>
     </div>
@@ -32,11 +36,11 @@
         <div class="left_sidebar">
             <nav class="sidebar">
                 <div class="user-info">
-                    <div class="image"><a href="javascript:void(0);"><img src="{{ url_for('static', filename=session['foto']) }}" href="/myProfile" alt="User"></a></div>
+                    <div class="image"><a href="javascript:void(0);"><img src="{{ url_for('static', filename='images/' + session['foto']) }}" alt="User"></a></div>
                     <div class="detail mt-3">
-                        
+
                         <h5 class="mb-0">{{session["nombre"]}} {{session["apellido"]}}</h5>
-                        
+
                         <small>{{session["profesion"]}}</small>
                     </div>
                     <div class="social">
@@ -47,89 +51,95 @@
                 </div>
                 <ul id="main-menu" class="metismenu">
                     <li class="g_heading">Inicio</li>
-                    <li ><a href="/inicio"><i class="ti-home"></i><span>Inicio/Noticias</span></a></li>
-                    
+                    <li><a href="/inicio"><i class="ti-home"></i><span>Inicio/Noticias</span></a></li>
+
                     <li class="g_heading">Application</li>
                     <li><a href="/calendario"><i class="ti-calendar"></i><span>Calendar</span></a></li>
-                    <li><a href="https://trello.com/login" target="_blank"><i class="ti-notepad"></i><span>TaskBoard</span></a></li>
-                    
-                    
+                    <li><a href="https://trello.com/login" target="_blank"><i
+                                class="ti-notepad"></i><span>TaskBoard</span></a></li>
+
+                    {% if session["cargo"] == 1 or session["cargo"] == 0 %}
+                    <li><a href="/empleados"><i class="fa fa-users"></i><span>Edit Users</span></a></li>
+                    {% endif %} 
                     <li><a href="/contactos"><i class="ti-id-badge"></i><span>Contact List</span></a></li>
-                   
+
                     <li class="g_heading">Users</li>
                     <li><a href="/myProfile"><i class="ti-user"></i><span>Profile</span></a></li>
-                  
-                </ul>            
+
+                </ul>
             </nav>
         </div>
         {% block content %}
 
         {% endblock %}
-          
+
     </div>
- 
-    
 
-<!-- Core -->
-<script src="{{ url_for('static', filename='bundles/libscripts.bundle.js') }}"></script>
-<script src="{{ url_for('static', filename='bundles/vendorscripts.bundle.js') }}"></script>
 
-<script src="{{ url_for('static', filename='bundles/fullcalendarscripts.bundle.js') }}"></script><!--/ calender javascripts --> 
 
-<!-- Theme JS -->
-<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
-<script src="{{ url_for('static', filename='js/pages/calendar.js') }}"></script>
+    <!-- Core -->
+    <script src="{{ url_for('static', filename='bundles/libscripts.bundle.js') }}"></script>
+    <script src="{{ url_for('static', filename='bundles/vendorscripts.bundle.js') }}"></script>
 
-<script src="{{ url_for('static', filename='bundles/knob.bundle.js') }}"></script> <!-- Jquery Knob-->
-<script src="{{ url_for('static', filename='vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bundles/fullcalendarscripts.bundle.js') }}"></script>
+    <!--/ calender javascripts -->
 
-<script>
-$(function () {
-    $('.knob').knob({
-        draw: function () {
-            // "tron" case
-            if (this.$.data('skin') == 'tron') {
+    <!-- Theme JS -->
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pages/calendar.js') }}"></script>
 
-                var a = this.angle(this.cv)  // Angle
-                    , sa = this.startAngle          // Previous start angle
-                    , sat = this.startAngle         // Start angle
-                    , ea                            // Previous end angle
-                    , eat = sat + a                 // End angle
-                    , r = true;
+    <script src="{{ url_for('static', filename='bundles/knob.bundle.js') }}"></script> <!-- Jquery Knob-->
+    <script
+        src="{{ url_for('static', filename='vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
 
-                this.g.lineWidth = this.lineWidth;
+    <script>
+        $(function () {
+            $('.knob').knob({
+                draw: function () {
+                    // "tron" case
+                    if (this.$.data('skin') == 'tron') {
 
-                this.o.cursor
-                    && (sat = eat - 0.3)
-                    && (eat = eat + 0.3);
+                        var a = this.angle(this.cv)  // Angle
+                            , sa = this.startAngle          // Previous start angle
+                            , sat = this.startAngle         // Start angle
+                            , ea                            // Previous end angle
+                            , eat = sat + a                 // End angle
+                            , r = true;
 
-                if (this.o.displayPrevious) {
-                    ea = this.startAngle + this.angle(this.value);
-                    this.o.cursor
-                        && (sa = ea - 0.3)
-                        && (ea = ea + 0.3);
-                    this.g.beginPath();
-                    this.g.strokeStyle = this.previousColor;
-                    this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
-                    this.g.stroke();
+                        this.g.lineWidth = this.lineWidth;
+
+                        this.o.cursor
+                            && (sat = eat - 0.3)
+                            && (eat = eat + 0.3);
+
+                        if (this.o.displayPrevious) {
+                            ea = this.startAngle + this.angle(this.value);
+                            this.o.cursor
+                                && (sa = ea - 0.3)
+                                && (ea = ea + 0.3);
+                            this.g.beginPath();
+                            this.g.strokeStyle = this.previousColor;
+                            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                            this.g.stroke();
+                        }
+
+                        this.g.beginPath();
+                        this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
+                        this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+                        this.g.stroke();
+
+                        this.g.lineWidth = 2;
+                        this.g.beginPath();
+                        this.g.strokeStyle = this.o.fgColor;
+                        this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                        this.g.stroke();
+
+                        return false;
+                    }
                 }
-
-                this.g.beginPath();
-                this.g.strokeStyle = r ? this.o.fgColor : this.fgColor;
-                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
-                this.g.stroke();
-
-                this.g.lineWidth = 2;
-                this.g.beginPath();
-                this.g.strokeStyle = this.o.fgColor;
-                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
-                this.g.stroke();
-
-                return false;
-            }
-        }
-    });
-});
-</script>
+            });
+        });
+    </script>
 </body>
+
 </html>

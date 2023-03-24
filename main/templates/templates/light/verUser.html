@@ -1,6 +1,5 @@
 {% extends 'templates/light/base.html' %}
 {% block content %}
-
 <div class="main_content" id="main-content">
 
     <div class="page">
@@ -64,7 +63,7 @@
                                                 <li><strong>Posgrado:</strong> {{datosUsuarios[0][20] }}</li>
                                                 <li><strong>Entidad de Salud:</strong> {{datosUsuarios[0][21] }}</li>
                                                 <li><strong>Tipo de Sangre:</strong> {{datosUsuarios[0][22] }}</li>
-                                                <li><strong>Foto:</strong> {{datosUsuarios[0][23] }}</li>
+
                                                 <li><strong>Nombre de Contacto:</strong> {{datosUsuarios[0][24] }}</li>
                                                 <li><strong>Número de Contacto:</strong> {{datosUsuarios[0][25] }}</li>
                                                 <li><strong>Usuario:</strong> {{datosUsuarios[0][26] }}</li>
@@ -74,9 +73,13 @@
                                 </div>
 
                             </div>
+                            <a href="/editEmpleados/{{datosUsuarios[0][26] }}"><button class="btn btn-primary">
+                                Editar Informacion
+                            </button></a>
                         </div s="body">
+
                     </div>
+
                 </div>
             </div>
-
             {% endblock %}
