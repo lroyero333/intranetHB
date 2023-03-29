@@ -1,8 +1,8 @@
-$(function() {
+$(function () {
     "use strict";
-    
-    setTimeout(function(){
-        $(document).ready(function(){
+
+    setTimeout(function () {
+        $(document).ready(function () {
             var chart = c3.generate({
                 bindto: '#chart-bar-rotated', // id of chart wrapper
                 data: {
@@ -42,7 +42,7 @@ $(function() {
                 },
             });
         });
-        $(document).ready(function(){
+        $(document).ready(function () {
             var chart = c3.generate({
                 bindto: '#chart-area-step', // id of chart wrapper
                 data: {
@@ -79,7 +79,7 @@ $(function() {
                 },
             });
         });
-        $(document).ready(function(){
+        $(document).ready(function () {
             var chart = c3.generate({
                 bindto: '#chart-pie', // id of chart wrapper
                 data: {
@@ -115,16 +115,16 @@ $(function() {
         });
     }, 50);
 
-    setTimeout(function(){
+    setTimeout(function () {
         "use strict";
         var mapData = {
             "US": 298,
             "SA": 200,
             "AU": 760,
             "IN": 2000000,
-            "GB": 120,        
-        };	
-        if( $('#world-map-markers').length > 0 ){
+            "GB": 120,
+        };
+        if ($('#world-map-markers').length > 0) {
             $('#world-map-markers').vectorMap({
                 map: 'world_mill_en',
                 backgroundColor: 'transparent',
@@ -132,49 +132,49 @@ $(function() {
                 borderOpacity: 0.25,
                 borderWidth: 0,
                 color: '#e6e6e6',
-                regionStyle : {
-                    initial : {
+                regionStyle: {
+                    initial: {
                         fill: '#4f5b65'
                     }
                 },
-    
+
                 markerStyle: {
-                initial: {
-                            r: 5,
-                            'fill': '#fff',
-                            'fill-opacity':1,
-                            'stroke': '#000',
-                            'stroke-width' : 1,
-                            'stroke-opacity': 0.4
-                        },
+                    initial: {
+                        r: 5,
+                        'fill': '#fff',
+                        'fill-opacity': 1,
+                        'stroke': '#000',
+                        'stroke-width': 1,
+                        'stroke-opacity': 0.4
                     },
-            
-                markers : [{
-                    latLng : [21.00, 78.00],
-                    name : 'INDIA : 350'
-                
+                },
+
+                markers: [{
+                    latLng: [21.00, 78.00],
+                    name: 'INDIA : 350'
+
                 },
                 {
-                    latLng : [-33.00, 151.00],
-                    name : 'Australia : 250'
-                    
+                    latLng: [-33.00, 151.00],
+                    name: 'Australia : 250'
+
                 },
                 {
-                    latLng : [36.77, -119.41],
-                    name : 'USA : 250'
-                
+                    latLng: [36.77, -119.41],
+                    name: 'USA : 250'
+
                 },
                 {
-                    latLng : [55.37, -3.41],
-                    name : 'UK   : 250'
-                
+                    latLng: [55.37, -3.41],
+                    name: 'UK   : 250'
+
                 },
                 {
-                    latLng : [25.20, 55.27],
-                    name : 'UAE : 250'
-                
+                    latLng: [25.20, 55.27],
+                    name: 'UAE : 250'
+
                 }],
-    
+
                 series: {
                     regions: [{
                         values: {
@@ -199,3 +199,5 @@ $(function() {
         }
     }, 100);
 });
+
+

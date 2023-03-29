@@ -1,0 +1,82 @@
+{% extends 'templates/light/base.html' %}
+{% block content %}
+<div class="main_content" id="main-content">
+    <br>
+    <div class="page">
+
+        <div class="container">
+
+            <h1 class="text-center">Información de Usuarios</h1>
+
+            <br>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card">
+                        <form action="" method="POST">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-md-6 col-12">
+
+                                        <div class="form-group">
+                                            <label for="Nombre"><strong>Nombre del Curso:</strong></label>
+                                            <input type="text" class="form-control" name="Nombre" id="Nombre"
+                                                placeholder="Nombre del Curso">
+                                        </div>
+
+                                        <label for="fecha_inicio_curso"><strong>Fecha de Inicio del
+                                                curso:</strong></label>
+                                        <div class="input-group">
+
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
+                                            </div>
+                                            <input data-provide="datepicker" data-date-format="yyyy-mm-dd"
+                                                data-date-autoclose="true" class="form-control"
+                                                name="fecha_inicio_curso" id="fecha_inicio_curso" value=""
+                                                placeholder="Fecha Inicio">
+                                        </div>
+                                        <br>
+
+
+                                        <label for="Fecha_nacimiento"><strong>Fecha de fin:</strong></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
+                                            </div>
+                                            <input data-provide="datepicker" data-date-format="yyyy-mm-dd"
+                                                data-date-autoclose="true" class="form-control" name="Fecha_nacimiento"
+                                                id="Fecha_fin_curso" value="" placeholder="Fecha Nacimiento">
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6 col-12">
+
+                                        <div class="form-group">
+                                            <label>Descripcion</label>
+                                            <textarea class="form-control" rows="5" cols="30" required></textarea>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 col-12">
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                                </div>
+                            </div>
+
+
+                    </div s="body">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    {% endblock %}

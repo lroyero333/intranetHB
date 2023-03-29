@@ -1,0 +1,117 @@
+{% extends 'templates/light/base.html' %}
+{% block content %}
+<div class="main_content" id="main-content">
+
+    <div class="page">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="javascript:void(0);">
+                <h4>Proyectos</h4>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-align-justify"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+
+                </ul>
+
+                <form class="form-inline my-2 my-lg-0">
+                    {% if session["cargo"] == 1%}
+                    <button data-toggle="modal" data-target="#addproject" type="button"
+                        class="btn btn-primary ml-2  btn-animated btn-animated-y">
+                        <span class="btn-inner--visible">Añadir Proyecto</span>
+                        <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
+                    </button>
+
+                    <a href="" title="" class="btn btn-success ml-2">Editar Proyecto</a>
+                    <button type="button" class="btn btn-danger btn-icon-label ml-2">
+                        <span class="btn-inner--text">Eliminar Proyecto</span>
+                        <span class="btn-inner--icon"><i class="fa fa-trash-o"></i></span>
+                    </button>
+                    {% endif %}
+                </form>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row clearfix">
+
+                {% for datosProyectos in datosProyectos %}
+
+                <div class="col-xl-3 col-lg-3 col-md-6">
+                    <div class="card mcard_4">
+                        <div class="body">
+                            <div class="img">
+                                <img src="{{ url_for('static', filename='images/' + datosProyectos[2]) }}" class="rounded-circle"
+                                    alt="profile-image">
+                            </div>
+                            <div class="user">
+                                <h5 class="mt-3 mb-1">{{datosProyectos[1]}}</h5>
+                                <small class="text-muted">{{datosProyectos[3]}}</small>
+                            </div>
+                            <ul class="list-unstyled social-links">
+                                <li><a href="javascript:void(0);"><i class="fa fa-dribbble"></i></a>
+                                </li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-behance"></i></a></li>
+                                <li><a href="javascript:void(0);"><i class="fa fa-pinterest"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<form action="/proyectos" method="POST">
+    <div class="modal fade" id="addproject" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label for="fecha_inicio_curso"><strong>Añadir Proyecto</strong></label>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="nombre_proyecto"><strong>Nombre del Proyecto:</strong></label>
+                                <input type="text" class="form-control" name="nombre_proyecto" id="nombre_proyecto"
+                                    placeholder="Nombre del Proyecto">
+                            </div>
+
+                        </div>
+                        <div class="col-12">
+
+                            <div class="form-group">
+                                <label for="imagen_proyecto"><strong>Imagen del Proyecto:</strong></label>
+                                <input type="text" class="form-control" name="imagen_proyecto" id="imagen_proyecto"
+                                    placeholder="Imagen del Proyecto">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label><strong>Descripcion</strong> </label>
+                                <textarea class="form-control" rows="3" cols="30" name="descripcion_proyecto"
+                                    id="descripcion_proyecto" required></textarea>
+                            </div>
+                        </div>
+                
+                        <div class="modal-footer">
+                            <button type="submit" name="crear_proyecto" class="btn btn-primary">Añadir</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

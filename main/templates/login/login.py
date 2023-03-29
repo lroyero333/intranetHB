@@ -59,10 +59,10 @@ def login():
                 return redirect(url_for('inicio'))
             else:
                 error = 'Usuario o contraseña incorrecta'
-                return render_template('login/login.html', error=error)
+                return render_template('login/login.html', error=error, campos=request.form)
         else:
             error = 'Usuario o contraseña incorrecta'
-            return render_template('login/login.html', error=error)
+            return render_template('login/login.html', error=error, campos=request.form)
     else:
         user = 'daniel'
         return render_template('login/login.html')

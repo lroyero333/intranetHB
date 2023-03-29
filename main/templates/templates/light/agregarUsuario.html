@@ -5,10 +5,8 @@
 
     <div class="page">
         <div class="container">
-            <h1 class="text-center">Información de Usuarios</h1>
-            <div class="circle-image">
-                <img src="{{ url_for('static', filename='images/' + datosUsuarios[0][23]) }}" alt="Imagen de perfil">
-            </div>
+            <h1 class="text-center">Registro de Usuarios</h1>
+           
             <br>
 
             <div class="row justify-content-center">
@@ -16,6 +14,11 @@
                     <div class="card">
                         <form action="" method="POST" enctype="multipart/form-data">
                             <div class="card-body">
+                                {% if error %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                                {% endif %}
                                 <div class="row">
 
                                     <div class="col-md-6 col-12">
@@ -23,38 +26,47 @@
                                         <div class="form-group">
                                             <label for="usuario"><strong>Foto:</strong></label>
                                             <div>
-                                                <input type="file" name="foto" id="foto" class="custom-input-file" />
+                                                <input type="file" name="foto" id="foto"
+                                                    class="custom-input-file" />
                                                 <label for="foto">
                                                     <i class="fa fa-upload"></i>
                                                     <span>Selecciona una foto…</span>
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="usuario"><strong>Usuario:</strong></label>
+                                            <input type="text" class="form-control" name="usuario" id="usuario"
+                                                placeholder="Usuario" value="{{ campos.get('usuario', '') }}" required>
+
+                                        </div>
 
                                         <div class="form-group">
                                             <label for="Nombre"><strong>Primer nombre:</strong></label>
                                             <input type="text" class="form-control" name="Nombre" id="Nombre"
-                                                value="{{datosUsuarios[0][1] }}" placeholder="Primer Nombre">
+                                                placeholder="Primer Nombre" value="{{ campos.get('Nombre', '') }}"
+                                                required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="segundo_nombre"><strong>Segundo nombre:</strong></label>
                                             <input type="text" class="form-control" name="segundo_nombre"
-                                                id="segundo_nombre" value="{{datosUsuarios[0][2] }}"
-                                                placeholder="Segundo Nombre">
+                                                id="segundo_nombre" placeholder="Segundo Nombre"
+                                                value="{{ campos.get('segundo_nombre', '') }}" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="Apellido"><strong>Primer apellido:</strong></label>
                                             <input type="text" class="form-control" name="Apellido" id="Apellido"
-                                                value="{{datosUsuarios[0][3] }}" placeholder="Primer Apellido">
+                                                placeholder="Primer Apellido" value="{{ campos.get('Apellido', '') }}"
+                                                required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="segundo_apellido"><strong>Segundo Apellido:</strong></label>
                                             <input type="text" class="form-control" name="segundo_apellido"
-                                                id="segundo_apellido" value="{{datosUsuarios[0][4] }}"
-                                                placeholder="Segundo Apellido">
+                                                id="segundo_apellido" placeholder="Segundo Apellido"
+                                                value="{{ campos.get('segundo_apellido', '') }}" required>
                                         </div>
                                         <h6><strong>Genero:</strong></h6>
                                         <div>
@@ -74,8 +86,8 @@
                                             </div>
                                             <input data-provide="datepicker" data-date-format="yyyy-mm-dd"
                                                 data-date-autoclose="true" class="form-control" name="Fecha_nacimiento"
-                                                id="Fecha_nacimiento" value="{{datosUsuarios[0][6] }}"
-                                                placeholder="Fecha Nacimiento">
+                                                id="Fecha_nacimiento" placeholder="Fecha Nacimiento"
+                                                value="{{ campos.get('Fecha_nacimiento', '') }}" required>
                                         </div>
                                     </div>
 
@@ -85,45 +97,49 @@
                                             <label for="correo"><strong>Correo:</strong></label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control" name="correo" id="correo"
-                                                    placeholder="Correo" value="{{datosUsuarios[0][7] }}"
+                                                    placeholder="Correo" value="{{ campos.get('correo', '') }}"
                                                     aria-label="Enter your email" aria-describedby="basic-addon2">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text"
                                                         id="correo">@humanbionics.com.co</span>
                                                 </div>
                                             </div>
+
+                                            <!--input type="email" class="form-control" name="correo" id="correo"
+                                                placeholder="Correo" value="{{ campos.get('correo', '') }}" required-->
                                         </div>
 
                                         <div class="form-group">
                                             <label for="identificacion"><strong>Identificación:</strong></label>
                                             <input type="text" class="form-control" name="identificacion"
-                                                id="identificacion" value="{{datosUsuarios[0][8] }}"
-                                                placeholder="Identificación">
+                                                id="identificacion" placeholder="Identificación"
+                                                value="{{ campos.get('identificacion', '') }}" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="direccion"><strong>Direccion:</strong></label>
                                             <input type="text" class="form-control" name="direccion" id="direccion"
-                                                value="{{datosUsuarios[0][9] }}" placeholder="Direccion">
+                                                placeholder="Direccion" value="{{ campos.get('direccion', '') }}"
+                                                required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="barrio"><strong>Barrio:</strong></label>
                                             <input type="text" class="form-control" name="barrio" id="barrio"
-                                                value="{{datosUsuarios[0][10] }}" placeholder="Barrio">
+                                                placeholder="Barrio" value="{{ campos.get('barrio', '') }}" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="ciudad"><strong>Ciudad:</strong></label>
                                             <input type="text" class="form-control" name="ciudad" id="ciudad"
-                                                value="{{datosUsuarios[0][11] }}" placeholder="Ciudad">
+                                                placeholder="Ciudad" value="{{ campos.get('ciudad', '') }}" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="departamento"><strong>Departamento:</strong></label>
                                             <input type="text" class="form-control" name="departamento"
-                                                id="departamento" value="{{datosUsuarios[0][12] }}"
-                                                placeholder="Departamento">
+                                                id="departamento" placeholder="Departamento"
+                                                value="{{ campos.get('departamento', '') }}" required>
                                         </div>
                                     </div>
                                 </div>
@@ -133,29 +149,31 @@
                                         <div class="form-group">
                                             <label for="pais"><strong>Pais:</strong></label>
                                             <input type="text" class="form-control" name="pais" id="pais"
-                                                value="{{datosUsuarios[0][13] }}" placeholder="Pais">
+                                                placeholder="Pais" value="{{ campos.get('pais', '') }}" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="telefono"><strong>Teléfono:</strong></label>
                                             <input type="text" class="form-control" name="telefono" id="telefono"
-                                                value="{{datosUsuarios[0][14] }}" placeholder="Telefono">
+                                                placeholder="Telefono" value="{{ campos.get('telefono', '') }}"
+                                                required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="celular"><strong>Celular:</strong></label>
                                             <input type="text" class="form-control" name="celular" id="celular"
-                                                value="{{datosUsuarios[0][15] }}" placeholder="Celular">
+                                                placeholder="Celular" value="{{ campos.get('celular', '') }}" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="habilidades"><strong>Habilidades:</strong></label>
                                             <input type="text" class="form-control" name="habilidades" id="habilidades"
-                                                value="{{datosUsuarios[0][16] }}" placeholder="Habilidades">
+                                                placeholder="Habilidades" value="{{ campos.get('habilidades', '') }}"
+                                                required>
                                         </div>
                                         <div class="form-group">
                                             <label for="profesion"><strong>Profesion:</strong></label>
                                             <select class="form-control" name="profesion" id="profesion"
-                                                value="{{datosUsuarios[0][17] }}">
+                                                value="{{ campos.get('profesion', '') }}" required>
                                                 <option value="">-- Seleccione la Profesion --</option>
                                                 <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
                                                 <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
@@ -169,7 +187,7 @@
                                         <div class="form-group">
                                             <label for="cargo"><strong>Cargo:</strong></label>
                                             <select class="form-control" name="cargo" id="cargo"
-                                                value="{{datosUsuarios[0][29] }}">
+                                                value="{{ campos.get('cargo', '') }}" required>
                                                 <option value="">-- Seleccione el cargo --</option>
                                                 <option value="0">CEO</option>
                                                 <option value="1">Recursos Humanos</option>
@@ -183,25 +201,27 @@
                                         <div class="form-group">
                                             <label for="institucion"><strong>Institucion:</strong></label>
                                             <input type="text" class="form-control" name="institucion" id="institucion"
-                                                value="{{datosUsuarios[0][19] }}" placeholder="Institucion">
+                                                placeholder="Institucion" value="{{ campos.get('institucion', '') }}"
+                                                required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="posgrado"><strong>Posgrado:</strong></label>
                                             <input type="text" class="form-control" name="posgrado" id="posgrado"
-                                                value="{{datosUsuarios[0][20] }}" placeholder="Posgrado">
+                                                placeholder="Posgrado" value="{{ campos.get('posgrado', '') }}"
+                                                required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="entidad_salud"><strong>Entidad de salud:</strong></label>
                                             <input type="text" class="form-control" name="entidad_salud"
                                                 id="entidad_salud" placeholder="Entidad de salud"
-                                                value="{{datosUsuarios[0][21] }}">
+                                                value="{{ campos.get('entidad_salud', '') }}" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
                                             <select class="form-control" name="tipo_sangre" id="tipo_sangre"
-                                                value="{{datosUsuarios[0][22] }}">
+                                                value="{{ campos.get('tipo_sangre', '') }}" required>
                                                 <option value="">-- Seleccione su tipo de sangre --</option>
                                                 <option value="A+">A+</option>
                                                 <option value="A-">A-</option>
@@ -218,27 +238,26 @@
                                             <label for="nombre_contacto"><strong>Nombre de contacto:</strong></label>
                                             <input type="text" class="form-control" name="nombre_contacto"
                                                 id="nombre_contacto" placeholder="Nombre de contacto"
-                                                value="{{datosUsuarios[0][24] }}">
+                                                value="{{ campos.get('nombre_contacto', '') }}" required>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="numero_contacto"><strong>Numero de contacto:</strong></label>
                                             <input type="text" class="form-control" name="numero_contacto"
-                                                id="numero_contacto" value="{{datosUsuarios[0][25] }}"
-                                                placeholder="Numero de contacto">
+                                                id="numero_contacto" placeholder="Numero de contacto"
+                                                value="{{ campos.get('numero_contacto', '') }}" required>
                                         </div>
-
                                         <div class="form-group">
                                             <label for="contrasena"><strong>Contraseña:</strong></label>
                                             <input type="password" class="form-control" name="contrasena"
-                                                id="contrasena" placeholder="Contraseña">
+                                                id="contrasena" placeholder="Contraseña" value="{{ campo }}" required>
                                         </div>
 
                                     </div>
                                     <div class="col-md-6 col-12">
 
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                                            <button type="submit" class="btn btn-primary">Registrar Empleado</button>
                                         </div>
                                     </div>
 
@@ -248,8 +267,5 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
-{% endblock %}
+            {% endblock %}

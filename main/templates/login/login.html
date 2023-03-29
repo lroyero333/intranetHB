@@ -25,9 +25,21 @@
     </div>
     <!-- WRAPPER -->
     <div id="wrapper">
+
         <div class="vertical-align-wrap">
             <div class="vertical-align-middle auth-main">
+                {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+                        <span class="alert-inner--text"><strong>Error </strong> Usuario o contraseña incorrecto!</span>
+                        <button type="button" class="undo" aria-label="Undo">cerrar</button>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                    {% endif %}
                 <div class="auth-box">
+                    
                     <div class="top">
                         <img src="{{ url_for('static', filename='images/isotipohb.svg') }}" alt="logoHB">
                         <strong>Human</strong> <span>Bionics</span>
@@ -37,12 +49,8 @@
                             <p class="lead">Inisiar sesion en su cuenta</p>
                         </div>
                         <div class="body">
-                            {% if error %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ error }}
-                            </div>
-                            {% endif %}
-                            <form class="form-auth-small"  method="POST">
+                           
+                            <form class="form-auth-small" method="POST">
                                 <div class="form-group">
                                     <label for="username" class="control-label sr-only">Usuario</label>
                                     <input type="text" class="form-control" id="username" name="username"

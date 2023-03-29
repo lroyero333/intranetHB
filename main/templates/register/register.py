@@ -31,7 +31,7 @@ def register():
                 # El usuario ya existe
                 error = 'El nombre de usuario o correo electrónico ya está en uso'
                 cursor.close()
-                return render_template('register/register.html', error=error)
+                return render_template('register/register.html', error=error,campos=request.form)
             else:
                 # El usuario no existe, crear nueva entrada en la base de datos
 
@@ -47,8 +47,8 @@ def register():
         else:
             # Las contraseñas no coinciden
             error = 'Las contraseñas no coinciden'
-            return render_template('register/register.html', error=error)
+            return render_template('register/register.html', error=error,campos=request.form)
 
     # Si el método HTTP es GET, mostrar la página de registro
     else:
-        return render_template('register/register.html')
+        return render_template('register/register.html',campos=request.form)

@@ -1,10 +1,53 @@
-$(function() {
+/*function agregarEventos() {
+    // Obtener los datos del formulario
+    var id_usuario = "{{ session['usuario'] }}";
+    var nombre_curso = "{{ request.form['nombre_curso'] }}";
+    var fecha_inicio_curso = "{{ request.form['fecha_inicio_curso'] }}";
+    var Fecha_fin_curso = "{{ request.form['fecha_fin_curso'] }}";
+    var ubicacion = "{{ request.form['ubicacion_curso'] }}";
+    var descripcion = "{{ request.form['descripcion'] }}";
+    var fecha_publicacion = "{{ datetime.now().strftime('%Y-%m-%d %H:%M:%S') }}";
+    
+    // Crear el objeto de evento con los datos del formulario
+    var evento = {
+        "title": nombre_curso,
+        "start": fecha_inicio_curso,
+        "end": Fecha_fin_curso,
+        "className": "bg-info"
+    };
+    
+    // Agregar el evento al calendario
+    calendar.fullCalendar('renderEvent', evento);
+    
+    // Enviar los datos del formulario al servidor para guardarlos en la base de datos
+    $.ajax({
+        url: "{{ url_for('guardar_evento') }}",
+        type: "POST",
+        data: {
+            "id_usuario": id_usuario,
+            "nombre_curso": nombre_curso,
+            "fecha_inicio_curso": fecha_inicio_curso,
+            "fecha_fin_curso": Fecha_fin_curso,
+            "ubicacion": ubicacion,
+            "descripcion": descripcion,
+            "fecha_publicacion": fecha_publicacion
+        },
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+}*/
+
+$(function () {
 
     enableDrag();
 
-    function enableDrag(){
+    function enableDrag() {
 
-        $('#external-events .fc-event').each(function() {
+        $('#external-events .fc-event').each(function () {
 
             $(this).data('event', {
 
@@ -34,7 +77,7 @@ $(function() {
 
 
 
-    $(".save-event").on('click', function() {
+    $(".save-event").on('click', function () {
 
         var categoryName = $('#addNewEvent form').find("input[name='category-name']").val();
 
@@ -60,15 +103,15 @@ $(function() {
 
     var dd = today.getDate();
 
-    var mm = today.getMonth()+1; //January is 0!
+    var mm = today.getMonth() + 1; //January is 0!
 
     var yyyy = today.getFullYear();
 
 
 
-    if(dd<10) { dd = '0'+dd }
+    if (dd < 10) { dd = '0' + dd }
 
-    if(mm<10) { mm = '0'+mm } 
+    if (mm < 10) { mm = '0' + mm }
 
 
 
@@ -80,7 +123,7 @@ $(function() {
 
     // Add direct event to calendar
 
-    var newEvent = function(start) {
+    var newEvent = function (start) {
 
         $('#addDirectEvent input[name="event-name"]').val("");
 
@@ -90,11 +133,11 @@ $(function() {
 
         $('#addDirectEvent .save-btn').unbind();
 
-        $('#addDirectEvent .save-btn').on('click', function() {
+        $('#addDirectEvent .save-btn').on('click', function () {
 
             var title = $('#addDirectEvent input[name="event-name"]').val();
 
-            var classes = 'bg-'+ $('#addDirectEvent select[name="event-bg"]').val();
+            var classes = 'bg-' + $('#addDirectEvent select[name="event-bg"]').val();
 
             if (title) {
 
@@ -112,7 +155,7 @@ $(function() {
 
                 $('#addDirectEvent').modal('hide');
 
-                }
+            }
 
             else {
 
@@ -124,7 +167,7 @@ $(function() {
 
     }
 
-    
+
 
     // initialize the calendar
 
@@ -140,7 +183,7 @@ $(function() {
 
         },
 
-        editable: true,
+        editable: false,
 
         droppable: true,
 
@@ -148,25 +191,26 @@ $(function() {
 
         selectable: true,
 
-        events: [
+        //agregarEventos
+        /*events: [
 
             {
 
-                title  : 'Birthday Party',
+                title: "Cumpleaños",
 
-                start  : current + '01',
+                start: current + '01',
 
                 className: 'bg-info'
 
             },
-
+            
             {
 
-                title  : 'Conference',
+                title: 'Conference',
 
-                start  : current + '05',
+                start: current + '05',
 
-                end    : '2018-08-07',
+                end: '2018-08-07',
 
                 className: 'bg-warning'
 
@@ -174,41 +218,44 @@ $(function() {
 
             {
 
-                title  : 'Meeting',
+                title: 'Meeting',
 
-                start  : current + '09T12:30:00',
+                start: current + '09T12:30:00',
 
-                allDay : false, // will make the time show
+                allDay: false, // will make the time show
 
                 className: 'bg-success',
 
             }
 
-        ],
-
-        drop: function(date,jsEvent) {
-
-        // var originalEventObject = $(this).data('eventObject');
-
-        // var $categoryClass = $(this).attr('data-class');
-
-        // var copiedEventObject = $.extend({}, originalEventObject);
-
-        // //console.log(originalEventObject + '--' + $categoryClass + '---' + copiedEventObject);
-
-        // copiedEventObject.start = date;
-
-        // if ($categoryClass)
-
-        //   copiedEventObject['className'] = [$categoryClass];
-
-        // calendar.fullCalendar('renderEvent', copiedEventObject, true);
+        ]*/
+        events: '/cursos',
+        //events: '/noticias',
 
 
+        drop: function (date, jsEvent) {
 
-        // is the "remove after drop" checkbox checked?
+            // var originalEventObject = $(this).data('eventObject');
 
-        if ($('#drop-remove').is(':checked')) {
+            // var $categoryClass = $(this).attr('data-class');
+
+            // var copiedEventObject = $.extend({}, originalEventObject);
+
+            // //console.log(originalEventObject + '--' + $categoryClass + '---' + copiedEventObject);
+
+            // copiedEventObject.start = date;
+
+            // if ($categoryClass)
+
+            //   copiedEventObject['className'] = [$categoryClass];
+
+            // calendar.fullCalendar('renderEvent', copiedEventObject, true);
+
+
+
+            // is the "remove after drop" checkbox checked?
+
+            if ($('#drop-remove').is(':checked')) {
 
                 // if so, remove the element from the "Draggable Events" list
 
@@ -218,13 +265,13 @@ $(function() {
 
         },
 
-        select: function(start, end, allDay) { 
+        select: function (start, end, allDay) {
 
             newEvent(start);
 
         },
 
-        eventClick: function(calEvent, jsEvent, view) {
+        eventClick: function (calEvent, jsEvent, view) {
 
             //var title = prompt('Event Title:', calEvent.title, { buttons: { Ok: true, Cancel: false} });
 
@@ -238,7 +285,7 @@ $(function() {
 
 
 
-            eventModal.find('.save-btn').click(function(){
+            eventModal.find('.save-btn').click(function () {
 
                 calEvent.title = eventModal.find("input[name='event-name']").val();
 
@@ -260,4 +307,28 @@ $(function() {
 
     });
 
+
+});
+
+$(document).ready(function () {
+    $.ajax({
+        url: '/events',
+        type: 'GET',
+        dataType: 'json',
+        success: function (events) {
+            $('#calendar').fullCalendar({
+                events: events
+            });
+        },
+        error: function (xhr, status, error) {
+            console.error(error);
+        }
+    });
+});
+
+
+$(document).ready(function () {
+    $('#myModal').on('shown.bs.modal', function () {
+        $(this).find('button:first').focus();
+    });
 });

@@ -7,6 +7,8 @@ import bcrypt
 from werkzeug.utils import secure_filename
 import os
 from main.app import app, mysql
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 from main.templates.login import login
 
@@ -87,21 +89,87 @@ def cerrar():
 url_inicio = '/inicio'
 
 
+"""@app.route('/notificaciones')
+def notificaciones():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    # Recuperar las notificaciones sin leer de la base de datos
+    notificaciones = Notification.query.filter_by(
+        user_id=session['user_id'], leido=False).all()
+
+    # Marcar las notificaciones como leídas y actualizar la base de datos
+    for notificacion in notificaciones:
+        notificacion.leido = True
+        db.session.add(notificacion)
+    db.session.commit()
+
+    # Eliminar las notificaciones leídas de la sesión del usuario
+    session.pop('notificaciones', None)
+
+    return render_template('notificaciones.html', notificaciones=notificaciones)"""
+
+
 @app.route('/inicio')
 def inicio():
     if not 'login' in session:
         return redirect('/')
-    return render_template('templates/light/index.html')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute(
+        "SELECT * FROM cursos ;")
+    datosCursos = cursor.fetchall()
+    conexion.commit()
+    cursos_con_tiempo = []
+    for curso in datosCursos:
+        fecha_insertado = curso[5]
+        fecha_actual = datetime.now()
+        diferencia = relativedelta(fecha_actual, fecha_insertado)
+        if diferencia.years > 0:
+            tiempo_transcurrido = f"hace {diferencia.years} años"
+        elif diferencia.months > 0:
+            tiempo_transcurrido = f"hace {diferencia.months} meses"
+        elif diferencia.days > 0:
+            tiempo_transcurrido = f"hace {diferencia.days} días"
+        elif diferencia.hours > 0:
+            tiempo_transcurrido = f"hace {diferencia.hours} horas"
+        elif diferencia.minutes > 0:
+            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
+        else:
+            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
+        # convertir a lista para poder modificar
+        curso_con_tiempo = list(curso)
+        curso_con_tiempo.append(tiempo_transcurrido)
+        cursos_con_tiempo.append(curso_con_tiempo)
 
+    cursor.execute(
+        "SELECT * FROM noticias ;")
+    datosNoticias = cursor.fetchall()
+    conexion.commit()
+    noticias_con_tiempo = []
+    for noticia in datosNoticias:
+        fecha_insertado = noticia[5]
+        fecha_actual = datetime.now()
+        diferencia = relativedelta(fecha_actual, fecha_insertado)
+        if diferencia.years > 0:
+            tiempo_transcurrido = f"hace {diferencia.years} años"
+        elif diferencia.months > 0:
+            tiempo_transcurrido = f"hace {diferencia.months} meses"
+        elif diferencia.days > 0:
+            tiempo_transcurrido = f"hace {diferencia.days} días"
+        elif diferencia.hours > 0:
+            tiempo_transcurrido = f"hace {diferencia.hours} horas"
+        elif diferencia.minutes > 0:
+            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
+        else:
+            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
+        # convertir a lista para poder modificar
+        # Cambiar el nombre de la variable aquí
+        noticia_con_tiempo = list(noticia)
+        noticia_con_tiempo.append(tiempo_transcurrido)
+        noticias_con_tiempo.append(noticia_con_tiempo)  # Agregar a la lista
 
-"""
-@app.route('/inicio')
-def inicio():
-   usuario_json = request.args.get('usuario')
-    user = json.loads(usuario_json)
-    if not 'login' in session:
-        return redirect('/')
-    return render_template('templates/light/index.html',user = user)"""
+    return render_template('templates/light/index.html', datosCursos=cursos_con_tiempo, datosNoticias=noticias_con_tiempo)
 
 
 @app.route('/Noticias')
@@ -111,51 +179,47 @@ def noticias():
     return render_template('sitio/Noticias.html')
 
 
-@app.route('/proyectos')
-def programacion():
-    if not 'login' in session:
-        return redirect('/')
-    return render_template('sitio/proyectos.html')
-
-
 @app.route('/static/<path:path>')
 def static_file(path):
     return app.send_static_file(path)
 
 
-@app.route('/tareas')
+@app.route('/agregar-cursos')
 def tareas():
     if not 'login' in session:
         return redirect('/')
-    return render_template('templates/light/app-taskboard.html')
+    return render_template('templates/light/agregarEvento.html')
 
 
-@app.route('/inventario')
-def inventario():
-    if not 'login' in session:
-        return redirect('/')
-    return render_template('templates/light/app-taskboard.html')
-
-
-@app.route('/crear-evento')
-def crearEvento():
-    if not 'login' in session:
-        return redirect('/')
-    return render_template('templates/light/app-taskboard.html')
-
-
-@app.route('/orden-perfiles')
-def ordenarPerfil():
-    if not 'login' in session:
-        return redirect('/')
-    return render_template('templates/light/app-taskboard.html')
-
-
-@app.route('/crear-proyecto')
+@app.route('/proyectos', methods=['GET', 'POST'])
 def crearProyecto():
     if not 'login' in session:
         return redirect('/')
-    return render_template('templates/light/app-taskboard.html')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+
+    if request.method == 'POST' and 'crear_proyecto' in request.form:
+
+        nombre_proyecto = request.form['nombre_proyecto']
+        imagen_proyecto = request.form['imagen_proyecto']
+        descripcion_proyecto = request.form['descripcion_proyecto']
+
+        query = "INSERT INTO proyectos (nombre_proyecto, imagen_proyecto, descripcion_proyecto) VALUES (%s,%s, %s)"
+        params = [nombre_proyecto, imagen_proyecto, descripcion_proyecto]
+
+        cursor.execute(query, params)
+        conexion.commit()
+        conexion.close()
+        return redirect('/proyectos')
+
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute(
+        "SELECT * FROM proyectos;")
+    datosProyectos = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return render_template('templates/light/projects.html', datosProyectos=datosProyectos)
 
 
 @app.route('/empleados')
@@ -213,6 +277,7 @@ def editEmpleados(usuario_id):
     datosUsuarios = cursor.fetchall()
     conexion.commit()
     if request.method == 'POST':
+        foto = request.files['foto']
         Nombre = request.form['Nombre']
         segundo_nombre = request.form['segundo_nombre']
         Apellido = request.form['Apellido']
@@ -237,11 +302,30 @@ def editEmpleados(usuario_id):
         tipo_sangre = request.form['tipo_sangre']
         nombre_contacto = request.form['nombre_contacto']
         numero_contacto = request.form['numero_contacto']
+        contrasena = request.form['contrasena']
+        hashed_password = bcrypt.hashpw(
+            contrasena.encode('utf-8'), bcrypt.gensalt())
+
+        basepath = os.path.dirname(__file__)
+        filename = secure_filename(foto.filename)
+
+        extension = os.path.splitext(filename)[1]
+        nuevoNombreFoto = usuario_id+'Foto'+extension
+
+        upload_path = os.path.join(
+            basepath, '..', 'static', 'images', nuevoNombreFoto)
+        if not os.path.exists(os.path.dirname(upload_path)):
+            os.makedirs(os.path.dirname(upload_path))
+
+        foto.save(upload_path)
 
         # Actualizar los campos que no están vacíos
         query = "UPDATE general_users SET"
         params = []
 
+        if nuevoNombreFoto:
+            query += " foto = %s,"
+            params.append(nuevoNombreFoto)
         if Nombre:
             query += " Nombre = %s,"
             params.append(Nombre)
@@ -296,7 +380,7 @@ def editEmpleados(usuario_id):
         if cargo:
             query += " id_cargo_fk = %s,"
             params.append(cargo)
-            
+
         if institucion:
             query += " institucion = %s,"
             params.append(institucion)
@@ -315,6 +399,9 @@ def editEmpleados(usuario_id):
         if numero_contacto:
             query += " numero_contacto = %s,"
             params.append(numero_contacto)
+        if hashed_password:
+            query += " contrasena = %s,"
+            params.append(hashed_password)
 
         # Eliminar la coma final de la consulta SQL
         query = query.rstrip(',')
@@ -328,12 +415,94 @@ def editEmpleados(usuario_id):
 
         # Confirmar los cambios en la base de datos
         conexion.commit()
-        
-        
+
         # Redirigir a la página de detalles del usuario actualizado
         return redirect(url_for('verEmpleados', usuario_id=usuario_id))
 
     return render_template('templates/light/editUser.html', datosUsuarios=datosUsuarios)
+
+
+@app.route('/registrarEmpleados', methods=['GET', 'POST'])
+def crearEmpleados():
+    if not 'login' in session:
+        return redirect('/')
+    print(session['cargo'])
+    if session['cargo'] != 1:
+        return redirect('/inicio')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM general_users")
+    datosUsuarios = cursor.fetchall()
+    conexion.commit()
+    if request.method == 'POST':
+
+        usuario = request.form['usuario']
+        # Verificar si el usuario ya existe
+        cursor.execute(
+            "SELECT * FROM general_users WHERE usuario=%s", (usuario,))
+        if cursor.fetchone() is not None:
+            error = 'El nombre de usuario o correo electrónico ya está en uso'
+            cursor.close()
+            return render_template('templates/light/agregarUsuario.html', error=error, datosUsuarios=datosUsuarios, campos=request.form)
+        foto = request.files['foto']
+        Nombre = request.form['Nombre']
+        segundo_nombre = request.form['segundo_nombre']
+        Apellido = request.form['Apellido']
+        segundo_apellido = request.form['segundo_apellido']
+        genero = request.form['genero']
+        fecha_nacimiento = request.form['Fecha_nacimiento']
+        correo = request.form['correo']
+        identificacion = request.form['identificacion']
+        direccion = request.form['direccion']
+        barrio = request.form['barrio']
+        ciudad = request.form['ciudad']
+        departamento = request.form['departamento']
+        pais = request.form['pais']
+        telefono = request.form['telefono']
+        celular = request.form['celular']
+        habilidades = request.form['habilidades']
+        profesion = request.form['profesion']
+        cargo = request.form['cargo']
+        institucion = request.form['institucion']
+        posgrado = request.form['posgrado']
+        entidad_salud = request.form['entidad_salud']
+        tipo_sangre = request.form['tipo_sangre']
+        nombre_contacto = request.form['nombre_contacto']
+        numero_contacto = request.form['numero_contacto']
+        contrasena = request.form['contrasena']
+
+        hashed_password = bcrypt.hashpw(
+            contrasena.encode('utf-8'), bcrypt.gensalt())
+
+        basepath = os.path.dirname(__file__)
+        filename = secure_filename(foto.filename)
+
+        extension = os.path.splitext(filename)[1]
+        nuevoNombreFoto = usuario+'Foto'+extension
+
+        upload_path = os.path.join(
+            basepath, '..', 'static', 'images', nuevoNombreFoto)
+        if not os.path.exists(os.path.dirname(upload_path)):
+            os.makedirs(os.path.dirname(upload_path))
+
+        foto.save(upload_path)
+
+        # Insertar un nuevo usuario en la tabla
+        query = "INSERT INTO general_users (Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion, id_cargo_fk, institucion, posgrado, entidad_salud, tipo_sangre,foto, nombre_contacto, numero_contacto, usuario,contrasena) VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s)"
+        params = [Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais,
+                  telefono, celular, habilidades, profesion, cargo, institucion, posgrado, entidad_salud, tipo_sangre, nuevoNombreFoto, nombre_contacto, numero_contacto, usuario, hashed_password]
+
+        # Ejecutar la consulta SQL
+        cursor.execute(query, params)
+
+        # Confirmar los cambios en la base de datos
+        conexion.commit()
+
+        # Redirigir a la página de detalles del nuevo usuario registrado
+        usuario_id = cursor.lastrowid
+        return redirect('/empleados')
+
+    return render_template('templates/light/agregarUsuario.html', datosUsuarios=datosUsuarios, campos=request.form)
 
 
 @app.route('/contactos')
@@ -358,7 +527,8 @@ def myperfil():
 
     conexion = mysql.connect()
     cursor = conexion.cursor()
-    cursor.execute("SELECT general_users.*, cargos.nombre_cargo FROM general_users LEFT JOIN usuario_cargo ON general_users.id = usuario_cargo.id_usuario_fk LEFT JOIN cargos ON usuario_cargo.id_cargo_fk = cargos.id_cargo WHERE usuario= %s;", session['usuario'])
+    cursor.execute(
+        "SELECT general_users.*, cargos.nombre_cargo FROM general_users LEFT JOIN usuario_cargo ON general_users.id = usuario_cargo.id_usuario_fk LEFT JOIN cargos ON usuario_cargo.id_cargo_fk = cargos.id_cargo WHERE usuario= %s;", session['usuario'])
     datosUsuarios = cursor.fetchall()
     conexion.commit()
     print(datosUsuarios)
@@ -366,3 +536,23 @@ def myperfil():
 
     # Renderizar el perfil actualizado
     return render_template('templates/light/profile.html',  datosUsuarios=datosUsuarios)
+
+
+@app.errorhandler(404)
+def error_404(error):
+    return render_template('templates/light/error-404.html')
+
+
+@app.errorhandler(400)
+def error_400(error):
+    return render_template('templates/light/error-400.html')
+
+
+@app.errorhandler(401)
+def error_401(error):
+    return render_template('templates/light/error-401.html')
+
+
+@app.errorhandler(403)
+def error_403(error):
+    return render_template('templates/light/error-403.html')

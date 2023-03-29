@@ -17,8 +17,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/blog.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/rtl.css') }}">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
 </head>
 
 <body class="theme-indigo">
@@ -36,7 +34,9 @@
         <div class="left_sidebar">
             <nav class="sidebar">
                 <div class="user-info">
-                    <div class="image"><a href="javascript:void(0);"><img src="{{ url_for('static', filename='images/' + session['foto']) }}" alt="User"></a></div>
+                    <div class="image"><a href="javascript:void(0);"><img
+                                src="{{ url_for('static', filename='images/' + session['foto']) }}" alt="User"></a>
+                    </div>
                     <div class="detail mt-3">
 
                         <h5 class="mb-0">{{session["nombre"]}} {{session["apellido"]}}</h5>
@@ -57,10 +57,11 @@
                     <li><a href="/calendario"><i class="ti-calendar"></i><span>Calendar</span></a></li>
                     <li><a href="https://trello.com/login" target="_blank"><i
                                 class="ti-notepad"></i><span>TaskBoard</span></a></li>
+                    <li><a href="/proyectos"><i class="fa fa-folder"></i><span>Projects</span></a></li>
 
                     {% if session["cargo"] == 1 or session["cargo"] == 0 %}
                     <li><a href="/empleados"><i class="fa fa-users"></i><span>Edit Users</span></a></li>
-                    {% endif %} 
+                    {% endif %}
                     <li><a href="/contactos"><i class="ti-id-badge"></i><span>Contact List</span></a></li>
 
                     <li class="g_heading">Users</li>
@@ -91,6 +92,17 @@
     <script src="{{ url_for('static', filename='bundles/knob.bundle.js') }}"></script> <!-- Jquery Knob-->
     <script
         src="{{ url_for('static', filename='vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='vendor/nestable/jquery.nestable.js') }}"></script>
+    <!-- Jquery Nestable -->
+
+    <script src="{{ url_for('static', filename='js/pages/sortable-nestable.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='vendor/jquery-sparkline/js/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/jquery-knob/jquery.knob.min.js') }}"></script>
+    <!-- Jquery Knob Plugin Js -->
+
+    <script src="{{ url_for('static', filename='js/pages/widgets.js') }}"></script>
 
     <script>
         $(function () {
