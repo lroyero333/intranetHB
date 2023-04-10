@@ -1,11 +1,12 @@
-from flask import request, redirect
+from random import sample
+from flask import request, redirect, send_file, send_from_directory
 from werkzeug.utils import secure_filename
 import os
 import json
 from flask import render_template, redirect, request, url_for, session, flash
 import bcrypt
 from werkzeug.utils import secure_filename
-import os
+
 from main.app import app, mysql
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -78,7 +79,13 @@ def datosUsuario():
     session["nombre_contacto"]=row[24]
     session["numero_contacto"]=row[25]
 """
-
+def stringAleatorio():
+    string_aleatorio="0123456789abcdefghijklmnñopqrstuvwxyz_"
+    longitud=10
+    secuencia=string_aleatorio.upper()
+    resultado_aleatorio= sample(secuencia, longitud)
+    string_aleatorio= "".join(resultado_aleatorio)
+    return string_aleatorio
 
 @app.route('/cerrar')
 def cerrar():
@@ -116,8 +123,7 @@ def inicio():
         return redirect('/')
     conexion = mysql.connect()
     cursor = conexion.cursor()
-    cursor.execute(
-        "SELECT * FROM cursos ;")
+    cursor.execute("SELECT cursos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM cursos LEFT JOIN general_users ON cursos.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
     datosCursos = cursor.fetchall()
     conexion.commit()
     cursos_con_tiempo = []
@@ -142,13 +148,12 @@ def inicio():
         curso_con_tiempo.append(tiempo_transcurrido)
         cursos_con_tiempo.append(curso_con_tiempo)
 
-    cursor.execute(
-        "SELECT * FROM noticias ;")
+    cursor.execute("SELECT noticias.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM noticias LEFT JOIN general_users ON noticias.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
     datosNoticias = cursor.fetchall()
     conexion.commit()
     noticias_con_tiempo = []
     for noticia in datosNoticias:
-        fecha_insertado = noticia[5]
+        fecha_insertado = noticia[4]
         fecha_actual = datetime.now()
         diferencia = relativedelta(fecha_actual, fecha_insertado)
         if diferencia.years > 0:
@@ -191,6 +196,48 @@ def tareas():
     return render_template('templates/light/agregarEvento.html')
 
 
+@app.route('/cursos/<string:curso_id>', methods=['GET', 'POST'])
+def verCursos(curso_id):
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM cursos WHERE id_curso= %s;", curso_id)
+    datosCursos = cursor.fetchall()
+    conexion.commit()
+
+    # Buscar si el usuario actual está inscrito en el curso
+    cursor.execute("SELECT * FROM inscripcion_cursos WHERE id_usuario_fk = %s AND id_curso_fk = %s",
+                   (session['usuario'], curso_id))
+    resultado = cursor.fetchone()
+
+    if request.method == 'POST':
+        if resultado is not None:
+            # Eliminar al usuario de la tabla de inscripción de cursos
+            cursor.execute("DELETE FROM inscripcion_cursos WHERE id_usuario_fk=%s AND id_curso_fk=%s", (session['usuario'], curso_id))
+            conexion.commit()
+            flash("Te has cancelado la inscripción en este curso.")
+        else:
+            # Insertar un nuevo usuario en la tabla de inscripción de cursos
+            id_usuario_fk = session['usuario']
+            id_curso_fk = curso_id
+            fecha_inscripcion_curso = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+            query = "INSERT INTO inscripcion_cursos (id_usuario_fk, id_curso_fk, fecha_inscripcion_curso) VALUES (%s, %s, %s)"
+            params = [id_usuario_fk, id_curso_fk, fecha_inscripcion_curso]
+
+            cursor.execute(query, params)
+            conexion.commit()
+
+            flash("Te has inscrito exitosamente en este curso.")
+
+        return redirect(f"/cursos/{curso_id}")
+
+    return render_template('templates/light/verCurso.html', datosCursos=datosCursos, inscrito=(resultado is not None))
+
+"""cursor.execute("SELECT inscripcion_cursos.*, cursos.*, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.correo FROM inscripcion_cursos LEFT JOIN cursos ON inscripcion_cursos.id_curso_fk = cursos.id_curso LEFT JOIN general_users ON inscripcion_cursos.id_usuario_fk = general_users.usuario WHERE id_curso= %s;", curso_id)"""
+
+
 @app.route('/proyectos', methods=['GET', 'POST'])
 def crearProyecto():
     if not 'login' in session:
@@ -201,17 +248,41 @@ def crearProyecto():
     if request.method == 'POST' and 'crear_proyecto' in request.form:
 
         nombre_proyecto = request.form['nombre_proyecto']
-        imagen_proyecto = request.form['imagen_proyecto']
+        imagen_proyecto = request.files['imagen_proyecto']
         descripcion_proyecto = request.form['descripcion_proyecto']
 
+        basepath = os.path.dirname(__file__)
+        filename = secure_filename(imagen_proyecto.filename)
+
+        extension = os.path.splitext(filename)[1]
+        nuevoNombreImagen = stringAleatorio()+extension
+
+        upload_path = os.path.join(basepath, '..',  'static', 'images','proyectos', nuevoNombreImagen)
+        if not os.path.exists(os.path.dirname(upload_path)):
+            os.makedirs(os.path.dirname(upload_path))
+
+        imagen_proyecto.save(upload_path)
+
+
         query = "INSERT INTO proyectos (nombre_proyecto, imagen_proyecto, descripcion_proyecto) VALUES (%s,%s, %s)"
-        params = [nombre_proyecto, imagen_proyecto, descripcion_proyecto]
+        params = [nombre_proyecto, nuevoNombreImagen, descripcion_proyecto]
 
         cursor.execute(query, params)
         conexion.commit()
         conexion.close()
         return redirect('/proyectos')
-
+    
+    if request.method == 'POST':
+        proyecto_id = request.form.get('proyecto_id')
+        if request.form.get('editar_proyecto'):
+            return redirect(f"/proyectos/{proyecto_id}")
+        if request.form.get('borrar_proyecto'):
+            cursor.execute(
+                "DELETE FROM proyectos WHERE id_proyecto = %s;", (proyecto_id,))
+            conexion.commit()
+            flash('El proyecto ha sido eliminado.', 'success')
+            return redirect('/proyectos')
+        
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute(
@@ -220,6 +291,57 @@ def crearProyecto():
     conexion.commit()
     conexion.close()
     return render_template('templates/light/projects.html', datosProyectos=datosProyectos)
+
+@app.route('/proyectos/<string:proyecto_id>', methods=['GET', 'POST'])
+def editProyecto(proyecto_id):
+    if not 'login' in session:
+        return redirect('/')
+    if session['cargo'] != 1:
+        return redirect('/inicio')
+    
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM proyectos WHERE id_proyecto= %s", proyecto_id)
+    proyecto = cursor.fetchone()
+    
+    if request.method == 'POST':
+        # Obtener los valores de los campos del formulario
+
+        
+        titulo_noticia = request.form.get('titulo_proyecto') or proyecto[1]
+        
+        descripcion_proyecto = request.form.get('descripcion_noticia') or proyecto[3]
+
+        if request.files['imagen_proyecto'].filename != '':
+            imagen_proyecto = request.files['imagen_proyecto']
+            basepath = os.path.dirname(__file__)
+            filename = secure_filename(imagen_proyecto.filename)
+
+            extension = os.path.splitext(filename)[1]
+            nuevoNombreImagen = stringAleatorio() + extension
+
+            upload_path = os.path.join( basepath, '..',  'static', 'images', 'proyectos', nuevoNombreImagen)
+            if not os.path.exists(os.path.dirname(upload_path)):
+                os.makedirs(os.path.dirname(upload_path))
+
+            imagen_proyecto.save(upload_path)
+
+        # Resto del código para procesar y guardar la imagen
+        else:
+            nuevoNombreImagen = proyecto[2]
+
+
+        
+        query = "UPDATE proyectos SET nombre_proyecto = %s, imagen_proyecto = %s, descripcion_proyecto = %s  WHERE id_proyecto = %s"
+        params = [ titulo_noticia, nuevoNombreImagen, descripcion_proyecto, proyecto_id]
+
+        cursor.execute(query, params)
+        conexion.commit()
+
+        flash('El curso ha sido editado.', 'success')
+        return redirect('/proyectos')
+    
+    return render_template('templates/light/editarProyecto.html', proyecto=proyecto)
 
 
 @app.route('/empleados')
@@ -536,6 +658,104 @@ def myperfil():
 
     # Renderizar el perfil actualizado
     return render_template('templates/light/profile.html',  datosUsuarios=datosUsuarios)
+
+@app.route('/nomina_certificados', methods=['GET', 'POST'])
+def verNominaCertificados():
+    if not 'login' in session:
+        return redirect('/')
+
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT Nombre, segundo_nombre, Apellido, segundo_apellido, usuario, profesion, correo, foto FROM general_users;")
+    datosUsuarios = cursor.fetchall()
+    conexion.commit()
+    print(datosUsuarios)
+    # Obtener la información de la sesión actual
+
+    # Renderizar el perfil actualizado
+    return render_template('templates/light/nomina_certificadosRH.html',  datosUsuarios=datosUsuarios)
+
+@app.route('/certificados/<string:usuario_id>', methods=['GET', 'POST'])
+def verCertificados(usuario_id):
+    if not 'login' in session:
+        return redirect('/')
+
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT certificados.*, general_users.Nombre AS nombre_sube, general_users.Apellido AS apellido_sube FROM certificados LEFT JOIN general_users ON certificados.usuario_sube_certificado = general_users.usuario WHERE id_usuario_fk = %s;", usuario_id)
+    certificado = cursor.fetchall()
+    conexion.commit()
+   
+    if request.method == 'POST':
+        if 'crear_certificado' in request.form:
+            nombre_certificado = request.form['nombre_certificado']
+            usuario_sube_certificado = session["usuario"]
+            fecha_subida = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            archivo_certificado = request.files['archivo_certificado']
+
+            basepath = os.path.dirname(__file__)
+            filename = secure_filename(archivo_certificado.filename)
+
+            extension = os.path.splitext(filename)[1]
+            nuevoNombreCertificado = stringAleatorio() + extension
+
+            upload_path = os.path.join(
+                basepath, '..', 'static', 'archivos', 'certificados', nuevoNombreCertificado)
+            if not os.path.exists(os.path.dirname(upload_path)):
+                os.makedirs(os.path.dirname(upload_path))
+
+            archivo_certificado.save(upload_path)
+
+            query = "INSERT INTO certificados (id_usuario_fk, nombre_certificado, usuario_sube_certificado, fecha_subida,archivo_certificado) VALUES (%s,%s,%s, %s, %s)"
+            params = [usuario_id, nombre_certificado,  usuario_sube_certificado,  fecha_subida, nuevoNombreCertificado]
+
+
+
+            cursor.execute(query, params)
+            conexion.commit()
+
+            return redirect(f'/certificados/{usuario_id}')
+        if 'eliminar_certificado' in request.form:
+    
+            nombre_archivo = request.form['eliminar_certificado']
+            print(nombre_archivo)
+            ruta_archivo = os.path.join(app.root_path, 'static', 'archivos', 'certificados', nombre_archivo)
+
+            cursor.execute("DELETE FROM certificados WHERE archivo_certificado = %s;", nombre_archivo)
+            conexion.commit()
+
+            if os.path.exists(ruta_archivo):
+                os.remove(ruta_archivo)
+
+            flash('El certificado ha sido eliminado.', 'success')
+            
+            return redirect(f'/certificados/{usuario_id}')
+
+    return render_template('templates/light/certificados.html',  certificado=certificado)
+
+
+@app.route('/descargar/<string:nombre_archivo>', methods=['GET','POST'])
+def descargar_Archivo(nombre_archivo=''):
+    if not 'login' in session:
+        return redirect('/')
+    basepath=os.path.dirname(__file__)
+    if 'descargar_certificado':
+        url_File=os.path.join (basepath, '..', 'static', 'archivos', 'certificados', nombre_archivo)
+    elif 'descargar_nomina':
+        url_File=os.path.join (basepath, '..', 'static', 'archivos', 'nominas', nombre_archivo)
+    resp=send_file(url_File,as_attachment=True)
+
+    return resp
+
+@app.route('/ver_archivo/<string:filename>', methods=['GET','POST'])
+def ver_archivo(filename):
+    if 'ver_certificado':
+        directorio_archivos = os.path.abspath(os.path.join(app.root_path, '..', 'static', 'archivos', 'certificados', filename))
+    elif 'ver_nomina':
+        directorio_archivos = os.path.abspath(os.path.join(app.root_path, '..', 'static', 'archivos', 'certificados', filename))
+
+    return send_from_directory(directory=directorio_archivos, path=filename)
+
 
 
 @app.errorhandler(404)

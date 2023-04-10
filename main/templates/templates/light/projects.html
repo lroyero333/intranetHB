@@ -25,11 +25,12 @@
                         <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
                     </button>
 
-                    <a href="" title="" class="btn btn-success ml-2">Editar Proyecto</a>
-                    <button type="button" class="btn btn-danger btn-icon-label ml-2">
-                        <span class="btn-inner--text">Eliminar Proyecto</span>
-                        <span class="btn-inner--icon"><i class="fa fa-trash-o"></i></span>
+                    <button data-toggle="modal" data-target="#verProyectos" type="button"
+                        class="btn btn-success ml-2  btn-animated btn-animated-y">
+                        <span class="btn-inner--visible">Opciones Proyecto</span>
+                        <span class="btn-inner--hidden"><i class="fa fa-cog"></i></span>
                     </button>
+                    
                     {% endif %}
                 </form>
             </div>
@@ -43,8 +44,8 @@
                     <div class="card mcard_4">
                         <div class="body">
                             <div class="img">
-                                <img src="{{ url_for('static', filename='images/' + datosProyectos[2]) }}" class="rounded-circle"
-                                    alt="profile-image">
+                                <img src="{{ url_for('static', filename='images/proyectos/' + datosProyectos[2]) }}"
+                                    class="rounded-circle" alt="profile-image">
                             </div>
                             <div class="user">
                                 <h5 class="mt-3 mb-1">{{datosProyectos[1]}}</h5>
@@ -68,7 +69,7 @@
     </div>
 </div>
 
-<form action="/proyectos" method="POST">
+<form action="/proyectos" method="POST" enctype="multipart/form-data">
     <div class="modal fade" id="addproject" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -76,7 +77,7 @@
                     <label for="fecha_inicio_curso"><strong>Añadir Proyecto</strong></label>
                 </div>
                 <div class="modal-body">
-                    
+
                     <div class="row clearfix">
                         <div class="col-12">
                             <div class="form-group">
@@ -89,9 +90,15 @@
                         <div class="col-12">
 
                             <div class="form-group">
-                                <label for="imagen_proyecto"><strong>Imagen del Proyecto:</strong></label>
-                                <input type="text" class="form-control" name="imagen_proyecto" id="imagen_proyecto"
-                                    placeholder="Imagen del Proyecto">
+                                <label for="foto"><strong>Imagen del Proyecto:</strong></label>
+                                <div>
+                                    <input type="file" name="imagen_proyecto" id="imagen_proyecto"
+                                        class="custom-input-file" />
+                                    <label for="imagen_proyecto">
+                                        <i class="fa fa-upload"></i>
+                                        <span>Selecciona una imagen…</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
@@ -102,7 +109,7 @@
                                     id="descripcion_proyecto" required></textarea>
                             </div>
                         </div>
-                
+
                         <div class="modal-footer">
                             <button type="submit" name="crear_proyecto" class="btn btn-primary">Añadir</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -114,4 +121,45 @@
         </div>
     </div>
 </form>
+
+
+<div class="modal fade" id="verProyectos" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label for="fecha_inicio_curso"><strong>Opciones de Proyectos</strong></label>
+            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="titulo_noticia"><strong>Proyectos creados</strong></label>
+                                <select class="selectpicker" name="proyecto_id" title="Selecciona un curso"
+                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
+                                    <option value="" selected disabled>Selecciona un proyecto</option>
+                                    {% for datosProyectos in datosProyectos %}
+                                    <option value="{{ datosProyectos[0] }}">{{ datosProyectos[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="" method="POST">
+                                <input type="hidden" name="proyecto_id" value="{{ datosProyectos[0] }}">
+                                <button type="submit" name="editar_proyecto" value="{{ datosProyectos[0] }}" class="btn btn-primary">Editar</button>
+                                <button type="submit" name="borrar_proyecto" value="{{ datosProyectos[0] }}"
+                                    class="btn btn-danger">Eliminar
+                                    <i class="fa fa-trash"></i></button>
+                                
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
 {% endblock %}

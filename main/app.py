@@ -1,7 +1,7 @@
 from flask import Flask
 from flaskext.mysql import MySQL
 import bcrypt
-from flask import Flask, render_template, request, redirect, url_for,session,jsonify
+from flask import Flask, render_template, request, redirect, url_for,session,jsonify, flash
 import os
 from werkzeug.utils import secure_filename
 

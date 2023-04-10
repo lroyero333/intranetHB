@@ -1,0 +1,76 @@
+{% extends 'templates/light/base.html' %}
+{% block content %}
+<div class="main_content" id="main-content">
+    <br>
+    <div class="page">
+
+        <div class="container">
+
+            <h1 class="text-center">{{datosCursos[0][2]}}</h1>
+
+            <br>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card">
+                        <form action="" method="POST">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <h3>{{datosCursos[0][2]}}</h3>
+                                </div>
+
+                                <div class="form-group">
+                                    <p>{{datosCursos[0][7]}}</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">Inicia: {{datosCursos[0][3]}} Termina: {{datosCursos[0][4]}}</label>
+                                </div>
+                                <form action="" method="POST">
+                                    <div class="form-group">
+
+                                        {% if inscrito %}
+                                        <form method="post"
+                                            action="">
+                                            <button type="submit"
+                                                class="btn btn-danger ml-2 btn-animated btn-animated-y">
+                                                <span class="btn-inner--visible">Cancelar Inscripcion</span>
+                                                <span class="btn-inner--hidden"><i class="fa fa-ban"></i></span>
+                                            </button>
+                                        </form>
+                                        {% else %}
+                                        <form method="post"
+                                            action="">
+                                            <button type="submit"
+                                                class="btn btn-primary ml-2 btn-animated btn-animated-y">
+                                                <span class="btn-inner--visible">Inscribirse</span>
+                                                <span class="btn-inner--hidden"><i class="fa fa-thumbs-up"></i></span>
+                                            </button>
+                                        </form>
+                                        {% endif %}
+
+
+                                        {% if session["cargo"] == 1%}
+                                        <span
+                                            class="badge badge-lg badge-pill badge-primary text-uppercase">Primary</span>
+                                        <span
+                                            class="badge badge-lg badge-pill badge-secondary text-uppercase">Secondary</span>
+                                        <span
+                                            class="badge badge-lg badge-pill badge-tertiary text-uppercase">Tertiary</span>
+                                        <span
+                                            class="badge badge-lg badge-pill badge-success text-uppercase">Success</span>
+                                        <span
+                                            class="badge badge-lg badge-pill badge-danger text-uppercase">Danger</span>
+                                        <span
+                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Warning</span>
+                                        <span class="badge badge-lg badge-pill badge-info text-uppercase">Info</span>
+                                        {% endif %}
+                                    </div>
+                                </form>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
