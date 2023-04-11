@@ -200,8 +200,7 @@ def calendario():
 
     conexion.close()
 
-    return render_template('templates/light/app-calendar.html', cursos=cursos, noticias=noticias)
-
+    return render_template('calendario/templates/app-calendar.html', cursos=cursos, noticias=noticias)
 
 @app.route('/calendario/curso/<string:curso_id>', methods=['GET', 'POST'])
 def editCurso(curso_id):
@@ -235,7 +234,7 @@ def editCurso(curso_id):
         flash('El curso ha sido editado.', 'success')
         return redirect('/calendario')
     
-    return render_template('templates/light/editarCurso.html', curso=curso)
+    return render_template('calendario/templates/editarCurso.html', curso=curso)
 
 @app.route('/calendario/noticia/<string:noticia_id>', methods=['GET', 'POST'])
 def editNoticia(noticia_id):
@@ -286,8 +285,151 @@ def editNoticia(noticia_id):
         flash('El curso ha sido editado.', 'success')
         return redirect('/calendario')
     
-    return render_template('templates/light/editarNoticia.html', noticia=noticia)
+    return render_template('calendario/templates/editarNoticia.html', noticia=noticia)
 
+@app.route('/cursos/<string:curso_id>', methods=['GET', 'POST'])
+def verCursos(curso_id):
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM cursos WHERE id_curso= %s;", curso_id)
+    datosCursos = cursor.fetchall()
+    conexion.commit()
+
+    # Buscar si el usuario actual está inscrito en el curso
+    cursor.execute("SELECT * FROM inscripcion_cursos WHERE id_usuario_fk = %s AND id_curso_fk = %s",
+                   (session['usuario'], curso_id))
+    resultado = cursor.fetchone()
+
+    if request.method == 'POST':
+        if resultado is not None:
+            # Eliminar al usuario de la tabla de inscripción de cursos
+            cursor.execute("DELETE FROM inscripcion_cursos WHERE id_usuario_fk=%s AND id_curso_fk=%s", (session['usuario'], curso_id))
+            conexion.commit()
+            flash("Te has cancelado la inscripción en este curso.")
+        else:
+            # Insertar un nuevo usuario en la tabla de inscripción de cursos
+            id_usuario_fk = session['usuario']
+            id_curso_fk = curso_id
+            fecha_inscripcion_curso = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+            query = "INSERT INTO inscripcion_cursos (id_usuario_fk, id_curso_fk, fecha_inscripcion_curso) VALUES (%s, %s, %s)"
+            params = [id_usuario_fk, id_curso_fk, fecha_inscripcion_curso]
+
+            cursor.execute(query, params)
+            conexion.commit()
+
+            flash("Te has inscrito exitosamente en este curso.")
+
+        return redirect(f"/cursos/{curso_id}")
+
+    return render_template('calendario/templates/verCurso.html', datosCursos=datosCursos, inscrito=(resultado is not None))
+
+@app.route('/proyectos', methods=['GET', 'POST'])
+def crearProyecto():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+
+    if request.method == 'POST' and 'crear_proyecto' in request.form:
+
+        nombre_proyecto = request.form['nombre_proyecto']
+        imagen_proyecto = request.files['imagen_proyecto']
+        descripcion_proyecto = request.form['descripcion_proyecto']
+
+        basepath = os.path.dirname(__file__)
+        filename = secure_filename(imagen_proyecto.filename)
+
+        extension = os.path.splitext(filename)[1]
+        nuevoNombreImagen = stringAleatorio()+extension
+
+        upload_path = os.path.join(basepath, '..','..',  'static', 'images','proyectos', nuevoNombreImagen)
+        if not os.path.exists(os.path.dirname(upload_path)):
+            os.makedirs(os.path.dirname(upload_path))
+
+        imagen_proyecto.save(upload_path)
+
+
+        query = "INSERT INTO proyectos (nombre_proyecto, imagen_proyecto, descripcion_proyecto) VALUES (%s,%s, %s)"
+        params = [nombre_proyecto, nuevoNombreImagen, descripcion_proyecto]
+
+        cursor.execute(query, params)
+        conexion.commit()
+        conexion.close()
+        return redirect('/proyectos')
+    
+    if request.method == 'POST':
+        proyecto_id = request.form.get('proyecto_id')
+        if request.form.get('editar_proyecto'):
+            return redirect(f"/proyectos/{proyecto_id}")
+        if request.form.get('borrar_proyecto'):
+            cursor.execute(
+                "DELETE FROM proyectos WHERE id_proyecto = %s;", (proyecto_id,))
+            conexion.commit()
+            flash('El proyecto ha sido eliminado.', 'success')
+            return redirect('/proyectos')
+        
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute(
+        "SELECT * FROM proyectos;")
+    datosProyectos = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return render_template('calendario/templates/projects.html', datosProyectos=datosProyectos)
+
+@app.route('/proyectos/<string:proyecto_id>', methods=['GET', 'POST'])
+def editProyecto(proyecto_id):
+    if not 'login' in session:
+        return redirect('/')
+    if session['cargo'] != 1:
+        return redirect('/inicio')
+    
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM proyectos WHERE id_proyecto= %s", proyecto_id)
+    proyecto = cursor.fetchone()
+    
+    if request.method == 'POST':
+        # Obtener los valores de los campos del formulario
+
+        
+        titulo_noticia = request.form.get('titulo_proyecto') or proyecto[1]
+        
+        descripcion_proyecto = request.form.get('descripcion_noticia') or proyecto[3]
+
+        if request.files['imagen_proyecto'].filename != '':
+            imagen_proyecto = request.files['imagen_proyecto']
+            basepath = os.path.dirname(__file__)
+            filename = secure_filename(imagen_proyecto.filename)
+
+            extension = os.path.splitext(filename)[1]
+            nuevoNombreImagen = stringAleatorio() + extension
+
+            upload_path = os.path.join( basepath, '..', '..', 'static', 'images', 'proyectos', nuevoNombreImagen)
+            if not os.path.exists(os.path.dirname(upload_path)):
+                os.makedirs(os.path.dirname(upload_path))
+
+            imagen_proyecto.save(upload_path)
+
+        # Resto del código para procesar y guardar la imagen
+        else:
+            nuevoNombreImagen = proyecto[2]
+
+
+        
+        query = "UPDATE proyectos SET nombre_proyecto = %s, imagen_proyecto = %s, descripcion_proyecto = %s  WHERE id_proyecto = %s"
+        params = [ titulo_noticia, nuevoNombreImagen, descripcion_proyecto, proyecto_id]
+
+        cursor.execute(query, params)
+        conexion.commit()
+
+        flash('El curso ha sido editado.', 'success')
+        return redirect('/proyectos')
+    
+    return render_template('calendario/templates/editarProyecto.html', proyecto=proyecto)
 
 @app.route('/cursos')
 def obtener_cursos():

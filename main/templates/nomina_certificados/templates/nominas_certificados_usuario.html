@@ -1,0 +1,164 @@
+{% extends 'templates/light/base.html' %}
+{% block content %}
+<div class="main_content" id="main-content">
+    <div class="page">
+
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12">
+                    <div class="table-responsive">
+                        <table
+                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                            <thead>
+                                <tr>
+
+                                    <th>Certificado</th>
+                                    <th>Subido por</th>
+                                    <th>fecha de subida</th>
+                                    <th>Archivo</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for certificado in certificado %}
+
+                                <tr>
+                                    <td>
+                                        <span class="ml-2">{{certificado[1]}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{certificado[6]}} {{certificado[7]}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{certificado[4]}}</span>
+                                    </td>
+
+
+                                    <td>
+                                        <form action="" method="POST">
+                                            <button class="btn btn-primary btn-sm" name="ver_certificado"
+                                                value="{{certificado[5]}}"><i class="fa fa-eye"></i></button></a>
+                                            <button class="btn btn-primary btn-sm" name="descargar_certificado"
+                                                value="{{certificado[5]}}"><i class="fa fa-download"></i></button></a>
+                                        </form>
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+                        <br>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#addCertificado">Solicitar
+                            Certificado</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+    <div class="modal fade" id="addCertificado" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label for="fecha_inicio_curso"><strong>Solicitar Certificado</strong></label>
+                </div>
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="tipo_certificado"><strong>Tipo de Certificado:</strong></label>
+                                <select class="selectpicker" name="tipo_certificado" title="Selecciona un curso"
+                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
+                                    <option value="" selected disabled>Selecciona el tipo</option>
+                                    <option value="">Tipo 1</option>
+                                    <option value="">Tipo 2</option>
+                                    <option value="">Tipo 3</option>
+                                    <option value="">Tipo 4</option>
+                                    
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" name="solicitar_certificado"
+                                class="btn btn-primary">Solicitar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="main_content" id="main-content">
+    <div class="page">
+
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12">
+                    <div class="table-responsive">
+                        <table
+                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                            <thead>
+                                <tr>
+
+                                    <th>Nomina</th>
+                                    <th>Subido por</th>
+                                    <th>fecha de subida</th>
+                                    <th>Archivo</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for nomina in nomina %}
+
+                                <tr>
+                                    <td>
+                                        <span class="ml-2">{{nomina[3]}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{nomina[6]}} {{nomina[7]}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{nomina[4]}}</span>
+                                    </td>
+
+
+                                    <td>
+                                        <form action="" method="POST">
+                                            <button class="btn btn-primary btn-sm" name="ver_nomina"
+                                                value="{{nomina[5]}}"><i class="fa fa-eye"></i></button></a>
+                                            <button class="btn btn-primary btn-sm" name="descargar_nomina"
+                                                value="{{nomina[5]}}"><i class="fa fa-download"></i></button></a>
+
+                                        </form>
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+                        <br>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#addNomina">Solicitar
+                            Nomina</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

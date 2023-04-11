@@ -58,7 +58,7 @@
                     <li><a href="https://trello.com/login" target="_blank"><i
                                 class="ti-notepad"></i><span>TaskBoard</span></a></li>
                     <li><a href="/proyectos"><i class="fa fa-folder"></i><span>Projects</span></a></li>
-                    <li><a href="/nomina_certificados"><i class="fa fa-file"></i><span>Nomina/Certificados</span></a>
+                    <li><a {% if session["cargo"] == 1 %} href="/nomina_certificados" {% endif %} {% if session["cargo"] != 1 %} href="/nomina_certificados/" {% endif %}><i class="fa fa-file"></i><span>Nomina/Certificados</span></a>
                     </li>
 
                     {% if session["cargo"] == 1 or session["cargo"] == 0 %}
