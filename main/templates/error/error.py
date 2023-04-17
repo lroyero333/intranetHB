@@ -1,7 +1,7 @@
 from main.routes import request, app,mysql,bcrypt,session,redirect,render_template,url_for
 import json
 from main.routes import request, app, mysql, bcrypt, session, redirect, render_template, url_for
-from main.app import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
+from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
 
 @app.errorhandler(404)
 def error_404(error):

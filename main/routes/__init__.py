@@ -2,10 +2,10 @@ from random import sample
 from flask import request, redirect, send_file, send_from_directory
 import os
 import json
-from flask import render_template, redirect, request, url_for, session, flash
+from flask import render_template, redirect, request, url_for, session, flash, g
 import bcrypt
 from werkzeug.utils import secure_filename
-from main.app import app, mysql
+from main.run import app, mysql
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from main.templates.login import login
@@ -14,6 +14,7 @@ from main.templates.calendario import calendario
 from main.templates.error import error
 from main.templates.nomina_certificados import nomina_certificado
 from main.templates.usersCRUD import usersCRUD
+from main.templates.infoUsuario import usuario
 
 """import pyrebase
 
@@ -94,25 +95,112 @@ def cerrar():
 url_inicio = '/inicio'
 
 
-"""@app.route('/notificaciones')
+@app.route('/notificaciones')
 def notificaciones():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.solicitante = general_users.usuario ORDER BY fecha_solicitud DESC;")
+    solicitudes_certificado = cursor.fetchall()
+    cursor.execute("SELECT solicitud_nomina.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_nomina LEFT JOIN general_users ON solicitud_nomina.solicitante = general_users.usuario ORDER BY fecha_solicitud DESC;")
+    solicitudes_nomina = cursor.fetchall()
+    conexion.commit()
+     
+    return render_template('templates/light/verNotificaciones.html',  solicitudes_certificado=solicitudes_certificado,solicitudes_nomina=solicitudes_nomina)
 
-    # Recuperar las notificaciones sin leer de la base de datos
-    notificaciones = Notification.query.filter_by(
-        user_id=session['user_id'], leido=False).all()
+@app.before_request
+def cargar_solicitudes_notificaciones():
+    if not 'login' in session:
+        return
 
-    # Marcar las notificaciones como leídas y actualizar la base de datos
-    for notificacion in notificaciones:
-        notificacion.leido = True
-        db.session.add(notificacion)
-    db.session.commit()
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.solicitante = general_users.usuario ORDER BY fecha_solicitud DESC;")
+    solicitudes_certificado = cursor.fetchall()
+    cursor.execute("SELECT solicitud_nomina.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_nomina LEFT JOIN general_users ON solicitud_nomina.solicitante = general_users.usuario ORDER BY fecha_solicitud DESC;")
+    solicitudes_nomina = cursor.fetchall()
 
-    # Eliminar las notificaciones leídas de la sesión del usuario
-    session.pop('notificaciones', None)
+    cursor.execute("SELECT * FROM solicitud_certificado WHERE estado_notificacion= %s;","No visto")
+    notificacion_certificado = cursor.fetchall()
+    cursor.execute("SELECT * FROM solicitud_nomina WHERE estado_notificacion= %s;","No visto")
+    notificacion_nomina = cursor.fetchall()
 
-    return render_template('notificaciones.html', notificaciones=notificaciones)"""
+    conexion.commit()
+   
+    solicitudes_total = notificacion_certificado + notificacion_nomina
+    solicitudes_total_count = len(solicitudes_total)
+
+    certificadooss_con_tiempo = []
+    fecha_actual = datetime.now()
+    for certificadoos in solicitudes_certificado:
+        fecha_insertado = certificadoos[4]
+        diferencia = relativedelta(fecha_actual, fecha_insertado)
+        if diferencia.years > 0:
+            tiempo_transcurrido = f"hace {diferencia.years} años"
+        elif diferencia.months > 0:
+            tiempo_transcurrido = f"hace {diferencia.months} meses"
+        elif diferencia.days > 0:
+            tiempo_transcurrido = f"hace {diferencia.days} días"
+        elif diferencia.hours > 0:
+            tiempo_transcurrido = f"hace {diferencia.hours} horas"
+        elif diferencia.minutes > 0:
+            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
+        else:
+            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
+        # convertir a lista para poder modificar
+        certificadoos_con_tiempo = list(certificadoos)
+        certificadoos_con_tiempo.append(tiempo_transcurrido)
+        certificadooss_con_tiempo.append(certificadoos_con_tiempo)
+
+    nominaas_con_tiempo = []
+    
+    for nominas in solicitudes_nomina:
+        fecha_insertado = nominas[3]
+        diferencia = relativedelta(fecha_actual, fecha_insertado)
+        if diferencia.years > 0:
+            tiempo_transcurrido = f"hace {diferencia.years} años"
+        elif diferencia.months > 0:
+            tiempo_transcurrido = f"hace {diferencia.months} meses"
+        elif diferencia.days > 0:
+            tiempo_transcurrido = f"hace {diferencia.days} días"
+        elif diferencia.hours > 0:
+            tiempo_transcurrido = f"hace {diferencia.hours} horas"
+        elif diferencia.minutes > 0:
+            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
+        else:
+            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
+        # convertir a lista para poder modificar
+        nominas_con_tiempo = list(nominas)
+        nominas_con_tiempo.append(tiempo_transcurrido)
+        nominaas_con_tiempo.append(nominas_con_tiempo)
+
+    if request.method == 'POST':
+        if 'ver_notificacion_certificado'in request.args:
+
+            id_solicitud=request.form['ver_notificacion_certificado']
+            estado_notificacion = "Visto"
+            query = "UPDATE solicitud_certificado SET estado_notificacion = %s WHERE id_solicitud = %s"
+            params = [estado_notificacion, id_solicitud]
+
+            cursor.execute(query, params)
+            conexion.commit()
+            return redirect("/notificaciones")
+        if 'ver_notificacion_nomina'in request.args:
+
+            id_solicitud_nomina=request.form['ver_notificacion_nomina']
+            estado_notificacion = "Visto"
+            query = "UPDATE solicitud_nomina SET estado_notificacion = %s WHERE id_solicitud_nomina = %s"
+            params = [estado_notificacion, id_solicitud_nomina]
+
+            cursor.execute(query, params)
+            conexion.commit()
+            return redirect("/notificaciones")
+    # Guardamos las solicitudes en la variable de contexto `g`
+    g.solicitudes_total_count = solicitudes_total_count
+    g.solicitudes_certificado = certificadooss_con_tiempo
+    g.solicitudes_nomina=nominaas_con_tiempo
+    
 
 
 @app.route('/inicio')
@@ -185,38 +273,6 @@ def noticias():
 @app.route('/static/<path:path>')
 def static_file(path):
     return app.send_static_file(path)
-
-
-@app.route('/contactos')
-def listaEmpleadosContact():
-    if not 'login' in session:
-        return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-    cursor.execute(
-        "SELECT Nombre, Apellido, correo, celular, foto ,profesion FROM general_users WHERE usuario != %s;", session["usuario"])
-    datosUsuarios = cursor.fetchall()
-    conexion.commit()
-    print(datosUsuarios)
-
-    return render_template('templates/light/app-contact.html', datosUsuarios=datosUsuarios)
-
-@app.route('/myProfile', methods=['GET', 'POST'])
-def myperfil():
-    if not 'login' in session:
-        return redirect('/')
-
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-    cursor.execute(
-        "SELECT general_users.*, cargos.nombre_cargo FROM general_users LEFT JOIN usuario_cargo ON general_users.id = usuario_cargo.id_usuario_fk LEFT JOIN cargos ON usuario_cargo.id_cargo_fk = cargos.id_cargo WHERE usuario= %s;", session['usuario'])
-    datosUsuarios = cursor.fetchall()
-    conexion.commit()
-    print(datosUsuarios)
-    # Obtener la información de la sesión actual
-
-    # Renderizar el perfil actualizado
-    return render_template('templates/light/profile.html',  datosUsuarios=datosUsuarios)
 
 @app.route('/ver_archivo/<string:filename>', methods=['GET','POST'])
 def ver_archivo(filename):

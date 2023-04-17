@@ -1,4 +1,4 @@
-from main.app import app, request, bcrypt, mysql, redirect, render_template, url_for
+from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for
 
 
 @app.route('/register', methods=['GET', 'POST'])

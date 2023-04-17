@@ -1,0 +1,45 @@
+{% extends 'templates/light/base.html' %}
+{% block content %}
+<div class="main_content" id="main-content">
+
+    <div class="page">
+
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-md-12">
+                    
+                    <div class="tab-content padding-0">
+                        <div class="tab-pane card active" id="Web">
+                            {% for solicitudes_certificado in solicitudes_certificado %}
+                            
+                            <div class="body">
+                                <h5 class="mb-0"><a target="_blank" href="javascript:void(0);">{{solicitudes_certificado[2]}}</a></h5>
+                                <small>Fecha y hora de solicitud: {{solicitudes_certificado[4]}}</small>
+                                <p class="m-t-10">{{solicitudes_certificado[9]}} {{solicitudes_certificado[10]}} ha solicitado un certificado de {{solicitudes_certificado[1]}} con el nombre de
+                                    {{solicitudes_certificado[2]}}</p>
+                                <a class="m-r-20" target="_blank" href="javascript:void(0);">AdminCC</a>
+                                <a class="m-r-20" target="_blank" href="javascript:void(0);">Swift Admin</a>
+                            </div>
+                            <hr>
+                            {%endfor%}
+                            {% for solicitudes_nomina in solicitudes_nomina %}
+                            
+                            <div class="body">
+                                <h5 class="mb-0"><a target="_blank" href="javascript:void(0);">{{solicitudes_nomina[1]}}</a></h5>
+                                <small>Fecha y hora de solicitud: {{solicitudes_nomina[3]}}</small>
+                                <p class="m-t-10">{{solicitudes_nomina[8]}} {{solicitudes_nomina[9]}} ha solicitado una nomina con el nombre de {{solicitudes_nomina[1]}}.</p>
+                                <a class="m-r-20" target="_blank" href="javascript:void(0);">AdminCC</a>
+                                <a class="m-r-20" target="_blank" href="javascript:void(0);">Swift Admin</a>
+                            </div>
+                            <hr>
+                            {%endfor%}
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

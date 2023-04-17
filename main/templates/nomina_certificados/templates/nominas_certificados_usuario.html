@@ -2,7 +2,6 @@
 {% block content %}
 <div class="main_content" id="main-content">
     <div class="page">
-
         <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
@@ -11,17 +10,14 @@
                             class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
                             <thead>
                                 <tr>
-
                                     <th>Certificado</th>
                                     <th>Subido por</th>
                                     <th>fecha de subida</th>
                                     <th>Archivo</th>
-
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for certificado in certificado %}
-
                                 <tr>
                                     <td>
                                         <span class="ml-2">{{certificado[1]}}</span>
@@ -32,8 +28,6 @@
                                     <td>
                                         <span>{{certificado[4]}}</span>
                                     </td>
-
-
                                     <td>
                                         <form action="" method="POST">
                                             <button class="btn btn-primary btn-sm" name="ver_certificado"
@@ -42,17 +36,62 @@
                                                 value="{{certificado[5]}}"><i class="fa fa-download"></i></button></a>
                                         </form>
                                     </td>
-
                                 </tr>
-
                                 {% endfor %}
-
                             </tbody>
-
                         </table>
                         <br>
                         <button class="btn btn-primary" data-toggle="modal" data-target="#addCertificado">Solicitar
                             Certificado</button>
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#cancelarCertificado">Cancelar
+                            Solicitud</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12">
+                    <div class="table-responsive">
+                        <table
+                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Nomina</th>
+                                    <th>Subido por</th>
+                                    <th>fecha de subida</th>
+                                    <th>Archivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for nomina in nomina %}
+                                <tr>
+                                    <td>
+                                        <span class="ml-2">{{nomina[3]}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{nomina[6]}} {{nomina[7]}}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{nomina[4]}}</span>
+                                    </td>
+                                    <td>
+                                        <form action="" method="POST">
+                                            <button class="btn btn-primary btn-sm" name="ver_nomina"
+                                                value="{{nomina[5]}}"><i class="fa fa-eye"></i></button></a>
+                                            <button class="btn btn-primary btn-sm" name="descargar_nomina"
+                                                value="{{nomina[5]}}"><i class="fa fa-download"></i></button></a>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <br>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#solicitarNomina">Solicitar
+                            Nomina</button>
+                        <button class="btn btn-danger" data-toggle="modal" data-target="#cancelarNomina">Cancelar
+                            Solicitud</button>
                     </div>
                 </div>
             </div>
@@ -76,16 +115,19 @@
                                 <select class="selectpicker" name="tipo_certificado" title="Selecciona un curso"
                                     data-live-search="true" data-live-search-placeholder="Buscar ...">
                                     <option value="" selected disabled>Selecciona el tipo</option>
-                                    <option value="">Tipo 1</option>
-                                    <option value="">Tipo 2</option>
-                                    <option value="">Tipo 3</option>
-                                    <option value="">Tipo 4</option>
-                                    
+                                    <option value="Tipo 1">Tipo 1</option>
+                                    <option value="Tipo 2">Tipo 2</option>
+                                    <option value="Tipo 3">Tipo 3</option>
+                                    <option value="Tipo 4">Tipo 4</option>
                                 </select>
                             </div>
-
+                            <div class="form-group">
+                                <label for="nombre_certificado" class="control-label sr-only">Nombre del
+                                    Certificado</label>
+                                <input type="text" class="form-control" id="nombre_certificado"
+                                    name="nombre_certificado" placeholder="Nombre del certificado" required>
+                            </div>
                         </div>
-
                         <div class="modal-footer">
                             <button type="submit" name="solicitar_certificado"
                                 class="btn btn-primary">Solicitar</button>
@@ -99,66 +141,109 @@
     </div>
 </form>
 
-<div class="main_content" id="main-content">
-    <div class="page">
+<form action="" method="POST" enctype="multipart/form-data">
+    <div class="modal fade" id="cancelarCertificado" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label for="fecha_inicio_curso"><strong>Cancelar Solicitud de Certificado</strong></label>
+                </div>
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="cancelar_certificado"><strong>Certificado:</strong></label>
+                                <select class="selectpicker" name="cancelar_certificado"
+                                    title="Selecciona un certificado" data-live-search="true"
+                                    data-live-search-placeholder="Buscar ...">
+                                    <option value="" selected disabled>Selecciona el certificado</option>
+                                    {% for solicitudesCertificado in solicitudesCertificado %}
+                                    <option value="{{solicitudesCertificado[0]}}">{{solicitudesCertificado[1]}}</option>
+                                    {% endfor %}
 
-        <div class="container-fluid">
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12">
-                    <div class="table-responsive">
-                        <table
-                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
-                            <thead>
-                                <tr>
-
-                                    <th>Nomina</th>
-                                    <th>Subido por</th>
-                                    <th>fecha de subida</th>
-                                    <th>Archivo</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for nomina in nomina %}
-
-                                <tr>
-                                    <td>
-                                        <span class="ml-2">{{nomina[3]}}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{nomina[6]}} {{nomina[7]}}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{nomina[4]}}</span>
-                                    </td>
-
-
-                                    <td>
-                                        <form action="" method="POST">
-                                            <button class="btn btn-primary btn-sm" name="ver_nomina"
-                                                value="{{nomina[5]}}"><i class="fa fa-eye"></i></button></a>
-                                            <button class="btn btn-primary btn-sm" name="descargar_nomina"
-                                                value="{{nomina[5]}}"><i class="fa fa-download"></i></button></a>
-
-                                        </form>
-                                    </td>
-
-                                </tr>
-
-                                {% endfor %}
-
-                            </tbody>
-
-                        </table>
-                        <br>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#addNomina">Solicitar
-                            Nomina</button>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="cancelar_certificado" class="btn btn-danger">Cancelar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-</div>
+</form>
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+    <div class="modal fade" id="solicitarNomina" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label><strong>Solicitar Nomina</strong></label>
+                </div>
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="nombre_nomina" class="control-label sr-only">Nombre de la
+                                    Nomina</label>
+                                <input type="text" class="form-control" id="nombre_nomina"
+                                    name="nombre_nomina" placeholder="Nombre de la Nomina" required>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Motivo de solicitud:</strong> </label>
+                                <textarea class="form-control" rows="3" cols="30" name="motivo_solicitud"
+                                    id="motivo_solicitud"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="solicitar_nomina" class="btn btn-primary">Solicitar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<form action="" method="POST" enctype="multipart/form-data">
+    <div class="modal fade" id="cancelarNomina" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label><strong>Cancelar Solicitud de Nomina</strong></label>
+                </div>
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="cancelar_nomina"><strong>Nomina:</strong></label>
+                                <select class="selectpicker" name="cancelar_nomina" title="Selecciona una nomina"
+                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
+                                    <option value="" selected disabled>Selecciona la nomina</option>
+                                    {% for solicitudesNomina in solicitudesNomina %}
+                                    <option value="{{solicitudesNomina[0]}}">{{solicitudesNomina[1]}}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="cancelar_nomina" class="btn btn-danger">Cancelar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
 
 
 {% endblock %}

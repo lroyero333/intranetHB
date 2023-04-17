@@ -1,12 +1,12 @@
 import datetime
 import os
 from random import sample
-
+from datetime import datetime
 from flask import send_file
 from main.routes import request, app,mysql,bcrypt,session,redirect,render_template,url_for
 import json
 from main.routes import request, app, mysql, bcrypt, session, redirect, render_template, url_for
-from main.app import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
+from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
 from werkzeug.utils import secure_filename
 
 def stringAleatorio():
@@ -76,7 +76,7 @@ def verCertificados(usuario_id):
     
             nombre_archivo = request.form['eliminar_certificado']
             print(nombre_archivo)
-            ruta_archivo = os.path.join(app.root_path,'..', 'static', 'archivos', 'certificados', nombre_archivo)
+            ruta_archivo = os.path.join(app.root_path, 'static', 'archivos', 'certificados', nombre_archivo)
 
             cursor.execute("DELETE FROM certificados WHERE archivo_certificado = %s;", nombre_archivo)
             conexion.commit()
@@ -142,7 +142,7 @@ def verNominas(usuario_id):
     
             nombre_archivo = request.form['eliminar_nomina']
             print(nombre_archivo)
-            ruta_archivo = os.path.join(app.root_path, '..', 'static', 'archivos', 'nominas', nombre_archivo)
+            ruta_archivo = os.path.join(app.root_path, 'static', 'archivos', 'nominas', nombre_archivo)
 
             cursor.execute("DELETE FROM nominas WHERE archivo_nomina = %s;", nombre_archivo)
             conexion.commit()
@@ -186,6 +186,49 @@ def verNominaCertificadosUsuario():
         url_File=os.path.join (basepath, '..','..', 'static', 'archivos', 'certificados', nombre_archivo)
         resp=send_file(url_File,as_attachment=True)
         return resp
-   
-  
-    return render_template('nomina_certificados/templates/nominas_certificados_usuario.html', nomina=nomina, certificado=certificado)
+    
+    if request.method == 'POST':
+
+        if 'solicitar_certificado'in request.form:
+            tipo_certificado = request.form['tipo_certificado']
+            nombre_certificado=request.form['nombre_certificado']
+            solicitante = session["usuario"]
+            fecha_solicitud = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            query = "INSERT INTO solicitud_certificado (tipo_certificado, nombre_certificado, solicitante, fecha_solicitud ) VALUES (%s,%s,%s,%s)"
+            params = [tipo_certificado, nombre_certificado, solicitante, fecha_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            return redirect('/nomina_certificados/')
+        
+        if 'cancelar_certificado'in request.form:
+            certificadoCancelar=request.form['cancelar_certificado']
+            cursor.execute("DELETE FROM solicitud_certificado WHERE id_solicitud=%s;", certificadoCancelar)
+            conexion.commit()
+            return redirect('/nomina_certificados/')
+        
+        if 'solicitar_nomina'in request.form:
+            solicitante = session["usuario"]
+            nombre_nomina=request.form['nombre_nomina']
+            fecha_solicitud = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            motivo_solicitud=request.form['motivo_solicitud']
+            query = "INSERT INTO solicitud_nomina (nombre_nomina, solicitante, fecha_solicitud ,motivo_solicitud) VALUES (%s,%s,%s,%s)"
+            params = [nombre_nomina,solicitante, fecha_solicitud, motivo_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            return redirect('/nomina_certificados/')
+        
+        if 'cancelar_nomina'in request.form:
+            nominaCancelar=request.form['cancelar_nomina']
+            cursor.execute("DELETE FROM solicitud_nomina WHERE id_solicitud_nomina=%s;", nominaCancelar)
+            conexion.commit()
+            return redirect('/nomina_certificados/')
+        
+    cursor.execute("SELECT id_solicitud, nombre_certificado FROM solicitud_certificado WHERE solicitante = %s;", session["usuario"])
+    solicitudesCertificado = cursor.fetchall()
+    cursor.execute("SELECT id_solicitud_nomina, nombre_nomina FROM solicitud_nomina WHERE solicitante = %s;", session["usuario"])
+    solicitudesNomina = cursor.fetchall()
+    conexion.commit()
+
+    return render_template('nomina_certificados/templates/nominas_certificados_usuario.html', nomina=nomina, certificado=certificado,solicitudesCertificado=solicitudesCertificado,solicitudesNomina=solicitudesNomina)
+
+

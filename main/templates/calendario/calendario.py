@@ -1,7 +1,7 @@
 
 from random import sample
 from flask import jsonify
-from main.app import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
+from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
 import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
