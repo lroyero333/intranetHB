@@ -7,39 +7,135 @@
         <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-md-12">
-                    
+
                     <div class="tab-content padding-0">
                         <div class="tab-pane card active" id="Web">
                             {% for solicitudes_certificado in solicitudes_certificado %}
-                            
+                            {% if solicitudes_certificado[5] == "Pendiente" %}
                             <div class="body">
-                                <h5 class="mb-0"><a target="_blank" href="javascript:void(0);">{{solicitudes_certificado[2]}}</a></h5>
+                                <h5 class="mb-0"><a target="_blank"
+                                        href="javascript:void(0);">{{solicitudes_certificado[2]}}</a></h5>
                                 <small>Fecha y hora de solicitud: {{solicitudes_certificado[4]}}</small>
-                                <p class="m-t-10">{{solicitudes_certificado[9]}} {{solicitudes_certificado[10]}} ha solicitado un certificado de {{solicitudes_certificado[1]}} con el nombre de
+                                <p class="m-t-10">{{solicitudes_certificado[9]}} {{solicitudes_certificado[10]}} ha
+                                    solicitado un certificado de {{solicitudes_certificado[1]}} con el nombre de
                                     {{solicitudes_certificado[2]}}</p>
-                                <a class="m-r-20" target="_blank" href="javascript:void(0);">AdminCC</a>
-                                <a class="m-r-20" target="_blank" href="javascript:void(0);">Swift Admin</a>
+
+                                <form action="/notificaciones" method="POST">
+                                    <div class="mb-3">
+                                        <label for="comentarioSolicitudCertificado"
+                                            class="form-label">Comentario:</label>
+                                        <textarea class="form-control" name="comentarioSolicitudCertificado"
+                                            id="comentarioSolicitudCertificado" rows="3" required></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+
+                                        <span
+                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
+
+                                        <button class="btn btn-success" type="submit" id="aceptarSolicitudCertificado"
+                                            name="aceptarSolicitudCertificado"
+                                            value="{{solicitudes_certificado[0]}}">Aceptar</button>
+
+                                        <button class="btn btn-danger" name="rechazarSolicitudCertificado"
+                                            value="{{solicitudes_certificado[0]}}">Rechazar</button>
+
+
+                                    </div>
+                                </form>
                             </div>
                             <hr>
+                            {% endif%}
                             {%endfor%}
                             {% for solicitudes_nomina in solicitudes_nomina %}
-                            
+                            {% if solicitudes_nomina[4] == "Pendiente" %}
+
                             <div class="body">
-                                <h5 class="mb-0"><a target="_blank" href="javascript:void(0);">{{solicitudes_nomina[1]}}</a></h5>
+                                <h5 class="mb-0"><a target="_blank"
+                                        href="javascript:void(0);">{{solicitudes_nomina[1]}}</a></h5>
                                 <small>Fecha y hora de solicitud: {{solicitudes_nomina[3]}}</small>
-                                <p class="m-t-10">{{solicitudes_nomina[8]}} {{solicitudes_nomina[9]}} ha solicitado una nomina con el nombre de {{solicitudes_nomina[1]}}.</p>
-                                <a class="m-r-20" target="_blank" href="javascript:void(0);">AdminCC</a>
-                                <a class="m-r-20" target="_blank" href="javascript:void(0);">Swift Admin</a>
+                                <p class="m-t-10">{{solicitudes_nomina[8]}} {{solicitudes_nomina[9]}} ha solicitado una
+                                    nomina con el nombre de {{solicitudes_nomina[1]}}.</p>
+                                <form action="/notificaciones" method="POST">
+                                    <div class="mb-3">
+                                        <label for="comentarioSolicitudNomina" class="form-label">Comentario:</label>
+                                        <textarea class="form-control" name="comentarioSolicitudNomina"
+                                            id="comentarioSolicitudNomina" rows="3" required></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <span
+                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
+
+                                        <button class="btn btn-success" type="submit" id="aceptarSolicitudNomina"
+                                            name="aceptarSolicitudNomina"
+                                            value="{{solicitudes_nomina[0]}}">Aceptar</button>
+
+                                        <button class="btn btn-danger" name="rechazarSolicitudNomina"
+                                            value="{{solicitudes_nomina[0]}}">Rechazar</button>
+                                    </div>
+                                </form>
                             </div>
                             <hr>
+                            {% endif%}
                             {%endfor%}
-                            
+
+
+                            {% for solicitudes_va_extemporaneas in g.solicitudes_va_extemporaneas %}
+                            {% if solicitudes_va_extemporaneas[8] == "Pendiente" %}
+
+                            <div class="body">
+                                <h5 class="mb-0"><a target="_blank" href="javascript:void(0);">Solicitud de Vacaciones
+                                        Extemporaneas</a></h5>
+                                <small><strong> Fecha y hora de solicitud:</strong>
+                                    {{solicitudes_va_extemporaneas[6]}}</small>
+                                <p class="m-t-10"><strong>{{solicitudes_va_extemporaneas[12]}}
+                                        {{solicitudes_va_extemporaneas[13]}}</strong> solicitó vacaciones extemporales
+                                    con fecha de inicio el dia
+                                    <strong>{{solicitudes_va_extemporaneas[2]}}</strong> y fecha final el dia
+                                    <strong>{{solicitudes_va_extemporaneas[3]}}</strong> con un total de
+                                    <strong>{{solicitudes_va_extemporaneas[4]}}</strong> dias.
+                                </p>
+                                <hr>
+                                <form action="/notificaciones" method="POST">
+                                    <div class="form-group">
+                                        <label for="tipo_vacaciones"><strong>Tipo de vacaciones</strong></label>
+                                        <select class="selectpicker" name="tipo_vacaciones" id="tipo_vacaciones" title="Selecciona un tipo"
+                                            data-live-search="true" data-live-search-placeholder="Buscar ...">
+                                            <option value="" selected disabled>Selecciona un tipo</option>
+                                            <option value="Remunerado">Remunerado</option>
+                                            <option value="No Remunerado">No Remunerado</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="comentarioSolicitudVacaciones" class="form-label">Comentario:</label>
+                                        <textarea class="form-control" name="comentarioSolicitudVacaciones"
+                                            id="comentarioSolicitudVacaciones" rows="3" required></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <span
+                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
+
+                                        <button class="btn btn-success" type="submit" id="aceptarSolicitudVacaciones"
+                                            name="aceptarSolicitudVacaciones"
+                                            value="{{solicitudes_va_extemporaneas[0]}}">Aceptar</button>
+
+                                        <button class="btn btn-danger" name="rechazarSolicitudVacaciones" 
+                                            value="{{solicitudes_va_extemporaneas[0]}}">Rechazar</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <hr>
+                            {% endif%}
+                            {%endfor%}
+
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
 {% endblock %}

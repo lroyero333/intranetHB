@@ -1,13 +1,13 @@
-$(document).ready(function() {
+$(document).ready(function () {
     "use strict";
-    
+
     // sidebar navigation
     $('.sidebar').metisMenu();
 
     setTimeout(function () {
         $('.page-loader-wrapper').fadeOut();
     }, 100);
-    
+
     $(window).bind("resize", function () {
         if ($(this).width() < 1201) {
             $("body").addClass("layout-fullwidth");
@@ -16,9 +16,9 @@ $(document).ready(function() {
         }
     }).trigger('resize');
 
-    
+
     // right side bar
-	$('a.rightbar_btn').on('click', function() {
+    $('a.rightbar_btn').on('click', function () {
         $('.right_sidebar').toggleClass('open');
     });
 
@@ -28,19 +28,19 @@ $(document).ready(function() {
     });
 
     // Dark bg sidebar
-    $(".switch-dark").on('change',function() {
-        if(this.checked) {
+    $(".switch-dark").on('change', function () {
+        if (this.checked) {
             $("body").addClass('dark-sidebar');
-        }else{
+        } else {
             $("body").removeClass('dark-sidebar');
         }
     });
 
     // mini sidebar 
-    $(".switch-sidebar").on('change',function() {
-        if(this.checked) {
+    $(".switch-sidebar").on('change', function () {
+        if (this.checked) {
             $("body").addClass('mini-sidebar');
-        }else{
+        } else {
             $("body").removeClass('mini-sidebar');
         }
     });
@@ -55,55 +55,55 @@ $(document).ready(function() {
     });
 
     // Skin changer
-	$('.choose-skin li').on('click', function() {
-	    var $body = $('body');
-	    var $this = $(this);
-  
-	    var existTheme = $('.choose-skin li.active').data('theme');
-	    $('.choose-skin li').removeClass('active');
-	    $body.removeClass('theme-' + existTheme);
-	    $this.addClass('active');
-	    $body.addClass('theme-' + $this.data('theme'));
-    }); 
+    $('.choose-skin li').on('click', function () {
+        var $body = $('body');
+        var $this = $(this);
+
+        var existTheme = $('.choose-skin li.active').data('theme');
+        $('.choose-skin li').removeClass('active');
+        $body.removeClass('theme-' + existTheme);
+        $this.addClass('active');
+        $body.addClass('theme-' + $this.data('theme'));
+    });
 
     // toggle fullwidth layout
-	$('.btn-toggle-fullwidth').on('click', function() {
-		if(!$('body').hasClass('layout-fullwidth')) {
-			$('body').addClass('layout-fullwidth');
-			$(this).find(".fa").toggleClass('fa-arrow-left fa-arrow-right');
+    $('.btn-toggle-fullwidth').on('click', function () {
+        if (!$('body').hasClass('layout-fullwidth')) {
+            $('body').addClass('layout-fullwidth');
+            $(this).find(".fa").toggleClass('fa-arrow-left fa-arrow-right');
 
-		} else {
-			$('body').removeClass('layout-fullwidth');
-			$(this).find(".fa").toggleClass('fa-arrow-left fa-arrow-right');
-		}
-	});
+        } else {
+            $('body').removeClass('layout-fullwidth');
+            $(this).find(".fa").toggleClass('fa-arrow-left fa-arrow-right');
+        }
+    });
 
-	// off-canvas menu toggle
-	$('.menu_toggle').on('click', function() {
-		$('body').toggleClass('offcanvas-active');
-	});
+    // off-canvas menu toggle
+    $('.menu_toggle').on('click', function () {
+        $('body').toggleClass('offcanvas-active');
+    });
 
     /*
-	$('#main-content').on('click', function() {
+    $('#main-content').on('click', function() {
         $('body').removeClass('toggle_menu_active');
         $('body').removeClass('offcanvas-active');
-	});
+    });
     */
 
-    $(window).on('load', function() {
-		// for shorter main content
-		if($('#main-content').height() < $('#left-sidebar').height()) {
-			$('#main-content').css('min-height', $('#left-sidebar').innerHeight() - $('footer').innerHeight());
-		}
-	});
+    $(window).on('load', function () {
+        // for shorter main content
+        if ($('#main-content').height() < $('#left-sidebar').height()) {
+            $('#main-content').css('min-height', $('#left-sidebar').innerHeight() - $('footer').innerHeight());
+        }
+    });
 });
 
-$(window).on('load resize', function() {
-    
+$(window).on('load resize', function () {
+
     // Background image holder - Static hero with fullscreen autosize
     if ($('.spotlight').length) {
-        $('.spotlight').each(function() {
-            
+        $('.spotlight').each(function () {
+
             var $this = $(this);
             var holderHeight;
 
@@ -115,13 +115,13 @@ $(window).on('load resize', function() {
                 else {
                     holderHeight = $(window).height();
                 }
-  
+
 
                 if ($(window).width() > 991) {
                     $this.find('.spotlight-holder').css({
                         'height': holderHeight + 'px'
                     });
-                } 
+                }
                 else {
                     $this.find('.spotlight-holder').css({
                         'height': 'auto'
@@ -131,163 +131,166 @@ $(window).on('load resize', function() {
         })
     }
 }),
-$(document).ready(function() {
+    $(document).ready(function () {
 
-    // Plugins init
-    $(".scrollbar-inner")[0] && $(".scrollbar-inner").scrollbar().scrollLock();
-    $('[data-stick-in-parent="true"]')[0] && $('[data-stick-in-parent="true"]').stick_in_parent();
-    $('.selectpicker')[0] && $('.selectpicker').selectpicker();
-    $('.textarea-autosize')[0] && autosize($('.textarea-autosize'));
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').each(function() {
-        var popoverClass = '';
-        if($(this).data('color')) {
-            popoverClass = 'popover-'+$(this).data('color');
+        // Plugins init
+        $(".scrollbar-inner")[0] && $(".scrollbar-inner").scrollbar().scrollLock();
+        $('[data-stick-in-parent="true"]')[0] && $('[data-stick-in-parent="true"]').stick_in_parent();
+        $('.selectpicker')[0] && $('.selectpicker').selectpicker();
+        $('.textarea-autosize')[0] && autosize($('.textarea-autosize'));
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="popover"]').each(function () {
+            var popoverClass = '';
+            if ($(this).data('color')) {
+                popoverClass = 'popover-' + $(this).data('color');
+            }
+            $(this).popover({
+                trigger: 'focus',
+                template: '<div class="popover ' + popoverClass + '" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'
+            })
+        });
+
+
+        // Floating label
+        $('.form-control').on('focus blur', function (e) {
+            $(this).parents('.form-group').toggleClass('focused', (e.type === 'focus' || this.value.length > 0));
+        }).trigger('blur');
+
+
+        // Custom input file
+        $('.custom-input-file').each(function () {
+            var $input = $(this),
+                $label = $input.next('label'),
+                labelVal = $label.html();
+
+            $input.on('change', function (e) {
+                var fileName = '';
+
+                if (this.files && this.files.length > 1)
+                    fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
+                else if (e.target.value)
+                    fileName = e.target.value.split('\\').pop();
+
+                if (fileName)
+                    $label.find('span').html(fileName);
+                else
+                    $label.html(labelVal);
+            });
+
+
+            // Firefox bug fix
+            $input.on('focus', function () {
+                $input.addClass('has-focus');
+            })
+                .on('blur', function () {
+                    $input.removeClass('has-focus');
+                });
+        });
+
+
+        // NoUI Slider
+        if ($(".input-slider-container")[0]) {
+            $('.input-slider-container').each(function () {
+
+                var slider = $(this).find('.input-slider');
+                var sliderId = slider.attr('id');
+                var minValue = slider.data('range-value-min');
+                var maxValue = slider.data('range-value-max');
+
+                var sliderValue = $(this).find('.range-slider-value');
+                var sliderValueId = sliderValue.attr('id');
+                var startValue = sliderValue.data('range-value-low');
+
+                var c = document.getElementById(sliderId),
+                    d = document.getElementById(sliderValueId);
+
+                noUiSlider.create(c, {
+                    start: [parseInt(startValue)],
+                    connect: [true, false],
+                    //step: 1000,
+                    range: {
+                        'min': [parseInt(minValue)],
+                        'max': [parseInt(maxValue)]
+                    }
+                });
+
+                c.noUiSlider.on('update', function (a, b) {
+                    d.textContent = a[b];
+                });
+            })
+
         }
-        $(this).popover({
-            trigger: 'focus',
-            template: '<div class="popover '+ popoverClass +'" role="tooltip"><div class="arrow"></div><h3 class="popover-header"></h3><div class="popover-body"></div></div>'
-        })
-    });
-    
 
-    // Floating label
-    $('.form-control').on('focus blur', function(e) {
-        $(this).parents('.form-group').toggleClass('focused', (e.type === 'focus' || this.value.length > 0));
-    }).trigger('blur');
-    
-
-    // Custom input file
-    $('.custom-input-file').each(function() {
-        var $input = $(this),
-            $label = $input.next('label'),
-            labelVal = $label.html();
-
-        $input.on('change', function(e) {
-            var fileName = '';
-
-            if (this.files && this.files.length > 1)
-                fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
-            else if (e.target.value)
-                fileName = e.target.value.split('\\').pop();
-
-            if (fileName)
-                $label.find('span').html(fileName);
-            else
-                $label.html(labelVal);
-        });
-
-
-        // Firefox bug fix
-        $input.on('focus', function() {
-            $input.addClass('has-focus');
-        })
-        .on('blur', function() {
-            $input.removeClass('has-focus');
-        });
-    });
-    
-    
-    // NoUI Slider
-    if ($(".input-slider-container")[0]) {
-        $('.input-slider-container').each(function() {
-
-            var slider = $(this).find('.input-slider');
-            var sliderId = slider.attr('id');
-            var minValue = slider.data('range-value-min');
-            var maxValue = slider.data('range-value-max');
-
-            var sliderValue = $(this).find('.range-slider-value');
-            var sliderValueId = sliderValue.attr('id');
-            var startValue = sliderValue.data('range-value-low');
-
-            var c = document.getElementById(sliderId),
-                d = document.getElementById(sliderValueId);
+        if ($("#input-slider-range")[0]) {
+            var c = document.getElementById("input-slider-range"),
+                d = document.getElementById("input-slider-range-value-low"),
+                e = document.getElementById("input-slider-range-value-high"),
+                f = [d, e];
 
             noUiSlider.create(c, {
-                start: [parseInt(startValue)],
-                connect: [true, false],
-                //step: 1000,
+                start: [parseInt(d.getAttribute('data-range-value-low')), parseInt(e.getAttribute('data-range-value-high'))],
+                connect: !0,
                 range: {
-                    'min': [parseInt(minValue)],
-                    'max': [parseInt(maxValue)]
+                    min: parseInt(c.getAttribute('data-range-value-min')),
+                    max: parseInt(c.getAttribute('data-range-value-max'))
                 }
-            });
+            }), c.noUiSlider.on("update", function (a, b) {
+                f[b].textContent = a[b]
+            })
+        }
 
-            c.noUiSlider.on('update', function(a, b) {
-                d.textContent = a[b];
-            });
-        })
+        // Scroll to anchor with animation
+        $('.scroll-me, .toc-entry a').on('click', function (event) {
+            var hash = $(this).attr('href');
+            var offset = $(this).data('scroll-to-offset') ? $(this).data('scroll-to-offset') : 0;
 
-    }
+            // Animate scroll to the selected section
+            $('html, body').stop(true, true).animate({
+                scrollTop: $(hash).offset().top - offset
+            }, 600);
 
-    if ($("#input-slider-range")[0]) {
-        var c = document.getElementById("input-slider-range"),
-            d = document.getElementById("input-slider-range-value-low"),
-            e = document.getElementById("input-slider-range-value-high"),
-            f = [d, e];
+            event.preventDefault();
+        });
 
-        noUiSlider.create(c, {
-            start: [parseInt(d.getAttribute('data-range-value-low')), parseInt(e.getAttribute('data-range-value-high'))],
-            connect: !0,
-            range: {
-                min: parseInt(c.getAttribute('data-range-value-min')),
-                max: parseInt(c.getAttribute('data-range-value-max'))
+    }),
+    $(document).ready(function () {
+        $("body").on("click", "[data-action]", function (e) {
+
+            e.preventDefault();
+
+            var $this = $(this);
+            var action = $this.data('action');
+            var target = '';
+
+            switch (action) {
+                case "offcanvas-open":
+                    target = $this.data("target"), $(target).addClass("open"), $("body").append('<div class="body-backdrop" data-action="offcanvas-close" data-target=' + target + " />");
+                    break;
+                case "offcanvas-close":
+                    target = $this.data("target"), $(target).removeClass("open"), $("body").find(".body-backdrop").remove();
+                    break;
+
+                case 'aside-open':
+                    target = $this.data('target');
+                    $this.data('action', 'aside-close');
+                    $this.addClass('toggled');
+                    $(target).addClass('toggled');
+                    $('.content').append('<div class="body-backdrop" data-action="aside-close" data-target=' + target + ' />');
+                    break;
+
+
+                case 'aside-close':
+                    target = $this.data('target');
+                    $this.data('action', 'aside-open');
+                    $('[data-action="aside-open"], ' + target).removeClass('toggled');
+                    $('.content, .header').find('.body-backdrop').remove();
+                    break;
             }
-        }), c.noUiSlider.on("update", function(a, b) {
-            f[b].textContent = a[b]
         })
-    }
-
-    // Scroll to anchor with animation
-    $('.scroll-me, .toc-entry a').on('click', function(event) {
-        var hash = $(this).attr('href');
-        var offset = $(this).data('scroll-to-offset') ? $(this).data('scroll-to-offset') : 0;
-
-        // Animate scroll to the selected section
-        $('html, body').stop(true, true).animate({
-            scrollTop: $(hash).offset().top - offset
-        }, 600);
-
-        event.preventDefault();
     });
 
-}),
-$(document).ready(function() {
-    $("body").on("click", "[data-action]", function(e) {
 
-        e.preventDefault();
-
-        var $this = $(this);
-        var action = $this.data('action');
-        var target = '';
-
-        switch (action) {
-            case "offcanvas-open":
-                target = $this.data("target"), $(target).addClass("open"), $("body").append('<div class="body-backdrop" data-action="offcanvas-close" data-target=' + target + " />");
-                break;
-            case "offcanvas-close":
-                target = $this.data("target"), $(target).removeClass("open"), $("body").find(".body-backdrop").remove();
-                break;
-
-            case 'aside-open':
-                target = $this.data('target');
-                $this.data('action', 'aside-close');
-                $this.addClass('toggled');
-                $(target).addClass('toggled');
-                $('.content').append('<div class="body-backdrop" data-action="aside-close" data-target='+target+' />');
-                break;
-
-
-            case 'aside-close':
-                target = $this.data('target');
-                $this.data('action', 'aside-open');
-                $('[data-action="aside-open"], '+target).removeClass('toggled');
-                $('.content, .header').find('.body-backdrop').remove();
-                break;
-        }
-    })
-});
+  
 
 window.bigbucket = {
     colors: {
@@ -393,12 +396,13 @@ window.bigbucket = {
 };
 
 // Wraptheme Website live
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/5c6d4867f324050cfe342c69/default';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
+var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+(function () {
+    var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+    s1.async = true;
+    s1.src = 'https://embed.tawk.to/5c6d4867f324050cfe342c69/default';
+    s1.charset = 'UTF-8';
+    s1.setAttribute('crossorigin', '*');
+    s0.parentNode.insertBefore(s1, s0);
 })();
+

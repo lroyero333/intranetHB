@@ -8,7 +8,8 @@ from main.routes import request, app, mysql, bcrypt, session, redirect, render_t
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    
+    if 'login' in session:
+        return redirect('/inicio')
     if request.method == 'POST':
         # Validar credenciales de usuario
         username = request.form['username']

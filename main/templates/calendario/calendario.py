@@ -1,6 +1,8 @@
 
 from random import sample
 from flask import jsonify
+from pymysql import IntegrityError
+import pymysql
 from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
 import os
 from werkzeug.utils import secure_filename
@@ -14,102 +16,6 @@ def stringAleatorio():
     resultado_aleatorio = sample(secuencia, longitud)
     string_aleatorio = "".join(resultado_aleatorio)
     return string_aleatorio
-
-
-"""@app.route('/calendario', methods=['GET', 'POST'])
-def calendario():
-    if not 'login' in session:
-        return redirect('/')
-
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-
-    # Manejar la creación de cursos
-    if request.method == 'POST' and 'crear_curso' in request.form:
-        id_usuario_fk = session["usuario"]
-        nombre_curso = request.form['nombre_curso']
-        fecha_inicio_curso = request.form['fecha_inicio_curso']
-        Fecha_fin_curso = request.form['fecha_fin_curso']
-        ubicacion = request.form['ubicacion_curso']
-        descripcion = request.form['descripcion']
-        fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-        query = "INSERT INTO cursos (id_usuario_fk,nombre_curso, fecha_inicio, fecha_fin, fecha_publicacion, ubicacion, descripcion) VALUES (%s,%s,%s, %s, %s, %s, %s)"
-        params = [id_usuario_fk, nombre_curso, fecha_inicio_curso,
-                  Fecha_fin_curso, fecha_publicacion, ubicacion, descripcion]
-
-        cursor.execute(query, params)
-        conexion.commit()
-
-        return redirect('/calendario')
-
-    # Manejar la creación de noticias
-    if request.method == 'POST' and 'crear_noticia' in request.form:
-       
-        usuarioPublica= session["usuario"]
-        titulo_noticia = request.form['titulo_noticia']
-        imagen_noticia = request.files['imagen_noticia']
-        descripcion_noticia = request.form['descripcion_noticia']
-        fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-        basepath = os.path.dirname(__file__)
-        filename = secure_filename(imagen_noticia.filename)
-
-        extension = os.path.splitext(filename)[1]
-        nuevoNombreImagen = stringAleatorio() +extension
-
-        upload_path = os.path.join(basepath, '..', '..', 'static', 'images','Noticias', nuevoNombreImagen)
-        if not os.path.exists(os.path.dirname(upload_path)):
-            os.makedirs(os.path.dirname(upload_path))
-
-        imagen_noticia.save(upload_path)
-
-
-        query = "INSERT INTO noticias (titulo_noticia, imagen_noticia, descripcion_noticia, fecha_publicacion,id_usuario_fk) VALUES (%s,%s, %s, %s,%s)"
-        params = [titulo_noticia, nuevoNombreImagen,descripcion_noticia, fecha_publicacion,usuarioPublica]
-
-        cursor.execute(query, params)
-        conexion.commit()
-
-        return redirect('/calendario')
-    
-    
-
-    # Obtener la lista de cursos y de noticias
-    cursor.execute("SELECT * FROM cursos")
-    cursos = cursor.fetchall()
-
-    cursor.execute("SELECT * FROM noticias")
-    noticias = cursor.fetchall()
-
-
-    return render_template('templates/light/app-calendar.html', cursos=cursos, noticias=noticias)
-
-@app.route('/calendario', methods=['GET', 'POST'])
-def eliminarCurso():
-    if not 'login' in session:
-        return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-    cursor.execute("SELECT * FROM cursos;")
-    cursos = cursor.fetchall()
-    conexion.close()
-    if request.method == 'POST':
-        curso_id = request.form.get('curso_id')
-        if request.form.get('editar_curso'):
-            # Lógica para editar el curso
-            flash('El curso ha sido editado.', 'success')
-        elif request.form.get('borrar_curso'):
-            conexion = mysql.connect()
-            cursor = conexion.cursor()
-            cursor.execute("DELETE FROM cursos WHERE id_curso = %s;", request.form.get('borrar_curso'))
-            conexion.commit()
-            conexion.close()
-            flash('El curso ha sido eliminado.', 'success')
-        return redirect('/calendario')
-    return render_template('templates/light/app-calendar.html', cursos=cursos)
-"""
-
 
 @app.route('/calendario', methods=['GET', 'POST'])
 def calendario():
@@ -186,7 +92,7 @@ def calendario():
             return redirect(f"/calendario/noticia/{noticia_id}")
         if request.form.get('borrar_noticia'):
             cursor.execute(
-                "DELETE FROM cursos WHERE id_noticia = %s;", (noticia_id,))
+                "DELETE FROM noticias WHERE id_noticia = %s;", (noticia_id,))
             conexion.commit()
             flash('El curso ha sido eliminado.', 'success')
             return redirect('/calendario')
@@ -382,6 +288,7 @@ def crearProyecto():
 
 @app.route('/proyectos/<string:proyecto_id>', methods=['GET', 'POST'])
 def editProyecto(proyecto_id):
+
     if not 'login' in session:
         return redirect('/')
     if session['cargo'] != 1:
@@ -431,6 +338,84 @@ def editProyecto(proyecto_id):
     
     return render_template('calendario/templates/editarProyecto.html', proyecto=proyecto)
 
+
+@app.route('/vacaciones', methods=['GET', 'POST'])
+def verVacaciones():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT usuario, Nombre, Apellido,foto FROM general_users;")
+    usuarios_vacaciones=cursor.fetchall()
+    cursor.execute("SELECT vacaciones.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM vacaciones LEFT JOIN general_users ON vacaciones.id_usuario = general_users.usuario ;")
+    solicitudes_vacaciones = cursor.fetchall()
+    
+    cursor.execute("SELECT vacaciones_extemporaneas.*, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
+    solicitudes_va_extemporaneas = cursor.fetchall()
+    conexion.commit()
+
+    if 'asignar_vacaciones' in request.form:
+        id_usuario=request.form['usuario_id']
+        tipo_vacaciones=request.form['tipo_vacaciones']
+        fecha_inicio_vacaciones=request.form['fecha_inicio_vacaciones']
+        fecha_fin_vacaciones=request.form['fecha_fin_vacaciones']
+
+        
+        # Verificar si el usuario ya existe
+        resultado = None
+        sql = "SELECT id_usuario FROM vacaciones WHERE id_usuario = %s "
+        conexion = mysql.connect()
+        cursor = conexion.cursor()
+        cursor.execute(sql, id_usuario)
+        resultado = cursor.fetchone()
+        if resultado is not None:
+            # El usuario ya existe
+            errorVacaciones = 'El usuario ya tiene vacaciones asignadas'
+            cursor.close()
+            return render_template('calendario/templates/vacaciones.html', errorVacaciones=errorVacaciones, usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones)
+        else:
+            query = "INSERT INTO vacaciones (tipo_vacaciones, fecha_inicio_vacaciones, fecha_fin_vacaciones, id_usuario ) VALUES (%s,%s, %s,%s)"
+            params = [tipo_vacaciones, fecha_inicio_vacaciones,fecha_fin_vacaciones, id_usuario]
+            cursor.execute(query, params)
+            conexion.commit()
+
+    if 'programar_vacaciones' in request.form:
+        id_usuario=session['usuario']
+        fecha_inicio_extemporanea=request.form['fecha_inicio_extemporanea']
+        fecha_fin_extemporanea=request.form['fecha_fin_extemporanea']
+        fecha_solicitud=datetime.now()
+        estado_solicitud='Pendiente'
+        
+        query = "INSERT INTO vacaciones_extemporaneas (fecha_inicio, fecha_fin, fecha_solicitud, estado_solicitud, id_usuario ) VALUES (%s,%s, %s,%s, %s)"
+        params = [fecha_inicio_extemporanea, fecha_fin_extemporanea,fecha_solicitud,estado_solicitud, id_usuario]
+        cursor.execute(query, params)
+        conexion.commit()
+    if 'cancelar_programar_vacaciones' in request.form:
+        id_vacaciones_ex=request.form['vacaciones_ex_id']
+        cursor.execute("DELETE FROM vacaciones_extemporaneas WHERE id_vacaciones_extemporaneas = %s;", (id_vacaciones_ex,))
+        conexion.commit()
+        return redirect('/vacaciones')
+
+
+    cursor.execute("SELECT vacaciones_extemporaneas.*, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.persona_aprueba = general_users.usuario;")
+    solicitudes_vacaciones_extemporaneas = cursor.fetchall()
+    cursor.execute("SELECT vacaciones_extemporaneas.*, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
+    solicitudes_va_extemporaneas = cursor.fetchall()
+    conexion.commit()
+
+    return render_template('calendario/templates/vacaciones.html',usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones,solicitudes_vacaciones_extemporaneas=solicitudes_vacaciones_extemporaneas,solicitudes_va_extemporaneas=solicitudes_va_extemporaneas)
+
+@app.route('/permisos')
+def verPermisos():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT vacaciones_extemporaneas.*, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
+    solicitudes_permisos = cursor.fetchall()
+    conexion.commit()
+    return render_template('calendario/templates/permisos.html', solicitudes_permisos=solicitudes_permisos)
+
 @app.route('/cursos')
 def obtener_cursos():
     conexion = mysql.connect()
@@ -438,10 +423,28 @@ def obtener_cursos():
     cursor.execute(
         'SELECT * FROM cursos')
     eventos = cursor.fetchall()
+    cursor.execute(
+        'SELECT tipo_vacaciones, fecha_inicio_vacaciones, fecha_fin_vacaciones FROM vacaciones WHERE id_usuario=%s', session['usuario'])
+    vacaciones = cursor.fetchall()
+
+    cursor.execute('SELECT tipo_vacaciones, fecha_inicio, fecha_fin FROM vacaciones_extemporaneas WHERE id_usuario=%s AND estado_solicitud=%s' , (session['usuario'], 'Aceptado'))
+    vacaciones_ex = cursor.fetchall()
+
     eventos_json = []
     for evento in eventos:
         evento_json = {'title': evento[2], 'start': evento[3].strftime(
             '%Y-%m-%d'), 'end': evento[4].strftime(
             '%Y-%m-%d'),  'location': evento[6], 'allDay': 'true', "className": 'bg-info'}
         eventos_json.append(evento_json)
+    for vacaciones in vacaciones:
+        evento_json = {'title': 'Vacaciones '+ vacaciones[0], 'start': vacaciones[1].strftime(
+            '%Y-%m-%d'), 'end': vacaciones[2].strftime(
+            '%Y-%m-%d'), 'allDay': 'true', "className": 'bg-success'}
+        eventos_json.append(evento_json)
+    for vacaciones_ex in vacaciones_ex:
+        evento_json = {'title': 'Vacaciones Extemporanea '+ vacaciones_ex[0], 'start': vacaciones_ex[1].strftime(
+            '%Y-%m-%d'), 'end': vacaciones_ex[2].strftime(
+            '%Y-%m-%d'), 'allDay': 'true',  "backgroundColor": "#D0A9F5"}
+        eventos_json.append(evento_json)
     return jsonify(eventos_json)
+

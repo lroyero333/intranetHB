@@ -223,9 +223,9 @@ def verNominaCertificadosUsuario():
             conexion.commit()
             return redirect('/nomina_certificados/')
         
-    cursor.execute("SELECT id_solicitud, nombre_certificado FROM solicitud_certificado WHERE solicitante = %s;", session["usuario"])
+    cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.persona_resuelve_solicitud = general_users.usuario WHERE solicitante = %s ORDER BY fecha_solicitud DESC ;", session["usuario"])
     solicitudesCertificado = cursor.fetchall()
-    cursor.execute("SELECT id_solicitud_nomina, nombre_nomina FROM solicitud_nomina WHERE solicitante = %s;", session["usuario"])
+    cursor.execute("SELECT solicitud_nomina.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_nomina LEFT JOIN general_users ON solicitud_nomina.persona_resuelve_solicitud = general_users.usuario WHERE solicitante = %s ORDER BY fecha_solicitud DESC ;", session["usuario"])
     solicitudesNomina = cursor.fetchall()
     conexion.commit()
 

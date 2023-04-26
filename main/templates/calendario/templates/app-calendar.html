@@ -17,16 +17,15 @@
             </ul>
 
             <form class="form-inline my-2 my-lg-0">
-                <button data-toggle="modal" data-target="#verCursos" type="button"
-                    class="btn btn-primary ml-2  btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Vacaciones</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-plane"></i></span>
-                </button>
-                <button data-toggle="modal" data-target="#verCursos" type="button"
+                <a href="/vacaciones"><button type="button" class="btn btn-primary ml-2  btn-animated btn-animated-y">
+                        <span class="btn-inner--visible">Vacaciones</span>
+                        <span class="btn-inner--hidden"><i class="fa fa-plane"></i></span>
+                    </button></a>
+                    <a href="/permisos"><button  type="button"
                     class="btn btn-primary ml-2  btn-animated btn-animated-y">
                     <span class="btn-inner--visible">Permisos</span>
                     <span class="btn-inner--hidden"><i class="fa fa-bullhorn"></i></span>
-                </button>
+                </button></a>
                 {% if session["cargo"] == 1%}
                 <button data-toggle="modal" data-target="#myModal" type="button"
                     class="btn btn-primary ml-2  btn-animated btn-animated-y">
@@ -227,11 +226,12 @@
                         <div class="modal-footer">
                             <form action="" method="POST">
                                 <input type="hidden" name="curso_id" value="{{ cursos[0] }}">
-                                <button type="submit" name="editar_curso" value="{{ cursos[0] }}" class="btn btn-primary">Editar</button>
+                                <button type="submit" name="editar_curso" value="{{ cursos[0] }}"
+                                    class="btn btn-primary">Editar</button>
                                 <button type="submit" name="borrar_curso" value="{{ cursos[0] }}"
                                     class="btn btn-danger">Eliminar
                                     <i class="fa fa-trash"></i></button>
-                                
+
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             </form>
                         </div>
@@ -247,7 +247,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <label ><strong>Opciones de Noticias</strong></label>
+                <label><strong>Opciones de Noticias</strong></label>
             </div>
             <form action="" method="POST">
                 <div class="modal-body">
@@ -267,11 +267,12 @@
                         <div class="modal-footer">
                             <form action="" method="POST">
                                 <input type="hidden" name="noticia_id" value="{{ noticias[0] }}">
-                                <button type="submit" name="editar_noticia" value="{{ noticias[0] }}" class="btn btn-primary">Editar</button>
+                                <button type="submit" name="editar_noticia" value="{{ noticias[0] }}"
+                                    class="btn btn-primary">Editar</button>
                                 <button type="submit" name="borrar_noticia" value="{{ noticias[0] }}"
                                     class="btn btn-danger">Eliminar
                                     <i class="fa fa-trash"></i></button>
-                                
+
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             </form>
                         </div>
