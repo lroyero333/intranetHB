@@ -29,7 +29,6 @@
     <link href="{{ url_for('static', filename='css/mobiscroll.jquery.min.css') }}" rel="stylesheet" />
     <script src="{{ url_for('static', filename='js/mobiscroll.jquery.min.js') }}"></script>
 
-
 </head>
 
 <body class="theme-indigo">
@@ -48,7 +47,8 @@
             <nav class="sidebar">
                 <div class="user-info">
                     <div class="image"><a href="/myProfile"><img
-                                src="{{ url_for('static', filename='images/' + session['foto']) }}" alt="User"></a>
+                                src="{{ url_for('static', filename='images/users/' + session['foto']) }}"
+                                alt="User"></a>
                     </div>
                     <div class="detail mt-3">
 
@@ -79,6 +79,8 @@
                     <li><a {% if session["cargo"]==1 %} href="/nomina_certificados" {% endif %} {% if session["cargo"]
                             !=1 %} href="/nomina_certificados/" {% endif %}><i
                                 class="fa fa-file"></i><span>Nomina/Certificados</span></a>
+                    </li>
+                    <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Inventario</span></a>
                     </li>
 
                     {% if session["cargo"] == 1 or session["cargo"] == 0 %}
@@ -136,8 +138,15 @@
     <script src="{{ url_for('static', filename='bundles/footable.bundle.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/editable-table/mindmup-editabletable.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pages/advanced-form.js')}}"></script>
+    <script src="{{ url_for('static', filename='vendor/LightboxGallery/mauGallery.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='vendor/LightboxGallery/scripts.js')}}"></script>
 
-    
+    <script src="{{ url_for('static', filename='bundles/c3.bundle.js')}}"></script>
+
+    <script src="{{ url_for('static', filename='js/theme.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/pages/charts/c3.js')}}"></script>
+
+
     <script>
         $(function () {
             $('.knob').knob({

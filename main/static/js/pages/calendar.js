@@ -229,7 +229,7 @@ $(function () {
             }
 
         ]*/
-        events: '/cursos',
+        events: '/eventos',
         //events: '/noticias',
 
 

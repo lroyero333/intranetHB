@@ -1,0 +1,430 @@
+{% extends 'templates/light/base.html' %}
+{% block content %}
+<div class="main_content" id="main-content">
+
+    <div class="page">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="javascript:void(0);">Inventario</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-align-justify"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    {% if session["cargo"] == 1%}
+                    <button data-toggle="modal" data-target="#myModal" type="button"
+                        class="btn btn-primary ml-2  btn-animated btn-animated-y">
+                        <span class="btn-inner--visible">Inventario</span>
+                        <span class="btn-inner--hidden"><i class="fa fa-plus "></i></span>
+                    </button>
+
+                    <button data-toggle="modal" data-target="#eliminar" type="button"
+                        class="btn btn-danger ml-2  btn-animated btn-animated-y">
+                        <span class="btn-inner--visible">Eliminar</span>
+                        <span class="btn-inner--hidden"><i class="fa fa-trash"></i></span>
+                    </button>
+
+                    <!--button data-toggle="modal" data-target="#verCursos" type="button"
+                        class="btn btn-primary ml-2  btn-animated btn-animated-y">
+                        <span class="btn-inner--visible">Opciones Cursos</span>
+                        <span class="btn-inner--hidden"><i class="fa fa-cog"></i></span>
+                    </button>
+                    <button data-toggle="modal" data-target="#verNoticias" type="button"
+                        class="btn btn-primary ml-2  btn-animated btn-animated-y">
+                        <span class="btn-inner--visible">Opciones Noticias</span>
+                        <span class="btn-inner--hidden"><i class="fa fa-cog"></i></span>
+                    </button-->
+                    {% endif %}
+                </form>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card planned_task">
+                        <div class="header">
+                            <h2>Inventario</h2>
+                            <ul class="nav nav-tabs nav-tabs-new" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
+                                        aria-controls="settings" aria-selected="false">Todos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview"
+                                        role="tab" aria-controls="overview" aria-selected="true">Herramientas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
+                                        aria-controls="settings" aria-selected="false">Materiales</a>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div class="body">
+                        <!--Tools Table-->
+                        <hr>
+                        <div class="body tab-content" id="myTabContent">
+                            <div class="table-responsive tab-pane fade show active" id="overview" role="tabpanel"
+                                aria-labelledby="overview-tab">
+                                <table
+                                    class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Cantidad</th>
+                                            <th>Ubicacion </th>
+                                            <th>Descripcion </th>
+                                            <th>Imagen</th>
+                                            <th>Accion </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for herramientas in herramientas %}
+                                        <tr>
+                                            <td>
+                                                {{herramientas[1]}}
+                                            </td>
+                                            <td>
+                                                {{herramientas[2]}}
+                                            </td>
+                                            <td>
+                                                {{herramientas[3]}}
+                                            </td>
+                                            <td>
+                                                {{herramientas[4]}}
+                                            </td>
+                                            <td>
+                                                <a href="/ver_archivo/{{herramientas[6]}}/{{herramientas[5]}}"
+                                                    target="_blank"><button type="button"
+                                                        class="btn btn-primary btn-sm btn-animated btn-animated-y">
+                                                        <span class="btn-inner--visible">Ver Imagen</span>
+                                                        <span class="btn-inner--hidden"><i class="fa fa-eye"></i></span>
+                                                    </button>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href=""><button class="btn btn-primary btn-md"><i
+                                                            class="fa fa-tag"></i></button></a>
+                                            </td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="body tab-pane fade show active" id="settings" role="tabpanel"
+                        aria-labelledby="settings-tab">
+                        <!--Materials Table-->
+                        <hr>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table
+                                    class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Cantidad</th>
+                                            <th>Ubicacion </th>
+                                            <th>Tipo </th>
+                                            <th>Descripcion </th>
+                                            <th>Imagen</th>
+                                            <th>Accion </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for materiales in materiales %}
+                                        <tr>
+                                            <td>
+                                                {{materiales[1]}}
+                                            </td>
+                                            <td>
+                                                {{materiales[2]}}
+                                            </td>
+                                            <td>
+                                                {{materiales[3]}}
+                                            </td>
+                                            <td>
+                                                {{materiales[4]}}
+                                            </td>
+                                            <td>
+                                                {{materiales[5]}}
+                                            </td>
+
+                                            <td>
+                                                <a href="/ver_archivo/{{materiales[7]}}/{{materiales[6]}}"
+                                                    target="_blank"><button type="button"
+                                                        class="btn btn-primary btn-block btn-animated btn-animated-y">
+                                                        <span class="btn-inner--visible">Ver Imagen</span>
+                                                        <span class="btn-inner--hidden"><i
+                                                                class="fa fa-plus"></i></span>
+                                                    </button>
+                                                </a>
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!--Opciones Inventario-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Seleccione su peticion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button type="button" data-toggle="modal" data-target="#agregarHerramienta"
+                    class="btn btn-primary btn-block btn-animated btn-animated-y">
+                    <span class="btn-inner--visible">Herramientas</span>
+                    <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
+                </button>
+                <button type="button" data-toggle="modal" data-target="#agregarMaterial"
+                    class="btn btn-primary btn-block btn-animated btn-animated-y">
+                    <span class="btn-inner--visible">Materiales</span>
+                    <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Opciones Inventario-->
+<div class="modal fade" id="eliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Seleccione su peticion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button type="button" data-toggle="modal" data-target="#eliminarHerramienta"
+                    class="btn btn-danger btn-block btn-animated btn-animated-y">
+                    <span class="btn-inner--visible">Herramientas</span>
+                    <span class="btn-inner--hidden"><i class="fa fa-trash"></i></span>
+                </button>
+                <button type="button" data-toggle="modal" data-target="#eliminarMaterial"
+                    class="btn btn-danger btn-block btn-animated btn-animated-y">
+                    <span class="btn-inner--visible">Materiales</span>
+                    <span class="btn-inner--hidden"><i class="fa fa-trash"></i></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal add Tool-->
+<div class="modal fade" id="agregarHerramienta" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label><strong>Agregar Herramienta</strong></label>
+            </div>
+            <form action="" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="foto"><strong>Imagen de la herramienta:</strong></label>
+                                <div>
+                                    <input type="file" name="imagen_tool" id="imagen_tool" class="custom-input-file" />
+                                    <label for="imagen_tool">
+                                        <i class="fa fa-upload"></i>
+                                        <span>Selecciona una imagen…</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="nombre_herramienta"><strong>Nombre de la herramienta:</strong></label>
+                                <input type="text" class="form-control" name="nombre_herramienta"
+                                    id="nombre_herramienta" value="" placeholder="Nombre de la herramienta">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ubicacion_tool" class="form-label">Ubicacion:</label>
+                                <textarea class="form-control" name="ubicacion_tool" id="ubicacion_tool" rows="3"
+                                    required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="cantidad_tool"><strong>Cantidad:</strong></label>
+                                <input type="number" min="0" class="form-control" name="cantidad_tool"
+                                    id="cantidad_tool" value="" placeholder="Cantidad">
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcion_tool" class="form-label">Descripcion:</label>
+                                <textarea class="form-control" name="descripcion_tool" id="descripcion_tool" rows="3"
+                                    required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="agregar_tool" class="btn btn-success">Agregar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="eliminarHerramienta" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label for="fecha_inicio_curso"><strong>Opciones de Cursos</strong></label>
+            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="imagen_herramienta"><strong>Herramientas</strong></label>
+                                <select class="selectpicker" name="imagen_herramienta" title="Selecciona un curso"
+                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
+                                    <option value="" selected disabled>Selecciona una herramienta</option>
+                                    {% for herramientas in herramientas %}
+                                    <option value="{{herramientas[5]}}">{{ herramientas[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="eliminar_tool" class="btn btn-danger">Eliminar
+                                <i class="fa fa-trash"></i></button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal add Material-->
+<div class="modal fade" id="agregarMaterial" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label><strong>Agregar Material</strong></label>
+            </div>
+            <form action="" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="foto"><strong>Imagen del material:</strong></label>
+                                <div>
+                                    <input type="file" name="imagen_material" id="imagen_material"
+                                        class="custom-input-file" />
+                                    <label for="imagen_material">
+                                        <i class="fa fa-upload"></i>
+                                        <span>Selecciona una imagen…</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="nombre_material"><strong>Nombre de la material:</strong></label>
+                                <input type="text" class="form-control" name="nombre_material" id="nombre_material"
+                                    value="" placeholder="Nombre del material">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ubicacion_material" class="form-label">Ubicacion:</label>
+                                <textarea class="form-control" name="ubicacion_material" id="ubicacion_material"
+                                    rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="cantidad_material"><strong>Cantidad:</strong></label>
+                                <input type="number" min="0" class="form-control" name="cantidad_material"
+                                    id="cantidad_material" value="" placeholder="Cantidad">
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo_material"><strong>Tipo de Material</strong></label>
+                                <select class="selectpicker" name="tipo_material" title="Selecciona un tipo"
+                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
+                                    <option value="" selected disabled>Selecciona una opcion</option>
+                                    <option value="Consumible">Consumible</option>
+                                    <option value="No consumible">No consumible</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcion_material" class="form-label">Descripcion:</label>
+                                <textarea class="form-control" name="descripcion_material" id="descripcion_material"
+                                    rows="3" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="agregar_material" class="btn btn-success">Agregar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="eliminarMaterial" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label for="fecha_inicio_curso"><strong>Opciones de Cursos</strong></label>
+            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="imagen_material"><strong>Materiales</strong></label>
+                                <select class="selectpicker" name="imagen_material" title="Selecciona un material"
+                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
+                                    <option value="" selected disabled>Selecciona un material</option>
+                                    {% for materiales in materiales %}
+                                    <option value="{{materiales[6]}}">{{ materiales[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="eliminar_material" class="btn btn-danger">Eliminar
+                                <i class="fa fa-trash"></i></button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

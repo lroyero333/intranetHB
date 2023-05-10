@@ -6,7 +6,6 @@
 
 
 <div class="main_content" id="main-content">
-
     <div class="page">
         <br>
         <h1 class="text-center ">Cursos</h1>
@@ -31,10 +30,10 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     {% if datosCursos[10] is none %}
-                                    <img src="{{ url_for('static', filename='images/userMale.PNG') }}"
+                                    <img src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
                                         class="avatar avatar-lg mr-3">
                                     {% else %}
-                                    <img src="{{ url_for('static', filename='images/' + datosCursos[10]) }}"
+                                    <img src="{{ url_for('static', filename='images/users/' + datosCursos[10]) }}"
                                         class="avatar avatar-lg mr-3">
                                     {%endif%}
                                     <span class="avatar-content">{{datosCursos[8]}} {{datosCursos[9]}}</span>
@@ -77,9 +76,9 @@
                             <div class="row align-items-center">
                                 <div class="col">
                                     {% if datosNoticias[8] is none %}
-                                    <img src="{{ url_for('static', filename='images/userMale.PNG') }}" class="avatar avatar-lg mr-3">
+                                    <img src="{{ url_for('static', filename='images/users/userMale.PNG') }}" class="avatar avatar-lg mr-3">
                                     {% else %}
-                                    <img src="{{ url_for('static', filename='images/' + datosNoticias[8]) }}" class="avatar avatar-lg mr-3">
+                                    <img src="{{ url_for('static', filename='images/users/' + datosNoticias[8]) }}" class="avatar avatar-lg mr-3">
                                     {% endif %}
                                 
                                 </div>

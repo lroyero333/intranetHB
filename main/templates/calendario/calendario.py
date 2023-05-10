@@ -6,7 +6,9 @@ import pymysql
 from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
 import os
 from werkzeug.utils import secure_filename
-from datetime import datetime
+import datetime as dt
+from datetime import datetime, time, timedelta 
+
 
 
 def stringAleatorio():
@@ -180,14 +182,10 @@ def editNoticia(noticia_id):
         else:
             nuevoNombreImagen = noticia[2]
 
-
-        
         query = "UPDATE noticias SET id_usuario_fk = %s, titulo_noticia = %s, imagen_noticia = %s, descripcion_noticia = %s,fecha_publicacion = %s WHERE id_noticia = %s"
         params = [usuarioPublica, titulo_noticia, nuevoNombreImagen,descripcion_noticia, fecha_publicacion, noticia_id]
-
         cursor.execute(query, params)
         conexion.commit()
-
         flash('El curso ha sido editado.', 'success')
         return redirect('/calendario')
     
@@ -231,6 +229,50 @@ def verCursos(curso_id):
         return redirect(f"/cursos/{curso_id}")
 
     return render_template('calendario/templates/verCurso.html', datosCursos=datosCursos, inscrito=(resultado is not None))
+
+@app.route('/proyectos/usuarios/<string:project_id>', methods=['GET', 'POST'])
+def userProyecto(project_id):
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT Nombre, segundo_nombre, Apellido, segundo_apellido, usuario FROM general_users")
+    integrante = cursor.fetchall()
+    cursor.execute("SELECT proyecto_users.*,proyectos.*, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto FROM proyecto_users JOIN proyectos ON proyecto_users.id_proyecto= proyectos.id_proyecto JOIN general_users ON proyecto_users.id_usuario= general_users.usuario;")
+    project_user = cursor.fetchall()
+    conexion.commit()
+    fecha_user = datetime.now()
+    if request.method == 'POST':
+        if 'asignar_usuario_proyecto' in request.form:
+            id_usuario = request.form['integrante_id']
+            observaciones_user_proyecto = request.form['observaciones_user_proyecto']
+            cursor.execute("SELECT * FROM proyecto_users WHERE id_proyecto=%s AND id_usuario=%s", (project_id, id_usuario))
+            usuario_proyecto = cursor.fetchone()
+            if usuario_proyecto is not None:
+                errorProyecto = 'El usuario ya colabora en este proyecto'
+                cursor.close()
+                return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user, errorProyecto=errorProyecto)
+            else:
+                query = "INSERT INTO proyecto_users (id_proyecto, id_usuario, fecha_inicio_user,observaciones) VALUES (%s, %s, %s,%s)"
+                params = [project_id, id_usuario, fecha_user, observaciones_user_proyecto]
+                cursor.execute(query, params)
+                conexion.commit()
+        elif 'desactivar_usuario_proyecto' in request.form:
+            id_usuario=request.form['desactivar_usuario_proyecto']
+            estado_usuario='Inactivo'
+            query = "UPDATE proyecto_users SET estado_usuario = %s, fecha_fin_user = %s WHERE id_usuario = %s"
+            params = [estado_usuario, fecha_user, id_usuario]
+            cursor.execute(query, params)
+            conexion.commit()
+        elif 'activar_usuario_proyecto' in request.form:
+            id_usuario=request.form['activar_usuario_proyecto']
+            estado_usuario='Activo'
+            query = "UPDATE proyecto_users SET estado_usuario = %s, fecha_inicio_user = %s WHERE id_usuario = %s"
+            params = [estado_usuario, fecha_user, id_usuario]
+            cursor.execute(query, params)
+            conexion.commit()
+    cursor.close()
+    return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user) 
 
 @app.route('/proyectos', methods=['GET', 'POST'])
 def crearProyecto():
@@ -338,7 +380,6 @@ def editProyecto(proyecto_id):
     
     return render_template('calendario/templates/editarProyecto.html', proyecto=proyecto)
 
-
 @app.route('/vacaciones', methods=['GET', 'POST'])
 def verVacaciones():
     if not 'login' in session:
@@ -353,6 +394,7 @@ def verVacaciones():
     cursor.execute("SELECT vacaciones_extemporaneas.*, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
     solicitudes_va_extemporaneas = cursor.fetchall()
     conexion.commit()
+    
 
     if 'asignar_vacaciones' in request.form:
         id_usuario=request.form['usuario_id']
@@ -405,18 +447,114 @@ def verVacaciones():
 
     return render_template('calendario/templates/vacaciones.html',usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones,solicitudes_vacaciones_extemporaneas=solicitudes_vacaciones_extemporaneas,solicitudes_va_extemporaneas=solicitudes_va_extemporaneas)
 
-@app.route('/permisos')
+@app.route('/permisos',methods=['GET', 'POST'])
 def verPermisos():
     if not 'login' in session:
         return redirect('/')
     conexion = mysql.connect()
     cursor = conexion.cursor()
-    cursor.execute("SELECT vacaciones_extemporaneas.*, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
+    cursor.execute("SELECT solicitud_permisos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario;")
     solicitudes_permisos = cursor.fetchall()
+    cursor.execute("SELECT solicitud_permisos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.persona_aprueba = general_users.usuario;")
+    solicitudes_permisos2 = cursor.fetchall()
     conexion.commit()
-    return render_template('calendario/templates/permisos.html', solicitudes_permisos=solicitudes_permisos)
+    
+    if 'agendar_permiso' in request.form:
+        id_usuario=session['usuario']
+        inicio_dia_permiso=request.form['inicio_dia_permiso'] #2023-03-28
+        inicio_hora_permiso=request.form['inicio_hora_permiso']#10:00 am
+        fin_dia_permiso=request.form['fin_dia_permiso']
+        fin_hora_permiso=request.form['fin_hora_permiso']
+        contar_sabados=request.form.get('contar_sabados')
+        motivo_permiso=request.form['motivo_permiso']
+        fecha_inicio_permiso = inicio_dia_permiso + ' ' + inicio_hora_permiso
+        fecha_hora = dt.datetime.strptime(fecha_inicio_permiso, '%Y-%m-%d %I:%M %p')
+        inicio_permiso = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
+        fecha_fin_permiso = fin_dia_permiso + ' ' + fin_hora_permiso
+        fecha_hora = dt.datetime.strptime(fecha_fin_permiso, '%Y-%m-%d %I:%M %p')
+        fin_permiso = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
+        fecha_solicitud=datetime.now()
+        duracion_permiso=dt.datetime.strptime(fin_permiso, '%Y-%m-%d %H:%M:%S') - dt.datetime.strptime(inicio_permiso, '%Y-%m-%d %H:%M:%S')
+        print(duracion_permiso)
+        print(inicio_permiso)
+        print(fin_permiso)
+        print(contar_sabados)
+        # Inicializar lista de fechas
+        fechas = []
+        # Definir fechas de inicio y fin
+        fecha_inicio = dt.datetime.strptime(inicio_permiso, '%Y-%m-%d %H:%M:%S')
+        fecha_fin = dt.datetime.strptime(fin_permiso, '%Y-%m-%d %H:%M:%S')
 
-@app.route('/cursos')
+        # Definir horario de trabajo
+        hora_inicio_manana = time(8, 0, 0)
+        hora_fin_manana = time(12, 30, 0)
+        hora_inicio_tarde = time(14, 0, 0)
+        hora_fin_tarde = time(18, 0, 0)
+
+
+        if contar_sabados:
+            print('Está activo')
+         
+            hora_inicio_manana_sabado = time(8, 0, 0)
+            hora_fin_manana_sabado = time(12, 30, 0)
+
+            dias_trabajo = set(range(0, 5))
+
+            fecha_actual = fecha_inicio 
+            while fecha_actual <= fecha_fin:
+                if (fecha_actual.weekday() in dias_trabajo and 
+                    ((fecha_actual.time() > hora_inicio_manana and fecha_actual.time() <= hora_fin_manana) or 
+                    (fecha_actual.time() > hora_inicio_tarde and fecha_actual.time() <= hora_fin_tarde))):
+                    fechas.append(fecha_actual)
+                elif (fecha_actual.weekday() == 5 and 
+                    hora_inicio_manana_sabado < fecha_actual.time() <= hora_fin_manana_sabado):
+                    fechas.append(fecha_actual)
+                fecha_actual += dt.timedelta(minutes=30)
+                # Omitir los domingos
+                if fecha_actual.weekday() == 6:
+                    fecha_actual += dt.timedelta(days=1)
+        else:
+            dias_trabajo = set(range(0, 5))
+            # Iterar entre fechas cada media hora
+            fecha_actual = fecha_inicio 
+            while fecha_actual <= fecha_fin:
+                # Verificar si la hora actual está dentro del horario de trabajo
+                if fecha_actual.weekday() in dias_trabajo:
+                    if (fecha_actual.time() > hora_inicio_manana and fecha_actual.time() <= hora_fin_manana) or (fecha_actual.time() > hora_inicio_tarde and fecha_actual.time() <= hora_fin_tarde):
+                        fechas.append(fecha_actual)
+                fecha_actual += dt.timedelta(minutes=30)
+        # Imprimir lista de fechas
+        for fecha in fechas:
+            print(fecha)
+        cantidad_media_horas=len(fechas)
+        cantidad_horas=cantidad_media_horas/2
+        horas_enteras = int(cantidad_horas)
+        minutos_fraccion = int((cantidad_horas - horas_enteras) * 60)
+        if horas_enteras==0:
+            cantidad_horas=f"{minutos_fraccion} minutos"
+        elif minutos_fraccion==0 and horas_enteras==1:
+            cantidad_horas=f"{horas_enteras} hora"
+        elif minutos_fraccion==0:
+            cantidad_horas=f"{horas_enteras} horas"
+        elif horas_enteras==1:
+            cantidad_horas=f"{horas_enteras} hora y {minutos_fraccion} minutos"
+        else:
+            cantidad_horas=f"{horas_enteras} horas y {minutos_fraccion} minutos"
+        
+        query = "INSERT INTO solicitud_permisos (fecha_inicio_permiso, fecha_fin_permiso, fecha_solicitud, horas_de_permiso, id_usuario, motivo_permiso ) VALUES (%s,%s, %s, %s, %s, %s)"
+        params = [inicio_permiso, fin_permiso,fecha_solicitud,cantidad_horas, id_usuario, motivo_permiso]
+        cursor.execute(query, params)
+        conexion.commit()
+
+        return redirect('/permisos')
+    if 'cancelarPermiso' in request.form:
+        permiso_id=request.form['permiso_id']
+        cursor.execute("DELETE FROM solicitud_permisos WHERE id_permisos = %s;", (permiso_id,))
+        conexion.commit()
+        return redirect('/permisos')
+    return render_template('calendario/templates/permisos.html', solicitudes_permisos=solicitudes_permisos, solicitudes_permisos2=solicitudes_permisos2)
+
+@app.route('/eventos')
 def obtener_cursos():
     conexion = mysql.connect()
     cursor = conexion.cursor()
@@ -429,6 +567,15 @@ def obtener_cursos():
 
     cursor.execute('SELECT tipo_vacaciones, fecha_inicio, fecha_fin FROM vacaciones_extemporaneas WHERE id_usuario=%s AND estado_solicitud=%s' , (session['usuario'], 'Aceptado'))
     vacaciones_ex = cursor.fetchall()
+
+    cursor.execute('SELECT fecha_inicio_permiso, fecha_fin_permiso FROM solicitud_permisos WHERE id_usuario=%s AND estado_solicitud=%s' , (session['usuario'], 'Aceptado'))
+    permisos = cursor.fetchall()
+
+    cursor.execute('SELECT fecha_inicio_recuperacion, fecha_fin_recuperacion FROM solicitud_permisos WHERE id_usuario=%s AND estado_solicitud=%s' , (session['usuario'], 'Aceptado'))
+    permisos_recuperar = cursor.fetchall()
+
+    cursor.execute('SELECT Nombre, Apellido, Fecha_nacimiento FROM general_users')
+    cumpleaños = cursor.fetchall()
 
     eventos_json = []
     for evento in eventos:
@@ -446,5 +593,20 @@ def obtener_cursos():
             '%Y-%m-%d'), 'end': vacaciones_ex[2].strftime(
             '%Y-%m-%d'), 'allDay': 'true',  "backgroundColor": "#D0A9F5"}
         eventos_json.append(evento_json)
+    for permisos in permisos:
+        evento_json = {'title': 'Permiso ', 'start': permisos[0].strftime(
+            '%Y-%m-%d %H:%M:%S'), 'end': permisos[1].strftime(
+            '%Y-%m-%d %H:%M:%S'), 'allDay': 'false', "backgroundColor": "#2D89DA"}
+        eventos_json.append(evento_json)
+    for permisos_recuperar in permisos_recuperar:
+        evento_json = {'title': 'Recuperar Permiso ', 'start': permisos_recuperar[0].strftime(
+            '%Y-%m-%d %H:%M:%S'), 'end': permisos_recuperar[1].strftime(
+            '%Y-%m-%d %H:%M:%S'), 'allDay': 'false', "backgroundColor": "#9B2DDA"}
+        eventos_json.append(evento_json)
+    for cumpleaños in cumpleaños:
+        evento_json = {'title': f'Cumpleaños de {cumpleaños[0]} {cumpleaños[1]}','start': cumpleaños[2].strftime('%Y-%m-%d'),
+        "recurrence": ["RRULE:FREQ=YEARLY"],'allDay': 'true',"backgroundColor": "#CFD13F"}
+        eventos_json.append(evento_json)
+    
     return jsonify(eventos_json)
 

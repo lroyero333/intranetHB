@@ -461,16 +461,16 @@ $(function() {
                 data: {
                     columns: [
                         // each columns data
-                        ['data1', 63],
-                        ['data2', 44],
-                        ['data3', 12],
-                        ['data4', 14]
+                        ['data1', 10],
+                        ['data2', 70],
+                        ['data3', 5],
+                        ['data4', 5]
                     ],
                     type: 'pie', // default type of chart
                     colors: {
                         'data1': bigbucket.colors["blue-darker"],
-                        'data2': bigbucket.colors["blue"],
-                        'data3': bigbucket.colors["blue-light"],
+                        'data2': bigbucket.colors["red"],
+                        'data3': bigbucket.colors["green"],
                         'data4': bigbucket.colors["blue-lighter"]
                     },
                     names: {

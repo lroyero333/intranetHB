@@ -43,7 +43,8 @@
                                         <th>Tipo de vacaciones</th>
                                         <th>Inicio de vacaciones</th>
                                         <th>Fin de vacaciones</th>
-                                        <th>Dias</th>
+                                        <th>Dias Totales</th>
+                                        <th>Dias Restantes</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -51,10 +52,10 @@
 
                                     <tr>
                                         <td>
-                                            <img src="{{ url_for('static', filename='images/' + solicitudes_vacaciones[8]) }}"
+                                            <img src="{{ url_for('static', filename='images/users/' + solicitudes_vacaciones[9]) }}"
                                                 class="avatar w30" alt="">
-                                            <span class="ml-2"> {{solicitudes_vacaciones[6]}}
-                                                {{solicitudes_vacaciones[7]}}</span>
+                                            <span class="ml-2"> {{solicitudes_vacaciones[7]}}
+                                                {{solicitudes_vacaciones[8]}}</span>
                                         </td>
                                         <td>
                                             {{solicitudes_vacaciones[1]}}
@@ -68,6 +69,9 @@
 
                                         <td>
                                             {{solicitudes_vacaciones[5]}}
+                                        </td>
+                                        <td>
+                                            {{solicitudes_vacaciones[6]}}
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -86,7 +90,8 @@
                                         <th>User</th>
                                         <th>Inicio de Adelanto</th>
                                         <th>Fin de adelanto</th>
-                                        <th>Dias</th>
+                                        <th>Dias Totales</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -95,8 +100,8 @@
                                     {% if solicitudes_va_extemporaneas[8] == 'Aceptado' %}
                                     <tr>
                                         <td>
-                                            {{solicitudes_va_extemporaneas[12]}}
                                             {{solicitudes_va_extemporaneas[13]}}
+                                            {{solicitudes_va_extemporaneas[14]}}
                                         </td>
                                         <td>
                                             {{solicitudes_va_extemporaneas[2]}}
@@ -128,7 +133,8 @@
                                         <th>Tipo de vacaciones</th>
                                         <th>Inicio de vacaciones</th>
                                         <th>Fin de vacaciones</th>
-                                        <th>Dias</th>
+                                        <th>Dias Totales</th>
+                                        <th>Dias Restantes</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -150,6 +156,9 @@
 
                                         <td>
                                             {{solicitudes_vacaciones[5]}}
+                                        </td>
+                                        <td>
+                                            {{solicitudes_vacaciones[6]}}
                                         </td>
 
                                     </tr>
@@ -205,7 +214,7 @@
 
 
                     </div>
-                    {% if session['cargo'] != 1 %}
+                   
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary ml-2  btn-animated btn-animated-y"
                             data-toggle="modal" data-target="#programarVacaciones">
@@ -219,7 +228,8 @@
                         </button>
                     </div>
                     <hr>
-                    {%endif%}
+                   
+                    <!-- State of Solicitud -->
                     <div class="body">
                         <div class="container-fluid">
                             <!-- Basic Table -->
@@ -248,7 +258,7 @@
                                                             <td>Vacaciones Extemporaneas</td>
                                                             <td>{{so_va_ex[2]}}</td>
                                                             <td>{{so_va_ex[3]}}</td>
-                                                            <td>{{so_va_ex[12]}} {{so_va_ex[13]}}</td>
+                                                            <td>{{so_va_ex[13]}} {{so_va_ex[14]}}</td>
                                                             <td>{{so_va_ex[6]}}</td>
                                                             <td>{{so_va_ex[7]}}</td>
                                                             <td>{%
@@ -360,7 +370,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="programarVacaciones" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -395,16 +404,14 @@
                                         placeholder="Fecha de fin de vacaciones Extemporaneas">
                                 </div>
                             </div>
-                           
-
                         </div>
-                        <div class="modal-footer">
+                    </div>
+                    <div class="modal-footer">
 
-                            <button type="submit" name="programar_vacaciones" value="{{ usuarios_vacaciones[0] }}"
-                                class="btn btn-success">Programar</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" name="programar_vacaciones" value="{{ usuarios_vacaciones[0] }}"
+                            class="btn btn-success">Programar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
-                        </div>
                     </div>
                 </div>
             </form>

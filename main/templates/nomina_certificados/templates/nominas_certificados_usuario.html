@@ -29,9 +29,10 @@
                                         <span>{{certificado[4]}}</span>
                                     </td>
                                     <td>
-                                        <form action="" method="POST">
-                                            <button class="btn btn-primary btn-sm" name="ver_certificado"
-                                                value="{{certificado[5]}}"><i class="fa fa-eye"></i></button></a>
+                                        <a href="/ver_archivo/Certificado/{{certificado[5]}}" target="_blank">
+                                            <button class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></button>
+                                        </a>
+                                        <form action="" method="POST" style="display: inline-block;">
                                             <button class="btn btn-primary btn-sm" name="descargar_certificado"
                                                 value="{{certificado[5]}}"><i class="fa fa-download"></i></button></a>
                                         </form>
@@ -76,9 +77,11 @@
                                         <span>{{nomina[4]}}</span>
                                     </td>
                                     <td>
-                                        <form action="" method="POST">
-                                            <button class="btn btn-primary btn-sm" name="ver_nomina"
-                                                value="{{nomina[5]}}"><i class="fa fa-eye"></i></button></a>
+                                        <a href="/ver_archivo/Nomina/{{nomina[5]}}" target="_blank">
+                                            <button class="btn btn-primary btn-sm" name="ver_nomina" value=""><i
+                                                    class="fa fa-eye"></i></button>
+                                        </a>
+                                        <form action="" method="POST" style="display: inline-block;">
                                             <button class="btn btn-primary btn-sm" name="descargar_nomina"
                                                 value="{{nomina[5]}}"><i class="fa fa-download"></i></button></a>
                                         </form>
@@ -121,7 +124,7 @@
                                         <tr>
                                             <td>Certificado</td>
                                             <td>{{solicitudesCertificado[2]}}</td>
-                                            <td>{{solicitudesCertificado[10]}} {{solicitudesCertificado[11]}}</td>
+                                            <td>{{solicitudesCertificado[11]}} {{solicitudesCertificado[12]}}</td>
                                             <td>{{solicitudesCertificado[4]}}</td>
                                             <td>{{solicitudesCertificado[8]}}</td>
                                             <td>{%
@@ -148,7 +151,7 @@
                                         <tr>
                                             <td>Nomina</td>
                                             <td>{{solicitudesNomina[1]}}</td>
-                                            <td>{{solicitudesNomina[10]}} {{solicitudesNomina[11]}}</td>
+                                            <td>{{solicitudesNomina[11]}} {{solicitudesNomina[12]}}</td>
                                             <td>{{solicitudesNomina[3]}}</td>
                                             <td>{{solicitudesNomina[7]}}</td>
                                             <td>{%
@@ -182,7 +185,6 @@
     </div>
 </div>
 
-
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="modal fade" id="addCertificado" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -209,6 +211,11 @@
                                     Certificado</label>
                                 <input type="text" class="form-control" id="nombre_certificado"
                                     name="nombre_certificado" placeholder="Nombre del certificado" required>
+                            </div>
+                            <div class="form-group">
+                                <label><strong>Motivo de solicitud:</strong> </label>
+                                <textarea class="form-control" rows="3" cols="30" name="motivo_solicitud"
+                                    id="motivo_solicitud"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -260,7 +267,6 @@
         </div>
     </div>
 </form>
-
 
 <form action="" method="POST" enctype="multipart/form-data">
     <div class="modal fade" id="solicitarNomina" tabindex="-1" role="dialog">

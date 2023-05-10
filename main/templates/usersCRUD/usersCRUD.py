@@ -80,7 +80,7 @@ def crearEmpleados():
         nuevoNombreFoto = usuario+'Foto'+extension
 
         upload_path = os.path.join(
-            basepath, '..', '..','static', 'images', nuevoNombreFoto)
+            basepath, '..', '..','static', 'images', 'users', nuevoNombreFoto)
         if not os.path.exists(os.path.dirname(upload_path)):
             os.makedirs(os.path.dirname(upload_path))
 
@@ -183,7 +183,7 @@ def editEmpleados(usuario_id):
             extension = os.path.splitext(filename)[1]
             nuevoNombreFoto = usuario_id+'Foto'+extension
             upload_path = os.path.join(
-            basepath, '..','..', 'static', 'images', nuevoNombreFoto)
+            basepath, '..','..', 'static', 'images', 'users', nuevoNombreFoto)
             if not os.path.exists(os.path.dirname(upload_path)):
                 os.makedirs(os.path.dirname(upload_path))
             foto.save(upload_path)

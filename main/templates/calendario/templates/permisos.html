@@ -9,7 +9,9 @@
                     <div class="card planned_task">
                         <div class="header">
                             <h2><strong>Permisos</strong></h2>
+                            <h1>{{horas_restantes}}</h1>
                         </div>
+                        {%if session['cargo']==1 %}
                         <!--Human Resources Permissions Table-->
                         <hr>
                         <div class="body">
@@ -32,18 +34,15 @@
                                     </thead>
                                     <tbody>
                                         {% for solicitudes_permisos in solicitudes_permisos %}
-                                        {% if solicitudes_permisos[11] == session["usuario"] %}
+
                                         {% if solicitudes_permisos[8] == 'Aceptado' %}
                                         <tr>
 
                                             <td>
-                                                {{solicitudes_permisos[2]}}
+                                                {{solicitudes_permisos[15]}} {{solicitudes_permisos[16]}}
                                             </td>
                                             <td>
-                                                {{solicitudes_permisos[2]}}
-                                            </td>
-                                            <td>
-                                                {{solicitudes_permisos[2]}}
+                                                {{solicitudes_permisos[1]}}
                                             </td>
                                             <td>
                                                 {{solicitudes_permisos[2]}}
@@ -54,6 +53,52 @@
                                             <td>
                                                 {{solicitudes_permisos[4]}}
                                             </td>
+                                            <td>
+                                                {{solicitudes_permisos[10]}}
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <!--Users Permissions Table-->
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table
+                                    class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Inicio de Permiso</th>
+                                            <th>Fin de permiso</th>
+                                            <th>Inicio de Recuperacion</th>
+                                            <th>Fin de Recuperacion</th>
+                                            <th>Observaciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for solicitudes_permisos in solicitudes_permisos %}
+                                        {% if solicitudes_permisos[11] == session['usuario'] %}
+                                        {% if solicitudes_permisos[8] == 'Aceptado' %}
+                                        <tr>
+                                            <td>
+                                                {{solicitudes_permisos[1]}}
+                                            </td>
+                                            <td>
+                                                {{solicitudes_permisos[2]}}
+                                            </td>
+                                            <td>
+                                                {{solicitudes_permisos[3]}}
+                                            </td>
+                                            <td>
+                                                {{solicitudes_permisos[4]}}
+                                            </td>
+                                            <td>
+                                                {{solicitudes_permisos[10]}}
+                                            </td>
                                         </tr>
                                         {% endif %}
                                         {% endif %}
@@ -62,7 +107,6 @@
                                 </table>
                             </div>
                         </div>
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary ml-2  btn-animated btn-animated-y"
                                 data-toggle="modal" data-target="#agendarPermiso">
@@ -70,10 +114,73 @@
                                 <span class="btn-inner--hidden"><i class="fa fa-plane"></i></span>
                             </button>
                             <button type="button" class="btn btn-danger ml-2  btn-animated btn-animated-y"
-                                data-toggle="modal" data-target="#cancelarProgramarVacaciones">
+                                data-toggle="modal" data-target="#cancelarPermiso">
                                 <span class="btn-inner--visible">Cancelar Permiso</span>
                                 <span class="btn-inner--hidden"><i class="fa fa-times-circle"></i></span>
                             </button>
+                        </div>
+                        <!-- State of Solicitud -->
+                        <div class="body">
+                            <div class="container-fluid">
+                                <!-- Basic Table -->
+                                <div class="row clearfix">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="card">
+                                            <div class="body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped m-b-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Solicitud</th>
+                                                                <th data-breakpoints="xs">Fecha de inico</th>
+                                                                <th data-breakpoints="xs">Fecha fin</th>
+                                                                <th data-breakpoints="xs">Resuelve</th>
+                                                                <th data-breakpoints="xs">Fecha de Solicitud</th>
+                                                                <th data-breakpoints="xs">Fecha de Resolucion</th>
+                                                                <th>Estado de Solicitud</th>
+                                                                <th>Comentario</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for solicitudes_permisos2 in solicitudes_permisos2 %}
+                                                            {% if solicitudes_permisos2[11] == session['usuario']%}
+                                                            <tr>
+                                                                <td>Permiso</td>
+                                                                <td>{{solicitudes_permisos2[1]}}</td>
+                                                                <td>{{solicitudes_permisos2[2]}}</td>
+                                                                <td>{{solicitudes_permisos2[15]}} {{solicitudes_permisos2[16]}}</td>
+                                                                <td>{{solicitudes_permisos2[6]}}</td>
+                                                                <td>{{solicitudes_permisos2[7]}}</td>
+                                                                <td>{%
+                                                                    if solicitudes_permisos2[8]=="Pendiente" %}<span
+                                                                        class="badge badge-lg badge-pill badge-warning text-uppercase">
+                                                                        Pendiente
+                                                                    </span>{%endif%}
+                                                                    {%
+                                                                    if solicitudes_permisos2[8]=="Rechazado" %}<span
+                                                                        class="badge badge-lg badge-pill badge-danger text-uppercase">
+                                                                        Rechazado
+                                                                    </span>{%endif%}
+                                                                    {%
+                                                                    if solicitudes_permisos2[8]=="Aceptado" %}<span
+                                                                        class="badge badge-lg badge-pill badge-success text-uppercase">
+                                                                        Aceptado
+                                                                    </span>{%endif%}
+                                                                <td>{{solicitudes_permisos2[10]}}</td>
+
+                                                                </td>
+                                                            </tr>
+                                                            {% endif %}
+                                                            {% endfor %}
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
 
@@ -86,26 +193,28 @@
 
 
 <!-- Modal Cancel Permission-->
-<div class="modal fade" id="agendarPermisos" tabindex="-1" role="dialog">
+<div class="modal fade" id="cancelarPermiso" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <label><strong>Cancelar Programacion de Vacaciones Extemporaneas</strong></label>
+                <label><strong>Cancelar Programacion de Permisos</strong></label>
             </div>
             <form action="" method="POST">
                 <div class="modal-body">
                     <div class="row clearfix">
                         <div class="col-12">
                             <div class="form-group">
-                                <label for="vacaciones_solicitadas"><strong>Vacaciones solicitadas</strong></label>
-                                <select class="selectpicker" name="vacaciones_ex_id" title="Selecciona una opcion"
+                                <label for="vacaciones_solicitadas"><strong>Permisos solicitados</strong></label>
+                                <select class="selectpicker" name="permiso_id" title="Selecciona una opcion"
                                     data-live-search="true" data-live-search-placeholder="Buscar ...">
                                     <option value="" selected disabled>Selecciona un Usuario</option>
-                                    {% for solicitudes_va_extemporaneas in solicitudes_va_extemporaneas %}
-                                    {% if solicitudes_va_extemporaneas[11] == session['usuario'] %}
-                                    <option value="{{ solicitudes_va_extemporaneas[0] }}"><strong>Inicio:</strong> {{
-                                        solicitudes_va_extemporaneas[2] }} <strong>Fin: </strong>
-                                        {{solicitudes_va_extemporaneas[3]}}</option>
+                                    {% for solicitudes_permisos in solicitudes_permisos %}
+                                    {% if solicitudes_permisos[11] == session['usuario'] %}
+                                    {% if solicitudes_permisos[8] == 'Pendiente' %}
+                                    <option value="{{ solicitudes_permisos[0] }}"><strong>Inicio:</strong> {{
+                                        solicitudes_permisos[1] }} <strong>Fin: </strong>
+                                        {{solicitudes_permisos[2]}}</option>
+                                    {% endif %}
                                     {% endif %}
                                     {% endfor %}
                                 </select>
@@ -114,15 +223,13 @@
                         </div>
                         <div class="modal-footer">
 
-                            <button type="submit" name="cancelar_programar_vacaciones"
-                                class="btn btn-danger">Cancelar</button>
+                            <button type="submit" name="cancelarPermiso" class="btn btn-danger">Cancelar</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
                         </div>
                     </div>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -145,11 +252,11 @@
                                         <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
                                     </div>
                                     <input data-provide="datepicker" data-date-format="yyyy-mm-dd" min="1960-01-01"
-                                        data-date-autoclose="true" class="form-control" name="fecha_fin_extemporanea"
-                                        id="fecha_fin_extemporanea" value=""
-                                        placeholder="Inicio de Permiso">
+                                        data-date-autoclose="true" class="form-control" name="inicio_dia_permiso"
+                                        id="inicio_dia_permiso" value="" placeholder="Inicio de Permiso">
                                     <div class="input-group-append">
-                                        <select class="form-control" name="hora" title="Hora">
+                                        <select class="form-control" id="inicio_hora_permiso" name="inicio_hora_permiso"
+                                            title="Hora">
                                             <option value="">Hora</option>
                                             <option value="8:00 am">8:00 am</option>
                                             <option value="8:30 am">8:30 am</option>
@@ -169,7 +276,7 @@
                                             <option value="5:00 pm">5:00 pm</option>
                                             <option value="5:30 pm">5:30 pm</option>
                                         </select>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -177,17 +284,17 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group demo-masked-input">
-                                <label for="fecha_inicio_extemporanea"><strong>Inicio:</strong></label>
+                                <label for="fin_dia_permiso"><strong>Inicio:</strong></label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
                                     </div>
                                     <input data-provide="datepicker" data-date-format="yyyy-mm-dd"
-                                        data-date-autoclose="true" class="form-control" name="fecha_fin_extemporanea"
-                                        id="fecha_fin_extemporanea" value=""
-                                        placeholder="Fin de Permiso">
+                                        data-date-autoclose="true" class="form-control" name="fin_dia_permiso"
+                                        id="fin_dia_permiso" value="" placeholder="Fin de Permiso">
                                     <div class="input-group-append">
-                                        <select class="form-control" name="hora" title="Hora">
+                                        <select class="form-control" name="fin_hora_permiso" id="fin_hora_permiso"
+                                            title="Hora">
                                             <option value="">Hora</option>
                                             <option value="8:00 am">8:00 am</option>
                                             <option value="8:30 am">8:30 am</option>
@@ -198,6 +305,7 @@
                                             <option value="11:00 am">11:00 am</option>
                                             <option value="11:30 am">11:30 am</option>
                                             <option value="12:00 pm">12:00 pm</option>
+                                            <option value="12:30 pm">12:30 pm</option>
                                             <option value="2:00 pm">2:00 pm</option>
                                             <option value="2:30 pm">2:30 pm</option>
                                             <option value="3:00 pm">3:00 pm</option>
@@ -206,21 +314,29 @@
                                             <option value="4:30 pm">4:30 pm</option>
                                             <option value="5:00 pm">5:00 pm</option>
                                             <option value="5:30 pm">5:30 pm</option>
-                                            <!-- Agregar más opciones -->
+                                            <option value="6:00 pm">6:00 pm</option>
                                         </select>
-                                        
+
                                     </div>
                                 </div>
                             </div>
 
                         </div>
-                        <div class="modal-footer">
+                    </div>
+                    <div class="mb-3">
+                        <label for="motivo_permiso" class="form-label">Motivo del permiso:</label>
+                        <textarea class="form-control" name="motivo_permiso" id="motivo_permiso" rows="3"
+                            required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <label class="d-block">Contar Sabados</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" name="contar_sabados" id='contar_sabados' checked>
+                            <span class="toggle-switch-slider rounded-circle"></span>
+                        </label>
+                        <button type="submit" name="agendar_permiso" class="btn btn-success">Agendar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
-                            <button type="submit" name="cancelar_programar_vacaciones"
-                                class="btn btn-danger">Cancelar</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-
-                        </div>
                     </div>
                 </div>
             </form>

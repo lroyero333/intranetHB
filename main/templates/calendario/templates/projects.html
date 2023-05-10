@@ -18,7 +18,7 @@
                 </ul>
 
                 <form class="form-inline my-2 my-lg-0">
-                    {% if session["cargo"] == 1%}
+                    {% if session["cargo"] == 4%}
                     <button data-toggle="modal" data-target="#addproject" type="button"
                         class="btn btn-primary ml-2  btn-animated btn-animated-y">
                         <span class="btn-inner--visible">Añadir Proyecto</span>
@@ -52,10 +52,7 @@
                                 <small class="text-muted">{{datosProyectos[3]}}</small>
                             </div>
                             <ul class="list-unstyled social-links">
-                                <li><a href="javascript:void(0);"><i class="fa fa-dribbble"></i></a>
-                                </li>
-                                <li><a href="javascript:void(0);"><i class="fa fa-behance"></i></a></li>
-                                <li><a href="javascript:void(0);"><i class="fa fa-pinterest"></i></a>
+                                <li title="Integrantes"><a href="/proyectos/usuarios/{{datosProyectos[0]}}"><i class="fa fa-briefcase"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -85,10 +82,8 @@
                                 <input type="text" class="form-control" name="nombre_proyecto" id="nombre_proyecto"
                                     placeholder="Nombre del Proyecto">
                             </div>
-
                         </div>
                         <div class="col-12">
-
                             <div class="form-group">
                                 <label for="foto"><strong>Imagen del Proyecto:</strong></label>
                                 <div>

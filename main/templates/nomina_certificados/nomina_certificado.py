@@ -192,10 +192,11 @@ def verNominaCertificadosUsuario():
         if 'solicitar_certificado'in request.form:
             tipo_certificado = request.form['tipo_certificado']
             nombre_certificado=request.form['nombre_certificado']
+            motivo_solicitud=request.form['motivo_solicitud']
             solicitante = session["usuario"]
             fecha_solicitud = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            query = "INSERT INTO solicitud_certificado (tipo_certificado, nombre_certificado, solicitante, fecha_solicitud ) VALUES (%s,%s,%s,%s)"
-            params = [tipo_certificado, nombre_certificado, solicitante, fecha_solicitud]
+            query = "INSERT INTO solicitud_certificado (tipo_certificado, nombre_certificado, solicitante, fecha_solicitud ,motivo) VALUES (%s, %s,%s,%s,%s)"
+            params = [tipo_certificado, nombre_certificado, solicitante, fecha_solicitud, motivo_solicitud]
             cursor.execute(query, params)
             conexion.commit()
             return redirect('/nomina_certificados/')
