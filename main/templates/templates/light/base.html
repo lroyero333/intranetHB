@@ -94,6 +94,7 @@
                 </ul>
             </nav>
         </div>
+        
         {% block content %}
 
         {% endblock %}
@@ -112,7 +113,7 @@
     <script src="{{ url_for('static', filename='vendor/nouislider/js/nouislider.min.js') }}"></script>
 
     <script src="{{ url_for('static', filename='bundles/fullcalendarscripts.bundle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/theme.js')}}"></script>
     <script src="{{ url_for('static', filename='js/pages/calendar.js') }}"></script>
     <script src="{{ url_for('static', filename='bundles/knob.bundle.js') }}"></script>
     <script
@@ -143,8 +144,9 @@
 
     <script src="{{ url_for('static', filename='bundles/c3.bundle.js')}}"></script>
 
-    <script src="{{ url_for('static', filename='js/theme.js')}}"></script>
     <script src="{{ url_for('static', filename='js/pages/charts/c3.js')}}"></script>
+
+    <script src="{{ url_for('static', filename='js/pages/todo-js.js')}}"></script>
 
 
     <script>

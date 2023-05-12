@@ -10,7 +10,7 @@
 
                     <div class="tab-content padding-0">
                         <div class="tab-pane card active" id="Web">
-                            
+
                             <!--CERTIFICATE NOTIFICATION-->
 
                             {% if tipo_solicitud == "Certificado" %}
@@ -25,7 +25,8 @@
 
                                 <form action="" method="POST">
                                     <div class="mb-3">
-                                        <input type="hidden" name="user_certificate" value="{{solicitudes_certificado[3]}}">
+                                        <input type="hidden" name="user_certificate"
+                                            value="{{solicitudes_certificado[3]}}">
                                         <label for="comentarioSolicitudCertificado"
                                             class="form-label">Comentario:</label>
                                         <textarea class="form-control" name="comentarioSolicitudCertificado"
@@ -34,7 +35,7 @@
                                     <div class="modal-footer">
 
                                         <span
-                                            class="badge badge-lg badge-pill badge-warning text-uppercase"  >Pendiente</span>
+                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
 
                                         <button class="btn btn-success" type="submit" id="aceptarSolicitudCertificado"
                                             name="aceptarSolicitudCertificado"
@@ -278,13 +279,164 @@
                                     </div>
                                 </form>
                             </div>
-                            {%endif%}
+
+                            <!--Tools NOTIFICATION-->
+                            {% elif tipo_solicitud == "herramienta" %}
+                            <div class="body">
+                                <h5 class="mb-0"><a target="_blank" href="javascript:void(0);">Solicitud de
+                                        Herramienta</a>
+                                </h5>
+                                <small><strong> Fecha y hora de solicitud:</strong>
+                                    {{solicitudes_tool[7]}}</small>
+                                <p class="m-t-10"><strong>{{solicitudes_tool[13]}}
+                                        {{solicitudes_tool[14]}}</strong> solicitó el prestamo de una herramienta el dia
+                                    <strong>{{solicitudes_tool[7]}}</strong>.
+                                </p>
+                                <h6>Informacion del prestamo:</h6>
+                                <ul>
+                                    <li>
+                                        <strong>Nombre:</strong> {{solicitudes_tool[17]}}
+                                    </li>
+                                    <li>
+                                        <strong>Cantidad solicitada:</strong> {{solicitudes_tool[3]}}
+                                    </li>
+                                    <li>
+                                        <strong>Cantidad disponible:</strong> {{solicitudes_tool[18]}}
+                                    </li>
+                                    <li>
+                                        <strong>Ubicacion:</strong> {{solicitudes_tool[19]}}
+                                    </li>
+                                    <li>
+                                        <strong>Imagen:</strong> <a
+                                            href="/ver_archivo/Herramienta/{{solicitudes_tool[21]}}"
+                                            target="_blank"><button type="button"
+                                                class="btn btn-primary btn-sm btn-animated btn-animated-y">
+                                                <span class="btn-inner--visible">Ver Imagen</span>
+                                                <span class="btn-inner--hidden"><i class="fa fa-eye"></i></span>
+                                            </button></a>
+                                    </li>
+                                    <li>
+                                        <strong>Motivo:</strong> {{solicitudes_tool[11]}}
+                                    </li>
+                                </ul>
+
+                                {% if solicitudes_tool[9] == "Pendiente" %}
+                                <hr>
+                                <form action="" method="POST">
+
+                                    <div class="mb-3">
+                                        <label for="comentarioSolicitudTool" class="form-label">Observaciones:</label>
+                                        <textarea class="form-control" name="comentarioSolicitudTool"
+                                            id="comentarioSolicitudTool" rows="3" required></textarea>
+                                    </div>
+                                    {%endif%}
+                                    <div class="modal-footer">
+                                        {% if solicitudes_tool[9] == "Aceptado" %}
+                                        <span
+                                            class="badge badge-lg badge-pill badge-success text-uppercase">Aceptado</span>
+
+                                        {% elif solicitudes_tool[9] == "Rechazado" %}
+                                        <span
+                                            class="badge badge-lg badge-pill badge-danger text-uppercase">Rechazado</span>
+
+                                        {% elif solicitudes_tool[9] == "Pendiente" %}
+                                        <span
+                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
+                                        <button class="btn btn-success" type="submit" id="aceptarSolicitudTool"
+                                            name="aceptarSolicitudTool" value="{{solicitudes_tool[0]}}">Aceptar</button>
+
+                                        <button class="btn btn-danger" name="rechazarSolicitudTool"
+                                            value="{{solicitudes_tool[0]}}">Rechazar</button>
+                                        {%endif%}
+                                    </div>
+                            </div>
+
+                            <!--MATERIAL NOTIFICATION-->
+                            {% elif tipo_solicitud == "material" %}
+                            <div class="body">
+                                <h5 class="mb-0"><a target="_blank" href="javascript:void(0);">Solicitud de
+                                        Material</a>
+                                </h5>
+                                <small><strong> Fecha y hora de solicitud:</strong>
+                                    {{solicitudes_material[7]}}</small>
+                                <p class="m-t-10"><strong>{{solicitudes_material[12]}}
+                                        {{solicitudes_material[13]}}</strong> solicitó el prestamo o uso de un material el dia
+                                    <strong>{{solicitudes_material[7]}}</strong>.
+                                </p>
+                                <h6>Informacion del prestamo:</h6>
+                                <ul>
+                                    <li>
+                                        <strong>Nombre:</strong> {{solicitudes_material[16]}}
+                                    </li>
+                                    <li>
+                                        <strong>Cantidad solicitada:</strong> {{solicitudes_material[3]}}
+                                    </li>
+                                    <li>
+                                        <strong>Cantidad disponible:</strong> {{solicitudes_material[17]}}
+                                    </li>
+                                    <li>
+                                        <strong>Ubicacion:</strong> {{solicitudes_material[18]}}
+                                    </li>
+                                    <li>
+                                        <strong>Tipo de material:</strong> {{solicitudes_material[19]}}
+                                    </li>
+                                    <li>
+                                        <strong>Descripcion del Material:</strong> {{solicitudes_material[20]}}
+                                    </li>
+                                    <li>
+                                        <strong>Imagen:</strong> <a
+                                            href="/ver_archivo/Material/{{solicitudes_material[21]}}"
+                                            target="_blank"><button type="button"
+                                                class="btn btn-primary btn-sm btn-animated btn-animated-y">
+                                                <span class="btn-inner--visible">Ver Imagen</span>
+                                                <span class="btn-inner--hidden"><i class="fa fa-eye"></i></span>
+                                            </button></a>
+                                    </li>
+                                
+                                    <li>
+                                        <strong>Motivo:</strong> {{solicitudes_material[11]}}
+                                    </li>
+                                </ul>
+
+                                {% if solicitudes_material[8] == "Pendiente" %}
+                                <hr>
+                                <form action="" method="POST">
+
+                                    <div class="mb-3">
+                                        <label for="comentarioSolicitudMaterial" class="form-label">Observaciones:</label>
+                                        <textarea class="form-control" name="comentarioSolicitudMaterial"
+                                            id="comentarioSolicitudTool" rows="3" required></textarea>
+                                    </div>
+                                    {%endif%}
+                                    <div class="modal-footer">
+                                        {% if solicitudes_material[8] == "Aceptado" %}
+                                        <span
+                                            class="badge badge-lg badge-pill badge-success text-uppercase">Aceptado</span>
+
+                                        {% elif solicitudes_material[8] == "Rechazado" %}
+                                        <span
+                                            class="badge badge-lg badge-pill badge-danger text-uppercase">Rechazado</span>
+
+                                        {% elif solicitudes_material[8] == "Pendiente" %}
+                                        <span
+                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
+                                        <button class="btn btn-success" type="submit" id="aceptarSolicitudMaterial"
+                                            name="aceptarSolicitudMaterial" value="{{solicitudes_material[0]}}">Aceptar</button>
+
+                                        <button class="btn btn-danger" name="rechazarSolicitudMaterial"
+                                            value="{{solicitudes_material[0]}}">Rechazar</button>
+                                        {%endif%}
+                                    </div>
+                            </div>
+                            </form>
                         </div>
+                        {%endif%}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 

@@ -1,12 +1,10 @@
 <a class="nav-link nav-link-icon" href="javascript:void(0);" id="navbar_1_dropdown_2" role="button"
-    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell">{% if session["cargo"]==1 %}{% if g.solicitudes_total_count !=0 %}<span
-            class="badge badge-pill badge-primary text-uppercase float-right"> 
-            {{g.solicitudes_total_count}} {%endif%}{%endif%}</span> </i></a>
+    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell">{% if g.solicitudes_total_count !=0 %}<span class="badge badge-pill badge-primary text-uppercase float-right">
+            {{g.solicitudes_total_count}} {%endif%}</span> </i></a>
 <div class="dropdown-menu dropdown-menu-right dropdown-menu-xl py-0">
     <div class="py-3 px-3">
         <h5 class="heading h6 mb-0">Notifications <span
-                class="badge badge-pill badge-primary text-uppercase float-right">{% if session["cargo"]==1 %}
-                {{g.solicitudes_total_count}} {%endif%}</span>
+                class="badge badge-pill badge-primary text-uppercase float-right">{{g.solicitudes_total_count}}</span>
         </h5>
     </div>
     <div class="list-group" style="max-height: 400px; overflow-y: scroll;">
@@ -15,7 +13,7 @@
 
             {% for solicitudes_certificado in g.solicitudes_certificado %}
             {% if solicitudes_certificado[6]!="Visto" %}
-            
+
             <a href="/allNotificaciones/{{solicitudes_certificado[10]}}/{{solicitudes_certificado[0]}}"
                 class="list-group-item list-group-item-action d-flex" name="ver_notificacion_certificado">
                 <div class="list-group-img"><img
@@ -29,14 +27,14 @@
                         {{solicitudes_certificado[2]}}</p>
                 </div>
             </a>
-           
+
             {%endif%}
             {% endfor %}
 
 
             {% for solicitudes_nomina in g.solicitudes_nomina %}
             {% if solicitudes_nomina[5]!="Visto" %}
-            
+
             <a href="/allNotificaciones/{{solicitudes_nomina[10]}}/{{solicitudes_nomina[0]}}"
                 class="list-group-item list-group-item-action d-flex" name="ver_notificacion_nomina"
                 value="{{solicitudes_nomina[0]}}">
@@ -50,13 +48,13 @@
                     <p class="text-sm">Ha solicitado una nomina con el nombre de {{solicitudes_nomina[1]}}</p>
                 </div>
             </a>
-           
+
             {%endif%}
             {% endfor %}
 
             {% for solicitudes_va_extemporaneas in g.solicitudes_va_extemporaneas %}
             {% if solicitudes_va_extemporaneas[9]!="Visto" %}
-            
+
             <a href="/allNotificaciones/{{solicitudes_va_extemporaneas[12]}}/{{solicitudes_va_extemporaneas[0]}}"
                 class="list-group-item list-group-item-action d-flex" name="ver_notificacion_nomina"
                 value="{{solicitudes_va_extemporaneas[0]}}">
@@ -64,19 +62,20 @@
                         src="{{ url_for('static', filename='images/users/' + solicitudes_va_extemporaneas[15]) }}"
                         class="avatar avatar-lg mr-3"></div>
                 <div class="list-group-content">
-                    <div class="list-group-heading">{{solicitudes_va_extemporaneas[13]}} {{solicitudes_va_extemporaneas[14]}}
+                    <div class="list-group-heading">{{solicitudes_va_extemporaneas[13]}}
+                        {{solicitudes_va_extemporaneas[14]}}
                         <small>{{solicitudes_va_extemporaneas[16]}}</small>
                     </div>
                     <p class="text-sm">Ha solicitado vacaciones extemporales</p>
                 </div>
             </a>
-           
+
             {%endif%}
             {% endfor %}
 
             {% for solicitudes_permisos in g.solicitudes_permisos %}
             {% if solicitudes_permisos[9]!="Visto" %}
-            
+
             <a href="/allNotificaciones/{{solicitudes_permisos[13]}}/{{solicitudes_permisos[0]}}"
                 class="list-group-item list-group-item-action d-flex" name="ver_notificacion_permisos"
                 value="{{solicitudes_permisos[0]}}">
@@ -90,55 +89,50 @@
                     <p class="text-sm">Ha solicitado un permiso</p>
                 </div>
             </a>
-           
+
             {%endif%}
             {% endfor %}
 
-            {%endif%}
+            <!--Las Notificaciones para el Jefe de taller-->
+            {% elif session["cargo"]==3 %}
 
-<!--Las Notificaciones para el usuario-->
-            {% if session["cargo"]==2 %}
-
-            {% for solicitudes_certificado in g.solicitudes_certificado %}
-            {% if solicitudes_certificado[6]!="Visto" %}
-            
-            <a href="/vistoNotificacionesCertificado/{{solicitudes_certificado[0]}}"
-                class="list-group-item list-group-item-action d-flex" name="ver_notificacion_certificado">
+            {% for solicitudes_tools in g.solicitudes_tools %}
+            {% if solicitudes_tools[10]!="Visto" %}
+            <a href="/allNotificaciones/herramienta/{{solicitudes_tools[0]}}"
+                class="list-group-item list-group-item-action d-flex" name="ver_notificacion_permisos"
+                value="{{solicitudes_tools[0]}}">
                 <div class="list-group-img"><img
-                        src="{{ url_for('static', filename='images/users/' + solicitudes_certificado[15]) }}"
+                        src="{{ url_for('static', filename='images/users/' + solicitudes_tools[15]) }}"
                         class="avatar avatar-lg mr-3"></div>
                 <div class="list-group-content">
-                    <div class="list-group-heading">{{solicitudes_certificado[10]}} {{solicitudes_certificado[11]}}
-                        <small>{{solicitudes_certificado[12]}}</small>
+                    <div class="list-group-heading">{{solicitudes_tools[13]}} {{solicitudes_tools[14]}}
+                        <small>{{solicitudes_tools[16]}}</small>
                     </div>
-                    <p class="text-sm">Ha solicitado un certificado de {{solicitudes_certificado[1]}} con el nombre de
-                        {{solicitudes_certificado[2]}}</p>
+                    <p class="text-sm">Ha solicitado el prestamo de una herramienta</p>
                 </div>
             </a>
-           
             {%endif%}
             {% endfor %}
 
-
-            {% for solicitudes_nomina in g.solicitudes_nomina %}
-            {% if solicitudes_nomina[5]!="Visto" %}
-            
-            <a href="/vistoNotificacionesnNomina/{{solicitudes_nomina[0]}}"
-                class="list-group-item list-group-item-action d-flex" name="ver_notificacion_nomina"
-                value="{{solicitudes_nomina[0]}}">
+            {% for solicitudes_material in g.solicitudes_material %}
+            {% if solicitudes_material[9]!="Visto" %}
+            <a href="/allNotificaciones/material/{{solicitudes_material[0]}}"
+                class="list-group-item list-group-item-action d-flex" name="ver_notificacion_material"
+                value="{{solicitudes_material[0]}}">
                 <div class="list-group-img"><img
-                        src="{{ url_for('static', filename='images/users/' + solicitudes_nomina[11]) }}"
+                        src="{{ url_for('static', filename='images/users/' + solicitudes_material[14]) }}"
                         class="avatar avatar-lg mr-3"></div>
                 <div class="list-group-content">
-                    <div class="list-group-heading">{{solicitudes_nomina[9]}} {{solicitudes_nomina[10]}}
-                        <small>{{solicitudes_nomina[12]}}</small>
+                    <div class="list-group-heading">{{solicitudes_material[12]}} {{solicitudes_material[13]}}
+                        <small>{{solicitudes_material[15]}}</small>
                     </div>
-                    <p class="text-sm">Ha solicitado una nomina con el nombre de {{solicitudes_nomina[1]}}</p>
+                    <p class="text-sm">Ha solicitado el prestamo o uso de un material</p>
                 </div>
             </a>
-           
             {%endif%}
             {% endfor %}
+
+            {%else%}
 
             {%endif%}
         </form>

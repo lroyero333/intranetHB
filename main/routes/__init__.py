@@ -54,6 +54,12 @@ def notificacionesRH():
     cursor.execute("SELECT solicitud_permisos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario ORDER BY fecha_solicitud DESC;")
     solicitudes_permisos = cursor.fetchall()
 
+    cursor.execute("SELECT movimientos_herramientas.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM movimientos_herramientas LEFT JOIN general_users ON movimientos_herramientas.responsable = general_users.usuario ORDER BY fecha_solicitud DESC;")
+    solicitudes_tools = cursor.fetchall()
+
+    cursor.execute("SELECT movimientos_materiales.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM movimientos_materiales LEFT JOIN general_users ON movimientos_materiales.responsable = general_users.usuario ORDER BY fecha_solicitud DESC;")
+    solicitudes_material= cursor.fetchall()
+
     cursor.execute("SELECT * FROM solicitud_certificado WHERE estado_notificacion= %s;","No visto")
     notificacion_certificado = cursor.fetchall()
     cursor.execute("SELECT * FROM solicitud_nomina WHERE estado_notificacion= %s;","No visto")
@@ -62,10 +68,32 @@ def notificacionesRH():
     notificacion_vacaciones = cursor.fetchall()
     cursor.execute("SELECT * FROM solicitud_permisos WHERE estado_notificacion= %s;","No visto")
     notificacion_permisos = cursor.fetchall()
+    cursor.execute("SELECT * FROM movimientos_herramientas WHERE estado_notificacion= %s;","No visto")
+    notificacion_tool = cursor.fetchall()
+    cursor.execute("SELECT * FROM movimientos_materiales WHERE estado_notificacion= %s;","No visto")
+    notificacion_material = cursor.fetchall()
+    nada=[]
     conexion.commit()
-   
-    solicitudes_total = notificacion_certificado + notificacion_nomina+ notificacion_vacaciones+notificacion_permisos
-    solicitudes_total_count = len(solicitudes_total)
+    # Verificar si la sesión existe
+    if 'cargo' in session:
+        cargo = session['cargo']
+        # Verificar el cargo del usuario
+        if cargo == 1:
+            solicitudes_total = (notificacion_certificado + notificacion_nomina + notificacion_vacaciones + notificacion_permisos)
+            solicitudes_total_count = len(solicitudes_total)
+        elif cargo == 3:
+            solicitudes_total = notificacion_tool+notificacion_material
+            solicitudes_total_count = len(solicitudes_total)
+        else:
+            # Si el cargo no es 1 o 4, no se hace nada
+            solicitudes_total = nada
+            solicitudes_total_count = len(solicitudes_total)
+            print('Por ahora nada')
+        # Obtener la cantidad de solicitudes totales
+        solicitudes_total_count = len(solicitudes_total)
+    else:
+        # Si no existe la sesión, no se hace nada
+        print('No existe la sesión')
 
     certificadooss_con_tiempo = []
     fecha_actual = datetime.now()
@@ -155,12 +183,59 @@ def notificacionesRH():
         permisos_ex_tiempo.append(tiempo_transcurrido)
         permisos_con_tiempo.append(permisos_ex_tiempo)
 
+    tools_con_tiempo = []
+
+    for tools in solicitudes_tools:
+        fecha_insertado = tools[7]
+        diferencia = relativedelta(fecha_actual, fecha_insertado)
+        if diferencia.years > 0:
+            tiempo_transcurrido = f"hace {diferencia.years} años"
+        elif diferencia.months > 0:
+            tiempo_transcurrido = f"hace {diferencia.months} meses"
+        elif diferencia.days > 0:
+            tiempo_transcurrido = f"hace {diferencia.days} días"
+        elif diferencia.hours > 0:
+            tiempo_transcurrido = f"hace {diferencia.hours} horas"
+        elif diferencia.minutes > 0:
+            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
+        else:
+            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
+        # convertir a lista para poder modificar
+        tools_ex_tiempo = list(tools)
+        tools_ex_tiempo.append(tiempo_transcurrido)
+        tools_con_tiempo.append(tools_ex_tiempo)
+
+    material_con_tiempo = []
+
+    for material in solicitudes_material:
+        fecha_insertado = tools[7]
+        diferencia = relativedelta(fecha_actual, fecha_insertado)
+        if diferencia.years > 0:
+            tiempo_transcurrido = f"hace {diferencia.years} años"
+        elif diferencia.months > 0:
+            tiempo_transcurrido = f"hace {diferencia.months} meses"
+        elif diferencia.days > 0:
+            tiempo_transcurrido = f"hace {diferencia.days} días"
+        elif diferencia.hours > 0:
+            tiempo_transcurrido = f"hace {diferencia.hours} horas"
+        elif diferencia.minutes > 0:
+            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
+        else:
+            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
+        # convertir a lista para poder modificar
+        material_ex_tiempo = list(material)
+        material_ex_tiempo.append(tiempo_transcurrido)
+        material_con_tiempo.append(material_ex_tiempo)
+
+
     # Guardamos las solicitudes en la variable de contexto `g`
     g.solicitudes_total_count = solicitudes_total_count
     g.solicitudes_certificado = certificadooss_con_tiempo
     g.solicitudes_nomina=nominaas_con_tiempo
     g.solicitudes_va_extemporaneas=vacaciones_con_tiempo
     g.solicitudes_permisos=permisos_con_tiempo
+    g.solicitudes_tools=tools_con_tiempo
+    g.solicitudes_material=material_con_tiempo
 
 @app.route('/allNotificaciones/<tipo_solicitud>/<id_solicitud>', methods=['GET','POST'])
 def allNotificaciones(tipo_solicitud,id_solicitud):
@@ -183,9 +258,15 @@ def allNotificaciones(tipo_solicitud,id_solicitud):
     elif tipo_solicitud == "Permiso":
         tabla_solicitud = "solicitud_permisos"
         campo_id_solicitud = "id_permisos"
+    elif tipo_solicitud == "herramienta":
+        tabla_solicitud = "movimientos_herramientas"
+        campo_id_solicitud = "id_movimiento"
+    elif tipo_solicitud == "material":
+        tabla_solicitud = "movimientos_materiales"
+        campo_id_solicitud = "id_movimiento"
     else:
         # Si el tipo de solicitud no es reconocido, se redirige al usuario a una página de error o a otra acción
-        return "Tipo de solicitud no reconocido"
+        return render_template('error/error-404.html')
 
     query = f"UPDATE {tabla_solicitud} SET estado_notificacion = %s WHERE {campo_id_solicitud} = %s"
     params = [estado_notificacion, id_solicitud]
@@ -294,6 +375,7 @@ def allNotificaciones(tipo_solicitud,id_solicitud):
         tipo_solicitud=tipo_solicitud)
     
     elif tipo_solicitud == "Permiso":
+
         cursor.execute("SELECT solicitud_permisos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario WHERE id_permisos=%s ORDER BY fecha_solicitud DESC;", id_solicitud)
         solicitudes_permiso = cursor.fetchall()
         conexion.commit()
@@ -330,10 +412,58 @@ def allNotificaciones(tipo_solicitud,id_solicitud):
 
                 
         return render_template("templates/light/verNotificaciones.html", solicitudes_permiso=solicitudes_permiso[0],tipo_solicitud=tipo_solicitud)
+    elif tipo_solicitud == "herramienta":
+        cursor.execute("SELECT movimientos_herramientas.*, general_users.Nombre, general_users.Apellido, general_users.foto , herramientas.* FROM movimientos_herramientas LEFT JOIN general_users ON movimientos_herramientas.responsable = general_users.usuario LEFT JOIN herramientas ON movimientos_herramientas.id_herramienta=herramientas.id_herramientas WHERE id_movimiento=%s ORDER BY fecha_solicitud DESC;", id_solicitud)
+        solicitudes_tool = cursor.fetchall()
+        conexion.commit()
+        print(solicitudes_tool)
+        if request.method == 'POST':
+            if 'aceptarSolicitudTool' in request.form:
+                observaciones=request.form['comentarioSolicitudTool']
+                estado_solicitud = "Aceptado"
+                query = "UPDATE movimientos_herramientas SET fecha_movimiento = %s, persona_aprueba = %s ,fecha_resolucion=%s ,estado_solicitud=%s ,observaciones=%s WHERE id_movimiento = %s"
+                params = [fechaResolucion , persona_resuelve_solicitud, fechaResolucion,estado_solicitud, observaciones,id_solicitud]
+                cursor.execute(query, params)
+                conexion.commit()
+                return redirect(f'/allNotificaciones/herramienta/{id_solicitud}')
+            
+            if 'rechazarSolicitudTool' in request.form:
+                observaciones=request.form['comentarioSolicitudTool']
+                estado_solicitud = "Rechazado"
+                query = "UPDATE movimientos_herramientas SET fecha_movimiento = %s, persona_aprueba = %s ,fecha_resolucion=%s ,estado_solicitud=%s ,observaciones=%s WHERE id_movimiento = %s"
+                params = [fechaResolucion , persona_resuelve_solicitud, fechaResolucion,estado_solicitud, observaciones,id_solicitud]
+                cursor.execute(query, params)
+                conexion.commit()
+                return redirect(f'/allNotificaciones/herramienta/{id_solicitud}')
+        return render_template("templates/light/verNotificaciones.html", solicitudes_tool=solicitudes_tool[0],tipo_solicitud=tipo_solicitud)
+    
+    elif tipo_solicitud == "material":
+        cursor.execute("SELECT movimientos_materiales.*, general_users.Nombre, general_users.Apellido, general_users.foto , materiales.* FROM movimientos_materiales LEFT JOIN general_users ON movimientos_materiales.responsable = general_users.usuario LEFT JOIN materiales ON movimientos_materiales.id_material=materiales.id_material WHERE id_movimiento=%s ORDER BY fecha_solicitud DESC;", id_solicitud)
+        solicitudes_material = cursor.fetchall()
+        conexion.commit()
+        print(solicitudes_material)
+        if request.method == 'POST':
+            if 'aceptarSolicitudMaterial' in request.form:
+                observaciones=request.form['comentarioSolicitudMaterial']
+                estado_solicitud = "Aceptado"
+                query = "UPDATE movimientos_materiales SET fecha_movimiento = %s, persona_aprueba = %s ,estado_solicitud=%s ,observaciones=%s WHERE id_movimiento = %s"
+                params = [fechaResolucion , persona_resuelve_solicitud, estado_solicitud, observaciones,id_solicitud]
+                cursor.execute(query, params)
+                conexion.commit()
+                return redirect(f'/allNotificaciones/material/{id_solicitud}')
+            
+            if 'rechazarSolicitudMaterial' in request.form:
+                observaciones=request.form['comentarioSolicitudMaterial']
+                estado_solicitud = "Rechazado"
+                query = "UPDATE movimientos_materiales SET fecha_movimiento = %s, persona_aprueba = %s ,estado_solicitud=%s ,observaciones=%s WHERE id_movimiento = %s"
+                params = [fechaResolucion , persona_resuelve_solicitud, estado_solicitud, observaciones,id_solicitud]
+                cursor.execute(query, params)
+                conexion.commit()
+                return redirect(f'/allNotificaciones/material/{id_solicitud}')
+        return render_template("templates/light/verNotificaciones.html", solicitudes_material=solicitudes_material[0],tipo_solicitud=tipo_solicitud)
     else:
         # Si el tipo de solicitud no es reconocido, se redirige al usuario a una página de error o a otra acción
         return "Tipo de solicitud no reconocido"
-        
 
 @app.route('/inicio')
 def inicio():

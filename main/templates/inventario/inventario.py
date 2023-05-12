@@ -1,4 +1,5 @@
-import datetime
+import datetime as dt
+from datetime import datetime, time, timedelta 
 import os
 from random import sample
 from flask import send_file
@@ -111,4 +112,43 @@ def verInventario():
          print('No es POST')
     return render_template('inventario/templates/verInventario.html', herramientas=herramientas, materiales=materiales)
 
+@app.route('/inventario/<tipo_solicitud>/<id_inventario>',  methods=['GET','POST'])
+def solicitarInventario(tipo_solicitud, id_inventario):
+    if not 'login' in session:
+        return redirect('/')
+    
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    responsable = session['usuario']
+    feha_actual=datetime.now()
+    if request.method == 'POST':
+        if 'solicitar_tool' in request.form:
+            tipo_movimiento='Salida'
+            cantidad = request.form['cantidad_tool']
+            motivo = request.form['motivo_tool']
+            query = "INSERT INTO movimientos_herramientas (id_herramienta,tipo_movimiento, cantidad, fecha_movimiento, responsable, fecha_solicitud, motivo) VALUES (%s, %s,%s,%s, %s,%s, %s)"
+            params = [id_inventario, tipo_movimiento, cantidad,  feha_actual,  responsable, feha_actual, motivo]
+
+            cursor.execute(query, params)
+            conexion.commit()
+
+            return redirect('/verInventario')
+        if 'eliminar_tool' in request.form:
+            
+           
+            return redirect('/verInventario')
+        if 'solicitar_material' in request.form:
+            tipo_movimiento='Salida'
+            cantidad = request.form['cantidad_material']
+            motivo = request.form['motivo_material']
+            query = "INSERT INTO movimientos_materiales (id_material,tipo_movimiento, cantidad, responsable, fecha_solicitud, motivo) VALUES (%s, %s,%s,%s, %s,%s)"
+            params = [id_inventario, tipo_movimiento, cantidad,  responsable, feha_actual, motivo]
+            cursor.execute(query, params)
+            conexion.commit()
+            return redirect('/verInventario')
+        else:
+            print('no agrego ')
+    else:
+         print('No es POST')
+    return render_template('inventario/templates/solicitudInventario.html',  tipo_solicitud=tipo_solicitud)
 
