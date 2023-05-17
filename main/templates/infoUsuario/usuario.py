@@ -1,7 +1,6 @@
 import datetime
 import os
 from random import sample
-
 from flask import send_file
 from main.routes import request, app,mysql,bcrypt,session,redirect,render_template,url_for
 import json
@@ -39,3 +38,49 @@ def myperfil():
 
     # Renderizar el perfil actualizado
     return render_template('infoUsuario/templates/profile.html',  datosUsuarios=datosUsuarios)
+
+@app.route('/configuration', methods=['GET', 'POST'])
+def configuration():
+    if 'login' not in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    if request.method == 'POST':
+        if 'cambio_contrasena' in request.form:
+        
+            actual_password = request.form['password']
+       
+            new_password = request.form['new_password']
+            confirm_password = request.form['confirm_password']
+
+            
+            # Realizar la consulta para obtener la contraseña almacenada
+            usuario = session['usuario']
+            cursor.execute("SELECT contrasena, usuario FROM general_users WHERE usuario = %s;", (usuario,))
+            change_password = cursor.fetchall()
+            
+            stored_password_hash = change_password[0][0]
+            print('DDDDDDDDD')
+            if bcrypt.checkpw(actual_password.encode('utf-8'), stored_password_hash.encode('utf-8')):
+              
+                if new_password == confirm_password:
+                    hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+                    query = "UPDATE general_users SET contrasena = %s WHERE usuario = %s"
+                    params = [hashed_password, usuario]
+                    cursor.execute(query, params)
+                    conexion.commit()  
+                    alerta = 0                      
+                    return render_template('infoUsuario/templates/configuration.html', alerta=alerta)
+                else:
+                 
+                    alerta = 1
+                    return render_template('infoUsuario/templates/configuration.html', alerta=alerta)
+            else:
+          
+                alerta = 2
+                return render_template('infoUsuario/templates/configuration.html', alerta=alerta)
+        else:
+            print('No es POST')
+
+    # Renderizar el perfil actualizado
+    return render_template('infoUsuario/templates/configuration.html')

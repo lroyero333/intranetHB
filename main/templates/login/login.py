@@ -14,14 +14,11 @@ def login():
         # Validar credenciales de usuario
         username = request.form['username']
         _password = request.form['password']
-        
-
         conexion=mysql.connect()
         cursor=conexion.cursor()
         cursor.execute("SELECT *  FROM general_users WHERE usuario = %s", (username))
         row = cursor.fetchone()
         conexion.commit()
-        
         # Comprobar que el usuario existe en la base de datos
         # y que la contraseña es correcta
         
@@ -67,3 +64,6 @@ def login():
     else:
         return render_template('login/login.html')
     
+@app.route('/recuperar-contrasena')
+def recover_password():
+    return render_template('login/forgot-password.html')

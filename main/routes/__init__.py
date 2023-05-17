@@ -447,7 +447,7 @@ def allNotificaciones(tipo_solicitud,id_solicitud):
                 observaciones=request.form['comentarioSolicitudMaterial']
                 estado_solicitud = "Aceptado"
                 query = "UPDATE movimientos_materiales SET fecha_movimiento = %s, persona_aprueba = %s ,estado_solicitud=%s ,observaciones=%s WHERE id_movimiento = %s"
-                params = [fechaResolucion , persona_resuelve_solicitud, estado_solicitud, observaciones,id_solicitud]
+                params = [fechaResolucion , persona_resuelve_solicitud, fechaResolucion,estado_solicitud, observaciones,id_solicitud]
                 cursor.execute(query, params)
                 conexion.commit()
                 return redirect(f'/allNotificaciones/material/{id_solicitud}')

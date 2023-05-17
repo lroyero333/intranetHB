@@ -18,4 +18,3 @@ app.config['MYSQL_DATABASE_DB']='login'
 mysql.init_app(app)
 
 from main.routes import *
-

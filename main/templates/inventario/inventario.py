@@ -26,8 +26,13 @@ def verInventario():
     cursor = conexion.cursor()
     cursor.execute("SELECT * FROM herramientas;")
     herramientas = cursor.fetchall()
+    cursor.execute("SELECT movimientos_herramientas.*, general_users.Nombre, general_users.Apellido, general_users.foto , herramientas.* FROM movimientos_herramientas LEFT JOIN general_users ON movimientos_herramientas.responsable = general_users.usuario LEFT JOIN herramientas ON movimientos_herramientas.id_herramienta=herramientas.id_herramientas WHERE tipo_movimiento='Salida' and estado_solicitud='Aceptado' ORDER BY fecha_solicitud DESC;")
+    herramientas_prestadas = cursor.fetchall()
     cursor.execute("SELECT * FROM materiales;")
     materiales = cursor.fetchall()
+    cursor.execute("SELECT movimientos_materiales.*, general_users.Nombre, general_users.Apellido, general_users.foto , materiales.* FROM movimientos_materiales LEFT JOIN general_users ON movimientos_materiales.responsable = general_users.usuario LEFT JOIN materiales ON movimientos_materiales.id_material=materiales.id_material WHERE tipo_movimiento='Salida' and estado_solicitud='Aceptado' ORDER BY fecha_solicitud DESC;")
+    materiales_prestados = cursor.fetchall()
+    fecha_actual=datetime.now()
     if request.method == 'POST':
         if 'agregar_tool' in request.form:
             imagen_herramienta=request.files['imagen_tool']
@@ -106,17 +111,40 @@ def verInventario():
             flash('El material ha sido eliminado.', 'success')
             
             return redirect('/verInventario')
+        if 'entregar_tool' in request.form:
+            id_inventario=request.form['herramienta_prestada']
+            tipo_movimiento='Entrada'
+            cantidad = request.form['cantidad_herramienta']
+            observaciones = request.form['observaciones_tool']
+            query = "UPDATE movimientos_herramientas SET tipo_movimiento = %s, cantidad = %s, fecha_movimiento = %s, observaciones = %s WHERE id_movimiento = %s"
+            params = [tipo_movimiento, cantidad,  fecha_actual, observaciones, id_inventario]
+
+            cursor.execute(query, params)
+            conexion.commit()
+
+            return redirect('/verInventario')
+        if 'entregar_material' in request.form:
+            id_inventario=request.form['material_prestado']
+            tipo_movimiento='Entrada'
+            cantidad = request.form['cantidad_material']
+            observaciones = request.form['observaciones_material']
+            query = "UPDATE movimientos_materiales SET tipo_movimiento = %s, cantidad = %s, fecha_movimiento = %s, observaciones = %s WHERE id_movimiento = %s"
+            params = [tipo_movimiento, cantidad,  fecha_actual, observaciones, id_inventario]
+
+            cursor.execute(query, params)
+            conexion.commit()
+
+            return redirect('/verInventario')
         else:
             print('no agrego ')
     else:
          print('No es POST')
-    return render_template('inventario/templates/verInventario.html', herramientas=herramientas, materiales=materiales)
+    return render_template('inventario/templates/verInventario.html', herramientas=herramientas, materiales=materiales,herramientas_prestadas=herramientas_prestadas,materiales_prestados=materiales_prestados)
 
 @app.route('/inventario/<tipo_solicitud>/<id_inventario>',  methods=['GET','POST'])
 def solicitarInventario(tipo_solicitud, id_inventario):
     if not 'login' in session:
         return redirect('/')
-    
     conexion = mysql.connect()
     cursor = conexion.cursor()
     responsable = session['usuario']
@@ -134,8 +162,6 @@ def solicitarInventario(tipo_solicitud, id_inventario):
 
             return redirect('/verInventario')
         if 'eliminar_tool' in request.form:
-            
-           
             return redirect('/verInventario')
         if 'solicitar_material' in request.form:
             tipo_movimiento='Salida'
@@ -151,4 +177,3 @@ def solicitarInventario(tipo_solicitud, id_inventario):
     else:
          print('No es POST')
     return render_template('inventario/templates/solicitudInventario.html',  tipo_solicitud=tipo_solicitud)
-

@@ -21,6 +21,12 @@
                         <span class="btn-inner--hidden"><i class="fa fa-plus "></i></span>
                     </button>
 
+                    <button data-toggle="modal" data-target="#entregar" type="button"
+                        class="btn btn-success ml-2  btn-animated btn-animated-y">
+                        <span class="btn-inner--visible">Entregar</span>
+                        <span class="btn-inner--hidden"><i class="fa fa-check "></i></span>
+                    </button>
+
                     <button data-toggle="modal" data-target="#eliminar" type="button"
                         class="btn btn-danger ml-2  btn-animated btn-animated-y">
                         <span class="btn-inner--visible">Eliminar</span>
@@ -161,9 +167,12 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="/inventario/material/{{materiales[0]}}"><button
-                                                        class="btn btn-primary btn-md"><i
-                                                            class="fa fa-tag"></i></button></a>
+                                                <a href="/inventario/material/{{materiales[0]}}">
+                                                    <button class="btn btn-primary btn-md">
+                                                        <i class="fa fa-tag">
+                                                        </i>
+                                                    </button>
+                                                </a>
                                             </td>
                                         </tr>
                                         {%endfor%}
@@ -226,6 +235,130 @@
                     <span class="btn-inner--hidden"><i class="fa fa-trash"></i></span>
                 </button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!--Opciones Inventario Entregar-->
+<div class="modal fade" id="entregar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Seleccione su peticion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button type="button" data-toggle="modal" data-target="#deliverTool"
+                    class="btn btn-success btn-block btn-animated btn-animated-y">
+                    <span class="btn-inner--visible">Herramientas</span>
+                    <span class="btn-inner--hidden"><i class="fa fa-check"></i></span>
+                </button>
+                <button type="button" data-toggle="modal" data-target="#deliverMaterial"
+                    class="btn btn-success btn-block btn-animated btn-animated-y">
+                    <span class="btn-inner--visible">Materiales</span>
+                    <span class="btn-inner--hidden"><i class="fa fa-check"></i></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal deliver Material-->
+<div class="modal fade" id="deliverMaterial" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label for="fecha_inicio_curso"><strong>Entrega de Materiales</strong></label>
+            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="material_prestado"><strong>Materiales</strong></label>
+                                <select class="selectpicker" name="material_prestado" title="Selecciona un material"
+                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
+                                    <option value="" selected disabled>Selecciona un material</option>
+                                    {% for materiales_prestados in materiales_prestados %}
+                                    <option value="{{materiales_prestados[0]}}">
+                                        Responsable: {{materiales_prestados[12]}} {{materiales_prestados[13]}},
+                                        Herramienta:
+                                        {{materiales_prestados[16]}}, Fecha:{{materiales_prestados[4]}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidad_material"><strong>Cantidad entregada:</strong></label>
+                                <input type="number" min=0 class="form-control" name="cantidad_material"
+                                    id="cantidad_material" value="" placeholder="Cantidad entregada">
+                            </div>
+                            <div class="mb-3">
+                                <label for="observaciones_material" class="form-label">Observaciones:</label>
+                                <textarea class="form-control" name="observaciones_material" id="observaciones_material"
+                                    rows="3" required></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="entregar_material" class="btn btn-success">Entregar
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!--Modal deliver Tool-->
+<div class="modal fade" id="deliverTool" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label for="fecha_inicio_curso"><strong>Entrega de Herramientas</strong></label>
+            </div>
+            <form action="" method="POST">
+                <div class="modal-body">
+                    <div class="row clearfix">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="herramienta_prestada"><strong>Herramientas</strong></label>
+                                <select class="selectpicker" name="herramienta_prestada"
+                                    title="Selecciona una herramienta" data-live-search="true"
+                                    data-live-search-placeholder="Buscar ...">
+                                    <option value="" selected disabled>Selecciona una herramienta</option>
+                                    {% for herramientas in herramientas_prestadas %}
+                                    <option value="{{herramientas[0]}}">
+                                        Responsable: {{herramientas[13]}} {{herramientas[14]}}, Herramienta:
+                                        {{herramientas[17]}}, Fecha:{{herramientas[4]}}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidad_herramienta"><strong>Cantidad entregada:</strong></label>
+                                <input type="number" min=0 class="form-control" name="cantidad_herramienta"
+                                    id="cantidad_herramienta" value="" placeholder="Cantidad entregada">
+                            </div>
+                            <div class="mb-3">
+                                <label for="observaciones_tool" class="form-label">Observaciones:</label>
+                                <textarea class="form-control" name="observaciones_tool" id="observaciones_tool"
+                                    rows="3" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" name="entregar_tool" class="btn btn-success">Entregar
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>
