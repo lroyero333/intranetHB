@@ -16,5 +16,5 @@ app.config['MYSQL_DATABASE_USER']='root'
 app.config['MYSQL_DATABASE_PASSWORD']=''
 app.config['MYSQL_DATABASE_DB']='login'
 mysql.init_app(app)
-
+app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024
 from main.routes import *

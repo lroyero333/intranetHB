@@ -240,6 +240,8 @@ def userProyecto(project_id):
     integrante = cursor.fetchall()
     cursor.execute("SELECT proyecto_users.*,proyectos.*, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto FROM proyecto_users JOIN proyectos ON proyecto_users.id_proyecto= proyectos.id_proyecto JOIN general_users ON proyecto_users.id_usuario= general_users.usuario;")
     project_user = cursor.fetchall()
+    cursor.execute('SELECT nombre_proyecto FROM proyectos WHERE id_proyecto=%s;', project_id)
+    proyecto_nombre=cursor.fetchone()
     conexion.commit()
     fecha_user = datetime.now()
     if request.method == 'POST':
@@ -251,7 +253,7 @@ def userProyecto(project_id):
             if usuario_proyecto is not None:
                 errorProyecto = 'El usuario ya colabora en este proyecto'
                 cursor.close()
-                return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user, errorProyecto=errorProyecto)
+                return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user, errorProyecto=errorProyecto,proyecto_nombre=proyecto_nombre)
             else:
                 query = "INSERT INTO proyecto_users (id_proyecto, id_usuario, fecha_inicio_user,observaciones) VALUES (%s, %s, %s,%s)"
                 params = [project_id, id_usuario, fecha_user, observaciones_user_proyecto]
@@ -272,7 +274,7 @@ def userProyecto(project_id):
             cursor.execute(query, params)
             conexion.commit()
     cursor.close()
-    return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user) 
+    return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user,proyecto_nombre=proyecto_nombre) 
 
 @app.route('/proyectos', methods=['GET', 'POST'])
 def crearProyecto():

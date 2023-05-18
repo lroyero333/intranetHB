@@ -41,6 +41,8 @@ def verCertificados(usuario_id):
     cursor = conexion.cursor()
     cursor.execute("SELECT certificados.*, general_users.Nombre AS nombre_sube, general_users.Apellido AS apellido_sube FROM certificados LEFT JOIN general_users ON certificados.usuario_sube_certificado = general_users.usuario WHERE id_usuario_fk = %s;", usuario_id)
     certificado = cursor.fetchall()
+    cursor.execute("SELECT  Nombre, Apellido FROM general_users WHERE usuario = %s;", usuario_id)
+    certificado_usuario = cursor.fetchone()
     conexion.commit()
    
     if request.method == 'POST':
@@ -96,7 +98,7 @@ def verCertificados(usuario_id):
             return resp
 
 
-    return render_template('nomina_certificados/templates/certificados.html',  certificado=certificado)
+    return render_template('nomina_certificados/templates/certificados.html',  certificado=certificado,certificado_usuario=certificado_usuario)
 
 @app.route('/nominas/<string:usuario_id>', methods=['GET', 'POST'])
 def verNominas(usuario_id):
@@ -107,6 +109,8 @@ def verNominas(usuario_id):
     cursor = conexion.cursor()
     cursor.execute("SELECT nominas.*, general_users.Nombre AS nombre_sube, general_users.Apellido AS apellido_sube FROM nominas LEFT JOIN general_users ON nominas.usuario_sube_nomina = general_users.usuario WHERE id_usuario_fk = %s;", usuario_id)
     nomina = cursor.fetchall()
+    cursor.execute("SELECT  Nombre, Apellido FROM general_users WHERE usuario = %s;", usuario_id)
+    nomina_usuario = cursor.fetchone()
     conexion.commit()
    
     if request.method == 'POST':
@@ -160,7 +164,7 @@ def verNominas(usuario_id):
             resp=send_file(url_File,as_attachment=True)
             return resp
 
-    return render_template('nomina_certificados/templates/nominas.html',  nomina=nomina)
+    return render_template('nomina_certificados/templates/nominas.html',  nomina=nomina, nomina_usuario=nomina_usuario)
 
 @app.route('/nomina_certificados/', methods=['GET', 'POST'])
 def verNominaCertificadosUsuario():

@@ -2,6 +2,20 @@
 {% block content %}
 <div class="main_content" id="main-content">
     <div class="page">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="javascript:void(0);">
+                <h4>Recursos Humanos / Nominas y Certificados</h4>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-align-justify"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+
+                </ul>
+            </div>
+        </nav>
 
         <div class="container-fluid">
             <div class="row clearfix">
@@ -26,9 +40,10 @@
                                     <td>
                                         <img src="{{ url_for('static', filename='images/users/' + datosUsuario[7]) }}"
                                             class="avatar w30" alt="">
-                                        <span class="ml-2">{{datosUsuario[0]}} {{datosUsuario[1]}} {{datosUsuario[2]}} {{datosUsuario[3]}}</span>
+                                        <span class="ml-2">{{datosUsuario[0]}} {{datosUsuario[1]}} {{datosUsuario[2]}}
+                                            {{datosUsuario[3]}}</span>
                                     </td>
-                                   
+
                                     <td>
                                         <span class="email"><a href="javascript:void(0);"
                                                 title="">{{datosUsuario[6]}}@humanbionics.com.co</a></span>
@@ -37,11 +52,11 @@
                                         <span class="phone text-center">{{datosUsuario[5]}}</span>
                                     </td>
                                     <td>
-                                        <a href="/nominas/{{datosUsuario[4]}}"
-                                            ><button class="btn btn-primary btn-sm"><i
+                                        <a href="/nominas/{{datosUsuario[4]}}"><button class="btn btn-primary btn-sm" title="Nominas"><i
                                                     class="ti-write" title="Nominas"></i></button></a>
-                                        <a href="/certificados/{{datosUsuario[4]}}" ><button
-                                                class="btn btn-primary btn-sm" title="Certificados"><i class="fa fa-archive"></i></button></a>
+                                        <a href="/certificados/{{datosUsuario[4]}}"><button
+                                                class="btn btn-primary btn-sm" title="Certificados"><i
+                                                    class="fa fa-archive"></i></button></a>
 
                                     </td>
                                 </tr>

@@ -330,25 +330,23 @@
                                             id="comentarioSolicitudTool" rows="3" required></textarea>
                                     </div>
                                     {%endif%}
+                                    {% if solicitudes_tool[9] == "Aceptado" %}
+                                    <span class="badge badge-lg badge-pill badge-success text-uppercase">Aceptado</span>
+
+                                    {% elif solicitudes_tool[9] == "Rechazado" %}
+                                    <span class="badge badge-lg badge-pill badge-danger text-uppercase">Rechazado</span>
+
+                                    {% elif solicitudes_tool[9] == "Pendiente" %}
+                                    <span
+                                        class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
+
                                     <div class="modal-footer">
-                                        {% if solicitudes_tool[9] == "Aceptado" %}
-                                        <span
-                                            class="badge badge-lg badge-pill badge-success text-uppercase">Aceptado</span>
-
-                                        {% elif solicitudes_tool[9] == "Rechazado" %}
-                                        <span
-                                            class="badge badge-lg badge-pill badge-danger text-uppercase">Rechazado</span>
-
-                                        {% elif solicitudes_tool[9] == "Pendiente" %}
-                                        <span
-                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
                                         <button class="btn btn-success" type="submit" id="aceptarSolicitudTool"
                                             name="aceptarSolicitudTool" value="{{solicitudes_tool[0]}}">Aceptar</button>
-
                                         <button class="btn btn-danger" name="rechazarSolicitudTool"
                                             value="{{solicitudes_tool[0]}}">Rechazar</button>
-                                        {%endif%}
                                     </div>
+                                    {%endif%}
                             </div>
 
                             <!--MATERIAL NOTIFICATION-->
@@ -360,7 +358,8 @@
                                 <small><strong> Fecha y hora de solicitud:</strong>
                                     {{solicitudes_material[7]}}</small>
                                 <p class="m-t-10"><strong>{{solicitudes_material[12]}}
-                                        {{solicitudes_material[13]}}</strong> solicitó el prestamo o uso de un material el dia
+                                        {{solicitudes_material[13]}}</strong> solicitó el prestamo o uso de un material
+                                    el dia
                                     <strong>{{solicitudes_material[7]}}</strong>.
                                 </p>
                                 <h6>Informacion del prestamo:</h6>
@@ -392,7 +391,7 @@
                                                 <span class="btn-inner--hidden"><i class="fa fa-eye"></i></span>
                                             </button></a>
                                     </li>
-                                
+
                                     <li>
                                         <strong>Motivo:</strong> {{solicitudes_material[11]}}
                                     </li>
@@ -403,30 +402,31 @@
                                 <form action="" method="POST">
 
                                     <div class="mb-3">
-                                        <label for="comentarioSolicitudMaterial" class="form-label">Observaciones:</label>
+                                        <label for="comentarioSolicitudMaterial"
+                                            class="form-label">Observaciones:</label>
                                         <textarea class="form-control" name="comentarioSolicitudMaterial"
                                             id="comentarioSolicitudTool" rows="3" required></textarea>
                                     </div>
                                     {%endif%}
+
+                                    {% if solicitudes_material[8] == "Aceptado" %}
+                                    <span class="badge badge-lg badge-pill badge-success text-uppercase">Aceptado</span>
+
+                                    {% elif solicitudes_material[8] == "Rechazado" %}
+                                    <span class="badge badge-lg badge-pill badge-danger text-uppercase">Rechazado</span>
+
+                                    {% elif solicitudes_material[8] == "Pendiente" %}
+                                    <span
+                                        class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
                                     <div class="modal-footer">
-                                        {% if solicitudes_material[8] == "Aceptado" %}
-                                        <span
-                                            class="badge badge-lg badge-pill badge-success text-uppercase">Aceptado</span>
-
-                                        {% elif solicitudes_material[8] == "Rechazado" %}
-                                        <span
-                                            class="badge badge-lg badge-pill badge-danger text-uppercase">Rechazado</span>
-
-                                        {% elif solicitudes_material[8] == "Pendiente" %}
-                                        <span
-                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
                                         <button class="btn btn-success" type="submit" id="aceptarSolicitudMaterial"
-                                            name="aceptarSolicitudMaterial" value="{{solicitudes_material[0]}}">Aceptar</button>
+                                            name="aceptarSolicitudMaterial"
+                                            value="{{solicitudes_material[0]}}">Aceptar</button>
 
                                         <button class="btn btn-danger" name="rechazarSolicitudMaterial"
                                             value="{{solicitudes_material[0]}}">Rechazar</button>
-                                        {%endif%}
                                     </div>
+                                    {%endif%}
                             </div>
                             </form>
                         </div>

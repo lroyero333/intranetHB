@@ -21,3 +21,8 @@ def error_401(error):
 @app.errorhandler(403)
 def error_403(error):
     return render_template('error/error-403.html')
+
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    return render_template('error/error-413.html'), 413
+

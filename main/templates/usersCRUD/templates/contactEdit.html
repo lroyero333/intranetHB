@@ -3,6 +3,21 @@
 
 <div class="main_content" id="main-content">
   <div class="page">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="javascript:void(0);">
+        <h4>Recursos Humanos / Lista de Empleados</h4>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-align-justify"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+        </ul>
+        <a href="/registrarEmpleados"><button class="btn btn-primary">Añadir Usuario</button></a>
+      </div>
+    </nav>
 
     <div class="container-fluid">
       <div class="row clearfix">
@@ -21,10 +36,11 @@
               </thead>
               <tbody>
                 {% for datosUsuario in datosUsuarios %}
-                
+
                 <tr>
                   <td>
-                    <img src="{{ url_for('static', filename='images/users/' + datosUsuario[4]) }}" class="avatar w30" alt="">
+                    <img src="{{ url_for('static', filename='images/users/' + datosUsuario[4]) }}" class="avatar w30"
+                      alt="">
                     <span class="ml-2">{{datosUsuario[0]}} {{datosUsuario[1]}}</span>
                   </td>
                   <td>
@@ -38,27 +54,27 @@
                     <span class="phone text-center">{{datosUsuario[5]}}</span>
                   </td>
                   <td>
-                    
+                    <div class="btn-group">
                       <a href="/verEmpleado/{{ datosUsuario[6] }}"><button class="btn btn-primary btn-sm"><i
                             class="fa fa-eye"></i></button></a>
                       <a href="/editEmpleados/{{ datosUsuario[6] }}"><button class="btn btn-primary btn-sm"><i
                             class="fa fa-edit"></i></button></a>
-                  
-                    <form action="{{ url_for('eliminarUsuario', usuario=datosUsuario[6]) }}" method="POST"
-                      onsubmit="return confirm('¿Está seguro que desea eliminar al usuario {{datosUsuario[2]}}?')">
-                      <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                    </form>
+
+                      <form action="{{ url_for('eliminarUsuario', usuario=datosUsuario[6]) }}" method="POST"
+                        onsubmit="return confirm('¿Está seguro que desea eliminar al usuario {{datosUsuario[2]}}?')"
+                        class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                      </form>
+                    </div>
                   </td>
 
                 </tr>
-                
+
                 {% endfor %}
 
               </tbody>
 
             </table>
-            <br>
-            <a href="/registrarEmpleados"><button class="btn btn-primary">Añadir Usuario</button></a>
           </div>
         </div>
       </div>

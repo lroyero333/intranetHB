@@ -2,105 +2,302 @@
 {% block content %}
 <div class="main_content" id="main-content">
     <div class="page">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="javascript:void(0);">
+                <h4>Usuarios / Nominas / Certificados</h4>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-align-justify"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+
+                </ul>
+            </div>
+        </nav>
         <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
-                    <div class="table-responsive">
-                        <table
-                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
-                            <thead>
-                                <tr>
-                                    <th>Certificado</th>
-                                    <th>Subido por</th>
-                                    <th>fecha de subida</th>
-                                    <th>Archivo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for certificado in certificado %}
-                                <tr>
-                                    <td>
-                                        <span class="ml-2">{{certificado[1]}}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{certificado[6]}} {{certificado[7]}}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{certificado[4]}}</span>
-                                    </td>
-                                    <td>
-                                        <a href="/ver_archivo/Certificado/{{certificado[5]}}" target="_blank">
-                                            <button class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></button>
-                                        </a>
-                                        <form action="" method="POST" style="display: inline-block;">
-                                            <button class="btn btn-primary btn-sm" name="descargar_certificado"
-                                                value="{{certificado[5]}}"><i class="fa fa-download"></i></button></a>
-                                        </form>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <br>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#addCertificado">Solicitar
-                            Certificado</button>
-                        <button class="btn btn-danger" data-toggle="modal" data-target="#cancelarCertificado">Cancelar
-                            Solicitud</button>
+                    <div class="card planned_task">
+                        <div class="header">
+                            <h2>Inventario</h2>
+                            <ul class="nav nav-tabs nav-tabs-new" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="todos-tab" data-toggle="tab" href="#todos" role="tab"
+                                        aria-controls="todos" aria-selected="true">Todos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="certificados-tab" data-toggle="tab" href="#certificados"
+                                        role="tab" aria-controls="certificados" aria-selected="false">Certificados</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="nominas-tab" data-toggle="tab" href="#nominas" role="tab"
+                                        aria-controls="nominas" aria-selected="false">Nominas</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="body">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="todos" role="tabpanel"
+                                    aria-labelledby="todos-tab">
+                                    <hr>
+                                    <div>
+                                        <H1>Certificados</H1>
+                                    </div>
+                                    <hr>
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Certificado</th>
+                                                            <th>Subido por</th>
+                                                            <th>fecha de subida</th>
+                                                            <th>Archivo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for certificado in certificado %}
+                                                        <tr>
+                                                            <td>
+                                                                <span class="ml-2">{{certificado[1]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span>{{certificado[6]}} {{certificado[7]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span>{{certificado[4]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="/ver_archivo/Certificado/{{certificado[5]}}"
+                                                                    target="_blank">
+                                                                    <button class="btn btn-primary btn-sm"><i
+                                                                            class="fa fa-eye"></i></button>
+                                                                </a>
+                                                                <form action="" method="POST"
+                                                                    style="display: inline-block;">
+                                                                    <button class="btn btn-primary btn-sm"
+                                                                        name="descargar_certificado"
+                                                                        value="{{certificado[5]}}"><i
+                                                                            class="fa fa-download"></i></button></a>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                                <br>
+                                                <button class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#addCertificado">Solicitar
+                                                    Certificado</button>
+                                                <button class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#cancelarCertificado">Cancelar
+                                                    Solicitud</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div>
+                                        <H1>Nominas</H1>
+                                    </div>
+                                    <hr>
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nomina</th>
+                                                            <th>Subido por</th>
+                                                            <th>fecha de subida</th>
+                                                            <th>Archivo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for nomina in nomina %}
+                                                        <tr>
+                                                            <td>
+                                                                <span class="ml-2">{{nomina[3]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span>{{nomina[6]}} {{nomina[7]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span>{{nomina[4]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="/ver_archivo/Nomina/{{nomina[5]}}"
+                                                                    target="_blank">
+                                                                    <button class="btn btn-primary btn-sm"
+                                                                        name="ver_nomina" value=""><i
+                                                                            class="fa fa-eye"></i></button>
+                                                                </a>
+                                                                <form action="" method="POST"
+                                                                    style="display: inline-block;">
+                                                                    <button class="btn btn-primary btn-sm"
+                                                                        name="descargar_nomina" value="{{nomina[5]}}"><i
+                                                                            class="fa fa-download"></i></button></a>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                                <br>
+                                                <button class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#solicitarNomina">Solicitar
+                                                    Nomina</button>
+                                                <button class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#cancelarNomina">Cancelar
+                                                    Solicitud</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>Contenido de la pestaña "Todos"</p>
+                                </div>
+                                <div class="tab-pane fade" id="certificados" role="tabpanel"
+                                    aria-labelledby="certificados-tab">
+                                    <hr>
+                                    <div>
+                                        <H1>Certificados</H1>
+                                    </div>
+                                    <hr>
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Certificado</th>
+                                                            <th>Subido por</th>
+                                                            <th>fecha de subida</th>
+                                                            <th>Archivo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for certificado in certificado %}
+                                                        <tr>
+                                                            <td>
+                                                                <span class="ml-2">{{certificado[1]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span>{{certificado[6]}} {{certificado[7]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span>{{certificado[4]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="/ver_archivo/Certificado/{{certificado[5]}}"
+                                                                    target="_blank">
+                                                                    <button class="btn btn-primary btn-sm"><i
+                                                                            class="fa fa-eye"></i></button>
+                                                                </a>
+                                                                <form action="" method="POST"
+                                                                    style="display: inline-block;">
+                                                                    <button class="btn btn-primary btn-sm"
+                                                                        name="descargar_certificado"
+                                                                        value="{{certificado[5]}}"><i
+                                                                            class="fa fa-download"></i></button></a>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                                <br>
+                                                <button class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#addCertificado">Solicitar
+                                                    Certificado</button>
+                                                <button class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#cancelarCertificado">Cancelar
+                                                    Solicitud</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>Contenido de la pestaña "certificados"</p>
+                                </div>
+                                <div class="tab-pane fade" id="nominas" role="tabpanel" aria-labelledby="nominas-tab">
+                                    <hr>
+                                    <div>
+                                        <H1>Nominas</H1>
+                                    </div>
+                                    <hr>
+                                    <div class="row clearfix">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="table-responsive">
+                                                <table
+                                                    class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nomina</th>
+                                                            <th>Subido por</th>
+                                                            <th>fecha de subida</th>
+                                                            <th>Archivo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for nomina in nomina %}
+                                                        <tr>
+                                                            <td>
+                                                                <span class="ml-2">{{nomina[3]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span>{{nomina[6]}} {{nomina[7]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <span>{{nomina[4]}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="/ver_archivo/Nomina/{{nomina[5]}}"
+                                                                    target="_blank">
+                                                                    <button class="btn btn-primary btn-sm"
+                                                                        name="ver_nomina" value=""><i
+                                                                            class="fa fa-eye"></i></button>
+                                                                </a>
+                                                                <form action="" method="POST"
+                                                                    style="display: inline-block;">
+                                                                    <button class="btn btn-primary btn-sm"
+                                                                        name="descargar_nomina" value="{{nomina[5]}}"><i
+                                                                            class="fa fa-download"></i></button></a>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                                <br>
+                                                <button class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#solicitarNomina">Solicitar
+                                                    Nomina</button>
+                                                <button class="btn btn-danger" data-toggle="modal"
+                                                    data-target="#cancelarNomina">Cancelar
+                                                    Solicitud</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>Contenido de la pestaña "nominas"</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12">
-                    <div class="table-responsive">
-                        <table
-                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
-                            <thead>
-                                <tr>
-                                    <th>Nomina</th>
-                                    <th>Subido por</th>
-                                    <th>fecha de subida</th>
-                                    <th>Archivo</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for nomina in nomina %}
-                                <tr>
-                                    <td>
-                                        <span class="ml-2">{{nomina[3]}}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{nomina[6]}} {{nomina[7]}}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{nomina[4]}}</span>
-                                    </td>
-                                    <td>
-                                        <a href="/ver_archivo/Nomina/{{nomina[5]}}" target="_blank">
-                                            <button class="btn btn-primary btn-sm" name="ver_nomina" value=""><i
-                                                    class="fa fa-eye"></i></button>
-                                        </a>
-                                        <form action="" method="POST" style="display: inline-block;">
-                                            <button class="btn btn-primary btn-sm" name="descargar_nomina"
-                                                value="{{nomina[5]}}"><i class="fa fa-download"></i></button></a>
-                                        </form>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <br>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#solicitarNomina">Solicitar
-                            Nomina</button>
-                        <button class="btn btn-danger" data-toggle="modal" data-target="#cancelarNomina">Cancelar
-                            Solicitud</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+
         <!--La tabla para ver todas las solicitudes y su estado-->
         <div class="container-fluid">
+            <hr>
+            <div>
+                <H1>Solicitudes Realizadas</H1>
+            </div>
+            <hr>
             <!-- Basic Table -->
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12">
