@@ -1,0 +1,111 @@
+<div class="container-fluid">
+  <div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+      <div class="card planned_task">
+        <div class="header">
+          <h2>Inventario</h2>
+          <ul class="nav nav-tabs nav-tabs-new" id="myTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="todos-tab" data-toggle="tab" href="#todos" role="tab" aria-controls="todos"
+                aria-selected="true">Todos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="herramientas-tab" data-toggle="tab" href="#herramientas" role="tab"
+                aria-controls="herramientas" aria-selected="false">Herramientas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="materiales-tab" data-toggle="tab" href="#materiales" role="tab"
+                aria-controls="materiales" aria-selected="false">Materiales</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="body">
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
+              <!-- Contenido de la pestaña "Todos" -->
+              <p>Contenido de la pestaña "Todos"</p>
+            </div>
+            <div class="tab-pane fade" id="herramientas" role="tabpanel" aria-labelledby="herramientas-tab">
+              <!-- Contenido de la pestaña "Herramientas" -->
+              <p>Contenido de la pestaña "Herramientas"</p>
+            </div>
+            <div class="tab-pane fade" id="materiales" role="tabpanel" aria-labelledby="materiales-tab">
+              <!-- Contenido de la pestaña "Materiales" -->
+              <p>Contenido de la pestaña "Materiales"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alertModalLabel">Mensaje</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% if category == 'error' %}
+        <div class="alert alert-danger" role="alert">
+          <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+          <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
+        </div>
+        {% endif %}
+        {% if category == 'correcto' %}
+        <div class="alert alert-success" role="alert">
+          <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+          <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
+        </div>
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+<script>
+  $('#alertModal').modal('show');
+</script>
+{% endif %}
+{% endwith %}
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+{% if category == 'error' %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+  <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
+  <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+{% if category == 'correcto' %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+  <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
+  <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}

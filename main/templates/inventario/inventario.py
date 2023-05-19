@@ -17,6 +17,7 @@ def stringAleatorio():
     string_aleatorio= "".join(resultado_aleatorio)
     return string_aleatorio
 
+extensionesImagenes=['.jpg', '.jpeg', '.png']
 @app.route('/verInventario',  methods=['GET','POST'])
 def verInventario():
     if not 'login' in session:
@@ -41,6 +42,13 @@ def verInventario():
             ubicacion = request.form['ubicacion_tool']
             descripcion = request.form['descripcion_tool']
 
+            filename, file_extension = os.path.splitext(imagen_herramienta.filename)
+            if file_extension.lower() not in extensionesImagenes:
+                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+                return redirect(request.url)
+            else:
+                flash('Se ha agregado satisfactoriamente','correcto')
+            
             filename = secure_filename(imagen_herramienta.filename)
             extension = os.path.splitext(filename)[1]
             nuevoNombreTool = stringAleatorio() + extension
@@ -69,7 +77,7 @@ def verInventario():
             if os.path.exists(ruta_archivo):
                 os.remove(ruta_archivo)
 
-            flash('La herramienta ha sido eliminada.', 'success')
+            flash('La herramienta ha sido eliminada.', 'correcto')
             
             return redirect('/verInventario')
         if 'agregar_material' in request.form:
@@ -80,6 +88,12 @@ def verInventario():
             descripcion = request.form['descripcion_material']
             tipo_material=request.form['tipo_material']
 
+            filename, file_extension = os.path.splitext(imagen_material.filename)
+            if file_extension.lower() not in extensionesImagenes:
+                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+                return redirect(request.url)
+            else:
+                flash('Se ha agregado satisfactoriamente','correcto')
             filename = secure_filename(imagen_material.filename)
             extension = os.path.splitext(filename)[1]
             nuevoNombreMaterial = stringAleatorio() + extension
@@ -108,7 +122,7 @@ def verInventario():
             if os.path.exists(ruta_archivo):
                 os.remove(ruta_archivo)
 
-            flash('El material ha sido eliminado.', 'success')
+            flash('El material ha sido eliminado.', 'correcto')
             
             return redirect('/verInventario')
         if 'entregar_tool' in request.form:
@@ -122,6 +136,8 @@ def verInventario():
             cursor.execute(query, params)
             conexion.commit()
 
+            flash('La herramienta ha sido entregada.', 'correcto')
+
             return redirect('/verInventario')
         if 'entregar_material' in request.form:
             id_inventario=request.form['material_prestado']
@@ -133,6 +149,8 @@ def verInventario():
 
             cursor.execute(query, params)
             conexion.commit()
+
+            flash('El material ha sido entregado.', 'correcto')
 
             return redirect('/verInventario')
         else:
@@ -160,6 +178,8 @@ def solicitarInventario(tipo_solicitud, id_inventario):
             cursor.execute(query, params)
             conexion.commit()
 
+            flash('Solicitud realizada','correcto')
+
             return redirect('/verInventario')
         if 'eliminar_tool' in request.form:
             return redirect('/verInventario')
@@ -171,6 +191,7 @@ def solicitarInventario(tipo_solicitud, id_inventario):
             params = [id_inventario, tipo_movimiento, cantidad,  responsable, feha_actual, motivo]
             cursor.execute(query, params)
             conexion.commit()
+            flash('Solicitud realizada','correcto')
             return redirect('/verInventario')
         else:
             print('no agrego ')

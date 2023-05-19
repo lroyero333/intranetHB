@@ -17,6 +17,7 @@ def stringAleatorio():
     string_aleatorio= "".join(resultado_aleatorio)
     return string_aleatorio
 
+extensionArchivo=['.pdf']
 #Human Resource view the list of user and can select nomina and certificates
 @app.route('/nomina_certificados', methods=['GET', 'POST'])
 def verNominaCertificados():
@@ -51,7 +52,12 @@ def verCertificados(usuario_id):
             usuario_sube_certificado = session["usuario"]
             fecha_subida = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             archivo_certificado = request.files['archivo_certificado']
-
+            filename, file_extension = os.path.splitext(archivo_certificado.filename)
+            if file_extension.lower() not in extensionArchivo:
+                flash('La extensión del archivo no está permitida. Solo se permiten archivos .PDF','error')
+                return redirect(request.url)
+            else:
+                flash('El certificado se ha agregado satisfactoriamente','correcto')
             
             filename = secure_filename(archivo_certificado.filename)
 
@@ -67,9 +73,6 @@ def verCertificados(usuario_id):
 
             query = "INSERT INTO certificados (id_usuario_fk, nombre_certificado, usuario_sube_certificado, fecha_subida,archivo_certificado) VALUES (%s,%s,%s, %s, %s)"
             params = [usuario_id, nombre_certificado,  usuario_sube_certificado,  fecha_subida, nuevoNombreCertificado]
-
-
-
             cursor.execute(query, params)
             conexion.commit()
 
@@ -86,7 +89,7 @@ def verCertificados(usuario_id):
             if os.path.exists(ruta_archivo):
                 os.remove(ruta_archivo)
 
-            flash('El certificado ha sido eliminado.', 'success')
+            flash('El certificado ha sido eliminado.', 'correcto')
             
             return redirect(f'/certificados/{usuario_id}')
         if 'descargar_certificado'in request.form:
@@ -119,6 +122,13 @@ def verNominas(usuario_id):
             usuario_sube_nomina = session["usuario"]
             fecha_subida = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             archivo_nomina = request.files['archivo_nomina']
+
+            filename, file_extension = os.path.splitext(archivo_nomina.filename)
+            if file_extension.lower() not in extensionArchivo:
+                flash('La extensión del archivo no está permitida. Solo se permiten archivos .PDF','error')
+                return redirect(request.url)
+            else:
+                flash('La nomina se ha agregado satisfactoriamente','correcto')
 
             
             filename = secure_filename(archivo_nomina.filename)
@@ -153,9 +163,7 @@ def verNominas(usuario_id):
 
             if os.path.exists(ruta_archivo):
                 os.remove(ruta_archivo)
-
-            flash('La nomina ha sido eliminado.', 'success')
-            
+            flash('La nomina se ha eliminado satisfactoriamente','correcto')
             return redirect(f'/nominas/{usuario_id}')
         
         if 'descargar_nomina'in request.form:
@@ -203,12 +211,15 @@ def verNominaCertificadosUsuario():
             params = [tipo_certificado, nombre_certificado, solicitante, fecha_solicitud, motivo_solicitud]
             cursor.execute(query, params)
             conexion.commit()
+            flash('Solicitud de certificado realizada.', 'correcto')
             return redirect('/nomina_certificados/')
         
         if 'cancelar_certificado'in request.form:
             certificadoCancelar=request.form['cancelar_certificado']
             cursor.execute("DELETE FROM solicitud_certificado WHERE id_solicitud=%s;", certificadoCancelar)
             conexion.commit()
+            flash('Solicitud de certificado cancelada.', 'correcto')
+
             return redirect('/nomina_certificados/')
         
         if 'solicitar_nomina'in request.form:
@@ -220,12 +231,14 @@ def verNominaCertificadosUsuario():
             params = [nombre_nomina,solicitante, fecha_solicitud, motivo_solicitud]
             cursor.execute(query, params)
             conexion.commit()
+            flash('Solicitud de nomina realizada.', 'correcto')
             return redirect('/nomina_certificados/')
         
         if 'cancelar_nomina'in request.form:
             nominaCancelar=request.form['cancelar_nomina']
             cursor.execute("DELETE FROM solicitud_nomina WHERE id_solicitud_nomina=%s;", nominaCancelar)
             conexion.commit()
+            flash('Solicitud de nomina cancelada.', 'correcto')
             return redirect('/nomina_certificados/')
         
     cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.persona_resuelve_solicitud = general_users.usuario WHERE solicitante = %s ORDER BY fecha_solicitud DESC ;", session["usuario"])

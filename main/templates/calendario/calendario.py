@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import datetime as dt
 from datetime import datetime, time, timedelta 
 
+extensionesImagenes=['.jpg', '.jpeg', '.png']
 
 
 def stringAleatorio():
@@ -44,6 +45,7 @@ def calendario():
 
             cursor.execute(query, params)
             conexion.commit()
+            flash('Curso agregado satisfactoriamente','correcto')
 
             return redirect('/calendario')
 
@@ -53,6 +55,14 @@ def calendario():
             imagen_noticia = request.files['imagen_noticia']
             descripcion_noticia = request.form['descripcion_noticia']
             fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+          
+            filename, file_extension = os.path.splitext(imagen_noticia.filename)
+            if file_extension.lower() not in extensionesImagenes:
+                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+                return redirect('/calendario')
+            else:
+                flash('La noticia se ha agregado satisfactoriamente','correcto')
 
             basepath = os.path.dirname(__file__)
             filename = secure_filename(imagen_noticia.filename)
@@ -85,7 +95,7 @@ def calendario():
             cursor.execute(
                 "DELETE FROM cursos WHERE id_curso = %s;", (curso_id,))
             conexion.commit()
-            flash('El curso ha sido eliminado.', 'success')
+            flash('El curso ha sido eliminado.', 'correcto')
             return redirect('/calendario')
         
         noticia_id = request.form.get('noticia_id')
@@ -96,7 +106,7 @@ def calendario():
             cursor.execute(
                 "DELETE FROM noticias WHERE id_noticia = %s;", (noticia_id,))
             conexion.commit()
-            flash('El curso ha sido eliminado.', 'success')
+            flash('La noticia ha sido eliminada correctamente','correcto')
             return redirect('/calendario')
 
     # Obtener la lista de cursos y de noticias
@@ -139,7 +149,7 @@ def editCurso(curso_id):
         cursor.execute(query, params)
         conexion.commit()
 
-        flash('El curso ha sido editado.', 'success')
+        flash('El curso ha sido editado correctamente.', 'correcto')
         return redirect('/calendario')
     
     return render_template('calendario/templates/editarCurso.html', curso=curso)
@@ -166,6 +176,11 @@ def editNoticia(noticia_id):
 
         if request.files['imagen_noticia'].filename != '':
             imagen_noticia = request.files['imagen_noticia']
+            filename, file_extension = os.path.splitext(imagen_noticia.filename)
+            if file_extension.lower() not in extensionesImagenes:
+                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+            else:
+                flash('La noticia se ha actualizado satisfactoriamente','correcto')
             basepath = os.path.dirname(__file__)
             filename = secure_filename(imagen_noticia.filename)
 
@@ -211,7 +226,7 @@ def verCursos(curso_id):
             # Eliminar al usuario de la tabla de inscripción de cursos
             cursor.execute("DELETE FROM inscripcion_cursos WHERE id_usuario_fk=%s AND id_curso_fk=%s", (session['usuario'], curso_id))
             conexion.commit()
-            flash("Te has cancelado la inscripción en este curso.")
+            flash("Te has cancelado la inscripción en este curso.", 'correcto')
         else:
             # Insertar un nuevo usuario en la tabla de inscripción de cursos
             id_usuario_fk = session['usuario']
@@ -224,7 +239,7 @@ def verCursos(curso_id):
             cursor.execute(query, params)
             conexion.commit()
 
-            flash("Te has inscrito exitosamente en este curso.")
+            flash("Te has inscrito exitosamente en este curso.", 'correcto')
 
         return redirect(f"/cursos/{curso_id}")
 
@@ -245,27 +260,15 @@ def userProyecto(project_id):
     conexion.commit()
     fecha_user = datetime.now()
     if request.method == 'POST':
-        if 'asignar_usuario_proyecto' in request.form:
-            id_usuario = request.form['integrante_id']
-            observaciones_user_proyecto = request.form['observaciones_user_proyecto']
-            cursor.execute("SELECT * FROM proyecto_users WHERE id_proyecto=%s AND id_usuario=%s", (project_id, id_usuario))
-            usuario_proyecto = cursor.fetchone()
-            if usuario_proyecto is not None:
-                errorProyecto = 'El usuario ya colabora en este proyecto'
-                cursor.close()
-                return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user, errorProyecto=errorProyecto,proyecto_nombre=proyecto_nombre)
-            else:
-                query = "INSERT INTO proyecto_users (id_proyecto, id_usuario, fecha_inicio_user,observaciones) VALUES (%s, %s, %s,%s)"
-                params = [project_id, id_usuario, fecha_user, observaciones_user_proyecto]
-                cursor.execute(query, params)
-                conexion.commit()
-        elif 'desactivar_usuario_proyecto' in request.form:
+        if 'desactivar_usuario_proyecto' in request.form:
             id_usuario=request.form['desactivar_usuario_proyecto']
             estado_usuario='Inactivo'
             query = "UPDATE proyecto_users SET estado_usuario = %s, fecha_fin_user = %s WHERE id_usuario = %s"
             params = [estado_usuario, fecha_user, id_usuario]
             cursor.execute(query, params)
             conexion.commit()
+            flash('Usuario desactivado satisfactoriamente','correcto')
+
         elif 'activar_usuario_proyecto' in request.form:
             id_usuario=request.form['activar_usuario_proyecto']
             estado_usuario='Activo'
@@ -273,6 +276,23 @@ def userProyecto(project_id):
             params = [estado_usuario, fecha_user, id_usuario]
             cursor.execute(query, params)
             conexion.commit()
+            flash('Usuario activado satisfactoriamente','correcto')
+        elif 'asignar_usuario_proyecto' in request.form:
+            id_usuario = request.form['integrante_id']
+            observaciones_user_proyecto = request.form['observaciones_user_proyecto']
+            cursor.execute("SELECT * FROM proyecto_users WHERE id_proyecto=%s AND id_usuario=%s", (project_id, id_usuario))
+            usuario_proyecto = cursor.fetchone()
+            if usuario_proyecto is not None:
+                
+                cursor.close()
+                flash('El usuario ya pertenece a este proyecto','error')
+                return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user,proyecto_nombre=proyecto_nombre)
+            else:
+                query = "INSERT INTO proyecto_users (id_proyecto, id_usuario, fecha_inicio_user,observaciones) VALUES (%s, %s, %s,%s)"
+                params = [project_id, id_usuario, fecha_user, observaciones_user_proyecto]
+                cursor.execute(query, params)
+                conexion.commit()
+                flash('Usuario agregado satisfactoriamente','correcto')
     cursor.close()
     return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user,proyecto_nombre=proyecto_nombre) 
 
@@ -288,6 +308,12 @@ def crearProyecto():
         nombre_proyecto = request.form['nombre_proyecto']
         imagen_proyecto = request.files['imagen_proyecto']
         descripcion_proyecto = request.form['descripcion_proyecto']
+        filename, file_extension = os.path.splitext(imagen_proyecto.filename)
+        if file_extension.lower() not in extensionesImagenes:
+            flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+            return redirect('/proyectos')
+        else:
+            flash('El proyecto se ha agregado satisfactoriamente','correcto')
 
         basepath = os.path.dirname(__file__)
         filename = secure_filename(imagen_proyecto.filename)
@@ -318,7 +344,7 @@ def crearProyecto():
             cursor.execute(
                 "DELETE FROM proyectos WHERE id_proyecto = %s;", (proyecto_id,))
             conexion.commit()
-            flash('El proyecto ha sido eliminado.', 'success')
+            flash('El proyecto ha sido eliminado.', 'correcto')
             return redirect('/proyectos')
         
     conexion = mysql.connect()
@@ -335,7 +361,7 @@ def editProyecto(proyecto_id):
 
     if not 'login' in session:
         return redirect('/')
-    if session['cargo'] != 1:
+    if session['cargo'] != 4:
         return redirect('/inicio')
     
     conexion = mysql.connect()
@@ -345,14 +371,17 @@ def editProyecto(proyecto_id):
     
     if request.method == 'POST':
         # Obtener los valores de los campos del formulario
-
-        
-        titulo_noticia = request.form.get('titulo_proyecto') or proyecto[1]
-        
+        titulo_noticia = request.form.get('titulo_proyecto') or proyecto[1]   
         descripcion_proyecto = request.form.get('descripcion_noticia') or proyecto[3]
 
         if request.files['imagen_proyecto'].filename != '':
             imagen_proyecto = request.files['imagen_proyecto']
+            filename, file_extension = os.path.splitext(imagen_proyecto.filename)
+            if file_extension.lower() not in extensionesImagenes:
+                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+                return redirect('/proyectos')
+            else:
+                flash('El proyecto se ha editado satisfactoriamente','correcto')
             basepath = os.path.dirname(__file__)
             filename = secure_filename(imagen_proyecto.filename)
 
@@ -362,22 +391,18 @@ def editProyecto(proyecto_id):
             upload_path = os.path.join( basepath, '..', '..', 'static', 'images', 'proyectos', nuevoNombreImagen)
             if not os.path.exists(os.path.dirname(upload_path)):
                 os.makedirs(os.path.dirname(upload_path))
-
             imagen_proyecto.save(upload_path)
-
         # Resto del código para procesar y guardar la imagen
         else:
             nuevoNombreImagen = proyecto[2]
 
-
-        
         query = "UPDATE proyectos SET nombre_proyecto = %s, imagen_proyecto = %s, descripcion_proyecto = %s  WHERE id_proyecto = %s"
         params = [ titulo_noticia, nuevoNombreImagen, descripcion_proyecto, proyecto_id]
 
         cursor.execute(query, params)
         conexion.commit()
 
-        flash('El curso ha sido editado.', 'success')
+        flash('El proyecto ha sido editado.', 'correcto')
         return redirect('/proyectos')
     
     return render_template('calendario/templates/editarProyecto.html', proyecto=proyecto)
@@ -403,8 +428,6 @@ def verVacaciones():
         tipo_vacaciones=request.form['tipo_vacaciones']
         fecha_inicio_vacaciones=request.form['fecha_inicio_vacaciones']
         fecha_fin_vacaciones=request.form['fecha_fin_vacaciones']
-
-        
         # Verificar si el usuario ya existe
         resultado = None
         sql = "SELECT id_usuario FROM vacaciones WHERE id_usuario = %s "
@@ -414,14 +437,16 @@ def verVacaciones():
         resultado = cursor.fetchone()
         if resultado is not None:
             # El usuario ya existe
-            errorVacaciones = 'El usuario ya tiene vacaciones asignadas'
+            
             cursor.close()
-            return render_template('calendario/templates/vacaciones.html', errorVacaciones=errorVacaciones, usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones)
+            flash('El usuario ya tiene vacaciones asignadas','error')
+            return render_template('calendario/templates/vacaciones.html', usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones)
         else:
             query = "INSERT INTO vacaciones (tipo_vacaciones, fecha_inicio_vacaciones, fecha_fin_vacaciones, id_usuario ) VALUES (%s,%s, %s,%s)"
             params = [tipo_vacaciones, fecha_inicio_vacaciones,fecha_fin_vacaciones, id_usuario]
             cursor.execute(query, params)
             conexion.commit()
+            flash('Vacaciones asignadas satisfactoriamente','correcto')
 
     if 'programar_vacaciones' in request.form:
         id_usuario=session['usuario']
@@ -434,10 +459,13 @@ def verVacaciones():
         params = [fecha_inicio_extemporanea, fecha_fin_extemporanea,fecha_solicitud,estado_solicitud, id_usuario]
         cursor.execute(query, params)
         conexion.commit()
+        flash('Vacaciones programadas satisfactoriamente','correcto')
+        
     if 'cancelar_programar_vacaciones' in request.form:
         id_vacaciones_ex=request.form['vacaciones_ex_id']
         cursor.execute("DELETE FROM vacaciones_extemporaneas WHERE id_vacaciones_extemporaneas = %s;", (id_vacaciones_ex,))
         conexion.commit()
+        flash('Vacaciones canceladas satisfactoriamente','correcto')
         return redirect('/vacaciones')
 
 
@@ -548,11 +576,13 @@ def verPermisos():
         cursor.execute(query, params)
         conexion.commit()
 
+        flash('Permiso solicitado satisfactoriamente','correcto')
         return redirect('/permisos')
     if 'cancelarPermiso' in request.form:
         permiso_id=request.form['permiso_id']
         cursor.execute("DELETE FROM solicitud_permisos WHERE id_permisos = %s;", (permiso_id,))
         conexion.commit()
+        flash('Permiso cancelado satisfactoriamente','correcto')
         return redirect('/permisos')
     return render_template('calendario/templates/permisos.html', solicitudes_permisos=solicitudes_permisos, solicitudes_permisos2=solicitudes_permisos2)
 
@@ -611,4 +641,3 @@ def obtener_cursos():
         eventos_json.append(evento_json)
     
     return jsonify(eventos_json)
-

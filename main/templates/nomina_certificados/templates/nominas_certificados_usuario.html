@@ -17,6 +17,32 @@
             </div>
         </nav>
         <div class="container-fluid">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+                <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
+                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% if category == 'correcto' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+                <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
+                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
                     <div class="card planned_task">

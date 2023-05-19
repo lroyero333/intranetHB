@@ -9,6 +9,8 @@ from main.routes import request, app, mysql, bcrypt, session, redirect, render_t
 from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
 from werkzeug.utils import secure_filename
 
+extensionesImagenes=['.jpg', '.jpeg', '.png']
+
 @app.route('/empleados')
 def listaEmpleados():
     if not 'login' in session:
@@ -171,7 +173,13 @@ def editEmpleados(usuario_id):
         nombre_contacto = request.form['nombre_contacto']
         numero_contacto = request.form['numero_contacto']
         contrasena = request.form['contrasena']
-              
+
+        filename, file_extension = os.path.splitext(foto.filename)
+        if file_extension.lower() not in extensionesImagenes:
+            flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+            return redirect(request.url)
+        else:
+            flash('Se ha agregado satisfactoriamente','correcto') 
 
         # Actualizar los campos que no están vacíos
         query = "UPDATE general_users SET"

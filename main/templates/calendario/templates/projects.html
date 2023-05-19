@@ -30,12 +30,38 @@
                         <span class="btn-inner--visible">Opciones Proyecto</span>
                         <span class="btn-inner--hidden"><i class="fa fa-cog"></i></span>
                     </button>
-                    
+
                     {% endif %}
                 </form>
             </div>
         </nav>
         <div class="container-fluid">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+                <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
+                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% if category == 'correcto' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+                <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
+                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
             <div class="row clearfix">
 
                 {% for datosProyectos in datosProyectos %}
@@ -52,7 +78,8 @@
                                 <small class="text-muted">{{datosProyectos[3]}}</small>
                             </div>
                             <ul class="list-unstyled social-links">
-                                <li title="Integrantes"><a href="/proyectos/usuarios/{{datosProyectos[0]}}"><i class="fa fa-briefcase"></i></a>
+                                <li title="Integrantes"><a href="/proyectos/usuarios/{{datosProyectos[0]}}"><i
+                                            class="fa fa-briefcase"></i></a>
                                 </li>
                             </ul>
                         </div>
@@ -142,11 +169,12 @@
                         <div class="modal-footer">
                             <form action="" method="POST">
                                 <input type="hidden" name="proyecto_id" value="{{ datosProyectos[0] }}">
-                                <button type="submit" name="editar_proyecto" value="{{ datosProyectos[0] }}" class="btn btn-primary">Editar</button>
+                                <button type="submit" name="editar_proyecto" value="{{ datosProyectos[0] }}"
+                                    class="btn btn-primary">Editar</button>
                                 <button type="submit" name="borrar_proyecto" value="{{ datosProyectos[0] }}"
                                     class="btn btn-danger">Eliminar
                                     <i class="fa fa-trash"></i></button>
-                                
+
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                             </form>
                         </div>

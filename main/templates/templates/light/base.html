@@ -37,10 +37,13 @@
         <div class="loader">
             <div class="m-t-30"><img src="{{ url_for('static', filename='images/isotipohb.svg') }}" width="48"
                     height="48" alt="Human Bionics"></div>
-            <p>Please wait...</p>
+            <p>Cargando...</p>
         </div>
     </div>
+    
     {% include 'templates/light/navbar/navbar.html' %}
+
+
     <div class="main_content" id="main-content">
 
         <div class="left_sidebar">
@@ -94,8 +97,11 @@
                 </ul>
             </nav>
         </div>
+
         
+
         {% block content %}
+
 
         {% endblock %}
 
@@ -147,6 +153,11 @@
     <script src="{{ url_for('static', filename='js/pages/charts/c3.js')}}"></script>
 
     <script src="{{ url_for('static', filename='js/pages/todo-js.js')}}"></script>
+    <script>
+        $('.undo').click(function () {
+            $(this).closest('.alert').remove();
+        });
+    </script>
 
 
     <script>

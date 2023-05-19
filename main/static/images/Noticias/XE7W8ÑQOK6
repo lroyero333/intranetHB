@@ -1,0 +1,35 @@
+
+
+List<String> cofeeVariety = [
+  'Blue Mountain', //Listo
+  'Bourbon', //Listo
+  'Casiopea',//listo
+  'Castillo', //Listo
+  'Catiguá MG2',//Listo
+  'Catuaí',//Listo
+  'Caturra', //Listo
+  'Centroamericano',//Listo
+  //'Colombia o Castilla', No Encontrado
+  'Etiope',//Listo
+  'Geisha',//Listo
+  'Icatú',//Listo
+  'k7',//Listo
+  'KP-423',//Listo
+  'Maracaturra',//Listo
+  'Maragogype', //Listo
+  'Milenio',//Listo
+  'Mundo Novo',//Listo
+  'Obatá',//Listo
+  'Pacamara',//Listo
+  'Pache',//Listo
+  'Pacas',//Listo
+  'SL-28',//Listo
+  'Sarchimor',//Listo
+  'Tabi', //Listo
+  'Timor',//Listo
+  'Typica', //Listo
+  'Venecia',//Listo
+  'Villasarchi',//Listo
+  'Villalobos',
+  'Otro'
+];

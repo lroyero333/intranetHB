@@ -4,9 +4,36 @@
 
     <div class="page">
         <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+                <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
+                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% if category == 'correcto' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+                <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
+                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
             <h1 class="text-center">Información de Usuarios</h1>
             <div class="circle-image">
-                <img src="{{ url_for('static', filename='images/users/' + datosUsuarios[0][23]) }}" alt="Imagen de perfil">
+                <img src="{{ url_for('static', filename='images/users/' + datosUsuarios[0][23]) }}"
+                    alt="Imagen de perfil">
             </div>
             <br>
             <div class="row justify-content-center">
@@ -33,7 +60,8 @@
                                             <h4>Contacto</h4>
                                             <hr>
                                             <ul>
-                                                <li><strong>Correo:</strong> {{datosUsuarios[0][7] }}@humanbionics.com.co</li>
+                                                <li><strong>Correo:</strong> {{datosUsuarios[0][7]
+                                                    }}@humanbionics.com.co</li>
                                                 <li><strong>Identificación:</strong> {{datosUsuarios[0][8] }}</li>
                                                 <li><strong>Dirección:</strong> {{datosUsuarios[0][9] }}</li>
                                                 <li><strong>Barrio:</strong> {{datosUsuarios[0][10] }}</li>
@@ -54,7 +82,7 @@
                                                 <li><strong>Profesión:</strong> {{datosUsuarios[0][17] }}</li>
                                                 <li><strong>Cargo:</strong> {{datosUsuarios[0][30] }}</li>
                                                 <li><strong>Departamento:</strong> {{datosUsuarios[0][29] }}</li>
-                                                
+
                                             </ul>
                                         </div>
                                         <div class="col-md-6 col-12">
@@ -76,8 +104,8 @@
 
                             </div>
                             <a href="/editEmpleados/{{datosUsuarios[0][26] }}"><button class="btn btn-primary">
-                                Editar Informacion
-                            </button></a>
+                                    Editar Informacion
+                                </button></a>
                         </div s="body">
 
                     </div>
