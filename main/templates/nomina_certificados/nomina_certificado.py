@@ -62,10 +62,10 @@ def verCertificados(usuario_id):
             filename = secure_filename(archivo_certificado.filename)
 
             extension = os.path.splitext(filename)[1]
-            nuevoNombreCertificado = stringAleatorio() + extension
+            nuevoNombreCertificado = 'CERT'+str(datetime.now().strftime("%d%m%y"))+stringAleatorio() + extension
 
             upload_path = os.path.join(
-                basepath, '..','..', 'static', 'archivos', 'certificados', nuevoNombreCertificado)
+                basepath, app.root_path, 'static', 'archivos', 'certificados', nuevoNombreCertificado)
             if not os.path.exists(os.path.dirname(upload_path)):
                 os.makedirs(os.path.dirname(upload_path))
 
@@ -95,7 +95,7 @@ def verCertificados(usuario_id):
         if 'descargar_certificado'in request.form:
 
             nombre_archivo = request.form['descargar_certificado']
-            url_File=os.path.join (basepath, '..','..', 'static', 'archivos', 'certificados', nombre_archivo)
+            url_File=os.path.join (basepath, app.root_path, 'static', 'archivos', 'certificados', nombre_archivo)
             resp=send_file(url_File,as_attachment=True)
 
             return resp
@@ -134,10 +134,10 @@ def verNominas(usuario_id):
             filename = secure_filename(archivo_nomina.filename)
 
             extension = os.path.splitext(filename)[1]
-            nuevoNombreNomina = stringAleatorio() + extension
+            nuevoNombreNomina = 'NOM'+str(datetime.now().strftime("%d%m%y"))+stringAleatorio() + extension
 
             upload_path = os.path.join(
-                basepath, '..', '..', 'static', 'archivos', 'nominas', nuevoNombreNomina)
+                basepath, app.root_path, 'static', 'archivos', 'nominas', nuevoNombreNomina)
             if not os.path.exists(os.path.dirname(upload_path)):
                 os.makedirs(os.path.dirname(upload_path))
 
@@ -168,7 +168,7 @@ def verNominas(usuario_id):
         
         if 'descargar_nomina'in request.form:
             nombre_archivo = request.form['descargar_nomina']
-            url_File=os.path.join (basepath, '..', '..', 'static', 'archivos', 'nominas', nombre_archivo)
+            url_File=os.path.join (basepath, app.root_path, 'static', 'archivos', 'nominas', nombre_archivo)
             resp=send_file(url_File,as_attachment=True)
             return resp
 

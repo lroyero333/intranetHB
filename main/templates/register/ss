@@ -1,5 +1,8 @@
+from sqlite3 import Cursor
 import bcrypt
 _password='qwerty'
 hashed_password = bcrypt.hashpw(
                 _password.encode('utf-8'), bcrypt.gensalt())
 print(hashed_password)
+
+Cursor.execute("SELECT cursos.*,inscripcion_cursos.*, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto, general_users.usuario FROM inscripcion_cursos LEFT JOIN general_users ON inscripcion_cursos.id_usuario_fk = general_users.usuario LEFT JOIN cursos ON inscripcion_cursos.id_curso_fk = cursos.id_curso WHERE id_curso= %s;", curso_id)

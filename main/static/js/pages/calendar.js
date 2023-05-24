@@ -166,30 +166,39 @@ $(function () {
         });
 
     }
-
+    var initialLocaleCode = 'es';
+    var localeSelectorEl = document.getElementById('locale-selector');
+    var calendarEl = document.getElementById('calendar');
 
 
     // initialize the calendar
 
     calendar.fullCalendar({
-
+        locale: initialLocaleCode,
         header: {
 
             left: 'title',
 
             center: '',
 
-            right: 'month, agendaWeek, agendaDay, prev, next'
+            right: ' month, agendaWeek, agendaDay, listMonth,prev, next today, dayGridMonth,timeGridWeek,timeGridDay',
+            
 
         },
-
+        
         editable: false,
 
-        droppable: true,
+        droppable: false,
 
         eventLimit: true, // allow "more" link when too many events
 
         selectable: true,
+
+        dayMaxEvents: true,
+        weekNumbers: true,
+        buttonIcons: true,
+        
+        defaultView: 'month',
 
         //agregarEventos
         /*events: [

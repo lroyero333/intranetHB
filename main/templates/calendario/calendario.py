@@ -213,12 +213,14 @@ def verCursos(curso_id):
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT * FROM cursos WHERE id_curso= %s;", curso_id)
-    datosCursos = cursor.fetchall()
+    datosCursos = cursor.fetchone()
+
+    cursor.execute("SELECT inscripcion_cursos.*, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto, general_users.usuario FROM inscripcion_cursos LEFT JOIN general_users ON inscripcion_cursos.id_usuario_fk = general_users.usuario WHERE id_curso_fk= %s;", curso_id)
+    datosCursosInscritos = cursor.fetchall()
     conexion.commit()
 
     # Buscar si el usuario actual está inscrito en el curso
-    cursor.execute("SELECT * FROM inscripcion_cursos WHERE id_usuario_fk = %s AND id_curso_fk = %s",
-                   (session['usuario'], curso_id))
+    cursor.execute("SELECT * FROM inscripcion_cursos WHERE id_usuario_fk = %s AND id_curso_fk = %s", (session['usuario'], curso_id))
     resultado = cursor.fetchone()
 
     if request.method == 'POST':
@@ -226,7 +228,7 @@ def verCursos(curso_id):
             # Eliminar al usuario de la tabla de inscripción de cursos
             cursor.execute("DELETE FROM inscripcion_cursos WHERE id_usuario_fk=%s AND id_curso_fk=%s", (session['usuario'], curso_id))
             conexion.commit()
-            flash("Te has cancelado la inscripción en este curso.", 'correcto')
+            flash("Has cancelado la inscripción en este curso.", 'correcto')
         else:
             # Insertar un nuevo usuario en la tabla de inscripción de cursos
             id_usuario_fk = session['usuario']
@@ -243,7 +245,20 @@ def verCursos(curso_id):
 
         return redirect(f"/cursos/{curso_id}")
 
-    return render_template('calendario/templates/verCurso.html', datosCursos=datosCursos, inscrito=(resultado is not None))
+    return render_template('calendario/templates/verCurso.html', datosCursos=datosCursos, inscrito=(resultado is not None),datosCursosInscritos=datosCursosInscritos)
+
+
+@app.route('/noticia/<string:noticia_id>', methods=['GET', 'POST'])
+def verNoticia(noticia_id):
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM noticias WHERE id_noticia= %s;", noticia_id)
+    datosNoticias = cursor.fetchone()
+    conexion.commit()
+
+    return render_template('calendario/templates/verNoticia.html', datosNoticias=datosNoticias)
 
 @app.route('/proyectos/usuarios/<string:project_id>', methods=['GET', 'POST'])
 def userProyecto(project_id):

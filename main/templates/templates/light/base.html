@@ -28,6 +28,7 @@
         href="{{ url_for('static', filename='vendor/bootstrap-tagsinput/bootstrap-tagsinput.css') }}">
     <link href="{{ url_for('static', filename='css/mobiscroll.jquery.min.css') }}" rel="stylesheet" />
     <script src="{{ url_for('static', filename='js/mobiscroll.jquery.min.js') }}"></script>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
 
 </head>
 
@@ -40,7 +41,7 @@
             <p>Cargando...</p>
         </div>
     </div>
-    
+
     {% include 'templates/light/navbar/navbar.html' %}
 
 
@@ -50,55 +51,50 @@
             <nav class="sidebar">
                 <div class="user-info">
                     <div class="image"><a href="/myProfile"><img
-                                src="{{ url_for('static', filename='images/users/' + session['foto']) }}"
+                                src="{{ url_for('static', filename='images/users/' + g.usuario_base[2]) }}"
                                 alt="User"></a>
                     </div>
                     <div class="detail mt-3">
 
-                        <h5 class="mb-0">{{session["nombre"]}} {{session["apellido"]}}</h5>
+                        <h5 class="mb-0">{{g.usuario_base[0]}} {{g.usuario_base[1]}}</h5>
 
-                        <small>{{session["profesion"]}}</small>
+                        <small>{{g.usuario_base[3]}}</small>
                     </div>
                     <div class="social">
-                        <a href="https://www.youtube.com/user/carscalante" title="youtube"><i
-                                class="ti-youtube"></i></a>
-                        <a href="https://github.com/HuBionics" title="github"><i class="ti-github"></i></a>
-                        <a href="https://www.linkedin.com/company/human-bionics-sas/" title="linkedin"><i
-                                class="ti-linkedin"></i></a>
-                        <a href="https://www.facebook.com/hubionics" title="facebook"><i class="ti-facebook"></i></a>
-                        <a href="https://www.instagram.com/humanbionics/?hl=es-la" title="instagram"><i
-                                class="ti-instagram"></i></a>
+                        <a href="https://github.com/HuBionics" title="github" target="_blank"><i
+                                class="ti-github"></i></a>
+                        <a href="https://app.slack.com" target="_blank" title="Slack"><i class="fa fa-slack"></i></a>
+                        <a href="https://meet.google.com/qjs-ghch-gku" title="Reuniones" target="_blank"><i
+                                class="fa fa-video-camera"></i></a>
+                        <a href="https://mail.hostinger.com/?_task=mail&_mbox=INBOX" title="Correo" target="_blank"><i
+                                class="ti-email"></i></a>
+                        <a href="https://trello.com/" title="Trello" target="_blank"><i class="ti-trello"></i></a>
                     </div>
                 </div>
                 <ul id="main-menu" class="metismenu">
-                    <li class="g_heading">Inicio</li>
+                    <li class="g_heading">Dashboard</li>
                     <li><a href="/inicio"><i class="ti-home"></i><span>Inicio/Noticias</span></a></li>
-
-                    <li class="g_heading">Application</li>
-                    <li><a href="/calendario"><i class="ti-calendar"></i><span>Calendar</span></a></li>
+                    <li class="g_heading">Aplicaciones</li>
+                    <li><a href="/calendario"><i class="ti-calendar"></i><span>Calendario</span></a></li>
                     <li><a href="https://trello.com" target="_blank"><i
-                                class="ti-notepad"></i><span>TaskBoard</span></a></li>
-                    <li><a href="/proyectos"><i class="fa fa-folder"></i><span>Projects</span></a></li>
+                                class="ti-notepad"></i><span>Tareas/Trello</span></a></li>
+                    <li><a href="/proyectos"><i class="fa fa-folder"></i><span>Proyectos</span></a></li>
                     <li><a {% if session["cargo"]==1 %} href="/nomina_certificados" {% endif %} {% if session["cargo"]
                             !=1 %} href="/nomina_certificados/" {% endif %}><i
-                                class="fa fa-file"></i><span>Nomina/Certificados</span></a>
-                    </li>
-                    <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Inventario</span></a>
-                    </li>
-
+                                class="fa fa-file"></i><span>Nómina/Certificados</span></a></li>
+                    <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Inventario</span></a></li>
                     {% if session["cargo"] == 1 or session["cargo"] == 0 %}
-                    <li><a href="/empleados"><i class="fa fa-users"></i><span>Edit Users</span></a></li>
+
+                    <li><a href="/empleados"><i class="fa fa-users"></i><span>Configurar Usuarios</span></a></li>
                     {% endif %}
-                    <li><a href="/contactos"><i class="ti-id-badge"></i><span>Contact List</span></a></li>
-
-                    <li class="g_heading">Users</li>
-                    <li><a href="/myProfile"><i class="ti-user"></i><span>Profile</span></a></li>
-
+                    <li><a href="/contactos"><i class="ti-id-badge"></i><span>Contactos</span></a></li>
+                    <li class="g_heading">Usuarios</li>
+                    <li><a href="/myProfile"><i class="ti-user"></i><span>Perfil</span></a></li>
                 </ul>
             </nav>
         </div>
 
-        
+
 
         {% block content %}
 
@@ -153,6 +149,8 @@
     <script src="{{ url_for('static', filename='js/pages/charts/c3.js')}}"></script>
 
     <script src="{{ url_for('static', filename='js/pages/todo-js.js')}}"></script>
+
+
     <script>
         $('.undo').click(function () {
             $(this).closest('.alert').remove();

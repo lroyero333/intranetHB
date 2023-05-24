@@ -26,11 +26,11 @@
               <thead>
                 <tr>
 
-                  <th>User</th>
-                  <th>Phone</th>
-                  <th>Email</th>
+                  <th>Usuario</th>
+                  <th>Celular</th>
+                  <th>Correo</th>
                   <th>Profesion</th>
-                  <th>Action</th>
+                  <th>Accion</th>
                 </tr>
               </thead>
               <tbody>
@@ -44,19 +44,19 @@
                     <span class="ml-2">{{datosUsuario[0]}} {{datosUsuario[1]}}</span>
                   </td>
                   <td>
-                    <span class="phone">+57 {{datosUsuario[3]}}</span>
+                    <span class="Celular">+57 {{datosUsuario[3]}}</span>
                   </td>
                   <td>
-                    <span class="email"><a href="javascript:void(0);"
+                    <span class="email"><a href="/enviar_correo/{{datosUsuario[2]}}@humanbionics.com.co"
                         title="">{{datosUsuario[2]}}@humanbionics.com.co</a></span>
                   </td>
                   <td>
                     <span class="phone text-center">{{datosUsuario[5]}}</span>
                   </td>
                   <td>
-                    <a href="https://mail.hostinger.com/?_task=mail&_mbox=INBOX" target="_blank"><button
+                    <a href="https://mail.hostinger.com/?_task=mail&_mbox=INBOX" title="Correo" target="_blank"><button
                         class="btn btn-primary btn-sm"><i class="ti-email"></i></button></a>
-                    <a href="https://slack.com/intl/es-co/" target="_blank"><button class="btn btn-primary btn-sm"><i
+                    <a href="https://slack.com/intl/es-co/" target="_blank"><button class="btn btn-primary btn-sm" title="Slack"><i
                           class="fa fa-slack"></i></button></a>
 
                   </td>

@@ -35,6 +35,29 @@ def cerrar():
 
 url_inicio = '/inicio'
 
+def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
+    solicitudes_con_tiempo = []
+    fecha_actual = datetime.now()
+
+    for solicitud in solicitudes:
+        fecha_insertado = solicitud[fecha_posicion]
+        diferencia = relativedelta(fecha_actual, fecha_insertado)
+        if diferencia.years > 0:
+            tiempo_transcurrido = f"hace {diferencia.years} años"
+        elif diferencia.months > 0:
+            tiempo_transcurrido = f"hace {diferencia.months} meses"
+        elif diferencia.days > 0:
+            tiempo_transcurrido = f"hace {diferencia.days} días"
+        elif diferencia.hours > 0:
+            tiempo_transcurrido = f"hace {diferencia.hours} horas"
+        elif diferencia.minutes > 0:
+            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
+        else:
+            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
+        solicitud_con_tiempo = list(solicitud)
+        solicitud_con_tiempo.append(tiempo_transcurrido)
+        solicitudes_con_tiempo.append(solicitud_con_tiempo)
+    return solicitudes_con_tiempo
 
 @app.before_request
 def notificacionesRH():
@@ -43,6 +66,10 @@ def notificacionesRH():
 
     conexion = mysql.connect()
     cursor = conexion.cursor()
+    cursor.execute("SELECT general_users.Nombre, general_users.Apellido, general_users.foto, cargos.nombre_cargo FROM general_users LEFT JOIN usuario_cargo ON general_users.id = usuario_cargo.id_usuario_fk LEFT JOIN cargos ON usuario_cargo.id_cargo_fk = cargos.id_cargo WHERE usuario= %s;", session['usuario'])
+    usuario_base=cursor.fetchone()
+
+    
     cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.solicitante = general_users.usuario ORDER BY fecha_solicitud DESC;")
     solicitudes_certificado = cursor.fetchall()
     cursor.execute("SELECT solicitud_nomina.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_nomina LEFT JOIN general_users ON solicitud_nomina.solicitante = general_users.usuario ORDER BY fecha_solicitud DESC;")
@@ -85,7 +112,6 @@ def notificacionesRH():
             solicitudes_total = notificacion_tool+notificacion_material
             solicitudes_total_count = len(solicitudes_total)
         else:
-            # Si el cargo no es 1 o 4, no se hace nada
             solicitudes_total = nada
             solicitudes_total_count = len(solicitudes_total)
             print('Por ahora nada')
@@ -95,140 +121,16 @@ def notificacionesRH():
         # Si no existe la sesión, no se hace nada
         print('No existe la sesión')
 
-    certificadooss_con_tiempo = []
-    fecha_actual = datetime.now()
-    for certificadoos in solicitudes_certificado:
-        fecha_insertado = certificadoos[4]
-        diferencia = relativedelta(fecha_actual, fecha_insertado)
-        if diferencia.years > 0:
-            tiempo_transcurrido = f"hace {diferencia.years} años"
-        elif diferencia.months > 0:
-            tiempo_transcurrido = f"hace {diferencia.months} meses"
-        elif diferencia.days > 0:
-            tiempo_transcurrido = f"hace {diferencia.days} días"
-        elif diferencia.hours > 0:
-            tiempo_transcurrido = f"hace {diferencia.hours} horas"
-        elif diferencia.minutes > 0:
-            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
-        else:
-            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
-        # convertir a lista para poder modificar
-        certificadoos_con_tiempo = list(certificadoos)
-        certificadoos_con_tiempo.append(tiempo_transcurrido)
-        certificadooss_con_tiempo.append(certificadoos_con_tiempo)
-
-    nominaas_con_tiempo = []
-    
-    for nominas in solicitudes_nomina:
-        fecha_insertado = nominas[3]
-        diferencia = relativedelta(fecha_actual, fecha_insertado)
-        if diferencia.years > 0:
-            tiempo_transcurrido = f"hace {diferencia.years} años"
-        elif diferencia.months > 0:
-            tiempo_transcurrido = f"hace {diferencia.months} meses"
-        elif diferencia.days > 0:
-            tiempo_transcurrido = f"hace {diferencia.days} días"
-        elif diferencia.hours > 0:
-            tiempo_transcurrido = f"hace {diferencia.hours} horas"
-        elif diferencia.minutes > 0:
-            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
-        else:
-            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
-        # convertir a lista para poder modificar
-        nominas_con_tiempo = list(nominas)
-        nominas_con_tiempo.append(tiempo_transcurrido)
-        nominaas_con_tiempo.append(nominas_con_tiempo)
-
-    vacaciones_con_tiempo = []
-    
-    for vacaciones in solicitudes_va_extemporaneas:
-        fecha_insertado = vacaciones[6]
-        diferencia = relativedelta(fecha_actual, fecha_insertado)
-        if diferencia.years > 0:
-            tiempo_transcurrido = f"hace {diferencia.years} años"
-        elif diferencia.months > 0:
-            tiempo_transcurrido = f"hace {diferencia.months} meses"
-        elif diferencia.days > 0:
-            tiempo_transcurrido = f"hace {diferencia.days} días"
-        elif diferencia.hours > 0:
-            tiempo_transcurrido = f"hace {diferencia.hours} horas"
-        elif diferencia.minutes > 0:
-            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
-        else:
-            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
-        # convertir a lista para poder modificar
-        vacaciones_ex_tiempo = list(vacaciones)
-        vacaciones_ex_tiempo.append(tiempo_transcurrido)
-        vacaciones_con_tiempo.append(vacaciones_ex_tiempo)
-
-    permisos_con_tiempo = []
-    
-    for permisos in solicitudes_permisos:
-        fecha_insertado = permisos[6]
-        diferencia = relativedelta(fecha_actual, fecha_insertado)
-        if diferencia.years > 0:
-            tiempo_transcurrido = f"hace {diferencia.years} años"
-        elif diferencia.months > 0:
-            tiempo_transcurrido = f"hace {diferencia.months} meses"
-        elif diferencia.days > 0:
-            tiempo_transcurrido = f"hace {diferencia.days} días"
-        elif diferencia.hours > 0:
-            tiempo_transcurrido = f"hace {diferencia.hours} horas"
-        elif diferencia.minutes > 0:
-            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
-        else:
-            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
-        # convertir a lista para poder modificar
-        permisos_ex_tiempo = list(permisos)
-        permisos_ex_tiempo.append(tiempo_transcurrido)
-        permisos_con_tiempo.append(permisos_ex_tiempo)
-
-    tools_con_tiempo = []
-
-    for tools in solicitudes_tools:
-        fecha_insertado = tools[7]
-        diferencia = relativedelta(fecha_actual, fecha_insertado)
-        if diferencia.years > 0:
-            tiempo_transcurrido = f"hace {diferencia.years} años"
-        elif diferencia.months > 0:
-            tiempo_transcurrido = f"hace {diferencia.months} meses"
-        elif diferencia.days > 0:
-            tiempo_transcurrido = f"hace {diferencia.days} días"
-        elif diferencia.hours > 0:
-            tiempo_transcurrido = f"hace {diferencia.hours} horas"
-        elif diferencia.minutes > 0:
-            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
-        else:
-            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
-        # convertir a lista para poder modificar
-        tools_ex_tiempo = list(tools)
-        tools_ex_tiempo.append(tiempo_transcurrido)
-        tools_con_tiempo.append(tools_ex_tiempo)
-
-    material_con_tiempo = []
-
-    for material in solicitudes_material:
-        fecha_insertado = tools[7]
-        diferencia = relativedelta(fecha_actual, fecha_insertado)
-        if diferencia.years > 0:
-            tiempo_transcurrido = f"hace {diferencia.years} años"
-        elif diferencia.months > 0:
-            tiempo_transcurrido = f"hace {diferencia.months} meses"
-        elif diferencia.days > 0:
-            tiempo_transcurrido = f"hace {diferencia.days} días"
-        elif diferencia.hours > 0:
-            tiempo_transcurrido = f"hace {diferencia.hours} horas"
-        elif diferencia.minutes > 0:
-            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
-        else:
-            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
-        # convertir a lista para poder modificar
-        material_ex_tiempo = list(material)
-        material_ex_tiempo.append(tiempo_transcurrido)
-        material_con_tiempo.append(material_ex_tiempo)
+    certificadooss_con_tiempo = agregar_tiempo_transcurrido(solicitudes_certificado, 4)
+    nominaas_con_tiempo = agregar_tiempo_transcurrido(solicitudes_nomina, 3)
+    vacaciones_con_tiempo = agregar_tiempo_transcurrido(solicitudes_va_extemporaneas, 6)
+    permisos_con_tiempo = agregar_tiempo_transcurrido(solicitudes_permisos, 6)
+    tools_con_tiempo = agregar_tiempo_transcurrido(solicitudes_tools, 7)
+    material_con_tiempo = agregar_tiempo_transcurrido(solicitudes_material, 7)
 
 
     # Guardamos las solicitudes en la variable de contexto `g`
+    g.usuario_base=usuario_base
     g.solicitudes_total_count = solicitudes_total_count
     g.solicitudes_certificado = certificadooss_con_tiempo
     g.solicitudes_nomina=nominaas_con_tiempo

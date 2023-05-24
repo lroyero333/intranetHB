@@ -133,6 +133,9 @@ def verInventario():
             query = "UPDATE movimientos_herramientas SET tipo_movimiento = %s, cantidad = %s, fecha_movimiento = %s, observaciones = %s WHERE id_movimiento = %s"
             params = [tipo_movimiento, cantidad,  fecha_actual, observaciones, id_inventario]
 
+            query = "INSERT INTO notificaciones_respuesta (tipo_notificacion, destinatario, remitente, fecha_notificacion) VALUES (%s,%s,%s, %s)"
+            params = [nombre_herramienta, cantidad,  ubicacion,  descripcion, nuevoNombreTool]
+
             cursor.execute(query, params)
             conexion.commit()
 

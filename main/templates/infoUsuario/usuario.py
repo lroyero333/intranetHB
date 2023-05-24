@@ -7,6 +7,13 @@ import json
 from main.routes import request, app, mysql, bcrypt, session, redirect, render_template, url_for
 from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
 from werkzeug.utils import secure_filename
+import webbrowser
+
+@app.route('/enviar_correo/<correo>')
+def enviar_correo(correo):
+    mailto_url = f"mailto:{correo}"
+    webbrowser.open(mailto_url)
+    return redirect('/contactos')
 
 @app.route('/contactos')
 def listaEmpleadosContact():

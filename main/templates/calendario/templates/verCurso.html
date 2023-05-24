@@ -32,7 +32,7 @@
 
         <div class="container">
 
-            <h1 class="text-center">{{datosCursos[0][2]}}</h1>
+            <h1 class="text-center">{{datosCursos [2]}}</h1>
 
             <br>
             <div class="row justify-content-center">
@@ -41,15 +41,18 @@
                         <form action="" method="POST">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <h3>{{datosCursos[0][2]}}</h3>
+                                    <h3>{{datosCursos [2]}}</h3>
                                 </div>
 
                                 <div class="form-group">
-                                    <p>{{datosCursos[0][7]}}</p>
+                                    <p>{{datosCursos [7]}}</p>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="">Inicia: {{datosCursos[0][3]}} Termina: {{datosCursos[0][4]}}</label>
+                                    <label for="">Inicia: {{datosCursos [3]}} Termina: {{datosCursos [4]}}</label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Ubicacion: {{datosCursos [6]}}</label>
                                 </div>
                                 <form action="" method="POST">
                                     <div class="form-group">
@@ -57,7 +60,8 @@
                                         {% if inscrito %}
                                         <form method="post" action="">
                                             <button type="submit"
-                                                class="btn btn-danger ml-2 btn-animated btn-animated-y">
+                                                class="btn btn-danger ml-2 btn-animated btn-animated-y"
+                                                title="Desinscribirse de este curso">
                                                 <span class="btn-inner--visible">Cancelar Inscripcion</span>
                                                 <span class="btn-inner--hidden"><i class="fa fa-ban"></i></span>
                                             </button>
@@ -65,28 +69,12 @@
                                         {% else %}
                                         <form method="post" action="">
                                             <button type="submit"
-                                                class="btn btn-primary ml-2 btn-animated btn-animated-y">
+                                                class="btn btn-primary ml-2 btn-animated btn-animated-y"
+                                                title="Inscribirse a este curso">
                                                 <span class="btn-inner--visible">Inscribirse</span>
                                                 <span class="btn-inner--hidden"><i class="fa fa-thumbs-up"></i></span>
                                             </button>
                                         </form>
-                                        {% endif %}
-
-
-                                        {% if session["cargo"] == 1%}
-                                        <span
-                                            class="badge badge-lg badge-pill badge-primary text-uppercase">Primary</span>
-                                        <span
-                                            class="badge badge-lg badge-pill badge-secondary text-uppercase">Secondary</span>
-                                        <span
-                                            class="badge badge-lg badge-pill badge-tertiary text-uppercase">Tertiary</span>
-                                        <span
-                                            class="badge badge-lg badge-pill badge-success text-uppercase">Success</span>
-                                        <span
-                                            class="badge badge-lg badge-pill badge-danger text-uppercase">Danger</span>
-                                        <span
-                                            class="badge badge-lg badge-pill badge-warning text-uppercase">Warning</span>
-                                        <span class="badge badge-lg badge-pill badge-info text-uppercase">Info</span>
                                         {% endif %}
                                     </div>
                                 </form>
@@ -96,5 +84,46 @@
                     </div>
                 </div>
             </div>
+            {%if session['cargo']==1%}
+            <h1 class="text-center">Personas Incritas</h1>
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-striped m-b-0">
+                                    <thead>
+                                        <tr>
+                                            <th data-breakpoints="xs">Nombre Completo</th>
+                                            <th data-breakpoints="xs">Fecha de Inscripcion</th>
+                                            <th>Perfil</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for datosCursosInscritos in datosCursosInscritos %}
+                                        <tr>
+                                            <td><img src="{{ url_for('static', filename='images/users/' + datosCursosInscritos[10]) }}" class="avatar w30"
+                                                alt=""> {{datosCursosInscritos[6]}}
+                                                {{datosCursosInscritos[7]}} {{datosCursosInscritos[8]}}
+                                                {{datosCursosInscritos[9]}}</td>
+                                            <td>{{datosCursosInscritos[4]}}</td>
+                                            <td><a href="/verEmpleado/{{datosCursosInscritos[1] }}"><button
+                                                        class="btn btn-primary btn-sm">
+                                                        Ver Perfil
+                                                    </button></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endblock %}
+        {%endif%}
+    </div>
+</div>
+
+{% endblock %}
