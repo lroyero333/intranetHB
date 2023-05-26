@@ -49,7 +49,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="">Inicia: {{datosCursos [3]}} Termina: {{datosCursos [4]}}</label>
+                                    <label for="">Inicia: {{datosCursos [8]}} Termina: {{datosCursos [9]}}</label>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Ubicacion: {{datosCursos [6]}}</label>
@@ -103,11 +103,11 @@
                                     <tbody>
                                         {% for datosCursosInscritos in datosCursosInscritos %}
                                         <tr>
-                                            <td><img src="{{ url_for('static', filename='images/users/' + datosCursosInscritos[10]) }}" class="avatar w30"
-                                                alt=""> {{datosCursosInscritos[6]}}
-                                                {{datosCursosInscritos[7]}} {{datosCursosInscritos[8]}}
-                                                {{datosCursosInscritos[9]}}</td>
-                                            <td>{{datosCursosInscritos[4]}}</td>
+                                            <td><img src="{{ url_for('static', filename='images/users/' + datosCursosInscritos[12]) }}" class="avatar w30"
+                                                alt=""> {{datosCursosInscritos[8]}}
+                                                {{datosCursosInscritos[9]}} {{datosCursosInscritos[10]}}
+                                                {{datosCursosInscritos[11]}}</td>
+                                            <td>{{datosCursosInscritos[6]}}, {{datosCursosInscritos[7]}}</td>
                                             <td><a href="/verEmpleado/{{datosCursosInscritos[1] }}"><button
                                                         class="btn btn-primary btn-sm">
                                                         Ver Perfil

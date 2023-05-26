@@ -83,11 +83,11 @@
                                         {%for project_user in project_user%}
                                         <tr>
                                             <td>
-                                                <img src="{{ url_for('static', filename='images/users/' + project_user[15]) }}"
+                                                <img src="{{ url_for('static', filename='images/users/' + project_user[17]) }}"
                                                     class="avatar w30" alt="">
-                                                <span class="ml-2"> {{project_user[11]}} {{project_user[12]}}
-                                                    {{project_user[13]}}
-                                                    {{project_user[14]}}</span>
+                                                <span class="ml-2"> {{project_user[13]}} {{project_user[14]}}
+                                                    {{project_user[15]}}
+                                                    {{project_user[16]}}</span>
                                             </td>
                                             <td>
                                                 {%
@@ -101,10 +101,10 @@
                                                 </span>{%endif%}
                                             </td>
                                             <td>
-                                                {{project_user[4]}}
+                                                {{project_user[11]}}
                                             </td>
                                             <td>
-                                                {{project_user[5]}}
+                                                {{project_user[12]}}
                                             </td>
                                             <td>
                                                 {{project_user[6]}}

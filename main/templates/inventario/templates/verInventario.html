@@ -89,59 +89,61 @@
 
                         <div class="body">
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="todos" role="tabpanel"
+                                <div class="tab-pane fade show active " id="todos" role="tabpanel"
                                     aria-labelledby="todos-tab">
                                     <hr>
                                     <div>
                                         <H1>Herramientas</H1>
                                     </div>
                                     <hr>
-                                    <table
-                                        class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Cantidad</th>
-                                                <th>Ubicacion </th>
-                                                <th>Descripcion </th>
-                                                <th>Imagen</th>
-                                                <th>Accion </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for herramientas in herramientas %}
-                                            <tr>
-                                                <td>
-                                                    {{herramientas[1]}}
-                                                </td>
-                                                <td>
-                                                    {{herramientas[2]}}
-                                                </td>
-                                                <td>
-                                                    {{herramientas[3]}}
-                                                </td>
-                                                <td>
-                                                    {{herramientas[4]}}
-                                                </td>
-                                                <td>
-                                                    <a href="/ver_archivo/{{herramientas[6]}}/{{herramientas[5]}}"
-                                                        target="_blank"><button type="button"
-                                                            class="btn btn-primary btn-sm btn-animated btn-animated-y">
-                                                            <span class="btn-inner--visible">Ver Imagen</span>
-                                                            <span class="btn-inner--hidden"><i
-                                                                    class="fa fa-eye"></i></span>
-                                                        </button>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <a href="/inventario/herramienta/{{herramientas[0]}}"><button
-                                                            class="btn btn-primary btn-md"><i
-                                                                class="fa fa-tag"></i></button></a>
-                                                </td>
-                                            </tr>
-                                            {%endfor%}
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table
+                                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Ubicacion </th>
+                                                    <th>Descripcion </th>
+                                                    <th>Imagen</th>
+                                                    <th>Accion </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for herramientas in herramientas %}
+                                                <tr>
+                                                    <td>
+                                                        {{herramientas[1]}}
+                                                    </td>
+                                                    <td>
+                                                        {{herramientas[2]}}
+                                                    </td>
+                                                    <td>
+                                                        {{herramientas[3]}}
+                                                    </td>
+                                                    <td>
+                                                        {{herramientas[4]}}
+                                                    </td>
+                                                    <td>
+                                                        <a href="/ver_archivo/{{herramientas[6]}}/{{herramientas[5]}}"
+                                                            target="_blank"><button type="button"
+                                                                class="btn btn-primary btn-sm btn-animated btn-animated-y">
+                                                                <span class="btn-inner--visible">Ver Imagen</span>
+                                                                <span class="btn-inner--hidden"><i
+                                                                        class="fa fa-eye"></i></span>
+                                                            </button>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/inventario/herramienta/{{herramientas[0]}}"><button
+                                                                class="btn btn-primary btn-md"><i
+                                                                    class="fa fa-tag"></i></button></a>
+                                                    </td>
+                                                </tr>
+                                                {%endfor%}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <hr>
                                     <div>
                                         <H1>Materiales</H1>
@@ -212,52 +214,54 @@
                                         <H1>Herramientas</H1>
                                     </div>
                                     <hr>
-                                    <table
-                                        class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Cantidad</th>
-                                                <th>Ubicacion </th>
-                                                <th>Descripcion </th>
-                                                <th>Imagen</th>
-                                                <th>Accion </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for herramientas in herramientas %}
-                                            <tr>
-                                                <td>
-                                                    {{herramientas[1]}}
-                                                </td>
-                                                <td>
-                                                    {{herramientas[2]}}
-                                                </td>
-                                                <td>
-                                                    {{herramientas[3]}}
-                                                </td>
-                                                <td>
-                                                    {{herramientas[4]}}
-                                                </td>
-                                                <td>
-                                                    <a href="/ver_archivo/{{herramientas[6]}}/{{herramientas[5]}}"
-                                                        target="_blank"><button type="button"
-                                                            class="btn btn-primary btn-sm btn-animated btn-animated-y">
-                                                            <span class="btn-inner--visible">Ver Imagen</span>
-                                                            <span class="btn-inner--hidden"><i
-                                                                    class="fa fa-eye"></i></span>
-                                                        </button>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <a href="/inventario/herramienta/{{herramientas[0]}}"><button
-                                                            class="btn btn-primary btn-md"><i
-                                                                class="fa fa-tag"></i></button></a>
-                                                </td>
-                                            </tr>
-                                            {%endfor%}
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table
+                                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Ubicacion </th>
+                                                    <th>Descripcion </th>
+                                                    <th>Imagen</th>
+                                                    <th>Accion </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for herramientas in herramientas %}
+                                                <tr>
+                                                    <td>
+                                                        {{herramientas[1]}}
+                                                    </td>
+                                                    <td>
+                                                        {{herramientas[2]}}
+                                                    </td>
+                                                    <td>
+                                                        {{herramientas[3]}}
+                                                    </td>
+                                                    <td>
+                                                        {{herramientas[4]}}
+                                                    </td>
+                                                    <td>
+                                                        <a href="/ver_archivo/{{herramientas[6]}}/{{herramientas[5]}}"
+                                                            target="_blank"><button type="button"
+                                                                class="btn btn-primary btn-sm btn-animated btn-animated-y">
+                                                                <span class="btn-inner--visible">Ver Imagen</span>
+                                                                <span class="btn-inner--hidden"><i
+                                                                        class="fa fa-eye"></i></span>
+                                                            </button>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/inventario/herramienta/{{herramientas[0]}}"><button
+                                                                class="btn btn-primary btn-md"><i
+                                                                    class="fa fa-tag"></i></button></a>
+                                                    </td>
+                                                </tr>
+                                                {%endfor%}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <p>Contenido de la pestaña "Herramientas"</p>
                                 </div>
                                 <div class="tab-pane fade" id="materiales" role="tabpanel"
@@ -306,7 +310,8 @@
                                                         <a href="/ver_archivo/{{materiales[7]}}/{{materiales[6]}}"
                                                             target="_blank"><button type="button"
                                                                 class="btn btn-primary btn-block btn-animated btn-animated-y">
-                                                                <span class="btn-inner--visible">Ver Imagen</span>
+                                                                <span class="btn-inner--visible">Ver
+                                                                    Imagen</span>
                                                                 <span class="btn-inner--hidden"><i
                                                                         class="fa fa-plus"></i></span>
                                                             </button>
@@ -701,6 +706,7 @@
 
         </div>
     </div>
+</div>
 </div>
 
 {% endblock %}

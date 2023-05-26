@@ -212,10 +212,13 @@ def verCursos(curso_id):
         return redirect('/')
     conexion = mysql.connect()
     cursor = conexion.cursor()
-    cursor.execute("SELECT * FROM cursos WHERE id_curso= %s;", curso_id)
-    datosCursos = cursor.fetchone()
+    curso_id = int(curso_id)
 
-    cursor.execute("SELECT inscripcion_cursos.*, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto, general_users.usuario FROM inscripcion_cursos LEFT JOIN general_users ON inscripcion_cursos.id_usuario_fk = general_users.usuario WHERE id_curso_fk= %s;", curso_id)
+    query = "SELECT *, DATE_FORMAT(fecha_inicio, '%d %M %Y') AS fecha_inicio1, DATE_FORMAT(fecha_fin, '%d %M %Y') AS fecha_fin2 FROM cursos WHERE id_curso = {};".format(curso_id)
+    cursor.execute(query)
+    datosCursos = cursor.fetchone()
+    query ="SELECT inscripcion_cursos.*, DATE_FORMAT(fecha_inscripcion_curso, '%d-%m-%Y') AS fecha_inscripcion, DATE_FORMAT(fecha_inscripcion_curso, '%H:%i %p') AS hora_inscripcion, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto, general_users.usuario FROM inscripcion_cursos LEFT JOIN general_users ON inscripcion_cursos.id_usuario_fk = general_users.usuario WHERE id_curso_fk= {};".format(curso_id)
+    cursor.execute(query)
     datosCursosInscritos = cursor.fetchall()
     conexion.commit()
 
@@ -268,7 +271,7 @@ def userProyecto(project_id):
     cursor = conexion.cursor()
     cursor.execute("SELECT Nombre, segundo_nombre, Apellido, segundo_apellido, usuario FROM general_users")
     integrante = cursor.fetchall()
-    cursor.execute("SELECT proyecto_users.*,proyectos.*, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto FROM proyecto_users JOIN proyectos ON proyecto_users.id_proyecto= proyectos.id_proyecto JOIN general_users ON proyecto_users.id_usuario= general_users.usuario;")
+    cursor.execute("SELECT proyecto_users.*,proyectos.*, DATE_FORMAT(fecha_inicio_user, '%d-%m-%Y')as inicio_user, DATE_FORMAT(fecha_fin_user, '%d-%m-%Y')as fecha_fin_user, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto FROM proyecto_users JOIN proyectos ON proyecto_users.id_proyecto= proyectos.id_proyecto JOIN general_users ON proyecto_users.id_usuario= general_users.usuario;")
     project_user = cursor.fetchall()
     cursor.execute('SELECT nombre_proyecto FROM proyectos WHERE id_proyecto=%s;', project_id)
     proyecto_nombre=cursor.fetchone()
@@ -430,10 +433,10 @@ def verVacaciones():
     cursor = conexion.cursor()
     cursor.execute("SELECT usuario, Nombre, Apellido,foto FROM general_users;")
     usuarios_vacaciones=cursor.fetchall()
-    cursor.execute("SELECT vacaciones.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM vacaciones LEFT JOIN general_users ON vacaciones.id_usuario = general_users.usuario ;")
+    cursor.execute("SELECT vacaciones.*,DATE_FORMAT(fecha_inicio_vacaciones, '%d-%m-%Y') AS inicio_vacaciones,DATE_FORMAT(fecha_fin_vacaciones, '%d-%m-%Y') AS fin_vacaciones, general_users.Nombre, general_users.Apellido, general_users.foto FROM vacaciones LEFT JOIN general_users ON vacaciones.id_usuario = general_users.usuario ;")
     solicitudes_vacaciones = cursor.fetchall()
     
-    cursor.execute("SELECT vacaciones_extemporaneas.*, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
+    cursor.execute("SELECT vacaciones_extemporaneas.*,DATE_FORMAT(fecha_inicio, '%d-%m-%Y') AS inicio_adelanto, DATE_FORMAT(fecha_fin, '%d-%m-%Y') AS fin_adelanto, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
     solicitudes_va_extemporaneas = cursor.fetchall()
     conexion.commit()
     
@@ -484,10 +487,9 @@ def verVacaciones():
         return redirect('/vacaciones')
 
 
-    cursor.execute("SELECT vacaciones_extemporaneas.*, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.persona_aprueba = general_users.usuario;")
+    cursor.execute("SELECT vacaciones_extemporaneas.*, DATE_FORMAT(fecha_inicio, '%d-%m-%Y')as inicio_adelanto,DATE_FORMAT(fecha_fin, '%d-%m-%Y') as fin_adelanto, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.persona_aprueba = general_users.usuario;")
     solicitudes_vacaciones_extemporaneas = cursor.fetchall()
-    cursor.execute("SELECT vacaciones_extemporaneas.*, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
-    solicitudes_va_extemporaneas = cursor.fetchall()
+    
     conexion.commit()
 
     return render_template('calendario/templates/vacaciones.html',usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones,solicitudes_vacaciones_extemporaneas=solicitudes_vacaciones_extemporaneas,solicitudes_va_extemporaneas=solicitudes_va_extemporaneas)
@@ -498,7 +500,7 @@ def verPermisos():
         return redirect('/')
     conexion = mysql.connect()
     cursor = conexion.cursor()
-    cursor.execute("SELECT solicitud_permisos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario;")
+    cursor.execute("SELECT solicitud_permisos.*,  DATE_FORMAT(fecha_inicio_permiso, '%d-%m-%Y %H:%i %p') AS inicio_permiso, DATE_FORMAT(fecha_fin_permiso, '%d-%m-%Y %H:%i %p') AS fin_permiso, DATE_FORMAT(fecha_inicio_recuperacion, '%d-%m-%Y %H:%i %p') AS inicio_recuperacion, DATE_FORMAT(fecha_fin_recuperacion, '%d-%m-%Y %H:%i %p') AS fin_recuperacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario;")
     solicitudes_permisos = cursor.fetchall()
     cursor.execute("SELECT solicitud_permisos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.persona_aprueba = general_users.usuario;")
     solicitudes_permisos2 = cursor.fetchall()

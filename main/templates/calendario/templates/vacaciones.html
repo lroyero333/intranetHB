@@ -101,12 +101,12 @@
                                                 class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>User</th>
-                                                        <th>Tipo de vacaciones</th>
-                                                        <th>Inicio de vacaciones</th>
-                                                        <th>Fin de vacaciones</th>
-                                                        <th>Dias Totales</th>
-                                                        <th>Dias Restantes</th>
+                                                        <th>Usuario</th>
+                                                        <th data-breakpoints="xs">Tipo de vacaciones</th>
+                                                        <th data-breakpoints="xs">Inicio de vacaciones</th>
+                                                        <th data-breakpoints="xs">Fin de vacaciones</th>
+                                                        <th data-breakpoints="xs">Dias Totales</th>
+                                                        <th data-breakpoints="xs">Dias Restantes</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -114,19 +114,19 @@
 
                                                     <tr>
                                                         <td>
-                                                            <img src="{{ url_for('static', filename='images/users/' + solicitudes_vacaciones[9]) }}"
+                                                            <img src="{{ url_for('static', filename='images/users/' + solicitudes_vacaciones[11]) }}"
                                                                 class="avatar w30" alt="">
-                                                            <span class="ml-2"> {{solicitudes_vacaciones[7]}}
-                                                                {{solicitudes_vacaciones[8]}}</span>
+                                                            <span class="ml-2"> {{solicitudes_vacaciones[9]}}
+                                                                {{solicitudes_vacaciones[10]}}</span>
                                                         </td>
                                                         <td>
                                                             {{solicitudes_vacaciones[1]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_vacaciones[2]}}
+                                                            {{solicitudes_vacaciones[7]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_vacaciones[3]}}
+                                                            {{solicitudes_vacaciones[8]}}
                                                         </td>
 
                                                         <td>
@@ -152,10 +152,10 @@
                                                 class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>User</th>
-                                                        <th>Inicio de Adelanto</th>
-                                                        <th>Fin de adelanto</th>
-                                                        <th>Dias Totales</th>
+                                                        <th>Usuario</th>
+                                                        <th data-breakpoints="xs">Inicio de Adelanto</th>
+                                                        <th data-breakpoints="xs">Fin de adelanto</th>
+                                                        <th data-breakpoints="xs">Dias Totales</th>
 
                                                     </tr>
                                                 </thead>
@@ -166,14 +166,14 @@
                                                     {% if solicitudes_va_extemporaneas[8] == 'Aceptado' %}
                                                     <tr>
                                                         <td>
+                                                            {{solicitudes_va_extemporaneas[15]}}
+                                                            {{solicitudes_va_extemporaneas[16]}}
+                                                        </td>
+                                                        <td>
                                                             {{solicitudes_va_extemporaneas[13]}}
+                                                        </td>
+                                                        <td>
                                                             {{solicitudes_va_extemporaneas[14]}}
-                                                        </td>
-                                                        <td>
-                                                            {{solicitudes_va_extemporaneas[2]}}
-                                                        </td>
-                                                        <td>
-                                                            {{solicitudes_va_extemporaneas[3]}}
                                                         </td>
                                                         <td>
                                                             {{solicitudes_va_extemporaneas[4]}}
@@ -201,10 +201,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Tipo de vacaciones</th>
-                                                        <th>Inicio de vacaciones</th>
-                                                        <th>Fin de vacaciones</th>
-                                                        <th>Dias Totales</th>
-                                                        <th>Dias Restantes</th>
+                                                        <th data-breakpoints="xs">Inicio de vacaciones</th>
+                                                        <th data-breakpoints="xs" >Fin de vacaciones</th>
+                                                        <th data-breakpoints="xs">Dias Totales</th>
+                                                        <th data-breakpoints="xs">Dias Restantes</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -218,10 +218,10 @@
                                                             {{solicitudes_vacaciones[1]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_vacaciones[2]}}
+                                                            {{solicitudes_vacaciones[7]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_vacaciones[3]}}
+                                                            {{solicitudes_vacaciones[8]}}
                                                         </td>
 
                                                         <td>
@@ -251,8 +251,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Inicio de Adelanto</th>
-                                                        <th>Fin de adelanto</th>
-                                                        <th>Dias</th>
+                                                        <th data-breakpoints="xs">Fin de adelanto</th>
+                                                        <th data-breakpoints="xs">Dias</th>
 
 
                                                     </tr>
@@ -265,10 +265,10 @@
                                                     <tr>
 
                                                         <td>
-                                                            {{solicitudes_va_extemporaneas[2]}}
+                                                            {{solicitudes_va_extemporaneas[13]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_va_extemporaneas[3]}}
+                                                            {{solicitudes_va_extemporaneas[14]}}
                                                         </td>
                                                         <td>
                                                             {{solicitudes_va_extemporaneas[4]}}
@@ -297,12 +297,12 @@
                                                 class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>User</th>
-                                                        <th>Tipo de vacaciones</th>
-                                                        <th>Inicio de vacaciones</th>
-                                                        <th>Fin de vacaciones</th>
-                                                        <th>Dias Totales</th>
-                                                        <th>Dias Restantes</th>
+                                                        <th>Usuario</th>
+                                                        <th data-breakpoints="xs">Tipo de vacaciones</th>
+                                                        <th data-breakpoints="xs">Inicio de vacaciones</th>
+                                                        <th data-breakpoints="xs">Fin de vacaciones</th>
+                                                        <th data-breakpoints="xs">Dias Totales</th>
+                                                        <th data-breakpoints="xs">Dias Restantes</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -310,19 +310,19 @@
 
                                                     <tr>
                                                         <td>
-                                                            <img src="{{ url_for('static', filename='images/users/' + solicitudes_vacaciones[9]) }}"
+                                                            <img src="{{ url_for('static', filename='images/users/' +  solicitudes_vacaciones[11]) }}"
                                                                 class="avatar w30" alt="">
-                                                            <span class="ml-2"> {{solicitudes_vacaciones[7]}}
-                                                                {{solicitudes_vacaciones[8]}}</span>
+                                                            <span class="ml-2"> {{solicitudes_vacaciones[9]}}
+                                                                {{solicitudes_vacaciones[10]}}</span>
                                                         </td>
                                                         <td>
                                                             {{solicitudes_vacaciones[1]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_vacaciones[2]}}
+                                                            {{solicitudes_vacaciones[7]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_vacaciones[3]}}
+                                                            {{solicitudes_vacaciones[8]}}
                                                         </td>
 
                                                         <td>
@@ -346,10 +346,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Tipo de vacaciones</th>
-                                                        <th>Inicio de vacaciones</th>
-                                                        <th>Fin de vacaciones</th>
-                                                        <th>Dias Totales</th>
-                                                        <th>Dias Restantes</th>
+                                                        <th data-breakpoints="xs">Inicio de vacaciones</th>
+                                                        <th data-breakpoints="xs">Fin de vacaciones</th>
+                                                        <th data-breakpoints="xs">Dias Totales</th>
+                                                        <th data-breakpoints="xs">Dias Restantes</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -363,10 +363,10 @@
                                                             {{solicitudes_vacaciones[1]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_vacaciones[2]}}
+                                                            {{solicitudes_vacaciones[7]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_vacaciones[3]}}
+                                                            {{solicitudes_vacaciones[8]}}
                                                         </td>
 
                                                         <td>
@@ -399,10 +399,10 @@
                                                 class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>User</th>
-                                                        <th>Inicio de Adelanto</th>
-                                                        <th>Fin de adelanto</th>
-                                                        <th>Dias Totales</th>
+                                                        <th>Usuario</th>
+                                                        <th data-breakpoints="xs">Inicio de Adelanto</th>
+                                                        <th data-breakpoints="xs">Fin de adelanto</th>
+                                                        <th data-breakpoints="xs">Dias Totales</th>
 
                                                     </tr>
                                                 </thead>
@@ -413,14 +413,14 @@
                                                     {% if solicitudes_va_extemporaneas[8] == 'Aceptado' %}
                                                     <tr>
                                                         <td>
+                                                            {{solicitudes_va_extemporaneas[15]}}
+                                                            {{solicitudes_va_extemporaneas[16]}}
+                                                        </td>
+                                                        <td>
                                                             {{solicitudes_va_extemporaneas[13]}}
+                                                        </td>
+                                                        <td>
                                                             {{solicitudes_va_extemporaneas[14]}}
-                                                        </td>
-                                                        <td>
-                                                            {{solicitudes_va_extemporaneas[2]}}
-                                                        </td>
-                                                        <td>
-                                                            {{solicitudes_va_extemporaneas[3]}}
                                                         </td>
                                                         <td>
                                                             {{solicitudes_va_extemporaneas[4]}}
@@ -441,8 +441,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Inicio de Adelanto</th>
-                                                        <th>Fin de adelanto</th>
-                                                        <th>Dias</th>
+                                                        <th data-breakpoints="xs">Fin de adelanto</th>
+                                                        <th data-breakpoints="xs">Dias</th>
 
 
                                                     </tr>
@@ -455,10 +455,10 @@
                                                     <tr>
 
                                                         <td>
-                                                            {{solicitudes_va_extemporaneas[2]}}
+                                                            {{solicitudes_va_extemporaneas[13]}}
                                                         </td>
                                                         <td>
-                                                            {{solicitudes_va_extemporaneas[3]}}
+                                                            {{solicitudes_va_extemporaneas[14]}}
                                                         </td>
                                                         <td>
                                                             {{solicitudes_va_extemporaneas[4]}}
@@ -498,14 +498,14 @@
                                                 <table class="table table-striped m-b-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>Solicitud</th>
+                                                            <th >Solicitud</th>
                                                             <th data-breakpoints="xs">Fecha de inico</th>
                                                             <th data-breakpoints="xs">Fecha fin</th>
                                                             <th data-breakpoints="xs">Resuelve</th>
                                                             <th data-breakpoints="xs">Fecha de Solicitud</th>
                                                             <th data-breakpoints="xs">Fecha de Resolucion</th>
-                                                            <th>Estado de Solicitud</th>
-                                                            <th>Comentario</th>
+                                                            <th data-breakpoints="xs">Estado de Solicitud</th>
+                                                            <th data-breakpoints="xs">Comentario</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -513,9 +513,9 @@
                                                         {% if so_va_ex[11] == session['usuario']%}
                                                         <tr>
                                                             <td>Vacaciones Extemporaneas</td>
-                                                            <td>{{so_va_ex[2]}}</td>
-                                                            <td>{{so_va_ex[3]}}</td>
-                                                            <td>{{so_va_ex[13]}} {{so_va_ex[14]}}</td>
+                                                            <td>{{so_va_ex[13]}}</td>
+                                                            <td>{{so_va_ex[14]}}</td>
+                                                            <td>{{so_va_ex[15]}} {{so_va_ex[16]}}</td>
                                                             <td>{{so_va_ex[6]}}</td>
                                                             <td>{{so_va_ex[7]}}</td>
                                                             <td>{%
@@ -692,7 +692,7 @@
                                     {% if solicitudes_va_extemporaneas[11] == session['usuario'] %}
                                     <option value="{{ solicitudes_va_extemporaneas[0] }}"><strong>Inicio:</strong> {{
                                         solicitudes_va_extemporaneas[2] }} <strong>Fin: </strong>
-                                        {{solicitudes_va_extemporaneas[3]}}</option>
+                                        {{solicitudes_va_extemporaneas[14]}}</option>
                                     {% endif %}
                                     {% endfor %}
                                 </select>
