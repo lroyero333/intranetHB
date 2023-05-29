@@ -1,15 +1,14 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,600,700');
+@import url("https://fonts.googleapis.com/css?family=Nunito:300,400,600,700");
 
 // Theme variables
 @import "variables";
 @import "reboot";
 @import "global";
 
-// Bootstrap variables and functions 
+// Bootstrap variables and functions
 @import "bootstrap/functions";
 @import "bootstrap/variables";
-@import "bootstrap/mixins";  
-
+@import "bootstrap/mixins";
 
 // Bootstrap components
 @import "bootstrap/bootstrap";
