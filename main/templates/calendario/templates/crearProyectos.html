@@ -1,0 +1,87 @@
+{% extends 'templates/light/base.html' %} {% block content %}
+<div class="main_content" id="main-content">
+  <div class="page">
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="card planned_task">
+            <form action="" method="POST" enctype="multipart/form-data">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <h1 for="fecha_inicio_curso">
+                    <strong>Añadir Proyecto</strong>
+                  </h1>
+                  <div class="row clearfix">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <label for="nombre_proyecto"
+                          ><strong>Nombre del Proyecto:</strong></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nombre_proyecto"
+                          id="nombre_proyecto"
+                          placeholder="Nombre del Proyecto"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-group">
+                        <label for="foto"
+                          ><strong>Imagen del Proyecto:</strong></label
+                        >
+                        <div>
+                          <input
+                            type="file"
+                            name="imagen_proyecto"
+                            id="imagen_proyecto"
+                            class="custom-input-file"
+                          />
+                          <label for="imagen_proyecto">
+                            <i class="fa fa-upload"></i>
+                            <span>Selecciona una imagen…</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="form-group">
+                        <label><strong>Descripcion</strong> </label>
+                        <textarea
+                          class="form-control"
+                          rows="3"
+                          cols="30"
+                          name="descripcion_proyecto"
+                          id="descripcion_proyecto"
+                          required
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button
+                        type="submit"
+                        name="crear_proyecto"
+                        class="btn btn-primary"
+                      >
+                        Añadir
+                      </button>
+                      <a
+                        href="javascript:history.go(-1)"
+                        class="btn btn-secondary"
+                        ><i class="fa fa-arrow-left"></i> <span>Volver</span></a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

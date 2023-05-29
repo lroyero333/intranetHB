@@ -61,35 +61,65 @@
                         <small>{{g.usuario_base[3]}}</small>
                     </div>
                     <div class="social">
-                        <a href="https://github.com/HuBionics" title="github" target="_blank"><i
-                                class="ti-github"></i></a>
-                        <a href="https://app.slack.com" target="_blank" title="Slack"><i class="fa fa-slack"></i></a>
-                        <a href="https://meet.google.com/qjs-ghch-gku" title="Reuniones" target="_blank"><i
-                                class="fa fa-video-camera"></i></a>
-                        <a href="https://mail.hostinger.com/?_task=mail&_mbox=INBOX" title="Correo" target="_blank"><i
-                                class="ti-email"></i></a>
                         <a href="https://trello.com/" title="Trello" target="_blank"><i class="ti-trello"></i></a>
+                        <a href="https://app.slack.com" target="_blank" title="Slack"><i class="fa fa-slack"></i></a>
+                        <a href="https://mail.hostinger.com/?_task=mail&_mbox=INBOX" title="Correo" target="_blank"><i
+                            class="ti-email"></i></a>
+                        <a href="https://meet.google.com/qjs-ghch-gku" title="Reuniones" target="_blank"><i class="fa fa-video-camera"></i></a>
+
+                        <a href="https://github.com/HuBionics" title="github" target="_blank"><i class="ti-github"></i></a>
+                        
                     </div>
                 </div>
                 <ul id="main-menu" class="metismenu">
-                    <li class="g_heading">Dashboard</li>
+                    <li class="g_heading">Cartelera</li>
                     <li><a href="/inicio"><i class="ti-home"></i><span>Inicio/Noticias</span></a></li>
                     <li class="g_heading">Aplicaciones</li>
-                    <li><a href="/calendario"><i class="ti-calendar"></i><span>Calendario</span></a></li>
-                    <li><a href="https://trello.com" target="_blank"><i
-                                class="ti-notepad"></i><span>Tareas/Trello</span></a></li>
-                    <li><a href="/proyectos"><i class="fa fa-folder"></i><span>Proyectos</span></a></li>
+                    <li><a href="/calendario"><i class="ti-calendar"></i><span>Mi Calendario</span></a></li>
+                    <li><a href="https://trello.com/u/user/cards" target="_blank"><i
+                                class="ti-notepad"></i><span>Mis Tareas</span></a></li>
+                    <li><a href="/proyectos"><i class="fa fa-folder"></i><span>Mis Proyectos</span></a></li>
+                    <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Mi Inventario</span></a></li>
                     <li><a {% if session["cargo"]==1 %} href="/nomina_certificados" {% endif %} {% if session["cargo"]
                             !=1 %} href="/nomina_certificados/" {% endif %}><i
-                                class="fa fa-file"></i><span>Nómina/Certificados</span></a></li>
-                    <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Inventario</span></a></li>
-                    {% if session["cargo"] == 1 or session["cargo"] == 0 %}
-
-                    <li><a href="/empleados"><i class="fa fa-users"></i><span>Configurar Usuarios</span></a></li>
-                    {% endif %}
-                    <li><a href="/contactos"><i class="ti-id-badge"></i><span>Contactos</span></a></li>
+                                class="fa fa-file"></i><span>Nómina / Certificados
+                                </span></a></li>
+                    
                     <li class="g_heading">Usuarios</li>
-                    <li><a href="/myProfile"><i class="ti-user"></i><span>Perfil</span></a></li>
+                    <li><a href="/myProfile"><i class="ti-user"></i><span>Mi Perfil</span></a></li>
+                    <li><a href="/contactos"><i class="ti-id-badge"></i><span>Lista de Contactos</span></a></li>
+
+                    <li class="g_heading">Administracion</li>
+                    
+                    {% if session["cargo"] == 1 or session["cargo"] == 0 %}
+                    
+                    <li><a href="/empleados"><i class="fa fa-users"></i><span>Gestión de Usuarios</span></a></li>
+                    <li>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" ti-check-box
+                            ti-check-box
+                            "></i><span>Gestión de permisos o vacaciones</span></a>
+                        <ul>
+                            <li><a href="/permisos">Permisos</a></li>
+                            <li><a href="/vacaciones">Vacaciones</a></li>
+                        </ul>
+                    </li>
+                    <li><a  href="/nomina_certificados"  ><i class="fa fa-file"></i><span>Nómina / Certificados
+                    </span></a></li>
+                    {%elif session['cargo']==4%}
+                    <li>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
+                            "></i><span>Gestión de Proyectos</span></a>
+                        <ul>
+                            <li><a href="/proyectos/crear">Crear Proyectos</a></li>
+                            <li><a href="/proyectos/lista/editar">Editar Proyectos</a></li>
+                            <li><a href="/proyectos/lista/eliminar">Eliminar Proyectos</a></li>
+
+                        </ul>
+                    </li>
+                    {%else%}
+
+                    {% endif %}
+
                 </ul>
             </nav>
         </div>

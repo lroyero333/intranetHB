@@ -1,87 +1,131 @@
 <!--{% block usuario %}
     {% endblock %}-->
-{% extends 'templates/light/base.html' %}
-
-{% block content %}
-
+{% extends 'templates/light/base.html' %} {% block content %}
 
 <div class="main_content" id="main-content">
-    <div class="page">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="javascript:void(0);">
-                <h4>Inicio / Cursos / Noticias</h4>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fa fa-align-justify"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-
-                </ul>
+  <div class="page">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="javascript:void(0);">
+        <h4>Inicio / Cursos / Noticias</h4>
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fa fa-align-justify"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto"></ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="card-title planned_task">
+            <div class="header">
+              <h2></h2>
+              <ul class="nav nav-tabs nav-tabs-new" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    id="todos-tab"
+                    data-toggle="tab"
+                    href="#todos"
+                    role="tab"
+                    aria-controls="todos"
+                    aria-selected="true"
+                    >Todos</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    id="cursos-tab"
+                    data-toggle="tab"
+                    href="#cursos"
+                    role="tab"
+                    aria-controls="cursos"
+                    aria-selected="false"
+                    >Cursos</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    id="noticias-tab"
+                    data-toggle="tab"
+                    href="#noticias"
+                    role="tab"
+                    aria-controls="noticias"
+                    aria-selected="false"
+                    >Noticias</a
+                  >
+                </li>
+              </ul>
             </div>
-        </nav>
-        <div class="container-fluid">
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12">
-                    <div class="card-title planned_task">
-                        <div class="header">
-                            <h2></h2>
-                            <ul class="nav nav-tabs nav-tabs-new" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="todos-tab" data-toggle="tab" href="#todos" role="tab"
-                                        aria-controls="todos" aria-selected="true">Todos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="cursos-tab" data-toggle="tab" href="#cursos" role="tab"
-                                        aria-controls="cursos" aria-selected="false">Cursos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="noticias-tab" data-toggle="tab" href="#noticias" role="tab"
-                                        aria-controls="noticias" aria-selected="false">Noticias</a>
-                                </li>
-                            </ul>
-                        </div>
 
-                        <div class="body">
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="todos" role="tabpanel"
-                                    aria-labelledby="todos-tab">
-                                    <h1 class="text-center ">Cursos</h1>
-                                    <hr>
+            <div class="body">
+              <div class="tab-content" id="myTabContent">
+                <div
+                  class="tab-pane fade show active"
+                  id="todos"
+                  role="tabpanel"
+                  aria-labelledby="todos-tab"
+                >
+                  <h1 class="text-center">Cursos</h1>
+                  <hr />
 
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            {% for datosCursos in datosCursos %}
-                                            <div class="col-md-6">
-                                                <div class="card">
-                                                    <div class="card-body" id="texto_curso">
-                                                        <h5 class="heading heading-5 strong-600">{{datosCursos[2]}}</h5>
-                                                        <h6 class="heading heading-sm strong-400 text-muted mb-4">
-                                                            {{datosCursos[11]}}
-                                                        </h6>
-                                                        <p class="card-text">{{datosCursos[7] | truncate(500)}}</p>
+                  <div class="container-fluid">
+                    <div class="row">
+                      {% for datosCursos in datosCursos %}
+                      <div class="col-md-6">
+                        <div class="card">
+                          <div class="card-body" id="texto_curso">
+                            <h5 class="heading heading-5 strong-600">
+                              {{datosCursos[2]}}
+                            </h5>
+                            <h6
+                              class="heading heading-sm strong-400 text-muted mb-4"
+                            >
+                              {{datosCursos[11]}}
+                            </h6>
+                            <p class="card-text">
+                              {{datosCursos[7] | truncate(500)}}
+                            </p>
 
-                                                        <br>
-                                                        <p class="card-text">{{datosCursos[6]}}</p>
-                                                        <a href="/cursos/{{datosCursos[0]}}"
-                                                            class="btn btn-sm btn-primary">Ver Más...</a>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <div class="row align-items-center">
-                                                            <div class="col">
-                                                                {% if datosCursos[10] is none %}
-                                                                <img src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
-                                                                    class="avatar avatar-lg mr-3">
-                                                                {% else %}
-                                                                <img src="{{ url_for('static', filename='images/users/' + datosCursos[10]) }}"
-                                                                    class="avatar avatar-lg mr-3">
-                                                                {%endif%}
-                                                                <span class="avatar-content">{{datosCursos[8]}}
-                                                                    {{datosCursos[9]}}</span>
-                                                            </div>
-                                                            <div class="col text-right text-xs-right">
-                                                                <!--ul class="list-inline mb-0">
+                            <br />
+                            <p class="card-text">{{datosCursos[6]}}</p>
+                            <a
+                              href="/cursos/{{datosCursos[0]}}"
+                              class="btn btn-sm btn-primary"
+                              >Ver Más...</a
+                            >
+                          </div>
+                          <div class="card-footer">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                {% if datosCursos[10] is none %}
+                                <img
+                                  src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
+                                  class="avatar avatar-lg mr-3"
+                                />
+                                {% else %}
+                                <img
+                                  src="{{ url_for('static', filename='images/users/' + datosCursos[10]) }}"
+                                  class="avatar avatar-lg mr-3"
+                                />
+                                {%endif%}
+                                <span class="avatar-content"
+                                  >{{datosCursos[8]}} {{datosCursos[9]}}</span
+                                >
+                              </div>
+                              <div class="col text-right text-xs-right">
+                                <!--ul class="list-inline mb-0">
                                                                     <li class="list-inline-item pr-2">
                                                                         <a href="#"><i class="fa fa-heart mr-1"></i> 50</a>
                                                                     </li>
@@ -89,101 +133,134 @@
                                                                         <i class="fa fa-eye text-muted mr-1"></i> 750
                                                                     </li>
                                                                 </ul-->
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                    <h1 class="text-center ">Noticias</h1>
-                                    <hr>
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            {% for datosNoticias in datosNoticias %}
-                                            <div class="col-md-4">
-                                                <div class="card" style="width: 400; height: 600;">
-                                                    <img class="card-img-top"
-                                                        src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
-                                                        width="160" height="170" alt="Imagen de Noticia"
-                                                        class="img-fluid">
-                                                    <div class="card-body">
-                                                        <h4 class="card-title">{{datosNoticias[1]}}</h4>
-                                                        <h6 class="heading heading-sm strong-400 text-muted mb-4">
-                                                            {{datosNoticias[9]}}
-                                                        </h6>
-                                                        <p class="card-text">{{datosNoticias[3] | truncate(400)}}</p>
-                                                        <a href="/noticia/{{datosNoticias[0]}}" class="btn btn-sm btn-primary">Ver mas...</a>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <div class="row align-items-center">
-                                                            <div class="col">
-                                                                {% if datosNoticias[8] is none %}
-                                                                <img src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
-                                                                    class="avatar avatar-lg mr-3">
-                                                                {% else %}
-                                                                <img src="{{ url_for('static', filename='images/users/' + datosNoticias[8]) }}"
-                                                                    class="avatar avatar-lg mr-3">
-                                                                {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <h1 class="text-center">Noticias</h1>
+                  <hr />
+                  <div class="container-fluid">
+                    <div class="row">
+                      {% for datosNoticias in datosNoticias %}
+                      <div class="col-md-4">
+                        <div class="card" style="width: 400; height: 600">
+                          <img
+                            class="card-img-top"
+                            src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
+                            width="160"
+                            height="170"
+                            alt="Imagen de Noticia"
+                            class="img-fluid"
+                          />
+                          <div class="card-body">
+                            <h4 class="card-title">{{datosNoticias[1]}}</h4>
+                            <h6
+                              class="heading heading-sm strong-400 text-muted mb-4"
+                            >
+                              {{datosNoticias[9]}}
+                            </h6>
+                            <p class="card-text">
+                              {{datosNoticias[3] | truncate(400)}}
+                            </p>
+                            <a
+                              href="/noticia/{{datosNoticias[0]}}"
+                              class="btn btn-sm btn-primary"
+                              >Ver mas...</a
+                            >
+                          </div>
+                          <div class="card-footer">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                {% if datosNoticias[8] is none %}
+                                <img
+                                  src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
+                                  class="avatar avatar-lg mr-3"
+                                />
+                                {% else %}
+                                <img
+                                  src="{{ url_for('static', filename='images/users/' + datosNoticias[8]) }}"
+                                  class="avatar avatar-lg mr-3"
+                                />
+                                {% endif %}
+                              </div>
+                              <div class="col text-right text-xs-right">
+                                <ul class="list-inline mb-0">
+                                  <li class="list-inline-item pr-2">
+                                    <span class="avatar-content"
+                                      >{{datosNoticias[6]}}
+                                      {{datosNoticias[7]}}</span
+                                    >
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <p>Contenido de la pestaña "Todos"</p>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="cursos"
+                  role="tabpanel"
+                  aria-labelledby="cursos-tab"
+                >
+                  <h1 class="text-center">Cursos</h1>
+                  <hr />
 
-                                                            </div>
-                                                            <div class="col text-right text-xs-right">
-                                                                <ul class="list-inline mb-0">
-                                                                    <li class="list-inline-item pr-2">
-                                                                        <span
-                                                                            class="avatar-content">{{datosNoticias[6]}}
-                                                                            {{datosNoticias[7]}}</span>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                  <div class="container-fluid">
+                    <div class="row">
+                      {% for datosCursos in datosCursos %}
+                      <div class="col-md-6">
+                        <div class="card">
+                          <div class="card-body" id="texto_curso">
+                            <h5 class="heading heading-5 strong-600">
+                              {{datosCursos[2]}}
+                            </h5>
+                            <h6
+                              class="heading heading-sm strong-400 text-muted mb-4"
+                            >
+                              {{datosCursos[11]}}
+                            </h6>
+                            <p class="card-text">
+                              {{datosCursos[7] | truncate(500)}}
+                            </p>
 
-                                            </div>
-                                            {% endfor %}
-
-                                        </div>
-                                    </div>
-                                    <p>Contenido de la pestaña "Todos"</p>
-                                </div>
-                                <div class="tab-pane fade" id="cursos" role="tabpanel" aria-labelledby="cursos-tab">
-                                    <h1 class="text-center ">Cursos</h1>
-                                    <hr>
-
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            {% for datosCursos in datosCursos %}
-                                            <div class="col-md-6">
-                                                <div class="card">
-                                                    <div class="card-body" id="texto_curso">
-                                                        <h5 class="heading heading-5 strong-600">{{datosCursos[2]}}</h5>
-                                                        <h6 class="heading heading-sm strong-400 text-muted mb-4">
-                                                            {{datosCursos[11]}}
-                                                        </h6>
-                                                        <p class="card-text">{{datosCursos[7] | truncate(500)}}</p>
-
-                                                        <br>
-                                                        <p class="card-text">{{datosCursos[6]}}</p>
-                                                        <a href="/cursos/{{datosCursos[0]}}"
-                                                            class="btn btn-sm btn-primary">Ver Más...</a>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <div class="row align-items-center">
-                                                            <div class="col">
-                                                                {% if datosCursos[10] is none %}
-                                                                <img src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
-                                                                    class="avatar avatar-lg mr-3">
-                                                                {% else %}
-                                                                <img src="{{ url_for('static', filename='images/users/' + datosCursos[10]) }}"
-                                                                    class="avatar avatar-lg mr-3">
-                                                                {%endif%}
-                                                                <span class="avatar-content">{{datosCursos[8]}}
-                                                                    {{datosCursos[9]}}</span>
-                                                            </div>
-                                                            <div class="col text-right text-xs-right">
-                                                                <!--ul class="list-inline mb-0">
+                            <br />
+                            <p class="card-text">{{datosCursos[6]}}</p>
+                            <a
+                              href="/cursos/{{datosCursos[0]}}"
+                              class="btn btn-sm btn-primary"
+                              >Ver Más...</a
+                            >
+                          </div>
+                          <div class="card-footer">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                {% if datosCursos[10] is none %}
+                                <img
+                                  src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
+                                  class="avatar avatar-lg mr-3"
+                                />
+                                {% else %}
+                                <img
+                                  src="{{ url_for('static', filename='images/users/' + datosCursos[10]) }}"
+                                  class="avatar avatar-lg mr-3"
+                                />
+                                {%endif%}
+                                <span class="avatar-content"
+                                  >{{datosCursos[8]}} {{datosCursos[9]}}</span
+                                >
+                              </div>
+                              <div class="col text-right text-xs-right">
+                                <!--ul class="list-inline mb-0">
                                         <li class="list-inline-item pr-2">
                                             <a href="#"><i class="fa fa-heart mr-1"></i> 50</a>
                                         </li>
@@ -191,75 +268,93 @@
                                             <i class="fa fa-eye text-muted mr-1"></i> 750
                                         </li>
                                     </ul-->
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                    <p>Contenido de la pestaña "cursos"</p>
-                                </div>
-                                <div class="tab-pane fade" id="noticias" role="tabpanel" aria-labelledby="noticias-tab">
-                                    <h1 class="text-center ">Noticias</h1>
-                                    <hr>
-                                    <div class="container-fluid">
-                                        <div class="row">
-                                            {% for datosNoticias in datosNoticias %}
-                                            <div class="col-md-4">
-                                                <div class="card" style="width: 400; height: 600;">
-                                                    <img class="card-img-top"
-                                                        src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
-                                                        width="160" height="170" alt="Imagen de Noticia"
-                                                        class="img-fluid">
-                                                    <div class="card-body">
-                                                        <h4 class="card-title">{{datosNoticias[1]}}</h4>
-                                                        <h6 class="heading heading-sm strong-400 text-muted mb-4">
-                                                            {{datosNoticias[9]}}
-                                                        </h6>
-                                                        <p class="card-text">{{datosNoticias[3] | truncate(400)}}</p>
-                                                        <a href="/noticia/{{datosNoticias[0]}}" class="btn btn-sm btn-primary">Ver más...</a>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <div class="row align-items-center">
-                                                            <div class="col">
-                                                                {% if datosNoticias[8] is none %}
-                                                                <img src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
-                                                                    class="avatar avatar-lg mr-3">
-                                                                {% else %}
-                                                                <img src="{{ url_for('static', filename='images/users/' + datosNoticias[8]) }}"
-                                                                    class="avatar avatar-lg mr-3">
-                                                                {% endif %}
-
-                                                            </div>
-                                                            <div class="col text-right text-xs-right">
-                                                                <ul class="list-inline mb-0">
-                                                                    <li class="list-inline-item pr-2">
-                                                                        <span
-                                                                            class="avatar-content">{{datosNoticias[6]}}
-                                                                            {{datosNoticias[7]}}</span>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            {% endfor %}
-
-                                        </div>
-                                    </div>
-                                    <p>Contenido de la pestaña "noticias"</p>
-                                </div>
+                              </div>
                             </div>
+                          </div>
                         </div>
+                      </div>
+                      {% endfor %}
                     </div>
+                  </div>
+                  <p>Contenido de la pestaña "cursos"</p>
                 </div>
+                <div
+                  class="tab-pane fade"
+                  id="noticias"
+                  role="tabpanel"
+                  aria-labelledby="noticias-tab"
+                >
+                  <h1 class="text-center">Noticias</h1>
+                  <hr />
+                  <div class="container-fluid">
+                    <div class="row">
+                      {% for datosNoticias in datosNoticias %}
+                      <div class="col-md-4">
+                        <div class="card" style="width: 400; height: 600">
+                          <img
+                            class="card-img-top"
+                            src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
+                            width="160"
+                            height="170"
+                            alt="Imagen de Noticia"
+                            class="img-fluid"
+                          />
+                          <div class="card-body">
+                            <h4 class="card-title">{{datosNoticias[1]}}</h4>
+                            <h6
+                              class="heading heading-sm strong-400 text-muted mb-4"
+                            >
+                              {{datosNoticias[9]}}
+                            </h6>
+                            <p class="card-text">
+                              {{datosNoticias[3] | truncate(400)}}
+                            </p>
+                            <a
+                              href="/noticia/{{datosNoticias[0]}}"
+                              class="btn btn-sm btn-primary"
+                              >Ver más...</a
+                            >
+                          </div>
+                          <div class="card-footer">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                {% if datosNoticias[8] is none %}
+                                <img
+                                  src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
+                                  class="avatar avatar-lg mr-3"
+                                />
+                                {% else %}
+                                <img
+                                  src="{{ url_for('static', filename='images/users/' + datosNoticias[8]) }}"
+                                  class="avatar avatar-lg mr-3"
+                                />
+                                {% endif %}
+                              </div>
+                              <div class="col text-right text-xs-right">
+                                <ul class="list-inline mb-0">
+                                  <li class="list-inline-item pr-2">
+                                    <span class="avatar-content"
+                                      >{{datosNoticias[6]}}
+                                      {{datosNoticias[7]}}</span
+                                    >
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <p>Contenido de la pestaña "noticias"</p>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-
-
+      </div>
     </div>
-    {% endblock %}
+  </div>
+  {% endblock %}
+</div>

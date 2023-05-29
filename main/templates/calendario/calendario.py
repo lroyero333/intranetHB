@@ -1,13 +1,16 @@
 
+import datetime as dt
+import os
+from datetime import datetime, time, timedelta
 from random import sample
+
+import pymysql
 from flask import jsonify
 from pymysql import IntegrityError
-import pymysql
-from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
-import os
 from werkzeug.utils import secure_filename
-import datetime as dt
-from datetime import datetime, time, timedelta 
+
+from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
+                      render_template, request, session, url_for)
 
 extensionesImagenes=['.jpg', '.jpeg', '.png']
 
@@ -19,6 +22,8 @@ def stringAleatorio():
     resultado_aleatorio = sample(secuencia, longitud)
     string_aleatorio = "".join(resultado_aleatorio)
     return string_aleatorio
+
+
 
 @app.route('/calendario', methods=['GET', 'POST'])
 def calendario():
@@ -315,6 +320,58 @@ def userProyecto(project_id):
     return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user,proyecto_nombre=proyecto_nombre) 
 
 @app.route('/proyectos', methods=['GET', 'POST'])
+def verProyecto():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute(
+        "SELECT * FROM proyectos;")
+    datosProyectos = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return render_template('calendario/templates/projects.html', datosProyectos=datosProyectos)
+
+@app.route('/proyectos/lista/editar', methods=['GET', 'POST'])
+def verProyectoEditar():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    if request.method == 'POST':
+        proyecto_id = request.form.get('proyecto_id')
+        if request.form.get('editar_proyecto'):
+            return redirect(f"/proyectos/{proyecto_id}")
+    cursor.execute(
+        "SELECT * FROM proyectos;")
+    datosProyectos = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return render_template('calendario/templates/listaEditarProyecto.html', datosProyectos=datosProyectos)
+
+@app.route('/proyectos/lista/eliminar', methods=['GET', 'POST'])
+def verProyectoEliminar():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    if request.method == 'POST':
+        proyecto_id = request.form.get('proyecto_id')
+        if request.form.get('borrar_proyecto'):
+            cursor.execute(
+                "DELETE FROM proyectos WHERE id_proyecto = %s;", (proyecto_id,))
+            conexion.commit()
+            flash('El proyecto ha sido eliminado.', 'correcto')
+            return redirect('/proyectos')
+    cursor.execute(
+        "SELECT * FROM proyectos;")
+    datosProyectos = cursor.fetchall()
+    conexion.commit()
+    conexion.close()
+    return render_template('calendario/templates/listaEliminarProyecto.html', datosProyectos=datosProyectos)
+
+
+@app.route('/proyectos/crear', methods=['GET', 'POST'])
 def crearProyecto():
     if not 'login' in session:
         return redirect('/')
@@ -352,27 +409,9 @@ def crearProyecto():
         cursor.execute(query, params)
         conexion.commit()
         conexion.close()
-        return redirect('/proyectos')
+        return redirect('/proyectos')        
     
-    if request.method == 'POST':
-        proyecto_id = request.form.get('proyecto_id')
-        if request.form.get('editar_proyecto'):
-            return redirect(f"/proyectos/{proyecto_id}")
-        if request.form.get('borrar_proyecto'):
-            cursor.execute(
-                "DELETE FROM proyectos WHERE id_proyecto = %s;", (proyecto_id,))
-            conexion.commit()
-            flash('El proyecto ha sido eliminado.', 'correcto')
-            return redirect('/proyectos')
-        
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-    cursor.execute(
-        "SELECT * FROM proyectos;")
-    datosProyectos = cursor.fetchall()
-    conexion.commit()
-    conexion.close()
-    return render_template('calendario/templates/projects.html', datosProyectos=datosProyectos)
+    return render_template('calendario/templates/crearProyectos.html')
 
 @app.route('/proyectos/<string:proyecto_id>', methods=['GET', 'POST'])
 def editProyecto(proyecto_id):

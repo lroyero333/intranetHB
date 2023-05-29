@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Gestión de Permisos y Vacaciones</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .form-group input[type="text"],
+      .form-group input[type="email"],
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+
+      .form-group textarea {
+        height: 120px;
+      }
+
+      .form-group button {
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .form-group button:hover {
+        background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Gestión de Permisos y Vacaciones</h1>
+      <form>
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            placeholder="Ingresa tu nombre"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Ingresa tu correo electrónico"
+          />
+        </div>
+        <div class="form-group">
+          <label for="permisos">Permisos:</label>
+          <textarea
+            id="permisos"
+            name="permisos"
+            placeholder="Escribe los permisos solicitados"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="vacaciones">Vacaciones:</label>
+          <textarea
+            id="vacaciones"
+            name="vacaciones"
+            placeholder="Escribe las fechas de tus vacaciones"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit">Enviar solicitud</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
