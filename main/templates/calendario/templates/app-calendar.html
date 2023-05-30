@@ -1,317 +1,82 @@
-{% extends 'templates/light/base.html' %}
-{% block content %}
-
+{% extends 'templates/light/base.html' %} {% block content %}
 
 <div class="page">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="javascript:void(0);">
+      <h4>Calendario</h4>
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fa fa-align-justify"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto"></ul>
+      <form class="form-inline my-2 my-lg-0">
+        <a href="/vacaciones"
+          ><button
+            type="button"
+            class="btn btn-primary ml-2 btn-animated btn-animated-y"
+          >
+            <span class="btn-inner--visible">Vacaciones</span>
+            <span class="btn-inner--hidden"
+              ><i class="fa fa-plane"></i
+            ></span></button
+        ></a>
+        <a href="/permisos"
+          ><button
+            type="button"
+            class="btn btn-primary ml-2 btn-animated btn-animated-y"
+          >
+            <span class="btn-inner--visible">Permisos</span>
+            <span class="btn-inner--hidden"
+              ><i class="fa fa-bullhorn"></i
+            ></span></button
+        ></a>
+      </form>
+    </div>
+  </nav>
+  <!--Mensajes de alerta-->
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %} {% for category, message in messages %} {% if category == 'error'
+  %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+    <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
+    <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %} {% if category == 'correcto' %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+    <span class="alert-inner--text"
+      ><strong>Correcto!</strong> {{ message }}!</span
+    >
+    <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %} {% endfor %} {% endif %} {% endwith %}
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="javascript:void(0);">
-            <h4>Calendario</h4>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="fa fa-align-justify"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <a href="/vacaciones"><button type="button" class="btn btn-primary ml-2  btn-animated btn-animated-y">
-                        <span class="btn-inner--visible">Vacaciones</span>
-                        <span class="btn-inner--hidden"><i class="fa fa-plane"></i></span>
-                    </button></a>
-                <a href="/permisos"><button type="button" class="btn btn-primary ml-2  btn-animated btn-animated-y">
-                        <span class="btn-inner--visible">Permisos</span>
-                        <span class="btn-inner--hidden"><i class="fa fa-bullhorn"></i></span>
-                    </button></a>
-                {% if session["cargo"] == 1%}
-                <button data-toggle="modal" data-target="#myModal" type="button"
-                    class="btn btn-primary ml-2  btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Añadir Evento</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
-                </button>
-
-                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="myModalLabel">Seleccione el tipo de evento</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <button data-toggle="modal" data-target="#addcontact" type="button"
-                                    class="btn btn-primary btn-block btn-animated btn-animated-y">
-                                    <span class="btn-inner--visible">Cursos</span>
-                                    <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
-                                </button>
-                                <button data-toggle="modal" data-target="#addNews" type="button"
-                                    class="btn btn-primary btn-block btn-animated btn-animated-y">
-                                    <span class="btn-inner--visible">Noticias</span>
-                                    <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
-                                </button>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button data-toggle="modal" data-target="#verCursos" type="button"
-                    class="btn btn-primary ml-2  btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Opciones Cursos</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-cog"></i></span>
-                </button>
-                <button data-toggle="modal" data-target="#verNoticias" type="button"
-                    class="btn btn-primary ml-2  btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Opciones Noticias</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-cog"></i></span>
-                </button>
-                {% endif %}
-            </form>
+  <div class="container-fluid">
+    <div class="row clearfix">
+      <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+          <div class="body">
+            <div id="calendar"></div>
+          </div>
         </div>
-    </nav>
-<!--Mensajes de alerta-->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    {% if category == 'error' %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
-        <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
-        <button type="button" class="undo" aria-label="Undo">Cerrar</button>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+      </div>
     </div>
-    {% endif %}
-    {% if category == 'correcto' %}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
-        <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
-        <button type="button" class="undo" aria-label="Undo">Cerrar</button>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endif %}
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-
-    <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12">
-                <div class="card planned_task">
-                    <div class="body">
-                        <div id="calendar"></div>
-                    
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
-<!-- Add New Task -->
-<form action="" method="POST">
-    <div class="modal fade" id="addcontact" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <label for="fecha_inicio_curso"><strong>Añadir Curso</strong></label>
-                </div>
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="nombre_curso"><strong>Nombre del Curso:</strong></label>
-                                <input type="text" class="form-control" name="nombre_curso" id="nombre_curso"
-                                    placeholder="Nombre del Curso">
-                            </div>
-
-                        </div>
-                        <div class="col-12">
-                            <label for="fecha_inicio_curso"><strong>Fecha de Inicio del
-                                    curso:</strong></label>
-                            <div class="input-group">
-
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
-                                </div>
-                                <input data-provide="datepicker" data-date-format="yyyy-mm-dd"
-                                    data-date-autoclose="true" class="form-control" name="fecha_inicio_curso"
-                                    id="fecha_inicio_curso" value="" placeholder="Fecha Inicio">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <label for="fecha_fin_curso"><strong>Fecha de fin:</strong></label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
-                                </div>
-                                <input data-provide="datepicker" data-date-format="yyyy-mm-dd"
-                                    data-date-autoclose="true" class="form-control" name="fecha_fin_curso"
-                                    id="fecha_fin_curso" value="" placeholder="Fecha de fin del Curso">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label><strong>Descripcion</strong> </label>
-                                <textarea class="form-control" rows="3" cols="30" name="descripcion" id="descripcion"
-                                    required></textarea>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="ubicacion_curso"><strong>Ubicacion:</strong></label>
-                                <input type="text" class="form-control" name="ubicacion_curso" id="ubicacion_curso"
-                                    placeholder="Ubicacion">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" name="crear_curso" class="btn btn-primary">Añadir</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</form>
-<!--Modal Add News-->
-<form action="" method="POST" enctype="multipart/form-data">
-    <div class="modal fade" id="addNews" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <label for="fecha_inicio_curso"><strong>Añadir Noticias</strong></label>
-                </div>
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="titulo_noticia"><strong>Titulo de la Noticia:</strong></label>
-                                <input type="text" class="form-control" name="titulo_noticia" id="titulo_noticia"
-                                    placeholder="Titulo de la Noticia">
-                            </div>
-
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="foto"><strong>Imagen de la Noticia:</strong></label>
-                                <div>
-                                    <input type="file" name="imagen_noticia" id="imagen_noticia"
-                                        class="custom-input-file" />
-                                    <label for="imagen_noticia">
-                                        <i class="fa fa-upload"></i>
-                                        <span>Selecciona una imagen…</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label><strong>Descripcion</strong> </label>
-                                <textarea class="form-control" rows="3" cols="30" name="descripcion_noticia"
-                                    id="descripcion_noticia" required></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" name="crear_noticia" class="btn btn-primary">Añadir</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</form>
-
-<div class="modal fade" id="verCursos" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label for="fecha_inicio_curso"><strong>Opciones de Cursos</strong></label>
-            </div>
-            <form action="" method="POST">
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="titulo_noticia"><strong>Cursos creados</strong></label>
-                                <select class="selectpicker" name="curso_id" title="Selecciona un curso"
-                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
-                                    <option value="" selected disabled>Selecciona un curso</option>
-                                    {% for cursos in cursos %}
-                                    <option value="{{ cursos[0] }}">{{ cursos[2] }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <form action="" method="POST">
-                                <input type="hidden" name="curso_id" value="{{ cursos[0] }}">
-                                <button type="submit" name="editar_curso" value="{{ cursos[0] }}"
-                                    class="btn btn-primary">Editar</button>
-                                <button type="submit" name="borrar_curso" value="{{ cursos[0] }}"
-                                    class="btn btn-danger">Eliminar
-                                    <i class="fa fa-trash"></i></button>
-
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="verNoticias" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label><strong>Opciones de Noticias</strong></label>
-            </div>
-            <form action="" method="POST">
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="titulo_noticia"><strong>Noticias creadas</strong></label>
-                                <select class="selectpicker" name="noticia_id" title="Selecciona una noticia"
-                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
-                                    <option value="" selected disabled>Selecciona una noticia</option>
-                                    {% for noticias in noticias %}
-                                    <option value="{{ noticias[0] }}">{{ noticias[1] }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <form action="" method="POST">
-                                <input type="hidden" name="noticia_id" value="{{ noticias[0] }}">
-                                <button type="submit" name="editar_noticia" value="{{ noticias[0] }}"
-                                    class="btn btn-primary">Editar</button>
-                                <button type="submit" name="borrar_noticia" value="{{ noticias[0] }}"
-                                    class="btn btn-danger">Eliminar
-                                    <i class="fa fa-trash"></i></button>
-
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-
-
 {% endblock %}

@@ -14,6 +14,8 @@ from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
 
 extensionesImagenes=['.jpg', '.jpeg', '.png']
 
+conexion = mysql.connect()
+cursor = conexion.cursor()
 
 def stringAleatorio():
     string_aleatorio = "0123456789abcdefghijklmnñopqrstuvwxyz_"
@@ -23,107 +25,11 @@ def stringAleatorio():
     string_aleatorio = "".join(resultado_aleatorio)
     return string_aleatorio
 
-
-
 @app.route('/calendario', methods=['GET', 'POST'])
 def calendario():
     if not 'login' in session:
         return redirect('/')
-
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-
-    # Manejar la creación de cursos y noticias
-    if request.method == 'POST':
-        if 'crear_curso' in request.form:
-            id_usuario_fk = session["usuario"]
-            nombre_curso = request.form['nombre_curso']
-            fecha_inicio_curso = request.form['fecha_inicio_curso']
-            Fecha_fin_curso = request.form['fecha_fin_curso']
-            ubicacion = request.form['ubicacion_curso']
-            descripcion = request.form['descripcion']
-            fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-            query = "INSERT INTO cursos (id_usuario_fk,nombre_curso, fecha_inicio, fecha_fin, fecha_publicacion, ubicacion, descripcion) VALUES (%s,%s,%s, %s, %s, %s, %s)"
-            params = [id_usuario_fk, nombre_curso, fecha_inicio_curso,
-                      Fecha_fin_curso, fecha_publicacion, ubicacion, descripcion]
-
-            cursor.execute(query, params)
-            conexion.commit()
-            flash('Curso agregado satisfactoriamente','correcto')
-
-            return redirect('/calendario')
-
-        elif 'crear_noticia' in request.form:
-            usuarioPublica = session["usuario"]
-            titulo_noticia = request.form['titulo_noticia']
-            imagen_noticia = request.files['imagen_noticia']
-            descripcion_noticia = request.form['descripcion_noticia']
-            fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-          
-            filename, file_extension = os.path.splitext(imagen_noticia.filename)
-            if file_extension.lower() not in extensionesImagenes:
-                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
-                return redirect('/calendario')
-            else:
-                flash('La noticia se ha agregado satisfactoriamente','correcto')
-
-            basepath = os.path.dirname(__file__)
-            filename = secure_filename(imagen_noticia.filename)
-
-            extension = os.path.splitext(filename)[1]
-            nuevoNombreImagen = stringAleatorio() + extension
-
-            upload_path = os.path.join(
-                basepath, '..', '..', 'static', 'images', 'Noticias', nuevoNombreImagen)
-            if not os.path.exists(os.path.dirname(upload_path)):
-                os.makedirs(os.path.dirname(upload_path))
-
-            imagen_noticia.save(upload_path)
-
-            query = "INSERT INTO noticias (titulo_noticia, imagen_noticia, descripcion_noticia, fecha_publicacion,id_usuario_fk) VALUES (%s,%s, %s, %s,%s)"
-            params = [titulo_noticia, nuevoNombreImagen,
-                      descripcion_noticia, fecha_publicacion, usuarioPublica]
-
-            cursor.execute(query, params)
-            conexion.commit()
-
-            return redirect('/calendario')
-
-    # Manejar la edición de cursos
-    if request.method == 'POST':
-        curso_id = request.form.get('curso_id')
-        if request.form.get('editar_curso'):
-            return redirect(f"/calendario/curso/{curso_id}")
-        if request.form.get('borrar_curso'):
-            cursor.execute(
-                "DELETE FROM cursos WHERE id_curso = %s;", (curso_id,))
-            conexion.commit()
-            flash('El curso ha sido eliminado.', 'correcto')
-            return redirect('/calendario')
-        
-        noticia_id = request.form.get('noticia_id')
-        if request.form.get('editar_noticia'):
-
-            return redirect(f"/calendario/noticia/{noticia_id}")
-        if request.form.get('borrar_noticia'):
-            cursor.execute(
-                "DELETE FROM noticias WHERE id_noticia = %s;", (noticia_id,))
-            conexion.commit()
-            flash('La noticia ha sido eliminada correctamente','correcto')
-            return redirect('/calendario')
-
-    # Obtener la lista de cursos y de noticias
-    cursor.execute("SELECT * FROM cursos")
-    cursos = cursor.fetchall()
-
-    cursor.execute("SELECT * FROM noticias")
-    noticias = cursor.fetchall()
-
-    conexion.close()
-
-    return render_template('calendario/templates/app-calendar.html', cursos=cursos, noticias=noticias)
+    return render_template('calendario/templates/app-calendar.html')
 
 @app.route('/calendario/curso/<string:curso_id>', methods=['GET', 'POST'])
 def editCurso(curso_id):
@@ -131,8 +37,7 @@ def editCurso(curso_id):
         return redirect('/')
     if session['cargo'] != 1:
         return redirect('/inicio')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
+    
     cursor.execute("SELECT * FROM cursos WHERE id_curso= %s", curso_id)
     curso = cursor.fetchone()
     
@@ -157,7 +62,7 @@ def editCurso(curso_id):
         flash('El curso ha sido editado correctamente.', 'correcto')
         return redirect('/calendario')
     
-    return render_template('calendario/templates/editarCurso.html', curso=curso)
+    return render_template('calendario/templates/cursos/editarCurso.html', curso=curso)
 
 @app.route('/calendario/noticia/<string:noticia_id>', methods=['GET', 'POST'])
 def editNoticia(noticia_id):
@@ -165,8 +70,6 @@ def editNoticia(noticia_id):
         return redirect('/')
     if session['cargo'] != 1:
         return redirect('/inicio')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     cursor.execute("SELECT * FROM noticias WHERE id_noticia= %s", noticia_id)
     noticia = cursor.fetchone()
     
@@ -209,14 +112,12 @@ def editNoticia(noticia_id):
         flash('El curso ha sido editado.', 'success')
         return redirect('/calendario')
     
-    return render_template('calendario/templates/editarNoticia.html', noticia=noticia)
+    return render_template('calendario/templates/noticias/editarNoticia.html', noticia=noticia)
 
 @app.route('/cursos/<string:curso_id>', methods=['GET', 'POST'])
 def verCursos(curso_id):
     if not 'login' in session:
         return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     curso_id = int(curso_id)
 
     query = "SELECT *, DATE_FORMAT(fecha_inicio, '%d %M %Y') AS fecha_inicio1, DATE_FORMAT(fecha_fin, '%d %M %Y') AS fecha_fin2 FROM cursos WHERE id_curso = {};".format(curso_id)
@@ -253,27 +154,133 @@ def verCursos(curso_id):
 
         return redirect(f"/cursos/{curso_id}")
 
-    return render_template('calendario/templates/verCurso.html', datosCursos=datosCursos, inscrito=(resultado is not None),datosCursosInscritos=datosCursosInscritos)
+    return render_template('calendario/templates/cursos/verCurso.html', datosCursos=datosCursos, inscrito=(resultado is not None),datosCursosInscritos=datosCursosInscritos)
 
+@app.route('/curso/crear', methods=['GET', 'POST'])
+def crearCurso():
+    if request.method == 'POST':
+        if 'crear_curso' in request.form:
+            id_usuario_fk = session["usuario"]
+            nombre_curso = request.form['nombre_curso']
+            fecha_inicio_curso = request.form['fecha_inicio_curso']
+            Fecha_fin_curso = request.form['fecha_fin_curso']
+            ubicacion = request.form['ubicacion_curso']
+            descripcion = request.form['descripcion']
+            fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+            query = "INSERT INTO cursos (id_usuario_fk,nombre_curso, fecha_inicio, fecha_fin, fecha_publicacion, ubicacion, descripcion) VALUES (%s,%s,%s, %s, %s, %s, %s)"
+            params = [id_usuario_fk, nombre_curso, fecha_inicio_curso,
+                      Fecha_fin_curso, fecha_publicacion, ubicacion, descripcion]
+
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Curso agregado satisfactoriamente','correcto')
+
+            return redirect('/calendario')
+    return render_template('calendario/templates/cursos/crearCursos.html')
+
+@app.route('/noticias/crear', methods=['GET', 'POST'])
+def crearNoticia():
+    if request.method == 'POST':
+        if 'crear_noticia' in request.form:
+            usuarioPublica = session["usuario"]
+            titulo_noticia = request.form['titulo_noticia']
+            imagen_noticia = request.files['imagen_noticia']
+            descripcion_noticia = request.form['descripcion_noticia']
+            fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            filename, file_extension = os.path.splitext(imagen_noticia.filename)
+            if file_extension.lower() not in extensionesImagenes:
+                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+                return redirect('/calendario')
+            else:
+                flash('La noticia se ha agregado satisfactoriamente','correcto')
+            basepath = os.path.dirname(__file__)
+            filename = secure_filename(imagen_noticia.filename)
+            extension = os.path.splitext(filename)[1]
+            nuevoNombreImagen = stringAleatorio() + extension
+            upload_path = os.path.join(
+                basepath, '..', '..', 'static', 'images', 'Noticias', nuevoNombreImagen)
+            if not os.path.exists(os.path.dirname(upload_path)):
+                os.makedirs(os.path.dirname(upload_path))
+
+            imagen_noticia.save(upload_path)
+            query = "INSERT INTO noticias (titulo_noticia, imagen_noticia, descripcion_noticia, fecha_publicacion,id_usuario_fk) VALUES (%s,%s, %s, %s,%s)"
+            params = [titulo_noticia, nuevoNombreImagen,
+                      descripcion_noticia, fecha_publicacion, usuarioPublica]
+
+            cursor.execute(query, params)
+            conexion.commit()
+
+            return redirect('/calendario')
+
+    return render_template('calendario/templates/noticias/crearNoticias.html')
+
+@app.route('/noticia/lista/editar', methods=['GET', 'POST'])
+def listaNoticiaEditar():
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    if request.method == 'POST':  
+        noticia_id = request.form.get('noticia_id')
+        if request.form.get('editar_noticia'):
+            return redirect(f"/calendario/noticia/{noticia_id}")
+    cursor.execute("SELECT * FROM noticias")
+    noticias = cursor.fetchall()
+    conexion.close()
+    return render_template('calendario/templates/noticias/listaEditarNoticias.html',noticias=noticias)
+
+@app.route('/noticia/lista/eliminar', methods=['GET', 'POST'])
+def listaNoticiaEliminar():
+    if request.method == 'POST':        
+        noticia_id = request.form.get('noticia_id')
+        if request.form.get('borrar_noticia'):
+            cursor.execute(
+                "DELETE FROM noticias WHERE id_noticia = %s;", (noticia_id,))
+            conexion.commit()
+            flash('La noticia ha sido eliminada correctamente','correcto')
+            return redirect('/calendario')
+    cursor.execute("SELECT * FROM noticias")
+    noticias = cursor.fetchall()
+    return render_template('calendario/templates/noticias/listaEliminarNoticias.html',noticias=noticias)
+
+@app.route('/cursos/lista/editar', methods=['GET', 'POST'])
+def listaCursoEditar():
+    if request.method == 'POST':
+        curso_id = request.form.get('curso_id')
+        if request.form.get('editar_curso'):
+            return redirect(f"/calendario/curso/{curso_id}")
+    cursor.execute("SELECT * FROM cursos")
+    cursos = cursor.fetchall()
+    return render_template('calendario/templates/cursos/listaEditarCursos.html',cursos=cursos)
+
+
+@app.route('/cursos/lista/eliminar', methods=['GET', 'POST'])
+def listaCursoEliminar():
+    if request.method == 'POST':
+        curso_id = request.form.get('curso_id')
+        if request.form.get('borrar_curso'):
+            cursor.execute(
+                "DELETE FROM cursos WHERE id_curso = %s;", (curso_id,))
+            conexion.commit()
+            flash('El curso ha sido eliminado.', 'correcto')
+            return redirect('/calendario')
+    cursor.execute("SELECT * FROM cursos")
+    cursos = cursor.fetchall()
+    return render_template('calendario/templates/cursos/listaEliminarCursos.html',cursos=cursos)
 
 @app.route('/noticia/<string:noticia_id>', methods=['GET', 'POST'])
 def verNoticia(noticia_id):
     if not 'login' in session:
         return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     cursor.execute("SELECT * FROM noticias WHERE id_noticia= %s;", noticia_id)
     datosNoticias = cursor.fetchone()
     conexion.commit()
 
-    return render_template('calendario/templates/verNoticia.html', datosNoticias=datosNoticias)
+    return render_template('calendario/templates/noticias/verNoticia.html', datosNoticias=datosNoticias)
 
 @app.route('/proyectos/usuarios/<string:project_id>', methods=['GET', 'POST'])
 def userProyecto(project_id):
     if not 'login' in session:
         return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     cursor.execute("SELECT Nombre, segundo_nombre, Apellido, segundo_apellido, usuario FROM general_users")
     integrante = cursor.fetchall()
     cursor.execute("SELECT proyecto_users.*,proyectos.*, DATE_FORMAT(fecha_inicio_user, '%d-%m-%Y')as inicio_user, DATE_FORMAT(fecha_fin_user, '%d-%m-%Y')as fecha_fin_user, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto FROM proyecto_users JOIN proyectos ON proyecto_users.id_proyecto= proyectos.id_proyecto JOIN general_users ON proyecto_users.id_usuario= general_users.usuario;")
@@ -309,7 +316,7 @@ def userProyecto(project_id):
                 
                 cursor.close()
                 flash('El usuario ya pertenece a este proyecto','error')
-                return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user,proyecto_nombre=proyecto_nombre)
+                return render_template('calendario/templates/proyectos/usersProjects.html', integrante=integrante, project_user=project_user,proyecto_nombre=proyecto_nombre)
             else:
                 query = "INSERT INTO proyecto_users (id_proyecto, id_usuario, fecha_inicio_user,observaciones) VALUES (%s, %s, %s,%s)"
                 params = [project_id, id_usuario, fecha_user, observaciones_user_proyecto]
@@ -317,27 +324,24 @@ def userProyecto(project_id):
                 conexion.commit()
                 flash('Usuario agregado satisfactoriamente','correcto')
     cursor.close()
-    return render_template('calendario/templates/usersProjects.html', integrante=integrante, project_user=project_user,proyecto_nombre=proyecto_nombre) 
+    return render_template('calendario/templates/proyectos/usersProjects.html', integrante=integrante, project_user=project_user,proyecto_nombre=proyecto_nombre) 
 
 @app.route('/proyectos', methods=['GET', 'POST'])
 def verProyecto():
     if not 'login' in session:
         return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
+    
     cursor.execute(
         "SELECT * FROM proyectos;")
     datosProyectos = cursor.fetchall()
     conexion.commit()
     conexion.close()
-    return render_template('calendario/templates/projects.html', datosProyectos=datosProyectos)
+    return render_template('calendario/templates/proyectos/projects.html', datosProyectos=datosProyectos)
 
 @app.route('/proyectos/lista/editar', methods=['GET', 'POST'])
 def verProyectoEditar():
     if not 'login' in session:
         return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     if request.method == 'POST':
         proyecto_id = request.form.get('proyecto_id')
         if request.form.get('editar_proyecto'):
@@ -347,14 +351,12 @@ def verProyectoEditar():
     datosProyectos = cursor.fetchall()
     conexion.commit()
     conexion.close()
-    return render_template('calendario/templates/listaEditarProyecto.html', datosProyectos=datosProyectos)
+    return render_template('calendario/templates/proyectos/listaEditarProyecto.html', datosProyectos=datosProyectos)
 
 @app.route('/proyectos/lista/eliminar', methods=['GET', 'POST'])
 def verProyectoEliminar():
     if not 'login' in session:
         return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     if request.method == 'POST':
         proyecto_id = request.form.get('proyecto_id')
         if request.form.get('borrar_proyecto'):
@@ -368,16 +370,13 @@ def verProyectoEliminar():
     datosProyectos = cursor.fetchall()
     conexion.commit()
     conexion.close()
-    return render_template('calendario/templates/listaEliminarProyecto.html', datosProyectos=datosProyectos)
+    return render_template('calendario/templates/proyectos/listaEliminarProyecto.html', datosProyectos=datosProyectos)
 
 
 @app.route('/proyectos/crear', methods=['GET', 'POST'])
 def crearProyecto():
     if not 'login' in session:
         return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-
     if request.method == 'POST' and 'crear_proyecto' in request.form:
 
         nombre_proyecto = request.form['nombre_proyecto']
@@ -411,7 +410,7 @@ def crearProyecto():
         conexion.close()
         return redirect('/proyectos')        
     
-    return render_template('calendario/templates/crearProyectos.html')
+    return render_template('calendario/templates/proyectos/crearProyectos.html')
 
 @app.route('/proyectos/<string:proyecto_id>', methods=['GET', 'POST'])
 def editProyecto(proyecto_id):
@@ -420,9 +419,6 @@ def editProyecto(proyecto_id):
         return redirect('/')
     if session['cargo'] != 4:
         return redirect('/inicio')
-    
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     cursor.execute("SELECT * FROM proyectos WHERE id_proyecto= %s", proyecto_id)
     proyecto = cursor.fetchone()
     
@@ -462,14 +458,12 @@ def editProyecto(proyecto_id):
         flash('El proyecto ha sido editado.', 'correcto')
         return redirect('/proyectos')
     
-    return render_template('calendario/templates/editarProyecto.html', proyecto=proyecto)
+    return render_template('calendario/templates/proyectos/editarProyecto.html', proyecto=proyecto)
 
 @app.route('/vacaciones', methods=['GET', 'POST'])
 def verVacaciones():
     if not 'login' in session:
         return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     cursor.execute("SELECT usuario, Nombre, Apellido,foto FROM general_users;")
     usuarios_vacaciones=cursor.fetchall()
     cursor.execute("SELECT vacaciones.*,DATE_FORMAT(fecha_inicio_vacaciones, '%d-%m-%Y') AS inicio_vacaciones,DATE_FORMAT(fecha_fin_vacaciones, '%d-%m-%Y') AS fin_vacaciones, general_users.Nombre, general_users.Apellido, general_users.foto FROM vacaciones LEFT JOIN general_users ON vacaciones.id_usuario = general_users.usuario ;")
@@ -488,8 +482,6 @@ def verVacaciones():
         # Verificar si el usuario ya existe
         resultado = None
         sql = "SELECT id_usuario FROM vacaciones WHERE id_usuario = %s "
-        conexion = mysql.connect()
-        cursor = conexion.cursor()
         cursor.execute(sql, id_usuario)
         resultado = cursor.fetchone()
         if resultado is not None:
@@ -497,7 +489,7 @@ def verVacaciones():
             
             cursor.close()
             flash('El usuario ya tiene vacaciones asignadas','error')
-            return render_template('calendario/templates/vacaciones.html', usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones)
+            return render_template('calendario/templates/vacaciones/vacaciones.html', usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones)
         else:
             query = "INSERT INTO vacaciones (tipo_vacaciones, fecha_inicio_vacaciones, fecha_fin_vacaciones, id_usuario ) VALUES (%s,%s, %s,%s)"
             params = [tipo_vacaciones, fecha_inicio_vacaciones,fecha_fin_vacaciones, id_usuario]
@@ -531,14 +523,12 @@ def verVacaciones():
     
     conexion.commit()
 
-    return render_template('calendario/templates/vacaciones.html',usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones,solicitudes_vacaciones_extemporaneas=solicitudes_vacaciones_extemporaneas,solicitudes_va_extemporaneas=solicitudes_va_extemporaneas)
+    return render_template('calendario/templates/vacaciones/vacaciones.html',usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones,solicitudes_vacaciones_extemporaneas=solicitudes_vacaciones_extemporaneas,solicitudes_va_extemporaneas=solicitudes_va_extemporaneas)
 
 @app.route('/permisos',methods=['GET', 'POST'])
 def verPermisos():
     if not 'login' in session:
         return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     cursor.execute("SELECT solicitud_permisos.*,  DATE_FORMAT(fecha_inicio_permiso, '%d-%m-%Y %H:%i %p') AS inicio_permiso, DATE_FORMAT(fecha_fin_permiso, '%d-%m-%Y %H:%i %p') AS fin_permiso, DATE_FORMAT(fecha_inicio_recuperacion, '%d-%m-%Y %H:%i %p') AS inicio_recuperacion, DATE_FORMAT(fecha_fin_recuperacion, '%d-%m-%Y %H:%i %p') AS fin_recuperacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario;")
     solicitudes_permisos = cursor.fetchall()
     cursor.execute("SELECT solicitud_permisos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.persona_aprueba = general_users.usuario;")
@@ -640,12 +630,10 @@ def verPermisos():
         conexion.commit()
         flash('Permiso cancelado satisfactoriamente','correcto')
         return redirect('/permisos')
-    return render_template('calendario/templates/permisos.html', solicitudes_permisos=solicitudes_permisos, solicitudes_permisos2=solicitudes_permisos2)
+    return render_template('calendario/templates/permisos/permisos.html', solicitudes_permisos=solicitudes_permisos, solicitudes_permisos2=solicitudes_permisos2)
 
 @app.route('/eventos')
 def obtener_cursos():
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
     cursor.execute(
         'SELECT * FROM cursos')
     eventos = cursor.fetchall()

@@ -1,23 +1,26 @@
-from random import sample
-from flask import request, redirect, send_file, send_from_directory
-import os
-import json
-from flask import render_template, redirect, request, url_for, session, flash, g
-import bcrypt
-from werkzeug.utils import secure_filename
-from main.run import app, mysql
 import datetime as dt
-from datetime import datetime, time, timedelta 
+import json
+import os
+from datetime import datetime, time, timedelta
+from random import sample
+
+import bcrypt
 from dateutil.relativedelta import relativedelta
-from main.templates.login import login
-from main.templates.register import register
+from flask import (flash, g, redirect, render_template, request, send_file,
+                   send_from_directory, session, url_for)
+from werkzeug.utils import secure_filename
+
+from main.run import app, mysql
 from main.templates.calendario import calendario
 from main.templates.error import error
-from main.templates.nomina_certificados import nomina_certificado
-from main.templates.usersCRUD import usersCRUD
 from main.templates.infoUsuario import usuario
 from main.templates.inventario import inventario
+from main.templates.login import login
 from main.templates.miTrabajo import miTrabajo
+from main.templates.nomina_certificados import nomina_certificado
+from main.templates.register import register
+from main.templates.usersCRUD import usersCRUD
+
 
 def stringAleatorio():
     string_aleatorio="0123456789abcdefghijklmnñopqrstuvwxyz_"
@@ -376,63 +379,44 @@ def inicio():
     cursor.execute("SELECT cursos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM cursos LEFT JOIN general_users ON cursos.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
     datosCursos = cursor.fetchall()
     conexion.commit()
-    cursos_con_tiempo = []
-    for curso in datosCursos:
-        fecha_insertado = curso[5]
-        fecha_actual = datetime.now()
-        diferencia = relativedelta(fecha_actual, fecha_insertado)
-        if diferencia.years > 0:
-            tiempo_transcurrido = f"hace {diferencia.years} años"
-        elif diferencia.months > 0:
-            tiempo_transcurrido = f"hace {diferencia.months} meses"
-        elif diferencia.days > 0:
-            tiempo_transcurrido = f"hace {diferencia.days} días"
-        elif diferencia.hours > 0:
-            tiempo_transcurrido = f"hace {diferencia.hours} horas"
-        elif diferencia.minutes > 0:
-            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
-        else:
-            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
-        # convertir a lista para poder modificar
-        curso_con_tiempo = list(curso)
-        curso_con_tiempo.append(tiempo_transcurrido)
-        cursos_con_tiempo.append(curso_con_tiempo)
+    cursos_con_tiempo = agregar_tiempo_transcurrido(datosCursos, 5)
 
     cursor.execute("SELECT noticias.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM noticias LEFT JOIN general_users ON noticias.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
     datosNoticias = cursor.fetchall()
     conexion.commit()
-    noticias_con_tiempo = []
-    for noticia in datosNoticias:
-        fecha_insertado = noticia[4]
-        fecha_actual = datetime.now()
-        diferencia = relativedelta(fecha_actual, fecha_insertado)
-        if diferencia.years > 0:
-            tiempo_transcurrido = f"hace {diferencia.years} años"
-        elif diferencia.months > 0:
-            tiempo_transcurrido = f"hace {diferencia.months} meses"
-        elif diferencia.days > 0:
-            tiempo_transcurrido = f"hace {diferencia.days} días"
-        elif diferencia.hours > 0:
-            tiempo_transcurrido = f"hace {diferencia.hours} horas"
-        elif diferencia.minutes > 0:
-            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
-        else:
-            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
-        # convertir a lista para poder modificar
-        # Cambiar el nombre de la variable aquí
-        noticia_con_tiempo = list(noticia)
-        noticia_con_tiempo.append(tiempo_transcurrido)
-        noticias_con_tiempo.append(noticia_con_tiempo)  # Agregar a la lista
-
+    noticias_con_tiempo = agregar_tiempo_transcurrido(datosNoticias, 4)
     return render_template('templates/light/index.html', datosCursos=cursos_con_tiempo, datosNoticias=noticias_con_tiempo)
 
+@app.route('/cursos')
+def cursos():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT cursos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM cursos LEFT JOIN general_users ON cursos.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
+    datosCursos = cursor.fetchall()
+    conexion.commit()
+    cursos_con_tiempo = agregar_tiempo_transcurrido(datosCursos, 5)
+    return render_template('calendario/templates/cursos/Cursos.html', datosCursos=cursos_con_tiempo)
 
-@app.route('/Noticias')
+@app.route('/noticias')
 def noticias():
     if not 'login' in session:
         return redirect('/')
-    return render_template('sitio/Noticias.html')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT noticias.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM noticias LEFT JOIN general_users ON noticias.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
+    datosNoticias = cursor.fetchall()
+    conexion.commit()
+    noticias_con_tiempo = agregar_tiempo_transcurrido(datosNoticias, 4)
+    return render_template('calendario/templates/noticias/Noticias.html',  datosNoticias=noticias_con_tiempo)
 
+
+@app.route('/Noticias')
+def noticiass():
+    if not 'login' in session:
+        return redirect('/')
+    return render_template('sitio/Noticias.html')
 
 @app.route('/static/<path:path>')
 def static_file(path):

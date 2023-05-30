@@ -29,6 +29,8 @@
     <link href="{{ url_for('static', filename='css/mobiscroll.jquery.min.css') }}" rel="stylesheet" />
     <script src="{{ url_for('static', filename='js/mobiscroll.jquery.min.js') }}"></script>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/summernote/dist/summernote.min.css') }}"/>
+
 
 </head>
 
@@ -73,10 +75,15 @@
                 </div>
                 <ul id="main-menu" class="metismenu">
                     <li class="g_heading">Cartelera</li>
-                    <li><a href="/inicio"><i class="ti-home"></i><span>Inicio/Noticias</span></a></li>
+                    <li><a href="/inicio"><i class="ti-home"></i><span>General</span></a></li>
+                    <li><a href="/inicio"><i class="fa fa-calendar-o"></i><span>Mi cartelera</span></a></li>
+                    <li><a href="/inicio"><i class="ti-tablet"></i><span>Avisos</span></a></li>
+                    <li><a href="/cursos"><i class="ti-layout"></i><span>Cursos</span></a></li>
+                    <li><a href="/noticias"><i class="fa fa-hacker-news"></i><span>Noticias</span></a></li>
+
                     <li class="g_heading">Aplicaciones</li>
-                    <li><a href="/calendario"><i class="ti-calendar"></i><span>Mi Calendario</span></a></li>
-                    <li><a href="https://trello.com/u/user/cards" target="_blank"><i
+                    <li><a href="/calendario"><i class="fa fa-calendar"></i><span>Mi Calendario</span></a></li>
+                    <li><a href="https://trello.com/u/{{session['usuario']}}/cards" target="_blank"><i
                                 class="ti-notepad"></i><span>Mis Tareas</span></a></li>
                     <li><a href="/proyectos"><i class="fa fa-folder"></i><span>Mis Proyectos</span></a></li>
                     <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Mi Inventario</span></a></li>
@@ -88,7 +95,7 @@
                     <li class="g_heading">Usuarios</li>
                     <li><a href="/myProfile"><i class="ti-user"></i><span>Mi Perfil</span></a></li>
                     <li><a href="/contactos"><i class="ti-id-badge"></i><span>Lista de Contactos</span></a></li>
-
+                    
                     <li class="g_heading">Administracion</li>
                     
                     {% if session["cargo"] == 1 or session["cargo"] == 0 %}
@@ -105,10 +112,37 @@
                     </li>
                     <li><a  href="/nomina_certificados"  ><i class="fa fa-file"></i><span>Nómina / Certificados
                     </span></a></li>
+                    <li>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-cubes"></i><span>Gestión de Cursos</span></a>
+                        <ul>
+                            <li><a href="/curso/crear">Crear Curso</a></li>
+                            <li><a href="/cursos/lista/editar">Editar Curso</a></li>
+                            <li><a href="/cursos/lista/eliminar">Eliminar Curso</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-flag"></i><span>Gestión de Noticias</span></a>
+                        <ul>
+                            <li><a href="/noticias/crear">Crear Noticia</a></li>
+                            <li><a href="/noticia/lista/editar">Editar Noticia</a></li>
+                            <li><a href="/noticia/lista/eliminar">Eliminar Noticia</a></li>
+                        </ul>
+                    </li>
                     {%elif session['cargo']==4%}
                     <li>
                         <a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
                             "></i><span>Gestión de Proyectos</span></a>
+                        <ul>
+                            <li><a href="/proyectos/crear">Crear Proyectos</a></li>
+                            <li><a href="/proyectos/lista/editar">Editar Proyectos</a></li>
+                            <li><a href="/proyectos/lista/eliminar">Eliminar Proyectos</a></li>
+
+                        </ul>
+                    </li>
+                    {%elif session['cargo']==3%}
+                    <li>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
+                            "></i><span>Gestión de Inventario</span></a>
                         <ul>
                             <li><a href="/proyectos/crear">Crear Proyectos</a></li>
                             <li><a href="/proyectos/lista/editar">Editar Proyectos</a></li>
@@ -123,17 +157,9 @@
                 </ul>
             </nav>
         </div>
-
-
-
         {% block content %}
-
-
         {% endblock %}
-
     </div>
-
-
 
     <!-- Core -->
     <script src="{{ url_for('static', filename='bundles/libscripts.bundle.js') }}"></script>
@@ -173,21 +199,16 @@
     <script src="{{ url_for('static', filename='js/pages/advanced-form.js')}}"></script>
     <script src="{{ url_for('static', filename='vendor/LightboxGallery/mauGallery.min.js')}}"></script>
     <script src="{{ url_for('static', filename='vendor/LightboxGallery/scripts.js')}}"></script>
-
     <script src="{{ url_for('static', filename='bundles/c3.bundle.js')}}"></script>
-
     <script src="{{ url_for('static', filename='js/pages/charts/c3.js')}}"></script>
-
     <script src="{{ url_for('static', filename='js/pages/todo-js.js')}}"></script>
-
+<script src="{{ url_for('static', filename='vendor/summernote/dist/summernote.js')}}"></script>
 
     <script>
         $('.undo').click(function () {
             $(this).closest('.alert').remove();
         });
     </script>
-
-
     <script>
         $(function () {
             $('.knob').knob({
@@ -236,7 +257,6 @@
             });
         });
     </script>
-
 </body>
 
 </html>
