@@ -89,6 +89,57 @@
                   role="tabpanel"
                   aria-labelledby="todos-tab"
                 >
+                  <h1 class="text-center">Avisos</h1>
+                  <hr />
+
+                  <div class="container-fluid">
+                    <div class="row">
+                      {% for datosAvisos in datosAvisos %}
+                      <div class="col-lg-4 col-md-6">
+                        <div class="card">
+                          <div class="card-header">
+                            <div class="row align-items-center">
+                              <div class="col-8">
+                                <h4 class="heading h6 mb-0">
+                                  {{datosAvisos[1]}}
+                                </h4>
+                              </div>
+                              <div class="col-4">
+                                <div class="card-icon-actions text-right">
+                                  <a
+                                    href="#"
+                                    class="favorite active"
+                                    data-toggle="tooltip"
+                                    data-original-title="Save to favorites"
+                                    ><i class="fa fa-star"></i
+                                  ></a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <p class="card-text small">
+                              {{datosAvisos[4] | safe}}
+                            </p>
+                          </div>
+                          <div class="card-footer">
+                            <div class="row align-items-center">
+                              <div class="col-6">
+                                <p>Fecha: {{datosAvisos[5]}}</p>
+                              </div>
+                              <div class="col-6 text-right">
+                                <span class="text-muted small"
+                                  >{{datosAvisos[9]}}</span
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {%endfor%}
+                    </div>
+                  </div>
+
                   <h1 class="text-center">Cursos</h1>
                   <hr />
 
@@ -176,7 +227,7 @@
                               {{datosNoticias[9]}}
                             </h6>
                             <p class="card-text">
-                              {{datosNoticias[3] | truncate(400)}}
+                              {{datosNoticias[3] | safe | truncate(400)}}
                             </p>
                             <a
                               href="/noticia/{{datosNoticias[0]}}"
@@ -241,7 +292,7 @@
                               {{datosCursos[11]}}
                             </h6>
                             <p class="card-text">
-                              {{datosCursos[7] | truncate(500)}}
+                              {{datosCursos[7] | safe | truncate(500)}}
                             </p>
 
                             <br />
@@ -317,7 +368,7 @@
                               {{datosNoticias[9]}}
                             </h6>
                             <p class="card-text">
-                              {{datosNoticias[3] | truncate(400)}}
+                              {{datosNoticias[3] | safe | truncate(400)}}
                             </p>
                             <a
                               href="/noticia/{{datosNoticias[0]}}"
@@ -358,12 +409,69 @@
                     </div>
                   </div>
                 </div>
+                <div
+                  class="tab-pane fade"
+                  id="avisos"
+                  role="tabpanel"
+                  aria-labelledby="avisos-tab"
+                >
+                  <h1 class="text-center">Avisos</h1>
+                  <hr />
+
+                  <div class="container-fluid">
+                    <div class="row">
+                      {% for datosAvisos in datosAvisos %}
+                      <div class="col-lg-4 col-md-6">
+                        <div class="card">
+                          <div class="card-header">
+                            <div class="row align-items-center">
+                              <div class="col-8">
+                                <h4 class="heading h6 mb-0">
+                                  {{datosAvisos[1]}}
+                                </h4>
+                              </div>
+                              <div class="col-4">
+                                <div class="card-icon-actions text-right">
+                                  <a
+                                    href="#"
+                                    class="favorite active"
+                                    data-toggle="tooltip"
+                                    data-original-title="Save to favorites"
+                                    ><i class="fa fa-star"></i
+                                  ></a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <p class="card-text small">
+                              {{datosAvisos[4] | safe}}
+                            </p>
+                          </div>
+                          <div class="card-footer">
+                            <div class="row align-items-center">
+                              <div class="col-6">
+                                <p>Fecha: {{datosAvisos[5]}}</p>
+                              </div>
+                              <div class="col-6 text-right">
+                                <span class="text-muted small"
+                                  >{{datosAvisos[9]}}</span
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {%endfor%}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    {% endblock %}
   </div>
-  {% endblock %}
 </div>

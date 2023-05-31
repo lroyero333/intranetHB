@@ -1,21 +1,17 @@
 import datetime as dt
-from datetime import datetime, time, timedelta 
-import os
-from random import sample
-from flask import send_file
-from main.routes import request, app,mysql,bcrypt,session,redirect,render_template,url_for
 import json
-from main.routes import request, app, mysql, bcrypt, session, redirect, render_template, url_for
-from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
+import os
+from datetime import datetime, time, timedelta
+from random import sample
+
+from flask import send_file
 from werkzeug.utils import secure_filename
 
-def stringAleatorio():
-    string_aleatorio="0123456789abcdefghijklmnñopqrstuvwxyz_"
-    longitud=10
-    secuencia=string_aleatorio.upper()
-    resultado_aleatorio= sample(secuencia, longitud)
-    string_aleatorio= "".join(resultado_aleatorio)
-    return string_aleatorio
+from main.routes import (app, bcrypt, mysql, redirect, render_template,
+                         request, session, url_for)
+from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
+                      render_template, request, session, stringAleatorio,
+                      url_for)
 
 extensionesImagenes=['.jpg', '.jpeg', '.png']
 @app.route('/verInventario',  methods=['GET','POST'])

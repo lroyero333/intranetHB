@@ -14,10 +14,134 @@
         <li class="nav-item page-header">
           <ul class="breadcrumb">
             <li class="breadcrumb-item">
-              <strong>Intranet</strong>
-              <a href="/inicio"><i class="fa fa-home"></i></a>
+              <a href="/inicio"
+                ><i class="fa fa-home"></i>
+                <strong>Intranet</strong>
+              </a>
             </li>
-            <li class="breadcrumb-item active">{{session["usuario"]}}</li>
+            {% if request.path == url_for('inicio') %}
+            <li class="breadcrumb-item active">Inicio</li>
+            {% elif request.path == '/avisos' %}
+            <li class="breadcrumb-item active">Avisos</li>
+            {% elif request.path == '/cursos' %}
+            <li class="breadcrumb-item active">Cursos</li>
+            {% elif request.path == '/noticias' %}
+            <li class="breadcrumb-item active">Noticias</li>
+            {% elif request.path == url_for('calendario') %}
+            <li class="breadcrumb-item active">Mi Calendario</li>
+            {% elif request.path == '/proyectos' %}
+            <li class="breadcrumb-item active">Mis Proyectos</li>
+            {% elif request.path == '/verInventario' %}
+            <li class="breadcrumb-item active">Mi Inventario</li>
+            {% elif request.path == '/nomina_certificados' %}
+            <li class="breadcrumb-item active">Nominas y Certificados</li>
+            {% elif request.path == '/myProfile' %}
+            <li class="breadcrumb-item active">Mi Perfil</li>
+            {% elif request.path == '/contactos' %}
+            <li class="breadcrumb-item active">Contactos</li>
+            {% elif request.path == '/empleados' %}
+            <li class="breadcrumb-item active">Empleados</li>
+            {% elif request.path == '/permisos' %}
+            <li class="breadcrumb-item active">Permisos</li>
+            {% elif request.path == '/vacaciones' %}
+            <li class="breadcrumb-item active">Vacaciones</li>
+            {% elif request.path == '/curso/crear' %}
+            <li class="breadcrumb-item active">
+              <a href="/cursos"> Cursos</a>
+            </li>
+            <li class="breadcrumb-item active">Crear curso</li>
+            {% elif request.path == '/cursos/lista/editar' %}
+            <li class="breadcrumb-item active">
+              <a href="/cursos"> Cursos</a>
+            </li>
+            <li class="breadcrumb-item active">Lista de cursos</li>
+            {% elif request.path == '/cursos/lista/eliminar' %}
+            <li class="breadcrumb-item active">
+              <a href="/cursos"> Cursos</a>
+            </li>
+            <li class="breadcrumb-item active">Eliminar cursos</li>
+            {% elif request.path == '/noticias/crear' %}
+            <li class="breadcrumb-item active">
+              <a href="/noticias"> Noticias</a>
+            </li>
+            <li class="breadcrumb-item active">Crear Noticia</li>
+            {% elif request.path == '/noticias/lista/editar' %}
+            <li class="breadcrumb-item active">
+              <a href="/noticias"> Noticias</a>
+            </li>
+            <li class="breadcrumb-item active">Lista de noticias</li>
+            {% elif request.path == '/noticia/lista/eliminar' %}
+            <li class="breadcrumb-item active">
+              <a href="/noticias"> Noticias</a>
+            </li>
+            <li class="breadcrumb-item active">Eliminar noticias</li>
+
+            {% elif request.path == '/aviso/crear' %}
+            <li class="breadcrumb-item active">
+              <a href="/avisos"> Avisos</a>
+            </li>
+            <li class="breadcrumb-item active">Crear Aviso</li>
+            {% elif request.path == '/avisos/lista/editar' %}
+            <li class="breadcrumb-item active">
+              <a href="/avisos"> Avisos</a>
+            </li>
+            <li class="breadcrumb-item active">Lista de avisos</li>
+            {% elif request.path == '/avisos/lista/eliminar' %}
+            <li class="breadcrumb-item active">
+              <a href="/avisos"> Avisos</a>
+            </li>
+            <li class="breadcrumb-item active">Eliminar noticias</li>
+
+            {% elif request.path == '/proyectos/crear' %}
+            <li class="breadcrumb-item active">
+              <a href="/proyectos"> Proyectos</a>
+            </li>
+            <li class="breadcrumb-item active">Crear Proyecto</li>
+            {% elif request.path == '/proyectos/lista/editar' %}
+            <li class="breadcrumb-item active">
+              <a href="/proyectos"> Proyectos</a>
+            </li>
+            <li class="breadcrumb-item active">Lista de proyectos</li>
+            {% elif request.path == '/proyectos/lista/eliminar' %}
+            <li class="breadcrumb-item active">
+              <a href="/proyectos"> Proyectos</a>
+            </li>
+            <li class="breadcrumb-item active">Eliminar proyectos</li>
+
+            {% endif %} {% set url_parts = request.path.split('/') %} {% if
+            url_parts[1] == 'curso' %}
+            <li class="breadcrumb-item">
+              <a href="/cursos">Cursos</a>
+            </li>
+            {% if url_parts[2] == 'editarCurso' %}
+            <li class="breadcrumb-item">
+              <a href="/cursos/lista/editar">Lista de Cursos</a>
+            </li>
+            {% if url_parts[3] is defined %}
+            <li class="breadcrumb-item active">{{ url_parts[3] }}</li>
+            {% endif %} {% endif %} {% endif %} {% set url_partsN =
+            request.path.split('/') %} {% if url_partsN[1] == 'noticia' %}
+            <li class="breadcrumb-item">
+              <a href="/noticia">Noticias</a>
+            </li>
+            {% if url_partsN[2] == 'editarNoticia' %}
+            <li class="breadcrumb-item">
+              <a href="/noticias/lista/editar">Lista de Noticias</a>
+            </li>
+            {% if url_partsN[3] is defined %}
+            <li class="breadcrumb-item active">{{ url_partsN[3] }}</li>
+            {% endif %} {% endif %} {% endif %} {% set url_partsA =
+            request.path.split('/') %} {% if url_partsA[1] == 'aviso' %}
+            <li class="breadcrumb-item">
+              <a href="/aviso">Aviso</a>
+            </li>
+            {% if url_partsA[2] == 'editarAviso' %}
+            <li class="breadcrumb-item">
+              <a href="/avisos/lista/editar">Lista de Avisos</a>
+            </li>
+            {% if url_partsA[3] is defined %}
+            <li class="breadcrumb-item active">{{ url_partsA[3] }}</li>
+            {% endif %} {% endif %} {% endif %}
           </ul>
         </li>
       </ul>
@@ -37,7 +161,7 @@
             ><i class="fa fa-user"></i
           ></a>
           <div class="dropdown-menu dropdown-menu-right">
-            <h6 class="dropdown-header">Menú de usuario</h6>
+            <h6 class="dropdown-header">Menú de {{session['usuario']}}</h6>
             <a
               class="dropdown-item"
               href="/myProfile"

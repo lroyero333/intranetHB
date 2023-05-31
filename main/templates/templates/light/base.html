@@ -75,9 +75,9 @@
                 </div>
                 <ul id="main-menu" class="metismenu">
                     <li class="g_heading">Cartelera</li>
-                    <li><a href="/inicio"><i class="ti-home"></i><span>General</span></a></li>
+                    <li {% if current_path == '/inicio' %} class="active"{% endif %}><a href="/inicio"><i class="ti-home"></i><span>General</span></a></li>
                     <li><a href="/inicio"><i class="fa fa-calendar-o"></i><span>Mi cartelera</span></a></li>
-                    <li><a href="/inicio"><i class="ti-tablet"></i><span>Avisos</span></a></li>
+                    <li><a href="/avisos"><i class="ti-tablet"></i><span>Avisos</span></a></li>
                     <li><a href="/cursos"><i class="ti-layout"></i><span>Cursos</span></a></li>
                     <li><a href="/noticias"><i class="fa fa-hacker-news"></i><span>Noticias</span></a></li>
 
@@ -124,8 +124,16 @@
                         <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-flag"></i><span>Gestión de Noticias</span></a>
                         <ul>
                             <li><a href="/noticias/crear">Crear Noticia</a></li>
-                            <li><a href="/noticia/lista/editar">Editar Noticia</a></li>
+                            <li><a href="/noticias/lista/editar">Editar Noticia</a></li>
                             <li><a href="/noticia/lista/eliminar">Eliminar Noticia</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-info-circle"></i><span>Gestión de Avisos</span></a>
+                        <ul>
+                            <li><a href="/aviso/crear">Crear Aviso</a></li>
+                            <li><a href="/avisos/lista/editar">Editar Aviso</a></li>
+                            <li><a href="/avisos/lista/eliminar">Eliminar Aviso</a></li>
                         </ul>
                     </li>
                     {%elif session['cargo']==4%}
@@ -142,12 +150,13 @@
                     {%elif session['cargo']==3%}
                     <li>
                         <a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
-                            "></i><span>Gestión de Inventario</span></a>
+                            "></i><span>Gestión de Inventario (Empresa)</span></a>
                         <ul>
-                            <li><a href="/proyectos/crear">Crear Proyectos</a></li>
-                            <li><a href="/proyectos/lista/editar">Editar Proyectos</a></li>
-                            <li><a href="/proyectos/lista/eliminar">Eliminar Proyectos</a></li>
-
+                            <li><a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
+                                "></i><span>Gestión de Inventario</span></a> </li>
+                            <li><a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
+                                "></i><span>Gestión de Inventario</span></a></li>
+                            
                         </ul>
                     </li>
                     {%else%}

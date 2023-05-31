@@ -28,4 +28,37 @@ app.config['MYSQL_DATABASE_DB']='u122395259_intranerHB'
 """
 mysql.init_app(app)
 app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024
+
+def stringAleatorio():
+    string_aleatorio = "0123456789abcdefghijklmnñopqrstuvwxyz_"
+    longitud = 10
+    secuencia = string_aleatorio.upper()
+    resultado_aleatorio = sample(secuencia, longitud)
+    string_aleatorio = "".join(resultado_aleatorio)
+    return string_aleatorio
+
+def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
+    solicitudes_con_tiempo = []
+    fecha_actual = datetime.now()
+
+    for solicitud in solicitudes:
+        fecha_insertado = solicitud[fecha_posicion]
+        diferencia = relativedelta(fecha_actual, fecha_insertado)
+        if diferencia.years > 0:
+            tiempo_transcurrido = f"hace {diferencia.years} años"
+        elif diferencia.months > 0:
+            tiempo_transcurrido = f"hace {diferencia.months} meses"
+        elif diferencia.days > 0:
+            tiempo_transcurrido = f"hace {diferencia.days} días"
+        elif diferencia.hours > 0:
+            tiempo_transcurrido = f"hace {diferencia.hours} horas"
+        elif diferencia.minutes > 0:
+            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
+        else:
+            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
+        solicitud_con_tiempo = list(solicitud)
+        solicitud_con_tiempo.append(tiempo_transcurrido)
+        solicitudes_con_tiempo.append(solicitud_con_tiempo)
+    return solicitudes_con_tiempo
+
 from main.routes import *

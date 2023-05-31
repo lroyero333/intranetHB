@@ -5,51 +5,30 @@
       <div class="row clearfix">
         <div class="col-lg-12 col-md-12">
           <div class="card planned_task">
-            <!--div class="header">
-                            <h2>Stater Page</h2>
-                        </div>
-                        <div class="body">
-                            <h4>Stater Page</h4>
-                        </div-->
-            <!-- Edit Curso -->
-            <form action="" method="POST" enctype="multipart/form-data">
-              <div>
+            <!-- Edit aviso -->
+            <form action="" method="POST">
+              <div id="editaraviso">
                 <div class="modal-content">
+                  <div class="modal-header">
+                    <label for="fecha_inicio_aviso"
+                      ><strong>Editar aviso</strong></label
+                    >
+                  </div>
                   <div class="modal-body">
-                    <h1>Editar Noticia</h1>
                     <div class="row clearfix">
                       <div class="col-12">
                         <div class="form-group">
-                          <label for="titulo_noticia"
-                            ><strong>Titulo de la Noticia:</strong></label
+                          <label for="nombre_aviso"
+                            ><strong>Titulo del aviso:</strong></label
                           >
                           <input
                             type="text"
                             class="form-control"
-                            name="titulo_noticia"
-                            id="titulo_noticia"
-                            value="{{noticia[1]}}"
-                            placeholder="Titulo de la Noticia"
+                            name="nombre_aviso"
+                            id="nombre_aviso"
+                            value="{{aviso[1]}}"
+                            placeholder="Nombre del aviso"
                           />
-                        </div>
-                      </div>
-                      <div class="col-12">
-                        <div class="form-group">
-                          <label for="foto"
-                            ><strong>Imagen de la Noticia:</strong></label
-                          >
-                          <div>
-                            <input
-                              type="file"
-                              name="imagen_noticia"
-                              id="imagen_noticia"
-                              class="custom-input-file"
-                            />
-                            <label for="imagen_noticia">
-                              <i class="fa fa-upload"></i>
-                              <span>Selecciona una imagen…</span>
-                            </label>
-                          </div>
                         </div>
                       </div>
                       <div class="col-12">
@@ -59,20 +38,22 @@
                             class="form-control summernote"
                             rows="3"
                             cols="30"
-                            name="descripcion_noticia"
-                            id="descripcion_noticia"
+                            name="descripcion"
+                            id="descripcion"
+                            placeholder="{{aviso[4]}}"
                           >
-{{noticia[3]}}</textarea
+{{aviso[4]}}</textarea
                           >
                         </div>
                       </div>
+
                       <div class="modal-footer">
                         <button
                           type="submit"
-                          name="crear_noticia"
+                          name="editar_aviso"
                           class="btn btn-primary"
                         >
-                          Editar
+                          Actualizar
                         </button>
                         <a
                           href="javascript:history.go(-1)"

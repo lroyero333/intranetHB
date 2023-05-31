@@ -57,7 +57,7 @@
                               {{datosNoticias[9]}}
                             </h6>
                             <p class="card-text">
-                              {{datosNoticias[3] | truncate(400)}}
+                              {{datosNoticias[3] | safe | truncate(400)}}
                             </p>
                             <a
                               href="/noticia/{{datosNoticias[0]}}"

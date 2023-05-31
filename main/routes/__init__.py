@@ -10,8 +10,9 @@ from flask import (flash, g, redirect, render_template, request, send_file,
                    send_from_directory, session, url_for)
 from werkzeug.utils import secure_filename
 
-from main.run import app, mysql
-from main.templates.calendario import calendario
+from main.run import agregar_tiempo_transcurrido, app, mysql, stringAleatorio
+from main.templates.calendario import (avisos, calendario, cursos, noticias,
+                                       proyectos)
 from main.templates.error import error
 from main.templates.infoUsuario import usuario
 from main.templates.inventario import inventario
@@ -22,14 +23,6 @@ from main.templates.register import register
 from main.templates.usersCRUD import usersCRUD
 
 
-def stringAleatorio():
-    string_aleatorio="0123456789abcdefghijklmnñopqrstuvwxyz_"
-    longitud=10
-    secuencia=string_aleatorio.upper()
-    resultado_aleatorio= sample(secuencia, longitud)
-    string_aleatorio= "".join(resultado_aleatorio)
-    return string_aleatorio
-
 @app.route('/cerrar')
 def cerrar():
     session.clear()
@@ -38,29 +31,6 @@ def cerrar():
 
 url_inicio = '/inicio'
 
-def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
-    solicitudes_con_tiempo = []
-    fecha_actual = datetime.now()
-
-    for solicitud in solicitudes:
-        fecha_insertado = solicitud[fecha_posicion]
-        diferencia = relativedelta(fecha_actual, fecha_insertado)
-        if diferencia.years > 0:
-            tiempo_transcurrido = f"hace {diferencia.years} años"
-        elif diferencia.months > 0:
-            tiempo_transcurrido = f"hace {diferencia.months} meses"
-        elif diferencia.days > 0:
-            tiempo_transcurrido = f"hace {diferencia.days} días"
-        elif diferencia.hours > 0:
-            tiempo_transcurrido = f"hace {diferencia.hours} horas"
-        elif diferencia.minutes > 0:
-            tiempo_transcurrido = f"hace {diferencia.minutes} minutos"
-        else:
-            tiempo_transcurrido = f"hace {diferencia.seconds} segundos"
-        solicitud_con_tiempo = list(solicitud)
-        solicitud_con_tiempo.append(tiempo_transcurrido)
-        solicitudes_con_tiempo.append(solicitud_con_tiempo)
-    return solicitudes_con_tiempo
 
 @app.before_request
 def notificacionesRH():
@@ -385,32 +355,12 @@ def inicio():
     datosNoticias = cursor.fetchall()
     conexion.commit()
     noticias_con_tiempo = agregar_tiempo_transcurrido(datosNoticias, 4)
-    return render_template('templates/light/index.html', datosCursos=cursos_con_tiempo, datosNoticias=noticias_con_tiempo)
 
-@app.route('/cursos')
-def cursos():
-    if not 'login' in session:
-        return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-    cursor.execute("SELECT cursos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM cursos LEFT JOIN general_users ON cursos.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
-    datosCursos = cursor.fetchall()
+    cursor.execute("SELECT avisos.*,DATE_FORMAT(fecha_publicacion, '%d-%m-%Y') AS fecha_publicacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM avisos LEFT JOIN general_users ON avisos.usuario_publica = general_users.usuario ORDER BY fecha_publicacion DESC;")
+    datosAvisos = cursor.fetchall()
     conexion.commit()
-    cursos_con_tiempo = agregar_tiempo_transcurrido(datosCursos, 5)
-    return render_template('calendario/templates/cursos/Cursos.html', datosCursos=cursos_con_tiempo)
-
-@app.route('/noticias')
-def noticias():
-    if not 'login' in session:
-        return redirect('/')
-    conexion = mysql.connect()
-    cursor = conexion.cursor()
-    cursor.execute("SELECT noticias.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM noticias LEFT JOIN general_users ON noticias.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
-    datosNoticias = cursor.fetchall()
-    conexion.commit()
-    noticias_con_tiempo = agregar_tiempo_transcurrido(datosNoticias, 4)
-    return render_template('calendario/templates/noticias/Noticias.html',  datosNoticias=noticias_con_tiempo)
-
+    avisos_con_tiempo = agregar_tiempo_transcurrido(datosAvisos, 3)
+    return render_template('templates/light/index.html', datosCursos=cursos_con_tiempo, datosNoticias=noticias_con_tiempo, datosAvisos=avisos_con_tiempo)
 
 @app.route('/Noticias')
 def noticiass():
