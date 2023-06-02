@@ -136,6 +136,15 @@
                             <li><a href="/avisos/lista/eliminar">Eliminar Aviso</a></li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-folder-open
+                            "></i><span>Gestión de Inventario</span></a>
+                        <ul>
+                            <li><a href="/crearInventario">Añadir Inventario</a></li>
+                            <li><a href="/inventario/listaInventario">Editar / Eliminar Inventario</a></li>
+                            <li><a href="/inventario/asignarInventario">Asignar Inventario</a></li>
+                        </ul>
+                    </li>
                     {%elif session['cargo']==4%}
                     <li>
                         <a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
@@ -149,14 +158,10 @@
                     </li>
                     {%elif session['cargo']==3%}
                     <li>
-                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
-                            "></i><span>Gestión de Inventario (Empresa)</span></a>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-folder-open
+                            "></i><span>Gestión de Inventario</span></a>
                         <ul>
-                            <li><a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
-                                "></i><span>Gestión de Inventario</span></a> </li>
-                            <li><a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
-                                "></i><span>Gestión de Inventario</span></a></li>
-                            
+                            <li><a href="/proyectos/lista/eliminar">Entregar Inventario Prestado</a></li>
                         </ul>
                     </li>
                     {%else%}

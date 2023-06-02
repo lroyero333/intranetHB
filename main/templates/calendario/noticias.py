@@ -8,8 +8,10 @@ from flask import jsonify
 from pymysql import IntegrityError
 from werkzeug.utils import secure_filename
 
-from main.run import (agregar_tiempo_transcurrido, app, bcrypt, flash, jsonify,
-                      mysql, redirect, render_template, request, session,
+from main.routes import (app, bcrypt, mysql, redirect, render_template,
+                         request, session, url_for)
+from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
+                      render_template, request, session, stringAleatorio,
                       url_for)
 
 extensionesImagenes=['.jpg', '.jpeg', '.png']
@@ -66,7 +68,7 @@ def editNoticia(noticia_id):
             extension = os.path.splitext(filename)[1]
             nuevoNombreImagen = stringAleatorio() + extension
 
-            upload_path = os.path.join( basepath, '..', '..', 'static', 'images', 'Noticias', nuevoNombreImagen)
+            upload_path = os.path.join( basepath, app.root_path, 'static', 'images', 'Noticias', nuevoNombreImagen)
             if not os.path.exists(os.path.dirname(upload_path)):
                 os.makedirs(os.path.dirname(upload_path))
 

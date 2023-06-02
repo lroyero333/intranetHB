@@ -1,0 +1,148 @@
+{% extends 'templates/light/base.html' %} {% block content %}
+<div class="main_content" id="main-content">
+  <div class="page">
+    <div class="container-fluid">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %} {% if category ==
+        'error' %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+          <span class="alert-inner--text"
+            ><strong>Error</strong> {{ message }}!</span
+          >
+          <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %} {% if category == 'correcto' %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+          <span class="alert-inner--text"
+            ><strong>Correcto!</strong> {{ message }}!</span
+          >
+          <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="alert"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %} {% endfor %} {% endif %} {% endwith %}
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="card planned_task">
+            <div class="modal-content">
+              <div class="modal-header">
+                <label
+                  ><strong><h1>Asignar Elemento</h1></strong></label
+                >
+              </div>
+              <form action="" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                  <div class="row clearfix">
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label for="categoria"
+                          ><strong>Elemento:</strong></label
+                        >
+                        <select
+                          class="selectpicker"
+                          name="elemento"
+                          title="Selecciona un elemento"
+                          data-live-search="true"
+                          data-live-search-placeholder="Buscar ..."
+                          required
+                        >
+                          <option value="" selected disabled>
+                            Selecciona un elemento
+                          </option>
+                          {%for inventario in inventario%}
+                          <option value="{{inventario[0]}}">{{inventario[1]}}</option>
+                          {%endfor%}
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="usuario_elemento"
+                          ><strong>Empleado:</strong></label
+                        >
+                        <select
+                          class="selectpicker"
+                          name="usuario_elemento"
+                          title="Selecciona un empleado"
+                          data-live-search="true"
+                          data-live-search-placeholder="Buscar ..."
+                          required
+                        >
+                          <option value="" selected disabled>
+                            Selecciona un empleado
+                          </option>
+                          {%for usuario in usuario%}
+                          <option value="{{usuario[0]}}">{{usuario[1]}} {{usuario[2]}} {{usuario[3]}} {{usuario[4]}}</option>
+                          {%endfor%}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label for="cantidad_elemento"
+                          ><strong>Cantidad:</strong></label
+                        >
+                        <input
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          name="cantidad_elemento"
+                          id="cantidad_elemento"
+                          value=""
+                          placeholder="Cantidad"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="descripcion_elemento" class="form-label"
+                          >Descripcion y Estado:</label
+                        >
+                        <textarea
+                          class="form-control"
+                          name="descripcion_elemento"
+                          id="descripcion_elemento"
+                          rows="3"
+                          required
+                        ></textarea
+                        >
+                  </div>
+                    </div>
+                    
+                  <div class="modal-footer">
+                    <button
+                      type="submit"
+                      name="asignar_elemento"
+                      class="btn btn-success"
+                    >
+                      Asignar
+                    </button>
+                    <a
+                      href="javascript:history.go(-1)"
+                      class="btn btn-secondary"
+                      ><i class="fa fa-arrow-left"></i> <span>Volver</span></a
+                    >
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

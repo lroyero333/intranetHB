@@ -376,10 +376,8 @@ def static_file(path):
 def ver_imagen(tipo_archivo,nombre_archivo):
     if not 'login' in session:
         return redirect('/')
-    if tipo_archivo == "Material":
-        ruta_archivo = os.path.join(app.root_path, 'static', 'images', 'inventario', 'materiales', nombre_archivo)
-    elif tipo_archivo == "Herramienta":
-        ruta_archivo = os.path.join(app.root_path, 'static', 'images', 'inventario', 'herramientas', nombre_archivo)
+    if tipo_archivo == "inventario":
+        ruta_archivo = os.path.join(app.root_path, 'static', 'images', 'inventario', nombre_archivo)
     elif tipo_archivo == "Certificado":
         ruta_archivo = os.path.join(app.root_path, 'static', 'archivos', 'certificados', nombre_archivo)
     elif tipo_archivo == "Nomina":

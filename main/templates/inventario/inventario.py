@@ -14,6 +14,8 @@ from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
                       url_for)
 
 extensionesImagenes=['.jpg', '.jpeg', '.png']
+conexion = mysql.connect()
+cursor = conexion.cursor()
 @app.route('/verInventario',  methods=['GET','POST'])
 def verInventario():
     if not 'login' in session:
@@ -21,46 +23,24 @@ def verInventario():
     basepath = os.path.dirname(__file__)
     conexion = mysql.connect()
     cursor = conexion.cursor()
-    cursor.execute("SELECT * FROM herramientas;")
-    herramientas = cursor.fetchall()
-    cursor.execute("SELECT movimientos_herramientas.*, general_users.Nombre, general_users.Apellido, general_users.foto , herramientas.* FROM movimientos_herramientas LEFT JOIN general_users ON movimientos_herramientas.responsable = general_users.usuario LEFT JOIN herramientas ON movimientos_herramientas.id_herramienta=herramientas.id_herramientas WHERE tipo_movimiento='Salida' and estado_solicitud='Aceptado' ORDER BY fecha_solicitud DESC;")
-    herramientas_prestadas = cursor.fetchall()
-    cursor.execute("SELECT * FROM materiales;")
-    materiales = cursor.fetchall()
+   
+    query = "SELECT elementos_entregados.*, DATE_FORMAT(fecha_entrega, '%d-%m-%Y') AS fecha_entrega, inventario.* FROM elementos_entregados LEFT JOIN inventario ON elementos_entregados.elemento_id = inventario.id_elemento;"
+    cursor.execute(query)
+    inventario_cargo = cursor.fetchall()
+
+    query = "SELECT  * FROM inventario;"
+    cursor.execute(query)
+    inventario = cursor.fetchall()
+
+    query = "SELECT movimientos.*, inventario.* FROM movimientos LEFT JOIN inventario ON movimientos.id_elemento = inventario.id_elemento WHERE estado_solicitud='Aceptado' and responsable=%s;"
+    cursor.execute(query, (session['usuario'],))
+    prestados = cursor.fetchall()
+
     cursor.execute("SELECT movimientos_materiales.*, general_users.Nombre, general_users.Apellido, general_users.foto , materiales.* FROM movimientos_materiales LEFT JOIN general_users ON movimientos_materiales.responsable = general_users.usuario LEFT JOIN materiales ON movimientos_materiales.id_material=materiales.id_material WHERE tipo_movimiento='Salida' and estado_solicitud='Aceptado' ORDER BY fecha_solicitud DESC;")
     materiales_prestados = cursor.fetchall()
     fecha_actual=datetime.now()
     if request.method == 'POST':
-        if 'agregar_tool' in request.form:
-            imagen_herramienta=request.files['imagen_tool']
-            nombre_herramienta = request.form['nombre_herramienta']
-            cantidad = request.form['cantidad_tool']
-            ubicacion = request.form['ubicacion_tool']
-            descripcion = request.form['descripcion_tool']
-
-            filename, file_extension = os.path.splitext(imagen_herramienta.filename)
-            if file_extension.lower() not in extensionesImagenes:
-                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
-                return redirect(request.url)
-            else:
-                flash('Se ha agregado satisfactoriamente','correcto')
-            
-            filename = secure_filename(imagen_herramienta.filename)
-            extension = os.path.splitext(filename)[1]
-            nuevoNombreTool = stringAleatorio() + extension
-            upload_path = os.path.join(basepath, app.root_path, 'static', 'images', 'inventario','herramientas', nuevoNombreTool)
-            if not os.path.exists(os.path.dirname(upload_path)):
-                os.makedirs(os.path.dirname(upload_path))
-
-            imagen_herramienta.save(upload_path)
-
-            query = "INSERT INTO herramientas (nombre_herramientas, cantidad, ubicacion, descripcion,imagen_herramienta) VALUES (%s,%s,%s, %s,%s)"
-            params = [nombre_herramienta, cantidad,  ubicacion,  descripcion, nuevoNombreTool]
-
-            cursor.execute(query, params)
-            conexion.commit()
-
-            return redirect('/verInventario')
+        
         if 'eliminar_tool' in request.form:
             
             imagen_tool = request.form['imagen_herramienta']
@@ -76,51 +56,7 @@ def verInventario():
             flash('La herramienta ha sido eliminada.', 'correcto')
             
             return redirect('/verInventario')
-        if 'agregar_material' in request.form:
-            imagen_material=request.files['imagen_material']
-            nombre_material = request.form['nombre_material']
-            cantidad = request.form['cantidad_material']
-            ubicacion = request.form['ubicacion_material']
-            descripcion = request.form['descripcion_material']
-            tipo_material=request.form['tipo_material']
-
-            filename, file_extension = os.path.splitext(imagen_material.filename)
-            if file_extension.lower() not in extensionesImagenes:
-                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
-                return redirect(request.url)
-            else:
-                flash('Se ha agregado satisfactoriamente','correcto')
-            filename = secure_filename(imagen_material.filename)
-            extension = os.path.splitext(filename)[1]
-            nuevoNombreMaterial = stringAleatorio() + extension
-            upload_path = os.path.join(basepath, app.root_path, 'static', 'images', 'inventario','materiales', nuevoNombreMaterial)
-            if not os.path.exists(os.path.dirname(upload_path)):
-                os.makedirs(os.path.dirname(upload_path))
-
-            imagen_material.save(upload_path)
-
-            query = "INSERT INTO materiales (nombre_material, cantidad, ubicacion, consumible, descripcion, imagen_material) VALUES (%s,%s,%s, %s,%s, %s)"
-            params = [nombre_material, cantidad,  ubicacion, tipo_material,  descripcion, nuevoNombreMaterial]
-
-            cursor.execute(query, params)
-            conexion.commit()
-
-            return redirect('/verInventario')
-        if 'eliminar_material' in request.form:
-            
-            imagen_material = request.form['imagen_material']
-            print('material',imagen_material)
-            ruta_archivo = os.path.join(app.root_path, 'static', 'images', 'inventario','materiales', imagen_material)
-
-            cursor.execute("DELETE FROM materiales WHERE imagen_material=%s;", imagen_material)
-            conexion.commit()
-
-            if os.path.exists(ruta_archivo):
-                os.remove(ruta_archivo)
-
-            flash('El material ha sido eliminado.', 'correcto')
-            
-            return redirect('/verInventario')
+                
         if 'entregar_tool' in request.form:
             id_inventario=request.form['herramienta_prestada']
             tipo_movimiento='Entrada'
@@ -156,10 +92,148 @@ def verInventario():
             print('no agrego ')
     else:
          print('No es POST')
-    return render_template('inventario/templates/verInventario.html', herramientas=herramientas, materiales=materiales,herramientas_prestadas=herramientas_prestadas,materiales_prestados=materiales_prestados)
+    return render_template('inventario/templates/verInventario.html', inventario_cargo=inventario_cargo, inventario=inventario, prestados=prestados)
 
-@app.route('/inventario/<tipo_solicitud>/<id_inventario>',  methods=['GET','POST'])
-def solicitarInventario(tipo_solicitud, id_inventario):
+@app.route('/crearInventario',  methods=['GET','POST'])
+def crearInventario():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    basepath = os.path.dirname(__file__)
+    
+    if 'agregar_elemento' in request.form:
+        imagen_elemento=request.files['imagen_elemento']
+        nombre_elemento = request.form['nombre_elemento']
+        categoria_elemento=request.form['categoria']
+        cantidad = request.form['cantidad_elemento']
+        tipo_elemento=request.form['tipo_elemento']
+        ubicacion = request.form['ubicacion_elemento']
+        descripcion = request.form['descripcion_elemento']
+
+        filename, file_extension = os.path.splitext(imagen_elemento.filename)
+        if file_extension.lower() not in extensionesImagenes:
+            flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+            return redirect(request.url)
+        else:
+            flash('Se ha agregado satisfactoriamente','correcto')
+            
+        filename = secure_filename(imagen_elemento.filename)
+        extension = os.path.splitext(filename)[1]
+        nuevoNombreElemento = stringAleatorio() + extension
+        upload_path = os.path.join(basepath, app.root_path, 'static', 'images', 'inventario', nuevoNombreElemento)
+        if not os.path.exists(os.path.dirname(upload_path)):
+                os.makedirs(os.path.dirname(upload_path))
+
+        imagen_elemento.save(upload_path)
+
+        query = "INSERT INTO inventario (nombre_elemento, descripcion, cantidad, ubicacion,tipo_elemento,imagen,categoria) VALUES (%s,%s,%s, %s,%s,%s,%s)"
+        params = [nombre_elemento, descripcion,  cantidad,  ubicacion, tipo_elemento,nuevoNombreElemento,categoria_elemento]
+
+        cursor.execute(query, params)
+        conexion.commit()
+
+        return redirect('/verInventario')
+    
+    return render_template('inventario/templates/crearInventario.html')
+
+@app.route('/inventario/listaInventario', methods=['GET', 'POST'])
+def listaInventario():
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    if request.method == 'POST':  
+        inventario_id = request.form.get('inventario_id')
+        if request.form.get('editar_inventario'):
+            return redirect(f"/inventario/editarInventario/{inventario_id}")
+        if request.form.get('borrar_inventario'):
+            cursor.execute(
+                "DELETE FROM inventario WHERE id_elemento = %s;", (inventario_id,))
+            conexion.commit()
+            flash('La inventario ha sido eliminada correctamente','correcto')
+            return redirect('/verInventario')
+    cursor.execute("SELECT * FROM inventario")
+    inventario = cursor.fetchall()
+    conexion.close()
+    return render_template('inventario/templates/listaInventario.html',inventario=inventario)
+
+@app.route('/inventario/editarInventario/<string:inventario_id>', methods=['GET', 'POST'])
+def editInventario(inventario_id):
+    if not 'login' in session:
+        return redirect('/')
+    if session['cargo'] != 1:
+        return redirect('/inicio')
+    cursor.execute("SELECT * FROM inventario WHERE id_elemento= %s", inventario_id)
+    inventario = cursor.fetchone()
+    
+    if request.method == 'POST':
+        # Obtener los valores de los campos del formulario
+
+        nombre_elemento = request.form.get('nombre_elemento') or inventario[1]
+        categoria_elemento=request.form.get('categoria') or inventario[7]
+        cantidad = request.form.get('cantidad_elemento') or inventario[3]
+        tipo_elemento=request.form.get('tipo_elemento') or inventario[5]
+        ubicacion = request.form.get('ubicacion_elemento' )or inventario[4]
+        descripcion = request.form.get('descripcion_elemento') or inventario[2]
+
+        if request.files['imagen_elemento'].filename != '':
+            imagen_elemento = request.files['imagen_elemento']
+            filename, file_extension = os.path.splitext(imagen_elemento.filename)
+            if file_extension.lower() not in extensionesImagenes:
+                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+            else:
+                flash('La noticia se ha actualizado satisfactoriamente','correcto')
+            basepath = os.path.dirname(__file__)
+            filename = secure_filename(imagen_elemento.filename)
+
+            extension = os.path.splitext(filename)[1]
+            nuevoNombreImagen = stringAleatorio() + extension
+
+            upload_path = os.path.join( basepath, app.root_path, 'static', 'images', 'inventario', nuevoNombreImagen)
+            if not os.path.exists(os.path.dirname(upload_path)):
+                os.makedirs(os.path.dirname(upload_path))
+
+            imagen_elemento.save(upload_path)
+
+        # Resto del código para procesar y guardar la imagen
+        else:
+            nuevoNombreImagen = inventario[6]
+
+        query = "UPDATE inventario SET nombre_elemento = %s, categoria = %s, cantidad = %s, tipo_elemento = %s,ubicacion = %s,descripcion = %s, imagen=%s WHERE id_elemento = %s"
+        params = [nombre_elemento, categoria_elemento, cantidad,tipo_elemento, ubicacion, descripcion,nuevoNombreImagen,inventario_id]
+        cursor.execute(query, params)
+        conexion.commit()
+        flash('Ha sido actualizado correctamiente.', 'success')
+        return redirect('/verInventario')
+    
+    return render_template('inventario/templates/editarInventario.html', inventario=inventario)
+
+@app.route('/inventario/asignarInventario', methods=['GET', 'POST'])
+def asignarInventario():
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT usuario, Nombre, segundo_nombre, Apellido, segundo_apellido FROM general_users")
+    usuario = cursor.fetchall()
+    cursor.execute("SELECT id_elemento, nombre_elemento FROM inventario")
+    inventario = cursor.fetchall()
+    if request.method == 'POST':  
+        if 'asignar_elemento' in request.form:
+            elemento=request.form['elemento']
+            usuario_elemento=request.form['usuario_elemento']
+            cantidad_elemento=request.form['cantidad_elemento']
+            descripcion_elemento=request.form['descripcion_elemento']
+            fecha_actual=datetime.now()
+            query = "INSERT INTO elementos_entregados (empleado_id, elemento_id, cantidad, fecha_entrega, observaciones) VALUES (%s,%s,%s, %s,%s)"
+            params = [usuario_elemento, elemento,  cantidad_elemento, fecha_actual, descripcion_elemento]
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Elemento asignado correctamente','correcto')
+            return redirect(request.url)
+    conexion.close()
+    return render_template('inventario/templates/asignarInventario.html',inventario=inventario, usuario=usuario)
+
+
+@app.route('/inventario/solicitarElemento/<id_inventario>',  methods=['GET','POST'])
+def solicitarInventario(id_inventario):
     if not 'login' in session:
         return redirect('/')
     conexion = mysql.connect()
@@ -167,26 +241,11 @@ def solicitarInventario(tipo_solicitud, id_inventario):
     responsable = session['usuario']
     feha_actual=datetime.now()
     if request.method == 'POST':
-        if 'solicitar_tool' in request.form:
+        if 'solicitar_elemento' in request.form:
             tipo_movimiento='Salida'
-            cantidad = request.form['cantidad_tool']
-            motivo = request.form['motivo_tool']
-            query = "INSERT INTO movimientos_herramientas (id_herramienta,tipo_movimiento, cantidad, fecha_movimiento, responsable, fecha_solicitud, motivo) VALUES (%s, %s,%s,%s, %s,%s, %s)"
-            params = [id_inventario, tipo_movimiento, cantidad,  feha_actual,  responsable, feha_actual, motivo]
-
-            cursor.execute(query, params)
-            conexion.commit()
-
-            flash('Solicitud realizada','correcto')
-
-            return redirect('/verInventario')
-        if 'eliminar_tool' in request.form:
-            return redirect('/verInventario')
-        if 'solicitar_material' in request.form:
-            tipo_movimiento='Salida'
-            cantidad = request.form['cantidad_material']
-            motivo = request.form['motivo_material']
-            query = "INSERT INTO movimientos_materiales (id_material,tipo_movimiento, cantidad, responsable, fecha_solicitud, motivo) VALUES (%s, %s,%s,%s, %s,%s)"
+            cantidad = request.form['cantidad_elemento']
+            motivo = request.form['motivo_elemento']
+            query = "INSERT INTO movimientos (id_elemento,tipo_movimiento, cantidad, responsable, fecha_solicitud, motivo) VALUES (%s,%s,%s, %s,%s, %s)"
             params = [id_inventario, tipo_movimiento, cantidad,  responsable, feha_actual, motivo]
             cursor.execute(query, params)
             conexion.commit()
@@ -196,4 +255,4 @@ def solicitarInventario(tipo_solicitud, id_inventario):
             print('no agrego ')
     else:
          print('No es POST')
-    return render_template('inventario/templates/solicitudInventario.html',  tipo_solicitud=tipo_solicitud)
+    return render_template('inventario/templates/solicitudInventario.html')

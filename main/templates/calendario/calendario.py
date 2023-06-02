@@ -197,6 +197,8 @@ def verPermisos():
 
 @app.route('/eventos')
 def obtener_cursos():
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     cursor.execute(
         'SELECT * FROM cursos')
     eventos = cursor.fetchall()

@@ -1,96 +1,81 @@
-{% extends 'templates/light/base.html' %}
-{% block content %}
+{% extends 'templates/light/base.html' %} {% block content %}
 <div class="main_content" id="main-content">
-
-    <div class="page">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="javascript:void(0);">Inventario/{{tipo_solicitud}}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fa fa-align-justify"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-
-                </ul>
-
+  <div class="page">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="javascript:void(0);">Inventario</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fa fa-align-justify"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto"></ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="card planned_task">
+            <div class="header">
+              <h1>Solicitud de Inventario</h1>
             </div>
-        </nav>
-        <div class="container-fluid">
-            
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12">
-                    <div class="card planned_task">
-                        <div class="header">
-                            <h2>Solicitud de {{tipo_solicitud}}</h2>
-                        </div>
-
-                        <form action="" method="POST">
-                            {%if tipo_solicitud=='herramienta'%}
-                            <div class="body">
-                                <div class="row">
-                                    <div class="col-6">
-
-                                        <div class="form-group">
-                                            <label for="cantidad_tool"><strong>Cantidad:</strong></label>
-                                            <input type="number" min="0" class="form-control" name="cantidad_tool"
-                                                id="cantidad_tool" value="" placeholder="Cantidad">
-                                        </div>
-
-                                    </div>
-                                    <div class="col-6">
-
-                                        <div class="mb-3">
-                                            <label for="motivo_tool" class="form-label">Motivo:</label>
-                                            <textarea class="form-control" name="motivo_tool" id="motivo_tool" rows="3"
-                                                required></textarea>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-
-                                <button type="submit" name="solicitar_tool" class="btn btn-success">Solicitar
-                                </button>
-                                {%elif tipo_solicitud=='material'%}
-                                <div class="body">
-                                    <div class="row">
-                                        <div class="col-6">
-
-                                            <div class="form-group">
-                                                <label for="cantidad_material"><strong>Cantidad:</strong></label>
-                                                <input type="number" min="0" class="form-control" name="cantidad_material"
-                                                    id="cantidad_material" value="" placeholder="Cantidad">
-                                            </div>
-
-                                        </div>
-                                        <div class="col-6">
-
-                                            <div class="mb-3">
-                                                <label for="motivo_material" class="form-label">Motivo:</label>
-                                                <textarea class="form-control" name="motivo_material" id="motivo_material"
-                                                    rows="3" required></textarea>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-
-                                    <button type="submit" name="solicitar_material" class="btn btn-success">Solicitar
-                                    </button>
-                                    {%else%}
-                                    {%endif%}
-                        </form>
-                        <a href="javascript:history.go(-1)" class="btn btn-default"><i class="fa fa-arrow-left"></i>
-                            <span>Volver</span></a>
+            <hr />
+            <form action="" method="POST">
+              <div class="body">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label for="cantidad_elemento"
+                        ><strong>Cantidad:</strong></label
+                      >
+                      <input
+                        type="number"
+                        min="0"
+                        class="form-control"
+                        name="cantidad_elemento"
+                        id="cantidad_elemento"
+                        value=""
+                        placeholder="Cantidad"
+                      />
                     </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="mb-3">
+                      <label for="motivo_elemento" class="form-label"
+                        >Motivo:</label
+                      >
+                      <textarea
+                        class="form-control"
+                        name="motivo_elemento"
+                        id="motivo_elemento"
+                        rows="3"
+                        required
+                      ></textarea>
+                    </div>
+                  </div>
                 </div>
-            </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="submit"
+                  name="solicitar_elemento"
+                  class="btn btn-success"
+                >
+                  Solicitar
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 </div>
 
 {% endblock %}

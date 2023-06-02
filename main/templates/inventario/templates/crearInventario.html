@@ -1,0 +1,149 @@
+{% extends 'templates/light/base.html' %} {% block content %}
+<div class="main_content" id="main-content">
+  <div class="page">
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="card planned_task">
+            <div class="modal-content">
+              <div class="modal-header">
+                <label
+                  ><strong><h1>Agregar Elemento</h1></strong></label
+                >
+              </div>
+              <form action="" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                  <div class="row clearfix">
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label for="foto"><strong>Imagen:</strong></label>
+                        <div>
+                          <input
+                            type="file"
+                            name="imagen_elemento"
+                            id="imagen_elemento"
+                            class="custom-input-file"
+                          />
+                          <label for="imagen_elemento">
+                            <i class="fa fa-upload"></i>
+                            <span>Selecciona una imagen…</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="nombre_elemento"
+                          ><strong>Nombre del elemento:</strong></label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nombre_elemento"
+                          id="nombre_elemento"
+                          value=""
+                          placeholder="Nombre del elemento"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="categoria"
+                          ><strong>Categoria</strong></label
+                        >
+                        <select
+                          class="selectpicker"
+                          name="categoria"
+                          title="Selecciona una categoria"
+                          data-live-search="true"
+                          data-live-search-placeholder="Buscar ..."
+                        >
+                          <option value="" selected disabled>
+                            Selecciona su categoria
+                          </option>
+                          <option value="Categoria 1">Categoria 1</option>
+                          <option value="Categoria 2">Categoria 2</option>
+                          <option value="Categoria 3">Categoria 3</option>
+                          <option value="Categoria 4">Categoria 4</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="ubicacion_elemento" class="form-label"
+                          >Ubicacion:</label
+                        >
+                        <textarea
+                          class="form-control"
+                          name="ubicacion_elemento"
+                          id="ubicacion_elemento"
+                          rows="3"
+                          required
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label for="cantidad_elemento"
+                          ><strong>Cantidad:</strong></label
+                        >
+                        <input
+                          type="number"
+                          min="0"
+                          class="form-control"
+                          name="cantidad_elemento"
+                          id="cantidad_elemento"
+                          value=""
+                          placeholder="Cantidad"
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="tipo_elemento"
+                          ><strong>Tipo de Elemento</strong></label
+                        >
+                        <select
+                          class="selectpicker"
+                          name="tipo_elemento"
+                          title="Selecciona un tipo"
+                          data-live-search="true"
+                          data-live-search-placeholder="Buscar ..."
+                        >
+                          <option value="" selected disabled>
+                            Selecciona un tipo
+                          </option>
+                          <option value="Consumible">Consumible</option>
+                          <option value="No Consumible">No Consumible</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="descripcion_elemento" class="form-label"
+                          >Descripcion:</label
+                        >
+                        <textarea
+                          class="form-control"
+                          name="descripcion_elemento"
+                          id="descripcion_elemento"
+                          rows="3"
+                          required
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="submit"
+                      name="agregar_elemento"
+                      class="btn btn-success"
+                    >
+                      Agregar
+                    </button>
+                    <a
+                      href="javascript:history.go(-1)"
+                      class="btn btn-secondary"
+                      ><i class="fa fa-arrow-left"></i> <span>Volver</span></a
+                    >
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

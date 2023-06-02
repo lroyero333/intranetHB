@@ -1,712 +1,296 @@
-{% extends 'templates/light/base.html' %}
-{% block content %}
+{% extends 'templates/light/base.html' %} {% block content %}
 <div class="main_content" id="main-content">
-
-    <div class="page">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="javascript:void(0);">
-                <h4>Inventario</h4>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fa fa-align-justify"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    {% if session["cargo"] == 3%}
-                    <button data-toggle="modal" data-target="#myModal" type="button"
-                        class="btn btn-primary ml-2  btn-animated btn-animated-y">
-                        <span class="btn-inner--visible">Inventario</span>
-                        <span class="btn-inner--hidden"><i class="fa fa-plus "></i></span>
-                    </button>
-
-                    <button data-toggle="modal" data-target="#entregar" type="button"
-                        class="btn btn-success ml-2  btn-animated btn-animated-y">
-                        <span class="btn-inner--visible">Entregar</span>
-                        <span class="btn-inner--hidden"><i class="fa fa-check "></i></span>
-                    </button>
-
-                    <button data-toggle="modal" data-target="#eliminar" type="button"
-                        class="btn btn-danger ml-2  btn-animated btn-animated-y">
-                        <span class="btn-inner--visible">Eliminar</span>
-                        <span class="btn-inner--hidden"><i class="fa fa-trash"></i></span>
-                    </button>
-
-                    {% endif %}
-                </form>
+  <div class="page">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="javascript:void(0);">
+        <h4>Inventario</h4>
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fa fa-align-justify"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto"></ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %} {% if category ==
+      'error' %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+        <span class="alert-inner--text"
+          ><strong>Error</strong> {{ message }}!</span
+        >
+        <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endif %} {% if category == 'correcto' %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+        <span class="alert-inner--text"
+          ><strong>Correcto!</strong> {{ message }}!</span
+        >
+        <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endif %} {% endfor %} {% endif %} {% endwith %}
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="card planned_task">
+            <div class="header">
+              <h2></h2>
+              <ul class="nav nav-tabs nav-tabs-new" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    id="pertenencia-tab"
+                    data-toggle="tab"
+                    href="#pertenencia"
+                    role="tab"
+                    aria-controls="pertenencia"
+                    aria-selected="true"
+                    >Inventario a cargo</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    id="inventario_pr-tab"
+                    data-toggle="tab"
+                    href="#inventario_pr"
+                    role="tab"
+                    aria-controls="inventario_pr"
+                    aria-selected="false"
+                    >Inventario Prestado</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    id="solicitus_prestamo-tab"
+                    data-toggle="tab"
+                    href="#solicitus_prestamo"
+                    role="tab"
+                    aria-controls="solicitus_prestamo"
+                    aria-selected="false"
+                    >Solicitar Prestamo</a
+                  >
+                </li>
+              </ul>
             </div>
-        </nav>
-        <div class="container-fluid">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-            {% for category, message in messages %}
-            {% if category == 'error' %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
-                <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
-                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {% endif %}
-            {% if category == 'correcto' %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
-                <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
-                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
-            <div class="row clearfix">
-                <div class="col-lg-12 col-md-12">
-                    <div class="card planned_task">
-                        <div class="header">
-                            <h2>Inventario</h2>
-                            <ul class="nav nav-tabs nav-tabs-new" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="todos-tab" data-toggle="tab" href="#todos" role="tab"
-                                        aria-controls="todos" aria-selected="true">Todos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="herramientas-tab" data-toggle="tab" href="#herramientas"
-                                        role="tab" aria-controls="herramientas" aria-selected="false">Herramientas</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="materiales-tab" data-toggle="tab" href="#materiales"
-                                        role="tab" aria-controls="materiales" aria-selected="false">Materiales</a>
-                                </li>
-                            </ul>
-                        </div>
 
-                        <div class="body">
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active " id="todos" role="tabpanel"
-                                    aria-labelledby="todos-tab">
-                                    <hr>
-                                    <div>
-                                        <H1>Herramientas</H1>
-                                    </div>
-                                    <hr>
-                                    <div class="table-responsive">
-                                        <table
-                                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nombre</th>
-                                                    <th>Cantidad</th>
-                                                    <th>Ubicacion </th>
-                                                    <th>Descripcion </th>
-                                                    <th>Imagen</th>
-                                                    <th>Accion </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for herramientas in herramientas %}
-                                                <tr>
-                                                    <td>
-                                                        {{herramientas[1]}}
-                                                    </td>
-                                                    <td>
-                                                        {{herramientas[2]}}
-                                                    </td>
-                                                    <td>
-                                                        {{herramientas[3]}}
-                                                    </td>
-                                                    <td>
-                                                        {{herramientas[4]}}
-                                                    </td>
-                                                    <td>
-                                                        <a href="/ver_archivo/{{herramientas[6]}}/{{herramientas[5]}}"
-                                                            target="_blank"><button type="button"
-                                                                class="btn btn-primary btn-sm btn-animated btn-animated-y">
-                                                                <span class="btn-inner--visible">Ver Imagen</span>
-                                                                <span class="btn-inner--hidden"><i
-                                                                        class="fa fa-eye"></i></span>
-                                                            </button>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="/inventario/herramienta/{{herramientas[0]}}"><button
-                                                                class="btn btn-primary btn-md"><i
-                                                                    class="fa fa-tag"></i></button></a>
-                                                    </td>
-                                                </tr>
-                                                {%endfor%}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <hr>
-                                    <div>
-                                        <H1>Materiales</H1>
-                                    </div>
-                                    <hr>
-                                    <div class="table-responsive">
-                                        <table
-                                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nombre</th>
-                                                    <th>Cantidad</th>
-                                                    <th>Ubicacion </th>
-                                                    <th>Tipo </th>
-                                                    <th>Descripcion </th>
-                                                    <th>Imagen</th>
-                                                    <th>Accion </th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for materiales in materiales %}
-                                                <tr>
-                                                    <td>
-                                                        {{materiales[1]}}
-                                                    </td>
-                                                    <td>
-                                                        {{materiales[2]}}
-                                                    </td>
-                                                    <td>
-                                                        {{materiales[3]}}
-                                                    </td>
-                                                    <td>
-                                                        {{materiales[4]}}
-                                                    </td>
-                                                    <td>
-                                                        {{materiales[5]}}
-                                                    </td>
-
-                                                    <td>
-                                                        <a href="/ver_archivo/{{materiales[7]}}/{{materiales[6]}}"
-                                                            target="_blank"><button type="button"
-                                                                class="btn btn-primary btn-block btn-animated btn-animated-y">
-                                                                <span class="btn-inner--visible">Ver Imagen</span>
-                                                                <span class="btn-inner--hidden"><i
-                                                                        class="fa fa-plus"></i></span>
-                                                            </button>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="/inventario/material/{{materiales[0]}}">
-                                                            <button class="btn btn-primary btn-md">
-                                                                <i class="fa fa-tag">
-                                                                </i>
-                                                            </button>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                {%endfor%}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="herramientas" role="tabpanel"
-                                    aria-labelledby="herramientas-tab">
-                                    <hr>
-                                    <div>
-                                        <H1>Herramientas</H1>
-                                    </div>
-                                    <hr>
-                                    <div class="table-responsive">
-                                        <table
-                                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nombre</th>
-                                                    <th>Cantidad</th>
-                                                    <th>Ubicacion </th>
-                                                    <th>Descripcion </th>
-                                                    <th>Imagen</th>
-                                                    <th>Accion </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for herramientas in herramientas %}
-                                                <tr>
-                                                    <td>
-                                                        {{herramientas[1]}}
-                                                    </td>
-                                                    <td>
-                                                        {{herramientas[2]}}
-                                                    </td>
-                                                    <td>
-                                                        {{herramientas[3]}}
-                                                    </td>
-                                                    <td>
-                                                        {{herramientas[4]}}
-                                                    </td>
-                                                    <td>
-                                                        <a href="/ver_archivo/{{herramientas[6]}}/{{herramientas[5]}}"
-                                                            target="_blank"><button type="button"
-                                                                class="btn btn-primary btn-sm btn-animated btn-animated-y">
-                                                                <span class="btn-inner--visible">Ver Imagen</span>
-                                                                <span class="btn-inner--hidden"><i
-                                                                        class="fa fa-eye"></i></span>
-                                                            </button>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="/inventario/herramienta/{{herramientas[0]}}"><button
-                                                                class="btn btn-primary btn-md"><i
-                                                                    class="fa fa-tag"></i></button></a>
-                                                    </td>
-                                                </tr>
-                                                {%endfor%}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <p>Contenido de la pestaña "Herramientas"</p>
-                                </div>
-                                <div class="tab-pane fade" id="materiales" role="tabpanel"
-                                    aria-labelledby="materiales-tab">
-                                    <hr>
-                                    <div>
-                                        <H1>Materiales</H1>
-                                    </div>
-                                    <hr>
-                                    <div class="table-responsive">
-
-                                        <table
-                                            class="table table-bordered table-striped table-hover mb-0 c_table js-basic-example dataTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nombre</th>
-                                                    <th>Cantidad</th>
-                                                    <th>Ubicacion </th>
-                                                    <th>Tipo </th>
-                                                    <th>Descripcion </th>
-                                                    <th>Imagen</th>
-                                                    <th>Accion </th>
-
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for materiales in materiales %}
-                                                <tr>
-                                                    <td>
-                                                        {{materiales[1]}}
-                                                    </td>
-                                                    <td>
-                                                        {{materiales[2]}}
-                                                    </td>
-                                                    <td>
-                                                        {{materiales[3]}}
-                                                    </td>
-                                                    <td>
-                                                        {{materiales[4]}}
-                                                    </td>
-                                                    <td>
-                                                        {{materiales[5]}}
-                                                    </td>
-
-                                                    <td>
-                                                        <a href="/ver_archivo/{{materiales[7]}}/{{materiales[6]}}"
-                                                            target="_blank"><button type="button"
-                                                                class="btn btn-primary btn-block btn-animated btn-animated-y">
-                                                                <span class="btn-inner--visible">Ver
-                                                                    Imagen</span>
-                                                                <span class="btn-inner--hidden"><i
-                                                                        class="fa fa-plus"></i></span>
-                                                            </button>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a href="/inventario/material/{{materiales[0]}}">
-                                                            <button class="btn btn-primary btn-md">
-                                                                <i class="fa fa-tag">
-                                                                </i>
-                                                            </button>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                {%endfor%}
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="body">
+              <div class="tab-content" id="myTabContent">
+                <div
+                  class="tab-pane fade show active"
+                  id="pertenencia"
+                  role="tabpanel"
+                  aria-labelledby="pertenencia-tab"
+                >
+                  <h1>Inventario a Cargo</h1>
+                  <hr />
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped table-hover mb-0 c_table"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Elemento</th>
+                          <th>Cantidad</th>
+                          <th>Descripcion</th>
+                          <th>Observaciones</th>
+                          <th>Fecha</th>
+                          <th>Imagen</th>
+                          <th>Accion</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for inventario_cargo in inventario_cargo %} {%if
+                        inventario_cargo[1]== session['usuario'] %}
+                        <tr>
+                          <td>{{inventario_cargo[8]}}</td>
+                          <td>{{inventario_cargo[3]}}</td>
+                          <td>{{inventario_cargo[9]}}</td>
+                          <td>{{inventario_cargo[5]}}</td>
+                          <td>{{inventario_cargo[6]}}</td>
+                          <td>
+                            <a
+                              href="/ver_archivo/inventario/{{inventario_cargo[13]}}"
+                              target="_blank"
+                              ><button
+                                type="button"
+                                class="btn btn-primary btn-sm btn-animated btn-animated-y"
+                              >
+                                <span class="btn-inner--visible"
+                                  >Ver Imagen</span
+                                >
+                                <span class="btn-inner--hidden"
+                                  ><i class="fa fa-eye"></i
+                                ></span>
+                              </button>
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href="/inventario/herramienta/{{inventario_cargo[0]}}"
+                              ><button class="btn btn-primary btn-md">
+                                <i class="fa fa-tag"></i></button
+                            ></a>
+                          </td>
+                        </tr>
+                        {%endif%} {%endfor%}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!--Opciones Inventario-->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Seleccione su peticion</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <button type="button" data-toggle="modal" data-target="#agregarHerramienta"
-                    class="btn btn-primary btn-block btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Herramientas</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
-                </button>
-                <button type="button" data-toggle="modal" data-target="#agregarMaterial"
-                    class="btn btn-primary btn-block btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Materiales</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--Opciones Inventario-->
-<div class="modal fade" id="eliminar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Seleccione su peticion</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <button type="button" data-toggle="modal" data-target="#eliminarHerramienta"
-                    class="btn btn-danger btn-block btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Herramientas</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-trash"></i></span>
-                </button>
-                <button type="button" data-toggle="modal" data-target="#eliminarMaterial"
-                    class="btn btn-danger btn-block btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Materiales</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-trash"></i></span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Opciones Inventario Entregar-->
-<div class="modal fade" id="entregar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Seleccione su peticion</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <button type="button" data-toggle="modal" data-target="#deliverTool"
-                    class="btn btn-success btn-block btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Herramientas</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-check"></i></span>
-                </button>
-                <button type="button" data-toggle="modal" data-target="#deliverMaterial"
-                    class="btn btn-success btn-block btn-animated btn-animated-y">
-                    <span class="btn-inner--visible">Materiales</span>
-                    <span class="btn-inner--hidden"><i class="fa fa-check"></i></span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--Modal deliver Material-->
-<div class="modal fade" id="deliverMaterial" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label for="fecha_inicio_curso"><strong>Entrega de Materiales</strong></label>
-            </div>
-            <form action="" method="POST">
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="material_prestado"><strong>Materiales</strong></label>
-                                <select class="selectpicker" name="material_prestado" title="Selecciona un material"
-                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
-                                    <option value="" selected disabled>Selecciona un material</option>
-                                    {% for materiales_prestados in materiales_prestados %}
-                                    <option value="{{materiales_prestados[0]}}">
-                                        Responsable: {{materiales_prestados[12]}} {{materiales_prestados[13]}},
-                                        Herramienta:
-                                        {{materiales_prestados[16]}}, Fecha:{{materiales_prestados[4]}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="cantidad_material"><strong>Cantidad entregada:</strong></label>
-                                <input type="number" min=0 class="form-control" name="cantidad_material"
-                                    id="cantidad_material" value="" placeholder="Cantidad entregada">
-                            </div>
-                            <div class="mb-3">
-                                <label for="observaciones_material" class="form-label">Observaciones:</label>
-                                <textarea class="form-control" name="observaciones_material" id="observaciones_material"
-                                    rows="3" required></textarea>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" name="entregar_material" class="btn btn-success">Entregar
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    </div>
+                <div
+                  class="tab-pane fade"
+                  id="inventario_pr"
+                  role="tabpanel"
+                  aria-labelledby="inventario_pr-tab"
+                >
+                  <div>
+                    <h1>Inventario Prestado</h1>
+                  </div>
+                  <hr />
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped table-hover mb-0 c_table"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Elemento</th>
+                          <th>Cantidad</th>
+                          <th>Descripcion</th>
+                          <th>Observaciones</th>
+                          <th>Tipo de Elemento</th>
+                          <th>Categoria</th>
+                          <th>Imagen</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for prestados in prestados %}
+                        <tr>
+                          <td>{{prestados[13]}}</td>
+                          <td>{{prestados[3]}}</td>
+                          <td>{{prestados[14]}}</td>
+                          <td>{{prestados[11]}}</td>
+                          <td>{{prestados[17]}}</td>
+                          <td>{{prestados[19]}}</td>
+                          <td>
+                            <a
+                              href="/ver_archivo/inventario/{{prestados[18]}}"
+                              target="_blank"
+                              ><button
+                                type="button"
+                                class="btn btn-primary btn-sm btn-animated btn-animated-y"
+                              >
+                                <span class="btn-inner--visible"
+                                  >Ver Imagen</span
+                                >
+                                <span class="btn-inner--hidden"
+                                  ><i class="fa fa-eye"></i
+                                ></span>
+                              </button>
+                            </a>
+                          </td>
+                        </tr>
+                        {%endfor%}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-<!--Modal deliver Tool-->
-<div class="modal fade" id="deliverTool" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label for="fecha_inicio_curso"><strong>Entrega de Herramientas</strong></label>
-            </div>
-            <form action="" method="POST">
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="herramienta_prestada"><strong>Herramientas</strong></label>
-                                <select class="selectpicker" name="herramienta_prestada"
-                                    title="Selecciona una herramienta" data-live-search="true"
-                                    data-live-search-placeholder="Buscar ...">
-                                    <option value="" selected disabled>Selecciona una herramienta</option>
-                                    {% for herramientas in herramientas_prestadas %}
-                                    <option value="{{herramientas[0]}}">
-                                        Responsable: {{herramientas[13]}} {{herramientas[14]}}, Herramienta:
-                                        {{herramientas[17]}}, Fecha:{{herramientas[4]}}
-                                    </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="cantidad_herramienta"><strong>Cantidad entregada:</strong></label>
-                                <input type="number" min=0 class="form-control" name="cantidad_herramienta"
-                                    id="cantidad_herramienta" value="" placeholder="Cantidad entregada">
-                            </div>
-                            <div class="mb-3">
-                                <label for="observaciones_tool" class="form-label">Observaciones:</label>
-                                <textarea class="form-control" name="observaciones_tool" id="observaciones_tool"
-                                    rows="3" required></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" name="entregar_tool" class="btn btn-success">Entregar
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    </div>
+                <div
+                  class="tab-pane fade"
+                  id="solicitus_prestamo"
+                  role="tabpanel"
+                  aria-labelledby="solicitus_prestamo-tab"
+                >
+                  <div>
+                    <h1>Solicitar Prestamo</h1>
+                  </div>
+                  <hr />
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered table-striped table-hover js-basic-example dataTable"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Elemento</th>
+                          <th>Cantidad</th>
+                          <th>Descripcion</th>
+                          <th>Tipo de Elemento</th>
+                          <th>Categoria</th>
+                          <th>Imagen</th>
+                          <th>Accion</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for inventario in inventario %}
+                        <tr>
+                          <td>{{inventario[1]}}</td>
+                          <td>{{inventario[3]}}</td>
+                          <td>{{inventario[2]}}</td>
+                          <td>{{inventario[5]}}</td>
+                          <td>{{inventario[7]}}</td>
+                          <td>
+                            <a
+                              href="/ver_archivo/inventario/{{inventario[6]}}"
+                              target="_blank"
+                              ><button
+                                type="button"
+                                class="btn btn-primary btn-sm btn-animated btn-animated-y"
+                              >
+                                <span class="btn-inner--visible"
+                                  >Ver Imagen</span
+                                >
+                                <span class="btn-inner--hidden"
+                                  ><i class="fa fa-eye"></i
+                                ></span>
+                              </button>
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href="/inventario/solicitarElemento/{{inventario[0]}}"
+                              ><button class="btn btn-primary btn-md">
+                                <i class="fa fa-tag"></i></button
+                            ></a>
+                          </td>
+                        </tr>
+                        {%endfor%}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-<!-- Modal add Tool-->
-<div class="modal fade" id="agregarHerramienta" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label><strong>Agregar Herramienta</strong></label>
+              </div>
             </div>
-            <form action="" method="POST" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="foto"><strong>Imagen de la herramienta:</strong></label>
-                                <div>
-                                    <input type="file" name="imagen_tool" id="imagen_tool" class="custom-input-file" />
-                                    <label for="imagen_tool">
-                                        <i class="fa fa-upload"></i>
-                                        <span>Selecciona una imagen…</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="nombre_herramienta"><strong>Nombre de la
-                                        herramienta:</strong></label>
-                                <input type="text" class="form-control" name="nombre_herramienta"
-                                    id="nombre_herramienta" value="" placeholder="Nombre de la herramienta">
-                            </div>
-                            <div class="mb-3">
-                                <label for="ubicacion_tool" class="form-label">Ubicacion:</label>
-                                <textarea class="form-control" name="ubicacion_tool" id="ubicacion_tool" rows="3"
-                                    required></textarea>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="cantidad_tool"><strong>Cantidad:</strong></label>
-                                <input type="number" min="0" class="form-control" name="cantidad_tool"
-                                    id="cantidad_tool" value="" placeholder="Cantidad">
-                            </div>
-                            <div class="mb-3">
-                                <label for="descripcion_tool" class="form-label">Descripcion:</label>
-                                <textarea class="form-control" name="descripcion_tool" id="descripcion_tool" rows="3"
-                                    required></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" name="agregar_tool" class="btn btn-success">Agregar</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
-            </form>
-
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-
-<div class="modal fade" id="eliminarHerramienta" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label for="fecha_inicio_curso"><strong>Opciones de Cursos</strong></label>
-            </div>
-            <form action="" method="POST">
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="imagen_herramienta"><strong>Herramientas</strong></label>
-                                <select class="selectpicker" name="imagen_herramienta" title="Selecciona un curso"
-                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
-                                    <option value="" selected disabled>Selecciona una herramienta</option>
-                                    {% for herramientas in herramientas %}
-                                    <option value="{{herramientas[5]}}">{{ herramientas[1] }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" name="eliminar_tool" class="btn btn-danger">Eliminar
-                                <i class="fa fa-trash"></i></button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-<!-- Modal add Material-->
-<div class="modal fade" id="agregarMaterial" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label><strong>Agregar Material</strong></label>
-            </div>
-            <form action="" method="POST" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="foto"><strong>Imagen del material:</strong></label>
-                                <div>
-                                    <input type="file" name="imagen_material" id="imagen_material"
-                                        class="custom-input-file" />
-                                    <label for="imagen_material">
-                                        <i class="fa fa-upload"></i>
-                                        <span>Selecciona una imagen…</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="nombre_material"><strong>Nombre de la material:</strong></label>
-                                <input type="text" class="form-control" name="nombre_material" id="nombre_material"
-                                    value="" placeholder="Nombre del material">
-                            </div>
-                            <div class="mb-3">
-                                <label for="ubicacion_material" class="form-label">Ubicacion:</label>
-                                <textarea class="form-control" name="ubicacion_material" id="ubicacion_material"
-                                    rows="3" required></textarea>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="cantidad_material"><strong>Cantidad:</strong></label>
-                                <input type="number" min="0" class="form-control" name="cantidad_material"
-                                    id="cantidad_material" value="" placeholder="Cantidad">
-                            </div>
-                            <div class="form-group">
-                                <label for="tipo_material"><strong>Tipo de Material</strong></label>
-                                <select class="selectpicker" name="tipo_material" title="Selecciona un tipo"
-                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
-                                    <option value="" selected disabled>Selecciona una opcion</option>
-                                    <option value="Consumible">Consumible</option>
-                                    <option value="No consumible">No consumible</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="descripcion_material" class="form-label">Descripcion:</label>
-                                <textarea class="form-control" name="descripcion_material" id="descripcion_material"
-                                    rows="3" required></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" name="agregar_material" class="btn btn-success">Agregar</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="eliminarMaterial" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <label for="fecha_inicio_curso"><strong>Opciones de Cursos</strong></label>
-            </div>
-            <form action="" method="POST">
-                <div class="modal-body">
-                    <div class="row clearfix">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="imagen_material"><strong>Materiales</strong></label>
-                                <select class="selectpicker" name="imagen_material" title="Selecciona un material"
-                                    data-live-search="true" data-live-search-placeholder="Buscar ...">
-                                    <option value="" selected disabled>Selecciona un material</option>
-                                    {% for materiales in materiales %}
-                                    <option value="{{materiales[6]}}">{{ materiales[1] }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" name="eliminar_material" class="btn btn-danger">Eliminar
-                                <i class="fa fa-trash"></i></button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-</div>
-
 {% endblock %}

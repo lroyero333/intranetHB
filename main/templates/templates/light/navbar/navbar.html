@@ -108,40 +108,7 @@
             </li>
             <li class="breadcrumb-item active">Eliminar proyectos</li>
 
-            {% endif %} {% set url_parts = request.path.split('/') %} {% if
-            url_parts[1] == 'curso' %}
-            <li class="breadcrumb-item">
-              <a href="/cursos">Cursos</a>
-            </li>
-            {% if url_parts[2] == 'editarCurso' %}
-            <li class="breadcrumb-item">
-              <a href="/cursos/lista/editar">Lista de Cursos</a>
-            </li>
-            {% if url_parts[3] is defined %}
-            <li class="breadcrumb-item active">{{ url_parts[3] }}</li>
-            {% endif %} {% endif %} {% endif %} {% set url_partsN =
-            request.path.split('/') %} {% if url_partsN[1] == 'noticia' %}
-            <li class="breadcrumb-item">
-              <a href="/noticia">Noticias</a>
-            </li>
-            {% if url_partsN[2] == 'editarNoticia' %}
-            <li class="breadcrumb-item">
-              <a href="/noticias/lista/editar">Lista de Noticias</a>
-            </li>
-            {% if url_partsN[3] is defined %}
-            <li class="breadcrumb-item active">{{ url_partsN[3] }}</li>
-            {% endif %} {% endif %} {% endif %} {% set url_partsA =
-            request.path.split('/') %} {% if url_partsA[1] == 'aviso' %}
-            <li class="breadcrumb-item">
-              <a href="/aviso">Aviso</a>
-            </li>
-            {% if url_partsA[2] == 'editarAviso' %}
-            <li class="breadcrumb-item">
-              <a href="/avisos/lista/editar">Lista de Avisos</a>
-            </li>
-            {% if url_partsA[3] is defined %}
-            <li class="breadcrumb-item active">{{ url_partsA[3] }}</li>
-            {% endif %} {% endif %} {% endif %}
+            {% endif %}
           </ul>
         </li>
       </ul>
