@@ -1,4 +1,5 @@
 import os
+import uuid
 
 import bcrypt
 from flask import (Flask, flash, jsonify, redirect, render_template, request,
@@ -61,4 +62,6 @@ def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
         solicitudes_con_tiempo.append(solicitud_con_tiempo)
     return solicitudes_con_tiempo
 
+def generarID():
+    return str(uuid.uuid4())
 from main.routes import *

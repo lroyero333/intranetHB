@@ -5,6 +5,32 @@
     <div class="page">
 
         <div class="container-fluid">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+                <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
+                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% if category == 'correcto' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+                <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
+                <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
             <div class="row clearfix">
                 <div class="col-md-12">
 
@@ -19,14 +45,16 @@
                                 <h5 class="mb-0"><a target="_blank"
                                         href="javascript:void(0);">{{solicitudes_certificado[2]}}</a></h5>
                                 <small>Fecha y hora de solicitud: {{solicitudes_certificado[4]}}</small>
-                                <p class="m-t-10">{{solicitudes_certificado[12]}} {{solicitudes_certificado[13]}} ha
+                                <p class="m-t-10">{{solicitudes_certificado[10]}} {{solicitudes_certificado[11]}} ha
                                     solicitado un certificado de {{solicitudes_certificado[1]}} con el nombre de
-                                    {{solicitudes_certificado[2]}} con el motivo: {{solicitudes_certificado[11]}} </p>
+                                    {{solicitudes_certificado[2]}} con el motivo: {{solicitudes_certificado[9]}} </p>
 
                                 <form action="" method="POST">
                                     <div class="mb-3">
                                         <input type="hidden" name="user_certificate"
                                             value="{{solicitudes_certificado[3]}}">
+                                            <input type="hidden" name="id_certificate"
+                                            value="{{solicitudes_certificado[0]}}">
                                         <label for="comentarioSolicitudCertificado"
                                             class="form-label">Comentario:</label>
                                         <textarea class="form-control" name="comentarioSolicitudCertificado"
@@ -57,12 +85,12 @@
                                 <h5 class="mb-0"><a target="_blank"
                                         href="javascript:void(0);">{{solicitudes_nomina[1]}}</a></h5>
                                 <small>Fecha y hora de solicitud: {{solicitudes_nomina[3]}}</small>
-                                <p class="m-t-10">{{solicitudes_nomina[11]}} {{solicitudes_nomina[12]}} ha solicitado
-                                    una
-                                    nomina con el nombre de {{solicitudes_nomina[1]}}.</p>
+                                <p class="m-t-10">{{solicitudes_nomina[9]}} {{solicitudes_nomina[10]}} ha solicitado
+                                    una nomina con el nombre de {{solicitudes_nomina[1]}}.</p>
                                 <form action="" method="POST">
                                     <div class="mb-3">
                                         <input type="hidden" name="user_nomina" value="{{solicitudes_nomina[2]}}">
+                                        <input type="hidden" name="id_nomina" value="{{solicitudes_nomina[0]}}">
                                         <label for="comentarioSolicitudNomina" class="form-label">Comentario:</label>
                                         <textarea class="form-control" name="comentarioSolicitudNomina"
                                             id="comentarioSolicitudNomina" rows="3" required></textarea>
@@ -94,14 +122,14 @@
                                 <p class="m-t-10"><strong>{{solicitudes_va_extemporaneas[13]}}
                                         {{solicitudes_va_extemporaneas[14]}}</strong> solicitó vacaciones extemporales
                                     con fecha de inicio el dia
-                                    <strong>{{solicitudes_va_extemporaneas[2]}}</strong> y fecha final el dia
-                                    <strong>{{solicitudes_va_extemporaneas[3]}}</strong> con un total de
+                                    <strong>{{solicitudes_va_extemporaneas[11]}}</strong> y fecha final el dia
+                                    <strong>{{solicitudes_va_extemporaneas[12]}}</strong> con un total de
                                     <strong>{{solicitudes_va_extemporaneas[4]}}</strong> dias.
                                 </p>
                                 {% if solicitudes_va_extemporaneas[8] == "Pendiente" %}
                                 <hr>
                                 <form
-                                    action="/allNotificaciones/{{solicitudes_va_extemporaneas[12]}}/{{solicitudes_va_extemporaneas[0]}}"
+                                    action=""
                                     method="POST">
                                     <div class="form-group">
                                         <label for="tipo_vacaciones"><strong>Tipo de vacaciones</strong></label>
@@ -113,6 +141,7 @@
                                             <option value="No Remunerado">No Remunerado</option>
                                         </select>
                                     </div>
+                                    <input type="hidden" value="{{solicitudes_va_extemporaneas[10]}}" name="user_vacaciones">
                                     <div class="mb-3">
                                         <label for="comentarioSolicitudVacaciones"
                                             class="form-label">Comentario:</label>
@@ -153,14 +182,14 @@
                                 <p class="m-t-10"><strong>{{solicitudes_permiso[15]}}
                                         {{solicitudes_permiso[16]}}</strong> solicitó un permiso
                                     con fecha de inicio el dia
-                                    <strong>{{solicitudes_permiso[1]}}</strong> y fecha final el dia
-                                    <strong>{{solicitudes_permiso[2]}}</strong> con un total de
-                                    <strong>{{solicitudes_permiso[12]}}</strong> por el motivo de:
-                                    {{solicitudes_permiso[14]}}.
+                                    <strong>{{solicitudes_permiso[13]}}</strong> y fecha final el dia
+                                    <strong>{{solicitudes_permiso[14]}}</strong> con un total de
+                                    <strong>{{solicitudes_permiso[11]}}</strong> por el motivo de:
+                                    {{solicitudes_permiso[12]}}.
                                 </p>
                                 {% if solicitudes_permiso[8] == "Pendiente" %}
                                 <hr>
-                                <form action="/allNotificaciones/{{solicitudes_permiso[13]}}/{{solicitudes_permiso[0]}}"
+                                <form action=""
                                     method="POST">
                                     <div class="modal-body">
                                         <div class="row clearfix">
@@ -249,6 +278,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <input type="hidden" value="{{solicitudes_permiso[10]}}" name="user_permiso">
                                         <div class="mb-3">
                                             <label for="comentarioSolicitudRecuperar"
                                                 class="form-label">Observaciones:</label>
@@ -280,111 +310,43 @@
                                 </form>
                             </div>
 
-                            <!--Tools NOTIFICATION-->
-                            {% elif tipo_solicitud == "herramienta" %}
+                            <!--INVENTARIO NOTIFICATION-->
+                            {% elif tipo_solicitud == "Inventario" %}
                             <div class="body">
                                 <h5 class="mb-0"><a target="_blank" href="javascript:void(0);">Solicitud de
-                                        Herramienta</a>
+                                        Inventario</a>
                                 </h5>
                                 <small><strong> Fecha y hora de solicitud:</strong>
-                                    {{solicitudes_tool[7]}}</small>
-                                <p class="m-t-10"><strong>{{solicitudes_tool[13]}}
-                                        {{solicitudes_tool[14]}}</strong> solicitó el prestamo de una herramienta el dia
-                                    <strong>{{solicitudes_tool[7]}}</strong>.
+                                    {{solicitudes_inventario[7]}}</small>
+                                <p class="m-t-10"><strong>{{solicitudes_inventario[12]}}
+                                        {{solicitudes_inventario[13]}}</strong> solicitó el prestamo o uso de un material.
                                 </p>
                                 <h6>Informacion del prestamo:</h6>
                                 <ul>
                                     <li>
-                                        <strong>Nombre:</strong> {{solicitudes_tool[17]}}
+                                        <strong>Nombre:</strong> {{solicitudes_inventario[16]}}
                                     </li>
                                     <li>
-                                        <strong>Cantidad solicitada:</strong> {{solicitudes_tool[3]}}
+                                        <strong>Cantidad solicitada:</strong> {{solicitudes_inventario[3]}}
                                     </li>
                                     <li>
-                                        <strong>Cantidad disponible:</strong> {{solicitudes_tool[18]}}
+                                        <strong>Cantidad disponible:</strong> {{solicitudes_inventario[18]}}
                                     </li>
                                     <li>
-                                        <strong>Ubicacion:</strong> {{solicitudes_tool[19]}}
+                                        <strong>Categoria:</strong> {{solicitudes_inventario[22]}}
                                     </li>
                                     <li>
-                                        <strong>Imagen:</strong> <a
-                                            href="/ver_archivo/Herramienta/{{solicitudes_tool[21]}}"
-                                            target="_blank"><button type="button"
-                                                class="btn btn-primary btn-sm btn-animated btn-animated-y">
-                                                <span class="btn-inner--visible">Ver Imagen</span>
-                                                <span class="btn-inner--hidden"><i class="fa fa-eye"></i></span>
-                                            </button></a>
+                                        <strong>Ubicacion:</strong> {{solicitudes_inventario[19]}}
                                     </li>
                                     <li>
-                                        <strong>Motivo:</strong> {{solicitudes_tool[11]}}
-                                    </li>
-                                </ul>
-
-                                {% if solicitudes_tool[9] == "Pendiente" %}
-                                <hr>
-                                <form action="" method="POST">
-
-                                    <div class="mb-3">
-                                        <label for="comentarioSolicitudTool" class="form-label">Observaciones:</label>
-                                        <textarea class="form-control" name="comentarioSolicitudTool"
-                                            id="comentarioSolicitudTool" rows="3" required></textarea>
-                                    </div>
-                                    {%endif%}
-                                    {% if solicitudes_tool[9] == "Aceptado" %}
-                                    <span class="badge badge-lg badge-pill badge-success text-uppercase">Aceptado</span>
-
-                                    {% elif solicitudes_tool[9] == "Rechazado" %}
-                                    <span class="badge badge-lg badge-pill badge-danger text-uppercase">Rechazado</span>
-
-                                    {% elif solicitudes_tool[9] == "Pendiente" %}
-                                    <span
-                                        class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
-
-                                    <div class="modal-footer">
-                                        <button class="btn btn-success" type="submit" id="aceptarSolicitudTool"
-                                            name="aceptarSolicitudTool" value="{{solicitudes_tool[0]}}">Aceptar</button>
-                                        <button class="btn btn-danger" name="rechazarSolicitudTool"
-                                            value="{{solicitudes_tool[0]}}">Rechazar</button>
-                                    </div>
-                                    {%endif%}
-                            </div>
-
-                            <!--MATERIAL NOTIFICATION-->
-                            {% elif tipo_solicitud == "material" %}
-                            <div class="body">
-                                <h5 class="mb-0"><a target="_blank" href="javascript:void(0);">Solicitud de
-                                        Material</a>
-                                </h5>
-                                <small><strong> Fecha y hora de solicitud:</strong>
-                                    {{solicitudes_material[7]}}</small>
-                                <p class="m-t-10"><strong>{{solicitudes_material[12]}}
-                                        {{solicitudes_material[13]}}</strong> solicitó el prestamo o uso de un material
-                                    el dia
-                                    <strong>{{solicitudes_material[7]}}</strong>.
-                                </p>
-                                <h6>Informacion del prestamo:</h6>
-                                <ul>
-                                    <li>
-                                        <strong>Nombre:</strong> {{solicitudes_material[16]}}
+                                        <strong>Tipo de material:</strong> {{solicitudes_inventario[20]}}
                                     </li>
                                     <li>
-                                        <strong>Cantidad solicitada:</strong> {{solicitudes_material[3]}}
-                                    </li>
-                                    <li>
-                                        <strong>Cantidad disponible:</strong> {{solicitudes_material[17]}}
-                                    </li>
-                                    <li>
-                                        <strong>Ubicacion:</strong> {{solicitudes_material[18]}}
-                                    </li>
-                                    <li>
-                                        <strong>Tipo de material:</strong> {{solicitudes_material[19]}}
-                                    </li>
-                                    <li>
-                                        <strong>Descripcion del Material:</strong> {{solicitudes_material[20]}}
+                                        <strong>Descripcion del Material:</strong> {{solicitudes_inventario[17]}}
                                     </li>
                                     <li>
                                         <strong>Imagen:</strong> <a
-                                            href="/ver_archivo/Material/{{solicitudes_material[21]}}"
+                                            href="/ver_archivo/inventario/{{solicitudes_inventario[21]}}"
                                             target="_blank"><button type="button"
                                                 class="btn btn-primary btn-sm btn-animated btn-animated-y">
                                                 <span class="btn-inner--visible">Ver Imagen</span>
@@ -393,42 +355,43 @@
                                     </li>
 
                                     <li>
-                                        <strong>Motivo:</strong> {{solicitudes_material[11]}}
+                                        <strong>Motivo:</strong> {{solicitudes_inventario[10]}}
                                     </li>
                                 </ul>
 
-                                {% if solicitudes_material[8] == "Pendiente" %}
+                                {% if solicitudes_inventario[9] == "Pendiente" %}
                                 <hr>
                                 <form action="" method="POST">
 
                                     <div class="mb-3">
-                                        <label for="comentarioSolicitudMaterial"
+                                        <label for="comentarioSolicitudInventario"
                                             class="form-label">Observaciones:</label>
-                                        <textarea class="form-control" name="comentarioSolicitudMaterial"
-                                            id="comentarioSolicitudTool" rows="3" required></textarea>
+                                        <textarea class="form-control" name="comentarioSolicitudInventario"
+                                            id="comentarioSolicitudInventario" rows="3" required></textarea>
                                     </div>
                                     {%endif%}
 
-                                    {% if solicitudes_material[8] == "Aceptado" %}
+                                    {% if solicitudes_inventario[9] == "Aceptado" %}
                                     <span class="badge badge-lg badge-pill badge-success text-uppercase">Aceptado</span>
 
-                                    {% elif solicitudes_material[8] == "Rechazado" %}
+                                    {% elif solicitudes_inventario[9] == "Rechazado" %}
                                     <span class="badge badge-lg badge-pill badge-danger text-uppercase">Rechazado</span>
 
-                                    {% elif solicitudes_material[8] == "Pendiente" %}
+                                    {% elif solicitudes_inventario[9] == "Pendiente" %}
                                     <span
                                         class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
                                     <div class="modal-footer">
-                                        <button class="btn btn-success" type="submit" id="aceptarSolicitudMaterial"
-                                            name="aceptarSolicitudMaterial"
-                                            value="{{solicitudes_material[0]}}">Aceptar</button>
+                                        <input type="hidden" value="{{solicitudes_inventario[5]}}" name="user_inventario">
+                                        <button class="btn btn-success" type="submit" id="aceptarSolicitudInventario"
+                                            name="aceptarSolicitudInventario"
+                                            value="{{solicitudes_inventario[0]}}">Aceptar</button>
 
-                                        <button class="btn btn-danger" name="rechazarSolicitudMaterial"
-                                            value="{{solicitudes_material[0]}}">Rechazar</button>
+                                        <button class="btn btn-danger" name="rechazarSolicitudInventario"
+                                            value="{{solicitudes_inventario[0]}}">Rechazar</button>
                                     </div>
                                     {%endif%}
                             </div>
-                            </form>
+                                </form>
                         </div>
                         {%endif%}
                     </div>

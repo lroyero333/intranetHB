@@ -8,9 +8,9 @@ from flask import jsonify
 from pymysql import IntegrityError
 from werkzeug.utils import secure_filename
 
-from main.run import (agregar_tiempo_transcurrido, app, bcrypt, flash, jsonify,
-                      mysql, redirect, render_template, request, session,
-                      url_for)
+from main.run import (agregar_tiempo_transcurrido, app, bcrypt, flash,
+                      generarID, jsonify, mysql, redirect, render_template,
+                      request, session, url_for)
 
 conexion = mysql.connect()
 cursor = conexion.cursor()
@@ -36,8 +36,8 @@ def crearAviso():
             descripcion = request.form['descripcion']
             fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-            query = "INSERT INTO avisos (titulo_aviso, usuario_publica, fecha_publicacion, descripcion) VALUES (%s,%s,%s, %s)"
-            params = [nombre_aviso, id_usuario_fk, fecha_publicacion, descripcion]
+            query = "INSERT INTO avisos (id_aviso,titulo_aviso, usuario_publica, fecha_publicacion, descripcion) VALUES (%s,%s,%s,%s, %s)"
+            params = [generarID(),nombre_aviso, id_usuario_fk, fecha_publicacion, descripcion]
 
             cursor.execute(query, params)
             conexion.commit()
@@ -55,7 +55,7 @@ def listaavisoEditar():
             return redirect(f"/aviso/editarAviso/{aviso_id}")
     cursor.execute("SELECT * FROM avisos")
     avisos = cursor.fetchall()
-    return render_template('calendario/templates/avisos/listaEditaravisos.html',avisos=avisos)
+    return render_template('calendario/templates/avisos/listaEditarAvisos.html',avisos=avisos)
 
 
 @app.route('/avisos/lista/eliminar', methods=['GET', 'POST'])
@@ -70,7 +70,7 @@ def listaavisoEliminar():
             return redirect('/calendario')
     cursor.execute("SELECT * FROM avisos")
     avisos = cursor.fetchall()
-    return render_template('calendario/templates/avisos/listaEliminaravisos.html',avisos=avisos)
+    return render_template('calendario/templates/avisos/listaEliminarAvisos.html',avisos=avisos)
 
 @app.route('/aviso/editarAviso/<string:aviso_id>', methods=['GET', 'POST'])
 def editaviso(aviso_id):
@@ -98,4 +98,4 @@ def editaviso(aviso_id):
         flash('El aviso ha sido editado correctamente.', 'correcto')
         return redirect('/calendario')
     
-    return render_template('calendario/templates/avisos/editaraviso.html', aviso=aviso)
+    return render_template('calendario/templates/avisos/editarAviso.html', aviso=aviso)

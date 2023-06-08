@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Webpixels">
     <link rel="icon" href="{{ url_for('static', filename='images/isotipohb.svg') }}" type="image/x-icon">
-    <title>:: Human :: Bionics</title>
+    <title>:: Human :: Bionics ::</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/themify-icons/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/font-awesome.min.css') }}">
@@ -30,7 +30,10 @@
     <script src="{{ url_for('static', filename='js/mobiscroll.jquery.min.js') }}"></script>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/summernote/dist/summernote.min.css') }}"/>
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/jquery-datatable/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/jquery-scrollbar/css/jquery-scrollbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/highlight/css/highlight.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/demo.css') }}" rel="stylesheet">
 
 </head>
 
@@ -52,9 +55,14 @@
         <div class="left_sidebar">
             <nav class="sidebar">
                 <div class="user-info">
-                    <div class="image"><a href="/myProfile"><img
-                                src="{{ url_for('static', filename='images/users/' + g.usuario_base[2]) }}"
-                                alt="User"></a>
+                    <div class="image"><a href="/myProfile">
+                        {%if g.usuario_base is none %}
+                        <img src="{{ url_for('static', filename='images/users/userMale.png') }}"
+                                alt="User">
+                        {%else%}
+                        <img src="{{ url_for('static', filename='images/users/' + g.usuario_base[2]) }}"
+                                alt="User">
+                        {%endif%}</a>
                     </div>
                     <div class="detail mt-3">
 
@@ -76,7 +84,7 @@
                 <ul id="main-menu" class="metismenu">
                     <li class="g_heading">Cartelera</li>
                     <li {% if current_path == '/inicio' %} class="active"{% endif %}><a href="/inicio"><i class="ti-home"></i><span>General</span></a></li>
-                    <li><a href="/inicio"><i class="fa fa-calendar-o"></i><span>Mi cartelera</span></a></li>
+                    <li><a href="/miCartelera"><i class="fa fa-calendar-o"></i><span>Mi cartelera</span></a></li>
                     <li><a href="/avisos"><i class="ti-tablet"></i><span>Avisos</span></a></li>
                     <li><a href="/cursos"><i class="ti-layout"></i><span>Cursos</span></a></li>
                     <li><a href="/noticias"><i class="fa fa-hacker-news"></i><span>Noticias</span></a></li>
@@ -87,9 +95,7 @@
                                 class="ti-notepad"></i><span>Mis Tareas</span></a></li>
                     <li><a href="/proyectos"><i class="fa fa-folder"></i><span>Mis Proyectos</span></a></li>
                     <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Mi Inventario</span></a></li>
-                    <li><a {% if session["cargo"]==1 %} href="/nomina_certificados" {% endif %} {% if session["cargo"]
-                            !=1 %} href="/nomina_certificados/" {% endif %}><i
-                                class="fa fa-file"></i><span>Nómina / Certificados
+                    <li><a  href="/nomina_certificados/" ><i class="fa fa-file"></i><span>Nómina / Certificados
                                 </span></a></li>
                     
                     <li class="g_heading">Usuarios</li>
@@ -161,7 +167,8 @@
                         <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-folder-open
                             "></i><span>Gestión de Inventario</span></a>
                         <ul>
-                            <li><a href="/proyectos/lista/eliminar">Entregar Inventario Prestado</a></li>
+                            <li><a href="/inventario/listaEntregarInventario">Entregar Inventario Prestado</a></li>
+                            <li><a href="/inventario/listaReportarInventario">Reportar Inventario</a></li>
                         </ul>
                     </li>
                     {%else%}
@@ -216,8 +223,7 @@
     <script src="{{ url_for('static', filename='bundles/c3.bundle.js')}}"></script>
     <script src="{{ url_for('static', filename='js/pages/charts/c3.js')}}"></script>
     <script src="{{ url_for('static', filename='js/pages/todo-js.js')}}"></script>
-<script src="{{ url_for('static', filename='vendor/summernote/dist/summernote.js')}}"></script>
-
+    <script src="{{ url_for('static', filename='vendor/summernote/dist/summernote.js')}}"></script>
     <script>
         $('.undo').click(function () {
             $(this).closest('.alert').remove();

@@ -155,14 +155,16 @@
                             <h6
                               class="heading heading-sm strong-400 text-muted mb-4"
                             >
-                              {{datosCursos[11]}}
+                              {{datosCursos[13]}}
                             </h6>
                             <p class="card-text">
-                              {{datosCursos[7] | safe | truncate(500)}}
+                              {{datosCursos[8] | safe | truncate(500)}}
                             </p>
 
                             <br />
-                            <p class="card-text">{{datosCursos[6]}}</p>
+                            <p class="card-text">
+                              Ubicacion: {{datosCursos[6]}}
+                            </p>
                             <a
                               href="/cursos/{{datosCursos[0]}}"
                               class="btn btn-sm btn-primary"
@@ -172,19 +174,19 @@
                           <div class="card-footer">
                             <div class="row align-items-center">
                               <div class="col">
-                                {% if datosCursos[10] is none %}
+                                {% if datosCursos[11] is none %}
                                 <img
                                   src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
                                   class="avatar avatar-lg mr-3"
                                 />
                                 {% else %}
                                 <img
-                                  src="{{ url_for('static', filename='images/users/' + datosCursos[10]) }}"
+                                  src="{{ url_for('static', filename='images/users/' + datosCursos[12]) }}"
                                   class="avatar avatar-lg mr-3"
                                 />
                                 {%endif%}
                                 <span class="avatar-content"
-                                  >{{datosCursos[8]}} {{datosCursos[9]}}</span
+                                  >{{datosCursos[10]}} {{datosCursos[11]}}</span
                                 >
                               </div>
                               <div class="col text-right text-xs-right">
@@ -289,14 +291,16 @@
                             <h6
                               class="heading heading-sm strong-400 text-muted mb-4"
                             >
-                              {{datosCursos[11]}}
+                              {{datosCursos[13]}}
                             </h6>
                             <p class="card-text">
-                              {{datosCursos[7] | safe | truncate(500)}}
+                              {{datosCursos[8] | safe | truncate(500)}}
                             </p>
 
                             <br />
-                            <p class="card-text">{{datosCursos[6]}}</p>
+                            <p class="card-text">
+                              Ubicacion: {{datosCursos[6]}}
+                            </p>
                             <a
                               href="/cursos/{{datosCursos[0]}}"
                               class="btn btn-sm btn-primary"
@@ -313,12 +317,12 @@
                                 />
                                 {% else %}
                                 <img
-                                  src="{{ url_for('static', filename='images/users/' + datosCursos[10]) }}"
+                                  src="{{ url_for('static', filename='images/users/' + datosCursos[12]) }}"
                                   class="avatar avatar-lg mr-3"
                                 />
                                 {%endif%}
                                 <span class="avatar-content"
-                                  >{{datosCursos[8]}} {{datosCursos[9]}}</span
+                                  >{{datosCursos[10]}} {{datosCursos[11]}}</span
                                 >
                               </div>
                               <div class="col text-right text-xs-right">

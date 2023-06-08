@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 
 from main.routes import (app, bcrypt, mysql, redirect, render_template,
                          request, session, url_for)
-from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
+from main.run import (app, bcrypt, flash, generarID, jsonify, mysql, redirect,
                       render_template, request, session, stringAleatorio,
                       url_for)
 
@@ -67,8 +67,8 @@ def verCertificados(usuario_id):
 
             archivo_certificado.save(upload_path)
 
-            query = "INSERT INTO certificados (id_usuario_fk, nombre_certificado, usuario_sube_certificado, fecha_subida,archivo_certificado) VALUES (%s,%s,%s, %s, %s)"
-            params = [usuario_id, nombre_certificado,  usuario_sube_certificado,  fecha_subida, nuevoNombreCertificado]
+            query = "INSERT INTO certificados (id_certificado, id_usuario_fk, nombre_certificado, usuario_sube_certificado, fecha_subida,archivo_certificado) VALUES (%s,%s,%s,%s, %s, %s)"
+            params = [generarID(),usuario_id, nombre_certificado,  usuario_sube_certificado,  fecha_subida, nuevoNombreCertificado]
             cursor.execute(query, params)
             conexion.commit()
 
@@ -182,6 +182,8 @@ def verNominaCertificadosUsuario():
     certificado = cursor.fetchall()
     cursor.execute("SELECT nominas.*, general_users.Nombre AS nombre_sube, general_users.Apellido AS apellido_sube FROM nominas LEFT JOIN general_users ON nominas.usuario_sube_nomina = general_users.usuario WHERE id_usuario_fk = %s;", session["usuario"])
     nomina = cursor.fetchall()
+    cursor.execute('SELECT usuario FROM general_users WHERE id_cargo_fk = 1')
+    usuariosRH = cursor.fetchall()
     conexion.commit()
 
     if 'descargar_nomina'in request.form:
@@ -198,15 +200,25 @@ def verNominaCertificadosUsuario():
     if request.method == 'POST':
 
         if 'solicitar_certificado'in request.form:
+            print(generarID())
+            id_certificado=generarID()
             tipo_certificado = request.form['tipo_certificado']
             nombre_certificado=request.form['nombre_certificado']
             motivo_solicitud=request.form['motivo_solicitud']
             solicitante = session["usuario"]
+            tipo_notificacion='Certificado'
+            mensaje='Ha solicitado una nueva petición de Certificado'
             fecha_solicitud = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            query = "INSERT INTO solicitud_certificado (tipo_certificado, nombre_certificado, solicitante, fecha_solicitud ,motivo) VALUES (%s, %s,%s,%s,%s)"
-            params = [tipo_certificado, nombre_certificado, solicitante, fecha_solicitud, motivo_solicitud]
+
+            query = "INSERT INTO solicitud_certificado (id_solicitud,tipo_certificado, nombre_certificado, solicitante, fecha_solicitud ,motivo) VALUES (%s, %s, %s,%s,%s,%s)"
+            params = [id_certificado,tipo_certificado, nombre_certificado, solicitante, fecha_solicitud, motivo_solicitud]
             cursor.execute(query, params)
-            conexion.commit()
+
+            for usuariosRH in usuariosRH:
+                query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+                params = [generarID(),tipo_notificacion, usuariosRH[0], id_certificado, solicitante, mensaje, fecha_solicitud]
+                cursor.execute(query, params)
+                conexion.commit()
             flash('Solicitud de certificado realizada.', 'correcto')
             return redirect('/nomina_certificados/')
         
@@ -219,14 +231,21 @@ def verNominaCertificadosUsuario():
             return redirect('/nomina_certificados/')
         
         if 'solicitar_nomina'in request.form:
+            id_nomina=generarID()
+            mensaje='Ha solicitado una nueva petición de Nomina'
+            tipo_notificacion='Nomina'
             solicitante = session["usuario"]
             nombre_nomina=request.form['nombre_nomina']
             fecha_solicitud = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             motivo_solicitud=request.form['motivo_solicitud']
-            query = "INSERT INTO solicitud_nomina (nombre_nomina, solicitante, fecha_solicitud ,motivo_solicitud) VALUES (%s,%s,%s,%s)"
-            params = [nombre_nomina,solicitante, fecha_solicitud, motivo_solicitud]
+            query = "INSERT INTO solicitud_nomina (id_solicitud_nomina,nombre_nomina, solicitante, fecha_solicitud ,motivo_solicitud) VALUES (%s,%s,%s,%s,%s)"
+            params = [id_nomina ,nombre_nomina,solicitante, fecha_solicitud, motivo_solicitud]
             cursor.execute(query, params)
-            conexion.commit()
+            for usuariosRH in usuariosRH:
+                query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+                params = [generarID(),tipo_notificacion, usuariosRH[0], id_nomina, solicitante, mensaje, fecha_solicitud]
+                cursor.execute(query, params)
+                conexion.commit()
             flash('Solicitud de nomina realizada.', 'correcto')
             return redirect('/nomina_certificados/')
         
@@ -237,9 +256,9 @@ def verNominaCertificadosUsuario():
             flash('Solicitud de nomina cancelada.', 'correcto')
             return redirect('/nomina_certificados/')
         
-    cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.persona_resuelve_solicitud = general_users.usuario WHERE solicitante = %s ORDER BY fecha_solicitud DESC ;", session["usuario"])
+    cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.resuelto_por = general_users.usuario WHERE solicitante = %s ORDER BY fecha_solicitud DESC ;", session["usuario"])
     solicitudesCertificado = cursor.fetchall()
-    cursor.execute("SELECT solicitud_nomina.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_nomina LEFT JOIN general_users ON solicitud_nomina.persona_resuelve_solicitud = general_users.usuario WHERE solicitante = %s ORDER BY fecha_solicitud DESC ;", session["usuario"])
+    cursor.execute("SELECT solicitud_nomina.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_nomina LEFT JOIN general_users ON solicitud_nomina.resuelto_por = general_users.usuario WHERE solicitante = %s ORDER BY fecha_solicitud DESC ;", session["usuario"])
     solicitudesNomina = cursor.fetchall()
     conexion.commit()
 

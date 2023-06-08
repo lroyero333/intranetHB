@@ -1,0 +1,140 @@
+{% extends 'templates/light/base.html' %} {% block content %}
+<div class="main_content" id="main-content">
+  <div class="page">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="javascript:void(0);">
+        <h4>Reportar Inventario</h4>
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fa fa-align-justify"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto"></ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <!--Mensajes de alerta-->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %} {% if category ==
+      'error' %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+        <span class="alert-inner--text"
+          ><strong>Error</strong> {{ message }}!</span
+        >
+        <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endif %} {% if category == 'correcto' %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+        <span class="alert-inner--text"
+          ><strong>Correcto!</strong> {{ message }}!</span
+        >
+        <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="card planned_task">
+            <div class="header">
+              <h1>Lista de Elementos</h1>
+            </div>
+            <div class="body">
+              <div class="table-responsive">
+                <table
+                  class="table table-bordered table-striped table-hover js-basic-example dataTable"
+                >
+                  <thead>
+                    <tr>
+                      <th>Elemento</th>
+                      <th>Cantidad</th>
+                      <th>Descripcion</th>
+                      <th>Tipo de Elemento</th>
+                      <th>Categoria</th>
+                      <th>Imagen</th>
+                      <th>Accion</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>Elemento</th>
+                      <th>Cantidad</th>
+                      <th>Descripcion</th>
+                      <th>Tipo de Elemento</th>
+                      <th>Categoria</th>
+                      <th>Imagen</th>
+                      <th>Accion</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    {% for inventario in inventario %}
+                    <tr>
+                      <td>{{inventario[1]}}</td>
+                      <td>{{inventario[3]}}</td>
+                      <td>{{inventario[2]}}</td>
+                      <td>{{inventario[5]}}</td>
+                      <td>{{inventario[7]}}</td>
+                      <td>
+                        <a
+                          href="/ver_archivo/inventario/{{inventario[6]}}"
+                          target="_blank"
+                          ><button
+                            type="button"
+                            class="btn btn-primary btn-sm btn-animated btn-animated-y"
+                          >
+                            <span class="btn-inner--visible">Ver Imagen</span>
+                            <span class="btn-inner--hidden"
+                              ><i class="fa fa-eye"></i
+                            ></span>
+                          </button>
+                        </a>
+                      </td>
+                      <td>
+                        <form action="" method="POST">
+                          <button
+                            class="btn btn-primary btn-md"
+                            name="reportarElemento"
+                            value="{{inventario[0]}}"
+                          >
+                            <i class="fa fa-tag"></i>
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                    {%endfor%}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

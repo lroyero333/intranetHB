@@ -9,7 +9,7 @@ from flask import jsonify
 from pymysql import IntegrityError
 from werkzeug.utils import secure_filename
 
-from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
+from main.run import (app, bcrypt, flash, generarID, jsonify, mysql, redirect,
                       render_template, request, session, stringAleatorio,
                       url_for)
 
@@ -27,6 +27,8 @@ def calendario():
 def verVacaciones():
     if not 'login' in session:
         return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     cursor.execute("SELECT usuario, Nombre, Apellido,foto FROM general_users;")
     usuarios_vacaciones=cursor.fetchall()
     cursor.execute("SELECT vacaciones.*,DATE_FORMAT(fecha_inicio_vacaciones, '%d-%m-%Y') AS inicio_vacaciones,DATE_FORMAT(fecha_fin_vacaciones, '%d-%m-%Y') AS fin_vacaciones, general_users.Nombre, general_users.Apellido, general_users.foto FROM vacaciones LEFT JOIN general_users ON vacaciones.id_usuario = general_users.usuario ;")
@@ -34,6 +36,8 @@ def verVacaciones():
     
     cursor.execute("SELECT vacaciones_extemporaneas.*,DATE_FORMAT(fecha_inicio, '%d-%m-%Y') AS inicio_adelanto, DATE_FORMAT(fecha_fin, '%d-%m-%Y') AS fin_adelanto, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
     solicitudes_va_extemporaneas = cursor.fetchall()
+    cursor.execute('SELECT usuario FROM general_users WHERE id_cargo_fk = 1')
+    usuariosRH = cursor.fetchall()
     conexion.commit()
     
 
@@ -50,12 +54,11 @@ def verVacaciones():
         if resultado is not None:
             # El usuario ya existe
             
-            cursor.close()
             flash('El usuario ya tiene vacaciones asignadas','error')
             return render_template('calendario/templates/vacaciones/vacaciones.html', usuarios_vacaciones=usuarios_vacaciones,solicitudes_vacaciones=solicitudes_vacaciones)
         else:
-            query = "INSERT INTO vacaciones (tipo_vacaciones, fecha_inicio_vacaciones, fecha_fin_vacaciones, id_usuario ) VALUES (%s,%s, %s,%s)"
-            params = [tipo_vacaciones, fecha_inicio_vacaciones,fecha_fin_vacaciones, id_usuario]
+            query = "INSERT INTO vacaciones (id_vacaciones,tipo_vacaciones, fecha_inicio_vacaciones, fecha_fin_vacaciones, id_usuario ) VALUES (%s,%s,%s, %s,%s)"
+            params = [generarID() ,tipo_vacaciones, fecha_inicio_vacaciones,fecha_fin_vacaciones, id_usuario]
             cursor.execute(query, params)
             conexion.commit()
             flash('Vacaciones asignadas satisfactoriamente','correcto')
@@ -66,11 +69,19 @@ def verVacaciones():
         fecha_fin_extemporanea=request.form['fecha_fin_extemporanea']
         fecha_solicitud=datetime.now()
         estado_solicitud='Pendiente'
+        id_vacaciones_extemporaneas=generarID()
+        tipo_notificacion='Vacaciones'
+        mensaje='Ha solicitado una nueva petición de Vacaciones'
         
-        query = "INSERT INTO vacaciones_extemporaneas (fecha_inicio, fecha_fin, fecha_solicitud, estado_solicitud, id_usuario ) VALUES (%s,%s, %s,%s, %s)"
-        params = [fecha_inicio_extemporanea, fecha_fin_extemporanea,fecha_solicitud,estado_solicitud, id_usuario]
+        query = "INSERT INTO vacaciones_extemporaneas (id_vacaciones_extemporaneas, fecha_inicio, fecha_fin, fecha_solicitud, estado_solicitud, id_usuario ) VALUES (%s,%s,%s, %s,%s, %s)"
+        params = [id_vacaciones_extemporaneas ,fecha_inicio_extemporanea, fecha_fin_extemporanea,fecha_solicitud,estado_solicitud, id_usuario]
         cursor.execute(query, params)
-        conexion.commit()
+        for usuariosRH in usuariosRH:
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(),tipo_notificacion, usuariosRH[0], id_vacaciones_extemporaneas, id_usuario, mensaje, fecha_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+
         flash('Vacaciones programadas satisfactoriamente','correcto')
         
     if 'cancelar_programar_vacaciones' in request.form:
@@ -99,6 +110,9 @@ def verPermisos():
     conexion.commit()
     
     if 'agendar_permiso' in request.form:
+        mensaje='Ha solicitado una nueva petición de Permiso'
+        tipo_notificacion='Permiso'
+        id_permisos=generarID()
         id_usuario=session['usuario']
         inicio_dia_permiso=request.form['inicio_dia_permiso'] #2023-03-28
         inicio_hora_permiso=request.form['inicio_hora_permiso']#10:00 am
@@ -129,7 +143,6 @@ def verPermisos():
         hora_fin_manana = time(12, 30, 0)
         hora_inicio_tarde = time(14, 0, 0)
         hora_fin_tarde = time(18, 0, 0)
-
 
         if contar_sabados:
             print('Está activo')
@@ -180,10 +193,19 @@ def verPermisos():
         else:
             cantidad_horas=f"{horas_enteras} horas y {minutos_fraccion} minutos"
         
-        query = "INSERT INTO solicitud_permisos (fecha_inicio_permiso, fecha_fin_permiso, fecha_solicitud, horas_de_permiso, id_usuario, motivo_permiso ) VALUES (%s,%s, %s, %s, %s, %s)"
-        params = [inicio_permiso, fin_permiso,fecha_solicitud,cantidad_horas, id_usuario, motivo_permiso]
+        cursor.execute('SELECT usuario FROM general_users WHERE id_cargo_fk = 1')
+        usuariosRH = cursor.fetchall()
+
+        query = "INSERT INTO solicitud_permisos (id_permisos,fecha_inicio_permiso, fecha_fin_permiso, fecha_solicitud, horas_de_permiso, id_usuario, motivo_permiso ) VALUES (%s, %s,%s, %s, %s, %s, %s)"
+        params = [id_permisos, inicio_permiso, fin_permiso,fecha_solicitud,cantidad_horas, id_usuario, motivo_permiso]
         cursor.execute(query, params)
         conexion.commit()
+
+        for usuariosRH in usuariosRH:
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(),tipo_notificacion, usuariosRH[0], id_permisos, id_usuario, mensaje, fecha_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
 
         flash('Permiso solicitado satisfactoriamente','correcto')
         return redirect('/permisos')
@@ -220,27 +242,27 @@ def obtener_cursos():
 
     eventos_json = []
     for evento in eventos:
-        evento_json = {'title': evento[2], 'start': evento[3].strftime(
+        evento_json = {'title': evento[2], 'url':f'/cursos/{evento[0]}', 'start': evento[3].strftime(
             '%Y-%m-%d'), 'end': evento[4].strftime(
             '%Y-%m-%d'),  'location': evento[6], 'allDay': 'true', "className": 'bg-info'}
         eventos_json.append(evento_json)
     for vacaciones in vacaciones:
-        evento_json = {'title': 'Vacaciones '+ vacaciones[0], 'start': vacaciones[1].strftime(
+        evento_json = {'title': 'Vacaciones '+ vacaciones[0], 'url':'/vacaciones','start': vacaciones[1].strftime(
             '%Y-%m-%d'), 'end': vacaciones[2].strftime(
             '%Y-%m-%d'), 'allDay': 'true', "className": 'bg-success'}
         eventos_json.append(evento_json)
     for vacaciones_ex in vacaciones_ex:
-        evento_json = {'title': 'Vacaciones Extemporanea '+ vacaciones_ex[0], 'start': vacaciones_ex[1].strftime(
+        evento_json = {'title': 'Vacaciones Extemporanea '+ vacaciones_ex[0], 'url':'/vacaciones', 'start': vacaciones_ex[1].strftime(
             '%Y-%m-%d'), 'end': vacaciones_ex[2].strftime(
             '%Y-%m-%d'), 'allDay': 'true',  "backgroundColor": "#D0A9F5"}
         eventos_json.append(evento_json)
     for permisos in permisos:
-        evento_json = {'title': 'Permiso ', 'start': permisos[0].strftime(
+        evento_json = {'title': 'Permiso ', 'url':'/permisos','start': permisos[0].strftime(
             '%Y-%m-%d %H:%M:%S'), 'end': permisos[1].strftime(
             '%Y-%m-%d %H:%M:%S'), 'allDay': 'false', "backgroundColor": "#2D89DA"}
         eventos_json.append(evento_json)
     for permisos_recuperar in permisos_recuperar:
-        evento_json = {'title': 'Recuperar Permiso ', 'start': permisos_recuperar[0].strftime(
+        evento_json = {'title': 'Recuperar Permiso ', 'url':'/permisos','start': permisos_recuperar[0].strftime(
             '%Y-%m-%d %H:%M:%S'), 'end': permisos_recuperar[1].strftime(
             '%Y-%m-%d %H:%M:%S'), 'allDay': 'false', "backgroundColor": "#9B2DDA"}
         eventos_json.append(evento_json)

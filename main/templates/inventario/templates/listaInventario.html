@@ -34,37 +34,35 @@
                           </select>
                         </div>
                       </div>
-                      <div class="modal-footer">
-                        <form action="" method="POST">
-                          <input
-                            type="hidden"
-                            name="inventario_id"
-                            value="{{ inventario[0] }}"
-                          />
-                          <button
-                            type="submit"
-                            name="editar_inventario"
-                            value="{{ inventario[0] }}"
-                            class="btn btn-primary"
-                          >
-                            Editar
-                          </button>
-                          <button
-                            type="submit"
-                            name="borrar_inventario"
-                            value="{{ inventario[0] }}"
-                            class="btn btn-danger"
-                          >
-                            Eliminar <i class="fa fa-trash"></i>
-                          </button>
-                          <a
-                            href="javascript:history.go(-1)"
-                            class="btn btn-secondary"
-                            ><i class="fa fa-arrow-left"></i>
-                            <span>Volver</span></a
-                          >
-                        </form>
-                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <input
+                        type="hidden"
+                        name="inventario_id"
+                        value="{{ inventario[0] }}"
+                      />
+                      <button
+                        type="submit"
+                        name="editar_inventario"
+                        value="{{ inventario[0] }}"
+                        class="btn btn-primary"
+                      >
+                        Editar
+                      </button>
+
+                      <button
+                        type="submit"
+                        name="borrar_inventario"
+                        value="{{ inventario[0] }}"
+                        class="btn btn-danger"
+                      >
+                        Eliminar <i class="fa fa-trash"></i>
+                      </button>
+                      <a
+                        href="javascript:history.go(-1)"
+                        class="btn btn-secondary"
+                        ><i class="fa fa-arrow-left"></i> <span>Volver</span></a
+                      >
                     </div>
                   </div>
                 </form>

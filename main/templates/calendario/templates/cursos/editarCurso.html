@@ -84,6 +84,18 @@
                         </div>
                       </div>
                       <div class="col-12">
+                        <br />
+                        <div class="form-group">
+                          <label><strong>Descripcion corta</strong> </label>
+                          <textarea
+                            class="form-control summernote"
+                            name="descripcion_corta"
+                          >
+{{curso[8]}}</textarea
+                          >
+                        </div>
+                      </div>
+                      <div class="col-12">
                         <div class="form-group">
                           <label><strong>Descripcion</strong> </label>
                           <textarea
@@ -96,6 +108,21 @@
                           >
 {{curso[7]}}</textarea
                           >
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-group">
+                          <label for="horario_curso"
+                            ><strong>Horario:</strong></label
+                          >
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="horario_curso"
+                            id="horario_curso"
+                            value="{{curso[9]}}"
+                            placeholder="ejm. Lunea a Viernes de 6pm a 8pm"
+                          />
                         </div>
                       </div>
                       <div class="col-12">

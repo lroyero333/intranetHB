@@ -154,10 +154,17 @@
                           </td>
                           <td>
                             <a
-                              href="/inventario/herramienta/{{inventario_cargo[0]}}"
-                              ><button class="btn btn-primary btn-md">
-                                <i class="fa fa-tag"></i></button
-                            ></a>
+                              href="/inventario/reportarInventario/{{inventario_cargo[2]}}"
+                              ><button
+                                type="button"
+                                class="btn btn-primary btn-sm btn-animated btn-animated-y"
+                              >
+                                <span class="btn-inner--visible">Reportar</span>
+                                <span class="btn-inner--hidden"
+                                  ><i class="fa fa-eye"></i
+                                ></span>
+                              </button>
+                            </a>
                           </td>
                         </tr>
                         {%endif%} {%endfor%}
@@ -188,6 +195,7 @@
                           <th>Tipo de Elemento</th>
                           <th>Categoria</th>
                           <th>Imagen</th>
+                          <th>Reportar</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -210,6 +218,20 @@
                                 <span class="btn-inner--visible"
                                   >Ver Imagen</span
                                 >
+                                <span class="btn-inner--hidden"
+                                  ><i class="fa fa-eye"></i
+                                ></span>
+                              </button>
+                            </a>
+                          </td>
+                          <td>
+                            <a
+                              href="/inventario/reportarInventario/{{prestados[1]}}"
+                              ><button
+                                type="button"
+                                class="btn btn-primary btn-sm btn-animated btn-animated-y"
+                              >
+                                <span class="btn-inner--visible">Reportar</span>
                                 <span class="btn-inner--hidden"
                                   ><i class="fa fa-eye"></i
                                 ></span>

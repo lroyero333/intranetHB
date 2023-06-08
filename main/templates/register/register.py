@@ -1,4 +1,5 @@
-from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for
+from main.run import (app, bcrypt, mysql, redirect, render_template, request,
+                      url_for)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -35,7 +36,7 @@ def register():
             else:
                 # El usuario no existe, crear nueva entrada en la base de datos
 
-                sql="INSERT INTO `general_users` (`id`, `Nombre`, `Apellido`, `Correo`, `Usuario`, `Contrasena`) VALUES (NULL,%s,%s,%s,%s,%s);"
+                sql="INSERT INTO `general_users` (`Nombre`, `Apellido`, `Correo`, `Usuario`, `Contrasena`) VALUES (%s,%s,%s,%s,%s);"
 
                 datos_registro = (_fullname, _fulllastname, _email, _username, hashed_password)
                 cursor.execute(sql, datos_registro)

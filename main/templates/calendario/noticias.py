@@ -10,9 +10,9 @@ from werkzeug.utils import secure_filename
 
 from main.routes import (app, bcrypt, mysql, redirect, render_template,
                          request, session, url_for)
-from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
-                      render_template, request, session, stringAleatorio,
-                      url_for)
+from main.run import (agregar_tiempo_transcurrido, app, bcrypt, flash, jsonify,
+                      mysql, redirect, render_template, request, session,
+                      stringAleatorio, url_for)
 
 extensionesImagenes=['.jpg', '.jpeg', '.png']
 conexion = mysql.connect()
