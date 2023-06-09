@@ -1,13 +1,15 @@
 import datetime
+import json
 import os
 from random import sample
 
 from flask import send_file
-from main.routes import request, app,mysql,bcrypt,session,redirect,render_template,url_for
-import json
-from main.routes import request, app, mysql, bcrypt, session, redirect, render_template, url_for
-from main.run import app, request, bcrypt, mysql, redirect, render_template, url_for, session, jsonify, flash
 from werkzeug.utils import secure_filename
+
+from main.routes import (app, bcrypt, mysql, redirect, render_template,
+                         request, session, url_for)
+from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
+                      render_template, request, session, url_for)
 
 extensionesImagenes=['.jpg', '.jpeg', '.png']
 
@@ -144,7 +146,7 @@ def editEmpleados(usuario_id):
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT * FROM general_users WHERE usuario= %s", usuario_id)
-    datosUsuarios = cursor.fetchall()
+    datosUsuarios = cursor.fetchone()
     conexion.commit()
     if request.method == 'POST':
         foto = request.files['foto']
@@ -175,23 +177,23 @@ def editEmpleados(usuario_id):
         contrasena = request.form['contrasena']
 
         filename, file_extension = os.path.splitext(foto.filename)
-        if file_extension.lower() not in extensionesImagenes:
-            flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
-            return redirect(request.url)
-        else:
-            flash('Se ha agregado satisfactoriamente','correcto') 
-
+        
         # Actualizar los campos que no están vacíos
         query = "UPDATE general_users SET"
         params = []
 
         if foto:
+            if file_extension.lower() not in extensionesImagenes:
+                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+                return redirect(request.url)
+            else:
+                flash('Se ha agregado satisfactoriamente','correcto')
             basepath = os.path.dirname(__file__)
             filename = secure_filename(foto.filename)
             extension = os.path.splitext(filename)[1]
             nuevoNombreFoto = usuario_id+'Foto'+extension
             upload_path = os.path.join(
-            basepath, '..','..', 'static', 'images', 'users', nuevoNombreFoto)
+            basepath, app.root_path, 'static', 'images', 'users', nuevoNombreFoto)
             if not os.path.exists(os.path.dirname(upload_path)):
                 os.makedirs(os.path.dirname(upload_path))
             foto.save(upload_path)
@@ -278,14 +280,11 @@ def editEmpleados(usuario_id):
 
         # Eliminar la coma final de la consulta SQL
         query = query.rstrip(',')
-
         # Agregar la cláusula WHERE
         query += " WHERE usuario = %s"
         params.append(usuario_id)
-
         # Ejecutar la consulta SQL
         cursor.execute(query, params)
-
         # Confirmar los cambios en la base de datos
         conexion.commit()
 

@@ -7,7 +7,7 @@
         <div class="container">
             <h1 class="text-center">Información de Usuarios</h1>
             <div class="circle-image">
-                <img src="{{ url_for('static', filename='images/users/' + datosUsuarios[0][23]) }}" alt="Imagen de perfil">
+                <img src="{{ url_for('static', filename='images/users/' + datosUsuarios[23]) }}" alt="Imagen de perfil">
             </div>
             <br>
 
@@ -34,26 +34,26 @@
                                         <div class="form-group">
                                             <label for="Nombre"><strong>Primer nombre:</strong></label>
                                             <input type="text" class="form-control" name="Nombre" id="Nombre"
-                                                value="{{datosUsuarios[0][1] }}" placeholder="Primer Nombre">
+                                                value="{{datosUsuarios[1] }}" placeholder="Primer Nombre">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="segundo_nombre"><strong>Segundo nombre:</strong></label>
                                             <input type="text" class="form-control" name="segundo_nombre"
-                                                id="segundo_nombre" value="{{datosUsuarios[0][2] }}"
+                                                id="segundo_nombre" value="{{datosUsuarios[2] }}"
                                                 placeholder="Segundo Nombre">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="Apellido"><strong>Primer apellido:</strong></label>
                                             <input type="text" class="form-control" name="Apellido" id="Apellido"
-                                                value="{{datosUsuarios[0][3] }}" placeholder="Primer Apellido">
+                                                value="{{datosUsuarios[3] }}" placeholder="Primer Apellido">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="segundo_apellido"><strong>Segundo Apellido:</strong></label>
                                             <input type="text" class="form-control" name="segundo_apellido"
-                                                id="segundo_apellido" value="{{datosUsuarios[0][4] }}"
+                                                id="segundo_apellido" value="{{datosUsuarios[4] }}"
                                                 placeholder="Segundo Apellido">
                                         </div>
                                         <h6><strong>Genero:</strong></h6>
@@ -74,7 +74,7 @@
                                             </div>
                                             <input data-provide="datepicker" data-date-format="yyyy-mm-dd"
                                                 data-date-autoclose="true" class="form-control" name="Fecha_nacimiento"
-                                                id="Fecha_nacimiento" value="{{datosUsuarios[0][6] }}"
+                                                id="Fecha_nacimiento" value="{{datosUsuarios[6] }}"
                                                 placeholder="Fecha Nacimiento">
                                         </div>
                                     </div>
@@ -85,7 +85,7 @@
                                             <label for="correo"><strong>Correo:</strong></label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control" name="correo" id="correo"
-                                                    placeholder="Correo" value="{{datosUsuarios[0][7] }}"
+                                                    placeholder="Correo" value="{{datosUsuarios[7] }}"
                                                     aria-label="Enter your email" aria-describedby="basic-addon2">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text"
@@ -97,32 +97,32 @@
                                         <div class="form-group">
                                             <label for="identificacion"><strong>Identificación:</strong></label>
                                             <input type="text" class="form-control" name="identificacion"
-                                                id="identificacion" value="{{datosUsuarios[0][8] }}"
+                                                id="identificacion" value="{{datosUsuarios[8] }}"
                                                 placeholder="Identificación">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="direccion"><strong>Direccion:</strong></label>
                                             <input type="text" class="form-control" name="direccion" id="direccion"
-                                                value="{{datosUsuarios[0][9] }}" placeholder="Direccion">
+                                                value="{{datosUsuarios[9] }}" placeholder="Direccion">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="barrio"><strong>Barrio:</strong></label>
                                             <input type="text" class="form-control" name="barrio" id="barrio"
-                                                value="{{datosUsuarios[0][10] }}" placeholder="Barrio">
+                                                value="{{datosUsuarios[10] }}" placeholder="Barrio">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="ciudad"><strong>Ciudad:</strong></label>
                                             <input type="text" class="form-control" name="ciudad" id="ciudad"
-                                                value="{{datosUsuarios[0][11] }}" placeholder="Ciudad">
+                                                value="{{datosUsuarios[11] }}" placeholder="Ciudad">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="departamento"><strong>Departamento:</strong></label>
                                             <input type="text" class="form-control" name="departamento"
-                                                id="departamento" value="{{datosUsuarios[0][12] }}"
+                                                id="departamento" value="{{datosUsuarios[12] }}"
                                                 placeholder="Departamento">
                                         </div>
                                     </div>
@@ -133,29 +133,29 @@
                                         <div class="form-group">
                                             <label for="pais"><strong>Pais:</strong></label>
                                             <input type="text" class="form-control" name="pais" id="pais"
-                                                value="{{datosUsuarios[0][13] }}" placeholder="Pais">
+                                                value="{{datosUsuarios[13] }}" placeholder="Pais">
                                         </div>
                                         <div class="form-group">
                                             <label for="telefono"><strong>Teléfono:</strong></label>
                                             <input type="text" class="form-control" name="telefono" id="telefono"
-                                                value="{{datosUsuarios[0][14] }}" placeholder="Telefono">
+                                                value="{{datosUsuarios[14] }}" placeholder="Telefono">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="celular"><strong>Celular:</strong></label>
                                             <input type="text" class="form-control" name="celular" id="celular"
-                                                value="{{datosUsuarios[0][15] }}" placeholder="Celular">
+                                                value="{{datosUsuarios[15] }}" placeholder="Celular">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="habilidades"><strong>Habilidades:</strong></label>
                                             <input type="text" class="form-control" name="habilidades" id="habilidades"
-                                                value="{{datosUsuarios[0][16] }}" placeholder="Habilidades">
+                                                value="{{datosUsuarios[16] }}" placeholder="Habilidades">
                                         </div>
                                         <div class="form-group">
                                             <label for="profesion"><strong>Profesion:</strong></label>
                                             <select class="form-control" name="profesion" id="profesion"
-                                                value="{{datosUsuarios[0][17] }}">
+                                                value="{{datosUsuarios[17] }}">
                                                 <option value="">-- Seleccione la Profesion --</option>
                                                 <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
                                                 <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
@@ -169,7 +169,7 @@
                                         <div class="form-group">
                                             <label for="departamento_hb"><strong>Profesion:</strong></label>
                                             <select class="form-control" name="profesion" id="profesion"
-                                                value="{{datosUsuarios[0][29] }}">
+                                                value="{{datosUsuarios[29] }}">
                                                 <option value="">-- Seleccione la Profesion --</option>
                                                 <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
                                                 <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
@@ -183,7 +183,7 @@
                                         <div class="form-group">
                                             <label for="cargo"><strong>Cargo:</strong></label>
                                             <select class="form-control" name="cargo" id="cargo"
-                                                value="{{datosUsuarios[0][30] }}">
+                                                value="{{datosUsuarios[30] }}">
                                                 <option value="">-- Seleccione el cargo --</option>
                                                 <option value="0">CEO</option>
                                                 <option value="1">Recursos Humanos</option>
@@ -198,25 +198,25 @@
                                         <div class="form-group">
                                             <label for="institucion"><strong>Institucion:</strong></label>
                                             <input type="text" class="form-control" name="institucion" id="institucion"
-                                                value="{{datosUsuarios[0][19] }}" placeholder="Institucion">
+                                                value="{{datosUsuarios[19] }}" placeholder="Institucion">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="posgrado"><strong>Posgrado:</strong></label>
                                             <input type="text" class="form-control" name="posgrado" id="posgrado"
-                                                value="{{datosUsuarios[0][20] }}" placeholder="Posgrado">
+                                                value="{{datosUsuarios[20] }}" placeholder="Posgrado">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="entidad_salud"><strong>Entidad de salud:</strong></label>
                                             <input type="text" class="form-control" name="entidad_salud"
                                                 id="entidad_salud" placeholder="Entidad de salud"
-                                                value="{{datosUsuarios[0][21] }}">
+                                                value="{{datosUsuarios[21] }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
                                             <select class="form-control" name="tipo_sangre" id="tipo_sangre"
-                                                value="{{datosUsuarios[0][22] }}">
+                                                value="{{datosUsuarios[22] }}">
                                                 <option value="">-- Seleccione su tipo de sangre --</option>
                                                 <option value="A+">A+</option>
                                                 <option value="A-">A-</option>
@@ -233,13 +233,13 @@
                                             <label for="nombre_contacto"><strong>Nombre de contacto:</strong></label>
                                             <input type="text" class="form-control" name="nombre_contacto"
                                                 id="nombre_contacto" placeholder="Nombre de contacto"
-                                                value="{{datosUsuarios[0][24] }}">
+                                                value="{{datosUsuarios[24] }}">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="numero_contacto"><strong>Numero de contacto:</strong></label>
                                             <input type="text" class="form-control" name="numero_contacto"
-                                                id="numero_contacto" value="{{datosUsuarios[0][25] }}"
+                                                id="numero_contacto" value="{{datosUsuarios[25] }}"
                                                 placeholder="Numero de contacto">
                                         </div>
 

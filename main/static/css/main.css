@@ -14414,7 +14414,7 @@ textarea[resize="horizontal"] {
 .icon svg {
   font-size: 2.25rem;
 }
-
+/*
 .icon + .icon-text {
   padding-left: 1rem;
   width: calc(100% - $icon-size - 1);
@@ -14449,7 +14449,7 @@ textarea[resize="horizontal"] {
 .icon-sm + .icon-text {
   width: calc(100% - $icon-size-sm - 1);
 }
-
+*/
 .input-group-text {
   transition: all 0.2s ease-in-out;
 }
@@ -19735,4 +19735,20 @@ body *:hover::-webkit-scrollbar-thumb {
   font-size: 1rem;
   margin-left: 5px;
   font-weight: 600;
+}
+.image-containerNoticia {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* Proporción de aspecto 16:9 */
+  overflow: hidden;
+}
+
+.news-imageNoticia {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

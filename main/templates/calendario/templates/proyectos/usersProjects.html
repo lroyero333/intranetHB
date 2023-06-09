@@ -81,9 +81,7 @@
             {%endif%}
             <div class="body">
               <div class="table-responsive">
-                <table
-                  class="table table-bordered table-striped table-hover mb-0 c_table dataTable"
-                >
+                <table id="mainTable" class="table table-striped c_table">
                   <thead>
                     <tr>
                       <th>Integrante</th>
@@ -125,7 +123,7 @@
                       </td>
                       <td>{{project_user[11]}}</td>
                       <td>{{project_user[12]}}</td>
-                      <td>{{project_user[6]}}</td>
+                      <td data-editable>{{project_user[6]}}</td>
                       {%if session['cargo']==4%}
                       <td class="d-flex justify-content-center">
                         <form action="" method="POST">

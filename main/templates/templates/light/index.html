@@ -355,15 +355,14 @@
                     <div class="row">
                       {% for datosNoticias in datosNoticias %}
                       <div class="col-md-4">
-                        <div class="card" style="width: 400; height: 600">
-                          <img
-                            class="card-img-top"
-                            src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
-                            width="160"
-                            height="170"
-                            alt="Imagen de Noticia"
-                            class="img-fluid"
-                          />
+                        <div class="card">
+                          <div class="image-containerNoticia">
+                            <img
+                              class="news-imageNoticia"
+                              src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
+                              alt="Imagen de Noticia"
+                            />
+                          </div>
                           <div class="card-body">
                             <h4 class="card-title">{{datosNoticias[1]}}</h4>
                             <h6

@@ -29,35 +29,35 @@
       <div class="row clearfix">
         <div class="col-lg-12 col-md-12">
           <div class="table-responsive">
-            <table
-              class="table table-bordered table-striped table-hover mb-0 c_table dataTable"
-            >
+            <table class="table table-hover table-cards align-items-center">
               <thead>
                 <tr>
-                  <th>Usuario</th>
-                  <th>Celular</th>
-                  <th>Correo</th>
-                  <th>Profesion</th>
-                  <th>Accion</th>
+                  <th scope="col">Usuario</th>
+                  <th scope="col">Celular</th>
+                  <th scope="col">Correo</th>
+                  <th scope="col">Accion</th>
                 </tr>
               </thead>
               <tbody>
                 {% for datosUsuario in datosUsuarios %}
-
-                <tr>
-                  <td>
-                    <img
-                      src="{{ url_for('static', filename='images/users/' + datosUsuario[4]) }}"
-                      class="avatar w30"
-                      alt=""
-                    />
-                    <span class="ml-2"
-                      >{{datosUsuario[0]}} {{datosUsuario[1]}}</span
-                    >
-                  </td>
-                  <td>
-                    <span class="phone">+57 {{datosUsuario[3]}}</span>
-                  </td>
+                <tr class="bg-white">
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <img
+                        src="{{ url_for('static', filename='images/users/' + datosUsuario[4]) }}"
+                        class="avatar avatar-lg mr-3"
+                      />
+                      <div class="media-body">
+                        <h6 class="h5 font-weight-normal mb-0">
+                          {{datosUsuario[0]}} {{datosUsuario[1]}}
+                        </h6>
+                        <span class="font-weight-normal text-muted"
+                          >{{datosUsuario[5]}}</span
+                        >
+                      </div>
+                    </div>
+                  </th>
+                  <td>+57 {{datosUsuario[3]}}</td>
                   <td>
                     <span class="email"
                       ><a
@@ -66,9 +66,6 @@
                         >{{datosUsuario[2]}}@humanbionics.com.co</a
                       ></span
                     >
-                  </td>
-                  <td>
-                    <span class="phone text-center">{{datosUsuario[5]}}</span>
                   </td>
                   <td>
                     <div class="btn-group">
@@ -94,7 +91,7 @@
                     </div>
                   </td>
                 </tr>
-
+                <tr class="table-divider"></tr>
                 {% endfor %}
               </tbody>
             </table>

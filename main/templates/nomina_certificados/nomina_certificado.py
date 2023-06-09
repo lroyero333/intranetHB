@@ -139,10 +139,8 @@ def verNominas(usuario_id):
 
             archivo_nomina.save(upload_path)
 
-            query = "INSERT INTO nominas (id_usuario_fk,  usuario_sube_nomina, nombre_nomina, fecha_subida ,archivo_nomina) VALUES (%s,%s,%s, %s, %s)"
-            params = [usuario_id,  usuario_sube_nomina, nombre_nomina, fecha_subida, nuevoNombreNomina]
-
-
+            query = "INSERT INTO nominas (id_nomina, id_usuario_fk,  usuario_sube_nomina, nombre_nomina, fecha_subida ,archivo_nomina) VALUES (%s, %s,%s,%s, %s, %s)"
+            params = [generarID(),usuario_id,  usuario_sube_nomina, nombre_nomina, fecha_subida, nuevoNombreNomina]
 
             cursor.execute(query, params)
             conexion.commit()

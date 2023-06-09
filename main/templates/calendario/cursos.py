@@ -19,10 +19,16 @@ cursor = conexion.cursor()
 def cursos():
     if not 'login' in session:
         return redirect('/')
+    fecha_actual=datetime.now()
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT cursos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM cursos LEFT JOIN general_users ON cursos.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
     datosCursos = cursor.fetchall()
+    #Eliminar cuando se agregue correctamente en la base de datos
+    cursor.execute("SELECT * FROM cursos WHERE fecha_fin < %s", (fecha_actual,))
+    datos_a_eliminar = cursor.fetchall()
+    for dato in datos_a_eliminar:
+        cursor.execute("DELETE FROM cursos WHERE id_curso = %s", (dato[0],))
     conexion.commit()
     cursos_con_tiempo = agregar_tiempo_transcurrido(datosCursos, 5)
     return render_template('calendario/templates/cursos/Cursos.html', datosCursos=cursos_con_tiempo)
@@ -37,11 +43,10 @@ def verCursos(curso_id):
     query ="SELECT inscripcion_cursos.*, DATE_FORMAT(fecha_inscripcion_curso,%s ) AS fecha_inscripcion, DATE_FORMAT(fecha_inscripcion_curso, %s) AS hora_inscripcion, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto, general_users.usuario FROM inscripcion_cursos LEFT JOIN general_users ON inscripcion_cursos.id_usuario_fk = general_users.usuario WHERE id_curso_fk= %s;"
     cursor.execute(query, ('%d-%m-%Y', '%H:%i %p', curso_id))
     datosCursosInscritos = cursor.fetchall()
-    conexion.commit()
-
     # Buscar si el usuario actual está inscrito en el curso
     cursor.execute("SELECT * FROM inscripcion_cursos WHERE id_usuario_fk = %s AND id_curso_fk = %s", (session['usuario'], curso_id))
     resultado = cursor.fetchone()
+    conexion.commit()
 
     if request.method == 'POST':
         if resultado is not None:
@@ -92,7 +97,6 @@ def crearCurso():
             return redirect('/calendario')
     return render_template('calendario/templates/cursos/crearCursos.html')
 
-
 @app.route('/cursos/lista/editar', methods=['GET', 'POST'])
 def listaCursoEditar():
     if request.method == 'POST':
@@ -102,7 +106,6 @@ def listaCursoEditar():
     cursor.execute("SELECT * FROM cursos")
     cursos = cursor.fetchall()
     return render_template('calendario/templates/cursos/listaEditarCursos.html',cursos=cursos)
-
 
 @app.route('/cursos/lista/eliminar', methods=['GET', 'POST'])
 def listaCursoEliminar():

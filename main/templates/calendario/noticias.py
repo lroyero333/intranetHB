@@ -10,9 +10,9 @@ from werkzeug.utils import secure_filename
 
 from main.routes import (app, bcrypt, mysql, redirect, render_template,
                          request, session, url_for)
-from main.run import (agregar_tiempo_transcurrido, app, bcrypt, flash, jsonify,
-                      mysql, redirect, render_template, request, session,
-                      stringAleatorio, url_for)
+from main.run import (agregar_tiempo_transcurrido, app, bcrypt, flash,
+                      generarID, jsonify, mysql, redirect, render_template,
+                      request, session, stringAleatorio, url_for)
 
 extensionesImagenes=['.jpg', '.jpeg', '.png']
 conexion = mysql.connect()
@@ -29,10 +29,15 @@ def stringAleatorio():
 def noticias():
     if not 'login' in session:
         return redirect('/')
+    fecha_actual=datetime.now()
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT noticias.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM noticias LEFT JOIN general_users ON noticias.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
     datosNoticias = cursor.fetchall()
+    fecha_limite = fecha_actual - dt.timedelta(days=6 * 30)
+    cursor = conexion.cursor()
+    cursor.execute("DELETE FROM noticias WHERE fecha_publicacion < %s", (fecha_limite,))
+
     conexion.commit()
     noticias_con_tiempo = agregar_tiempo_transcurrido(datosNoticias, 4)
     return render_template('calendario/templates/noticias/Noticias.html',  datosNoticias=noticias_con_tiempo)
@@ -112,8 +117,8 @@ def crearNoticia():
                 os.makedirs(os.path.dirname(upload_path))
 
             imagen_noticia.save(upload_path)
-            query = "INSERT INTO noticias (titulo_noticia, imagen_noticia, descripcion_noticia, fecha_publicacion,id_usuario_fk) VALUES (%s,%s, %s, %s,%s)"
-            params = [titulo_noticia, nuevoNombreImagen,
+            query = "INSERT INTO noticias (id_noticia, titulo_noticia, imagen_noticia, descripcion_noticia, fecha_publicacion,id_usuario_fk) VALUES (%s, %s,%s, %s, %s,%s)"
+            params = [generarID() ,titulo_noticia, nuevoNombreImagen,
                       descripcion_noticia, fecha_publicacion, usuarioPublica]
 
             cursor.execute(query, params)
@@ -142,8 +147,15 @@ def listaNoticiaEliminar():
         noticia_id = request.form.get('noticia_id')
         if request.form.get('borrar_noticia'):
             cursor.execute(
+                "SELECT imagen_noticia FROM noticias WHERE id_noticia = %s;", (noticia_id,))
+            nombre_archivo=cursor.fetchone()
+            print('NOMBREARCHIVO', nombre_archivo[0])
+            ruta_archivo = os.path.join(app.root_path, 'static', 'images', 'Noticias', nombre_archivo[0])
+            cursor.execute(
                 "DELETE FROM noticias WHERE id_noticia = %s;", (noticia_id,))
             conexion.commit()
+            if os.path.exists(ruta_archivo):
+                os.remove(ruta_archivo)
             flash('La noticia ha sido eliminada correctamente','correcto')
             return redirect('/calendario')
     cursor.execute("SELECT * FROM noticias")

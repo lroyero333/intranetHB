@@ -320,6 +320,7 @@ def allNotificaciones(tipo_solicitud,id_solicitud):
 def inicio():
     if not 'login' in session:
         return redirect('/')
+    fecha_actual=datetime.now()
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT cursos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM cursos LEFT JOIN general_users ON cursos.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
@@ -334,6 +335,16 @@ def inicio():
 
     cursor.execute("SELECT avisos.*,DATE_FORMAT(fecha_publicacion, '%d-%m-%Y') AS fecha_publicacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM avisos LEFT JOIN general_users ON avisos.usuario_publica = general_users.usuario ORDER BY fecha_publicacion DESC;")
     datosAvisos = cursor.fetchall()
+
+
+    #Eliminar cuando se agregue correctamente en la base de datos
+    cursor.execute("SELECT * FROM cursos WHERE fecha_fin < %s", (fecha_actual,))
+    datos_a_eliminar = cursor.fetchall()
+    for dato in datos_a_eliminar:
+        cursor.execute("DELETE FROM cursos WHERE id_curso = %s", (dato[0],))
+    fecha_limite = fecha_actual - dt.timedelta(days=6 * 30)
+    cursor = conexion.cursor()
+    cursor.execute("DELETE FROM noticias WHERE fecha_publicacion < %s", (fecha_limite,))
     conexion.commit()
     avisos_con_tiempo = agregar_tiempo_transcurrido(datosAvisos, 3)
     return render_template('templates/light/index.html', datosCursos=cursos_con_tiempo, datosNoticias=noticias_con_tiempo, datosAvisos=avisos_con_tiempo)
