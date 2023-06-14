@@ -125,6 +125,7 @@
                                                 id="departamento" value="{{datosUsuarios[12] }}"
                                                 placeholder="Departamento">
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <div class="row">
@@ -167,20 +168,6 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="departamento_hb"><strong>Profesion:</strong></label>
-                                            <select class="form-control" name="profesion" id="profesion"
-                                                value="{{datosUsuarios[29] }}">
-                                                <option value="">-- Seleccione la Profesion --</option>
-                                                <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
-                                                <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
-                                                <option value="Ingenieria Mecatronica">Ingenieria Mecatronica</option>
-                                                <option value="Diseño Industrial">Diseño Industrial</option>
-                                                <option value="Diseño Grafico">Diseño Grafico</option>
-                                                <option value="Marketing">Marketing</option>
-
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
                                             <label for="cargo"><strong>Cargo:</strong></label>
                                             <select class="form-control" name="cargo" id="cargo"
                                                 value="{{datosUsuarios[30] }}">
@@ -191,6 +178,40 @@
                                                 <option value="3">Lider de Taller</option>
                                                 <option value="4">Director de proyectos</option>
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="entidad_salud"><strong>Entidad de salud:</strong></label>
+                                            <input type="text" class="form-control" name="entidad_salud"
+                                                id="entidad_salud" placeholder="Entidad de salud"
+                                                value="{{datosUsuarios[21] }}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="lugar_pension"><strong>Lugar de pension:</strong></label>
+                                            <input type="text" class="form-control" name="lugar_pension"
+                                                id="lugar_pension" placeholder="Lugar de pension"
+                                                value="{{datosUsuarios[21] }}" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="entidad_bancaria"><strong>Entidad Bancaria:</strong></label>
+                                            <input type="text" class="form-control" name="entidad_bancaria"
+                                                id="entidad_bancaria" placeholder="Entidad Bancaria"
+                                                value="{{datosUsuarios[21] }}" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tipo_cuenta"><strong>Tipo de Cuenta:</strong></label>
+                                            <select class="form-control" name="tipo_cuenta" id="tipo_cuenta"
+                                            value="{{datosUsuarios[21] }}" >
+                                                <option value="">-- Seleccione un tipo --</option>
+                                                <option value="Ahorro">Ahorro</option>
+                                                <option value="Corriente">Corriente</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="numero_cuenta"><strong>Numero de cuenta:</strong></label>
+                                            <input type="number" class="form-control" name="numero_cuenta"
+                                                id="numero_cuenta" placeholder="Numero de cuenta"
+                                                value="{{datosUsuarios[21] }}" >
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
@@ -207,12 +228,6 @@
                                                 value="{{datosUsuarios[20] }}" placeholder="Posgrado">
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="entidad_salud"><strong>Entidad de salud:</strong></label>
-                                            <input type="text" class="form-control" name="entidad_salud"
-                                                id="entidad_salud" placeholder="Entidad de salud"
-                                                value="{{datosUsuarios[21] }}">
-                                        </div>
                                         <div class="form-group">
                                             <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
                                             <select class="form-control" name="tipo_sangre" id="tipo_sangre"

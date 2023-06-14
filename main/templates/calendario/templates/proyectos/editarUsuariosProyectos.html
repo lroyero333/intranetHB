@@ -1,0 +1,105 @@
+{% extends 'templates/light/base.html' %} {% block content %}
+<div class="main_content" id="main-content">
+  <div class="page">
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="card planned_task">
+            <!--Edit Participate-->
+
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1><strong>Editar integrante del proyecto</strong></h1>
+              </div>
+              <form action="" method="POST">
+                <div class="modal-body">
+                  <div class="row clearfix">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <label for="fecha_inicio"
+                          ><strong>Fecha de inicio:</strong></label
+                        >
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"
+                              ><i class="fa fa-calendar-o"></i
+                            ></span>
+                          </div>
+                          <input
+                            data-provide="datepicker"
+                            data-date-format="yyyy-mm-dd"
+                            data-date-autoclose="true"
+                            class="form-control"
+                            name="fecha_inicio"
+                            id="fecha_inicio"
+                            value=""
+                            placeholder="Fecha de inicio"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="fecha_final"
+                          ><strong>Fecha final:</strong></label
+                        >
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"
+                              ><i class="fa fa-calendar-o"></i
+                            ></span>
+                          </div>
+                          <input
+                            data-provide="datepicker"
+                            data-date-format="yyyy-mm-dd"
+                            data-date-autoclose="true"
+                            class="form-control"
+                            name="fecha_final"
+                            id="fecha_final"
+                            value=""
+                            placeholder="Fecha final"
+                          />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label><strong>Observaciones:</strong> </label>
+                        <textarea
+                          class="form-control summernote"
+                          rows="3"
+                          cols="30"
+                          name="observaciones_user_proyecto"
+                          id="observaciones_user_proyecto"
+                          value="{{project_user[6]}}"
+                        >
+{{project_user[6]}}</textarea
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <input
+                    type="hidden"
+                    value="{{project_user[1]}}"
+                    name="proyecto_usuario"
+                  />
+                  <div class="modal-footer">
+                    <button
+                      type="submit"
+                      name="editar_usuario_proyecto"
+                      class="btn btn-warning"
+                    >
+                      Editar
+                    </button>
+                    <a
+                      href="javascript:history.go(-1)"
+                      class="btn btn-secondary"
+                      ><i class="fa fa-arrow-left"></i> <span>Volver</span></a
+                    >
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

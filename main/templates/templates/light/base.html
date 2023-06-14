@@ -85,15 +85,15 @@
                     <li class="g_heading">Cartelera</li>
                     <li {% if current_path == '/inicio' %} class="active"{% endif %}><a href="/inicio"><i class="ti-home"></i><span>General</span></a></li>
                     <li><a href="/miCartelera"><i class="fa fa-calendar-o"></i><span>Mi cartelera</span></a></li>
-                    <li><a href="/avisos"><i class="ti-tablet"></i><span>Avisos</span></a></li>
+                    <li><a href="/avisos"><i class="fa fa-exclamation"></i><span>Avisos</span></a></li>
                     <li><a href="/cursos"><i class="ti-layout"></i><span>Cursos</span></a></li>
-                    <li><a href="/noticias"><i class="fa fa-hacker-news"></i><span>Noticias</span></a></li>
+                    <li><a href="/noticias"><i class="fa fa-bullhorn"></i><span>Noticias</span></a></li>
 
                     <li class="g_heading">Aplicaciones</li>
                     <li><a href="/calendario"><i class="fa fa-calendar"></i><span>Mi Calendario</span></a></li>
                     <li><a href="https://trello.com/u/{{session['usuario']}}/cards" target="_blank"><i
                                 class="ti-notepad"></i><span>Mis Tareas</span></a></li>
-                    <li><a href="/misProyectos"><i class="fa fa-folder"></i><span>Mis Proyectos</span></a></li>
+                    <li><a href="/misProyectos"><i class="fa fa-folder-o"></i><span>Mis Proyectos</span></a></li>
                     <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Mi Inventario</span></a></li>
                     <li><a  href="/nomina_certificados/" ><i class="fa fa-file"></i><span>Nómina / Certificados
                                 </span></a></li>
@@ -108,15 +108,14 @@
                     
                     <li><a href="/empleados"><i class="fa fa-users"></i><span>Gestión de Usuarios</span></a></li>
                     <li>
-                        <a href="javascript:void(0)" class="has-arrow"><i class=" ti-check-box
-                            ti-check-box
+                        <a href="javascript:void(0)" class="has-arrow"><i class="fa fa-check-square
                             "></i><span>Gestión de permisos o vacaciones</span></a>
                         <ul>
                             <li><a href="/permisos">Permisos</a></li>
                             <li><a href="/vacaciones">Vacaciones</a></li>
                         </ul>
                     </li>
-                    <li><a  href="/nomina_certificados"  ><i class="fa fa-file"></i><span>Nómina / Certificados
+                    <li><a  href="/nomina_certificados"  ><i class="fa fa-file-o"></i><span>Nómina / Certificados
                     </span></a></li>
                     <li>
                         <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-cubes"></i><span>Gestión de Cursos</span></a>
@@ -153,7 +152,7 @@
                     </li>
                     {%elif session['cargo']==4%}
                     <li>
-                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa-folder-open-o
+                        <a href="javascript:void(0)" class="has-arrow"><i class="fa fa-folder-open-o
                             "></i><span>Gestión de Proyectos</span></a>
                         <ul>
                             <li><a href="/proyectos/crear">Crear Proyectos</a></li>

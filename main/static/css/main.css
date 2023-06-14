@@ -17060,7 +17060,7 @@ body {
 
 body *::-webkit-scrollbar {
   width: 3px;
-  height: 3px;
+  height: 18px;
   transition: 0.3s background;
 }
 

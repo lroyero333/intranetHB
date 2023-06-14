@@ -92,7 +92,7 @@
         <div class="col-lg-12 col-md-12">
           <div class="card planned_task">
             <div class="header">
-              <h2>Inventario</h2>
+              <h2></h2>
               <ul class="nav nav-tabs nav-tabs-new" id="myTab" role="tablist">
                 <li class="nav-item">
                   <a
@@ -213,11 +213,11 @@
                           solicitudes_va_extemporaneas[8] == 'Aceptado' %}
                           <tr>
                             <td>
-                              {{solicitudes_va_extemporaneas[15]}}
-                              {{solicitudes_va_extemporaneas[16]}}
+                              {{solicitudes_va_extemporaneas[13]}}
+                              {{solicitudes_va_extemporaneas[14]}}
                             </td>
-                            <td>{{solicitudes_va_extemporaneas[13]}}</td>
-                            <td>{{solicitudes_va_extemporaneas[14]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[11]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[12]}}</td>
                             <td>{{solicitudes_va_extemporaneas[4]}}</td>
                           </tr>
                           {% endif %} {% endfor %}
@@ -283,12 +283,12 @@
                         <tbody>
                           {% for solicitudes_va_extemporaneas in
                           solicitudes_va_extemporaneas %} {% if
-                          solicitudes_va_extemporaneas[11] == session["usuario"]
+                          solicitudes_va_extemporaneas[10] == session["usuario"]
                           %} {% if solicitudes_va_extemporaneas[8] == 'Aceptado'
                           %}
                           <tr>
-                            <td>{{solicitudes_va_extemporaneas[13]}}</td>
-                            <td>{{solicitudes_va_extemporaneas[14]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[11]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[12]}}</td>
                             <td>{{solicitudes_va_extemporaneas[4]}}</td>
                           </tr>
                           {% endif %} {% endif %} {% endfor %}
@@ -417,11 +417,11 @@
                           solicitudes_va_extemporaneas[8] == 'Aceptado' %}
                           <tr>
                             <td>
-                              {{solicitudes_va_extemporaneas[15]}}
-                              {{solicitudes_va_extemporaneas[16]}}
+                              {{solicitudes_va_extemporaneas[13]}}
+                              {{solicitudes_va_extemporaneas[14]}}
                             </td>
-                            <td>{{solicitudes_va_extemporaneas[13]}}</td>
-                            <td>{{solicitudes_va_extemporaneas[14]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[11]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[12]}}</td>
                             <td>{{solicitudes_va_extemporaneas[4]}}</td>
                           </tr>
                           {% endif %} {% endfor %}
@@ -445,12 +445,12 @@
                         <tbody>
                           {% for solicitudes_va_extemporaneas in
                           solicitudes_va_extemporaneas %} {% if
-                          solicitudes_va_extemporaneas[11] == session["usuario"]
+                          solicitudes_va_extemporaneas[10] == session["usuario"]
                           %} {% if solicitudes_va_extemporaneas[8] == 'Aceptado'
                           %}
                           <tr>
-                            <td>{{solicitudes_va_extemporaneas[13]}}</td>
-                            <td>{{solicitudes_va_extemporaneas[14]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[11]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[12]}}</td>
                             <td>{{solicitudes_va_extemporaneas[4]}}</td>
                           </tr>
                           {% endif %} {% endif %} {% endfor %}
@@ -701,11 +701,14 @@
                   </option>
                   {% for solicitudes_va_extemporaneas in
                   solicitudes_va_extemporaneas %} {% if
-                  solicitudes_va_extemporaneas[10] == session['usuario'] %}
+                  solicitudes_va_extemporaneas[10] == session['usuario'] and
+                  (solicitudes_va_extemporaneas[8] == 'Aceptado' or
+                  solicitudes_va_extemporaneas[8] == 'Pendiente') %}
                   <option value="{{ solicitudes_va_extemporaneas[0] }}">
                     <strong>Inicio:</strong> {{ solicitudes_va_extemporaneas[11]
                     }}
-                    <strong>Fin: </strong> {{solicitudes_va_extemporaneas[12]}}
+                    <strong>Fin: </strong> {{solicitudes_va_extemporaneas[12]}},
+                    Dias: {{solicitudes_va_extemporaneas[4]}}
                   </option>
                   {% endif %} {% endfor %}
                 </select>

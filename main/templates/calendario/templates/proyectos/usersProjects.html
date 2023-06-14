@@ -73,7 +73,18 @@
               >
                 <span class="btn-inner--visible">Asignar participante</span>
                 <span class="btn-inner--hidden"
-                  ><i class="fa fa-plane"></i
+                  ><i class="fa fa-check"></i
+                ></span>
+              </button>
+              <button
+                type="button"
+                data-toggle="modal"
+                data-target="#eliminarParticipante"
+                class="btn btn-danger ml-2 btn-animated btn-animated-y"
+              >
+                <span class="btn-inner--visible">Eliminar participante</span>
+                <span class="btn-inner--hidden"
+                  ><i class="fa fa-trash"></i
                 ></span>
               </button>
             </div>
@@ -95,7 +106,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {%for project_user in project_user%}
+                    {% for project_user in project_user %} {% if project_user[2]
+                    == session['usuario'] and session['cargo'] != 4 %}
                     <tr>
                       <td>
                         <img
@@ -104,12 +116,13 @@
                           alt=""
                         />
                         <span class="ml-2">
-                          {{project_user[13]}} {{project_user[14]}}
-                          {{project_user[15]}} {{project_user[16]}}</span
-                        >
+                          {{ project_user[13] }} {{ project_user[14] }} {{
+                          project_user[15] }} {{ project_user[16] }}
+                        </span>
                       </td>
                       <td>
-                        {% if project_user[3]=="Inactivo" %}<span
+                        {% if project_user[3] == "Inactivo" %}
+                        <span
                           class="badge badge-lg badge-pill badge-danger text-uppercase"
                         >
                           Inactivo
@@ -118,22 +131,54 @@
                         <span
                           class="badge badge-lg badge-pill badge-success text-uppercase"
                         >
-                          Activo </span
-                        >{%endif%}
+                          Activo
+                        </span>
+                        {% endif %}
                       </td>
-                      <td>{{project_user[11]}}</td>
-                      <td>{{project_user[12]}}</td>
-                      <td data-editable>{{project_user[6]}}</td>
-                      {%if session['cargo']==4%}
+                      <td>{{ project_user[11] }}</td>
+                      <td>{{ project_user[12] }}</td>
+                      <td data-editable>{{ project_user[6] |safe}}</td>
+                    </tr>
+                    {% endif %} {% if session['cargo'] == 4 %}
+                    <tr>
+                      <td>
+                        <img
+                          src="{{ url_for('static', filename='images/users/' + project_user[17]) }}"
+                          class="avatar w30"
+                          alt=""
+                        />
+                        <span class="ml-2">
+                          {{ project_user[13] }} {{ project_user[14] }} {{
+                          project_user[15] }} {{ project_user[16] }}
+                        </span>
+                      </td>
+                      <td>
+                        {% if project_user[3] == "Inactivo" %}
+                        <span
+                          class="badge badge-lg badge-pill badge-danger text-uppercase"
+                        >
+                          Inactivo
+                        </span>
+                        {% else %}
+                        <span
+                          class="badge badge-lg badge-pill badge-success text-uppercase"
+                        >
+                          Activo
+                        </span>
+                        {% endif %}
+                      </td>
+                      <td>{{ project_user[11] }}</td>
+                      <td>{{ project_user[12] }}</td>
+                      <td data-editable>{{ project_user[6] | safe}}</td>
                       <td class="d-flex justify-content-center">
                         <form action="" method="POST">
-                          {% if project_user[3]=="Inactivo" %}
+                          {% if project_user[3] == "Inactivo" %}
                           <button
                             type="submit"
                             class="btn btn-primary btn-sm"
                             title="Activar"
                             name="activar_usuario_proyecto"
-                            value="{{project_user[2]}}"
+                            value="{{ project_user[2] }}"
                           >
                             <i class="fa fa-check-square"></i>
                           </button>
@@ -143,16 +188,24 @@
                             class="btn btn-danger btn-sm"
                             title="Desactivar"
                             name="desactivar_usuario_proyecto"
-                            value="{{project_user[2]}}"
+                            value="{{ project_user[2] }}"
                           >
                             <i class="fa fa-times-circle"></i>
                           </button>
-                          {%endif%}
+                          {% endif %}
+                          <button
+                            type="submit"
+                            class="btn btn-warning btn-sm"
+                            title="Editar"
+                            name="editar_usuario_proyecto"
+                            value="{{ project_user[0] }}"
+                          >
+                            <i class="fa  fa-pencil-square-o"></i>
+                          </button>
                         </form>
                       </td>
-                      {%endif%}
                     </tr>
-                    {%endfor%}
+                    {% endif %} {% endfor %}
                   </tbody>
                 </table>
               </div>
@@ -162,7 +215,7 @@
       </div>
     </div>
   </div>
-
+  <!--Add Participate-->
   <div class="modal fade" id="asignarParticipante" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -175,7 +228,7 @@
               <div class="col-12">
                 <div class="form-group">
                   <label for="integrante_id"
-                    ><strong>Vacaciones solicitadas</strong></label
+                    ><strong>Usuarios</strong></label
                   >
                   <select
                     class="selectpicker"
@@ -197,7 +250,7 @@
                 <div class="form-group">
                   <label><strong>Observaciones:</strong> </label>
                   <textarea
-                    class="form-control"
+                    class="form-control summernote"
                     rows="3"
                     cols="30"
                     name="observaciones_user_proyecto"
@@ -212,6 +265,60 @@
                   class="btn btn-success"
                 >
                   Asignar
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--delete Participate-->
+  <div class="modal fade" id="eliminarParticipante" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <label><strong>Eliminar integrante del proyecto</strong></label>
+        </div>
+        <form action="" method="POST">
+          <div class="modal-body">
+            <div class="row clearfix">
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="integrante_id"
+                    ><strong>Usuarios Agregados</strong></label
+                  >
+                  <select
+                    class="selectpicker"
+                    name="integrante_id"
+                    title="Selecciona una opcion"
+                    data-live-search="true"
+                    data-live-search-placeholder="Buscar ..."
+                  >
+                    <option value="" selected disabled>
+                      Selecciona un Usuario
+                    </option>
+                    {% for project_user in project_user %}
+                    <option value="{{ project_user[0] }}">
+                      {{project_user[13]}} {{project_user[14]}} {{project_user[15]}}
+                      {{project_user[16]}} {% endfor %}
+                    </option>
+                  </select>
+                </div>
+              <div class="modal-footer">
+                <button
+                  type="submit"
+                  name="eliminar_usuario_proyecto"
+                  class="btn btn-danger"
+                >
+                  Eliminar
                 </button>
                 <button
                   type="button"

@@ -196,6 +196,39 @@
                                                 <option value="4">Director de proyectos</option>
                                             </select>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="entidad_salud"><strong>Entidad de salud:</strong></label>
+                                            <input type="text" class="form-control" name="entidad_salud"
+                                                id="entidad_salud" placeholder="Entidad de salud"
+                                                value="{{ campos.get('entidad_salud', '') }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="lugar_pension"><strong>Lugar de pension:</strong></label>
+                                            <input type="text" class="form-control" name="lugar_pension"
+                                                id="lugar_pension" placeholder="Lugar de pension"
+                                                value="{{ campos.get('lugar_pension', '') }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="entidad_bancaria"><strong>Entidad Bancaria:</strong></label>
+                                            <input type="text" class="form-control" name="entidad_bancaria"
+                                                id="entidad_bancaria" placeholder="Entidad Bancaria"
+                                                value="{{ campos.get('entidad_bancaria', '') }}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tipo_cuenta"><strong>Tipo de Cuenta:</strong></label>
+                                            <select class="form-control" name="tipo_cuenta" id="tipo_cuenta"
+                                                value="{{ campos.get('tipo_cuenta', '') }}" required>
+                                                <option value="">-- Seleccione un tipo --</option>
+                                                <option value="Ahorro">Ahorro</option>
+                                                <option value="Corriente">Corriente</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="numero_cuenta"><strong>Numero de cuenta:</strong></label>
+                                            <input type="number" class="form-control" name="numero_cuenta"
+                                                id="numero_cuenta" placeholder="Numero de cuenta"
+                                                value="{{ campos.get('numero_cuenta', '') }}" required>
+                                        </div>
                                     </div>
                                     <div class="col-md-6 col-12">
 
@@ -213,12 +246,7 @@
                                                 required>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="entidad_salud"><strong>Entidad de salud:</strong></label>
-                                            <input type="text" class="form-control" name="entidad_salud"
-                                                id="entidad_salud" placeholder="Entidad de salud"
-                                                value="{{ campos.get('entidad_salud', '') }}" required>
-                                        </div>
+                                       
                                         <div class="form-group">
                                             <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
                                             <select class="form-control" name="tipo_sangre" id="tipo_sangre"
@@ -234,14 +262,12 @@
                                                 <option value="O-">O-</option>
                                             </select>
                                         </div>
-
                                         <div class="form-group">
                                             <label for="nombre_contacto"><strong>Nombre de contacto:</strong></label>
                                             <input type="text" class="form-control" name="nombre_contacto"
                                                 id="nombre_contacto" placeholder="Nombre de contacto"
                                                 value="{{ campos.get('nombre_contacto', '') }}" required>
                                         </div>
-
                                         <div class="form-group">
                                             <label for="numero_contacto"><strong>Numero de contacto:</strong></label>
                                             <input type="text" class="form-control" name="numero_contacto"

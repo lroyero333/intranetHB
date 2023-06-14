@@ -11,7 +11,8 @@ from main.routes import (app, bcrypt, mysql, redirect, render_template,
 from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
                       render_template, request, session, url_for)
 
-extensionesImagenes=['.jpg', '.jpeg', '.png']
+extensionesImagenes = ['.jpg', '.jpeg', '.png']
+
 
 @app.route('/empleados')
 def listaEmpleados():
@@ -24,6 +25,7 @@ def listaEmpleados():
     datosUsuarios = cursor.fetchall()
     conexion.commit()
     return render_template('usersCRUD/templates/contactEdit.html', datosUsuarios=datosUsuarios)
+
 
 @app.route('/registrarEmpleados', methods=['GET', 'POST'])
 def crearEmpleados():
@@ -46,7 +48,7 @@ def crearEmpleados():
         if cursor.fetchone() is not None:
             error = 'El nombre de usuario o correo electrónico ya está en uso'
             cursor.close()
-            return render_template('templates/light/agregarUsuario.html', error=error, datosUsuarios=datosUsuarios, campos=request.form)
+            return render_template('usersCRUD/templates/agregarUsuario.html', error=error, datosUsuarios=datosUsuarios, campos=request.form)
         foto = request.files['foto']
         Nombre = request.form['Nombre']
         segundo_nombre = request.form['segundo_nombre']
@@ -72,6 +74,10 @@ def crearEmpleados():
         tipo_sangre = request.form['tipo_sangre']
         nombre_contacto = request.form['nombre_contacto']
         numero_contacto = request.form['numero_contacto']
+        lugar_pension = request.form['lugar_pension']
+        entidad_bancaria = request.form['entidad_bancaria']
+        tipo_cuenta = request.form['tipo_cuenta']
+        numero_cuenta = request.form['numero_cuenta']
         contrasena = request.form['contrasena']
 
         hashed_password = bcrypt.hashpw(
@@ -84,28 +90,26 @@ def crearEmpleados():
         nuevoNombreFoto = usuario+'Foto'+extension
 
         upload_path = os.path.join(
-            basepath, '..', '..','static', 'images', 'users', nuevoNombreFoto)
+            basepath, app.root_path, 'static', 'images', 'users', nuevoNombreFoto)
         if not os.path.exists(os.path.dirname(upload_path)):
             os.makedirs(os.path.dirname(upload_path))
 
         foto.save(upload_path)
 
         # Insertar un nuevo usuario en la tabla
-        query = "INSERT INTO general_users (Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion, id_cargo_fk, institucion, posgrado, entidad_salud, tipo_sangre,foto, nombre_contacto, numero_contacto, usuario,contrasena) VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s)"
-        params = [Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais,
-                  telefono, celular, habilidades, profesion, cargo, institucion, posgrado, entidad_salud, tipo_sangre, nuevoNombreFoto, nombre_contacto, numero_contacto, usuario, hashed_password]
+        query = "INSERT INTO general_users (Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion, id_cargo_fk, institucion, posgrado, entidad_salud, tipo_sangre,foto, nombre_contacto, numero_contacto, usuario,contrasena,lugar_pension,entidad_bancaria,tipo_cuenta,numero_cuenta) VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s)"
+        params = [Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion,
+                  cargo, institucion, posgrado, entidad_salud, tipo_sangre, nuevoNombreFoto, nombre_contacto, numero_contacto, usuario, hashed_password, lugar_pension, entidad_bancaria, tipo_cuenta, numero_cuenta]
 
         # Ejecutar la consulta SQL
         cursor.execute(query, params)
 
         # Confirmar los cambios en la base de datos
         conexion.commit()
-
-        # Redirigir a la página de detalles del nuevo usuario registrado
-        usuario_id = cursor.lastrowid
         return redirect('/empleados')
 
     return render_template('usersCRUD/templates/agregarUsuario.html', datosUsuarios=datosUsuarios, campos=request.form)
+
 
 @app.route('/eliminar-usuario/<usuario>', methods=['GET', 'POST'])
 def eliminarUsuario(usuario):
@@ -131,7 +135,8 @@ def verEmpleados(usuario_id):
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT general_users.*, cargos.nombre_cargo FROM general_users LEFT JOIN usuario_cargo ON general_users.id = usuario_cargo.id_usuario_fk LEFT JOIN cargos ON usuario_cargo.id_cargo_fk = cargos.id_cargo WHERE usuario= %s;", usuario_id)
-    datosUsuarios = cursor.fetchall()
+    datosUsuarios = cursor.fetchone()
+
     conexion.commit()
     return render_template('usersCRUD/templates/verUser.html', datosUsuarios=datosUsuarios)
 
@@ -174,26 +179,31 @@ def editEmpleados(usuario_id):
         tipo_sangre = request.form['tipo_sangre']
         nombre_contacto = request.form['nombre_contacto']
         numero_contacto = request.form['numero_contacto']
+        lugar_pension = request.form['lugar_pension']
+        entidad_bancaria = request.form['entidad_bancaria']
+        tipo_cuenta = request.form['tipo_cuenta']
+        numero_cuenta = request.form['numero_cuenta']
         contrasena = request.form['contrasena']
 
         filename, file_extension = os.path.splitext(foto.filename)
-        
+
         # Actualizar los campos que no están vacíos
         query = "UPDATE general_users SET"
         params = []
 
         if foto:
             if file_extension.lower() not in extensionesImagenes:
-                flash('La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.','error')
+                flash(
+                    'La extensión de la imagen no está permitida. Solo se permiten archivos JPG, JPEG y PNG.', 'error')
                 return redirect(request.url)
             else:
-                flash('Se ha agregado satisfactoriamente','correcto')
+                flash('Se ha agregado satisfactoriamente', 'correcto')
             basepath = os.path.dirname(__file__)
             filename = secure_filename(foto.filename)
             extension = os.path.splitext(filename)[1]
             nuevoNombreFoto = usuario_id+'Foto'+extension
             upload_path = os.path.join(
-            basepath, app.root_path, 'static', 'images', 'users', nuevoNombreFoto)
+                basepath, app.root_path, 'static', 'images', 'users', nuevoNombreFoto)
             if not os.path.exists(os.path.dirname(upload_path)):
                 os.makedirs(os.path.dirname(upload_path))
             foto.save(upload_path)
@@ -254,7 +264,7 @@ def editEmpleados(usuario_id):
         if cargo:
             query += " id_cargo_fk = %s,"
             params.append(cargo)
-        
+
         if institucion:
             query += " institucion = %s,"
             params.append(institucion)
@@ -273,8 +283,21 @@ def editEmpleados(usuario_id):
         if numero_contacto:
             query += " numero_contacto = %s,"
             params.append(numero_contacto)
+        if numero_cuenta:
+            query += " numero_cuenta = %s,"
+            params.append(numero_cuenta)
+        if lugar_pension:
+            query += " lugar_pension = %s,"
+            params.append(lugar_pension)
+        if entidad_bancaria:
+            query += " entidad_bancaria = %s,"
+            params.append(entidad_bancaria)
+        if tipo_cuenta:
+            query += " tipo_cuenta = %s,"
+            params.append(tipo_cuenta)
         if contrasena:
-            hashed_password = bcrypt.hashpw(contrasena.encode('utf-8'), bcrypt.gensalt())
+            hashed_password = bcrypt.hashpw(
+                contrasena.encode('utf-8'), bcrypt.gensalt())
             query += "contrasena = %s,"
             params.append(hashed_password)
 
@@ -292,4 +315,3 @@ def editEmpleados(usuario_id):
         return redirect(url_for('verEmpleados', usuario_id=usuario_id))
 
     return render_template('usersCRUD/templates/editUser.html', datosUsuarios=datosUsuarios)
-
