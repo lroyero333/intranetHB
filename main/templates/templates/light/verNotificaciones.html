@@ -189,7 +189,8 @@
                                     {{solicitudes_permiso[12]}}.
 
                                 </p>
-                                <p>Sugerencia de recuperacion de tiempo: <strong> {{solicitudes_permiso[15]}} </strong> a <strong> {{solicitudes_permiso[16]}}</strong></p>
+                                <p>Sugerencia de recuperacion de tiempo: <strong> {{solicitudes_permiso[15]}} </strong>
+                                    a <strong> {{solicitudes_permiso[16]}}</strong></p>
                                 {% if solicitudes_permiso[8] == "Pendiente" %}
                                 <hr>
                                 <form action="" method="POST">
@@ -228,6 +229,81 @@
                                     </div>
                                 </form>
                             </div>
+
+                            <!--PERMISOS NOTIFICATION EXtra-->
+
+                            {% elif tipo_solicitud == "Permiso_Empresa" %}
+                            <div class="body">
+                                <h5 class="mb-0">Solicitud de Permiso de Entrada a la Empresa
+                                </h5>
+                                <small><strong> Fecha y hora de solicitud:</strong>
+                                    {{solicitudes_permiso[3]}}</small>
+                                <p class="m-t-10"><strong>{{solicitudes_permiso[12]}}
+                                        {{solicitudes_permiso[13]}}</strong> solicitó un permiso de acceso a la empresa
+                                    con fecha de inicio el dia
+                                    <strong>{{solicitudes_permiso[10]}}</strong> y fecha final el dia
+                                    <strong>{{solicitudes_permiso[11]}}</strong> por el motivo de:
+                                    {{solicitudes_permiso[8]}}.
+
+                                </p>
+                                <hr>
+                                <form action="" method="POST">
+                                    <div class="modal-body">
+                                        <div class="row clearfix">
+
+                                        </div>
+                                        {% if solicitudes_permiso[5] == "Pendiente" %}
+
+                                        <input type="hidden" value="{{solicitudes_permiso[6]}}" name="user_permiso">
+                                        <div class="mb-3">
+                                            <label for="comentarioSolicitudRecuperar"
+                                                class="form-label">Observaciones:</label>
+                                            <textarea class="form-control" name="comentarioSolicitudRecuperar"
+                                                id="comentarioSolicitudRecuperar" rows="3" required></textarea>
+                                        </div>
+                                        {%endif%}
+
+                                        <div class="modal-footer">
+                                            {% if solicitudes_permiso[5] == "Aceptado" %}
+                                            <span
+                                                class="badge badge-lg badge-pill badge-success text-uppercase">Aceptado</span>
+                                            {%endif%}
+                                            {% if solicitudes_permiso[5] == "Rechazado" %}
+                                            <span
+                                                class="badge badge-lg badge-pill badge-danger text-uppercase">Rechazado</span>
+                                            {%endif%}
+                                            {% if solicitudes_permiso[5] == "Pendiente" %}
+                                            <span
+                                                class="badge badge-lg badge-pill badge-warning text-uppercase">Pendiente</span>
+                                            <button class="btn btn-success" type="submit" id="aceptarSolicitudPermisoEX"
+                                                name="aceptarSolicitudPermisoEX"
+                                                value="{{solicitudes_permiso[0]}}">Agendar</button>
+
+                                            <button class="btn btn-danger" name="rechazarSolicitudPermisoEX"
+                                                value="{{solicitudes_permiso[0]}}">Rechazar</button>
+                                            {%endif%}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                             <!--INVENTARIO NOTIFICATION-->
                             {% elif tipo_solicitud == "Inventario" %}

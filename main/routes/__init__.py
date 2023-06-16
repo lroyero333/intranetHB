@@ -11,7 +11,7 @@ from flask import (flash, g, redirect, render_template, request, send_file,
 from werkzeug.utils import secure_filename
 
 from main.run import (agregar_tiempo_transcurrido, app, generarID, mysql,
-                      stringAleatorio,fecha_actualCO)
+                      stringAleatorio, fecha_actualCO)
 from main.templates.calendario import (avisos, calendario, cursos, noticias,
                                        proyectos)
 from main.templates.error import error
@@ -75,7 +75,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
     fechaResolucion = datetime.now()
 
     if tipo_solicitud == "Nomina":
-        if session['cargo'] != 1 and  session['cargo'] != 0:
+        if session['cargo'] != 1 and session['cargo'] != 0:
             return redirect('/miCartelera')
         cursor.execute("SELECT solicitud_nomina.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_nomina LEFT JOIN general_users ON solicitud_nomina.solicitante = general_users.usuario WHERE id_solicitud_nomina=%s ORDER BY fecha_solicitud DESC;", id_solicitud)
         solicitudes_nomina = cursor.fetchall()
@@ -123,7 +123,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
                 return redirect('/nomina_certificados')
         return render_template("templates/light/verNotificaciones.html", solicitudes_nomina=solicitudes_nomina[0], tipo_solicitud=tipo_solicitud)
     elif tipo_solicitud == "Vacaciones":
-        if session['cargo'] != 1 and  session['cargo'] != 0:
+        if session['cargo'] != 1 and session['cargo'] != 0:
             return redirect('/miCartelera')
         query = "SELECT vacaciones_extemporaneas.*, DATE_FORMAT(fecha_inicio, %s) AS fecha_inicio, DATE_FORMAT(fecha_fin, %s) AS fecha_fin, general_users.Nombre, general_users.Apellido, general_users.foto FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario WHERE id_vacaciones_extemporaneas = %s ORDER BY fecha_solicitud DESC;"
         cursor.execute(query, ('%d-%M-%Y', '%d-%M-%Y', id_solicitud))
@@ -183,7 +183,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
 
         return render_template("templates/light/verNotificaciones.html", solicitudes_va_extemporaneas=solicitudes_va_extemporaneas[0], tipo_solicitud=tipo_solicitud)
     elif tipo_solicitud == "Certificado":
-        if session['cargo'] != 1 and  session['cargo'] != 0:
+        if session['cargo'] != 1 and session['cargo'] != 0:
             return redirect('/miCartelera')
         cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.solicitante = general_users.usuario WHERE id_solicitud=%s ORDER BY fecha_solicitud DESC;", id_solicitud)
         solicitudes_certificado = cursor.fetchall()
@@ -239,16 +239,17 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
         return render_template("templates/light/verNotificaciones.html", solicitudes_certificado=solicitudes_certificado[0],
                                tipo_solicitud=tipo_solicitud)
     elif tipo_solicitud == "Permiso":
-        if session['cargo'] != 1 and  session['cargo'] != 0:
+        if session['cargo'] != 1 and session['cargo'] != 0:
             return redirect('/miCartelera')
         query = "SELECT solicitud_permisos.*, DATE_FORMAT(fecha_inicio_permiso, %s) AS fecha_permiso, DATE_FORMAT(fecha_fin_permiso, %s) AS fecha_fin_permiso, DATE_FORMAT(fecha_inicio_recuperacion, %s) AS fecha_inicio_recuperacion, DATE_FORMAT(fecha_fin_recuperacion, %s) AS fecha_fin_recuperacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario WHERE id_permisos=%s ORDER BY fecha_solicitud DESC;"
-        cursor.execute(query, ('%d-%M-%Y', '%d-%M-%Y','%d-%b-%Y %H:%i %p','%d-%b-%Y %H:%i %p', id_solicitud))
+        cursor.execute(query, ('%d-%M-%Y', '%d-%M-%Y',
+                       '%d-%b-%Y %H:%i %p', '%d-%b-%Y %H:%i %p', id_solicitud))
         solicitudes_permiso = cursor.fetchall()
         conexion.commit()
         print(solicitudes_permiso)
         if request.method == 'POST':
             if 'aceptarSolicitudPermiso' in request.form:
-        
+
                 comentarioSolicitudRecuperar = request.form['comentarioSolicitudRecuperar']
                 user_permiso = request.form['user_permiso']
                 mensaje = 'Ha solucionado su petición de Permiso'
@@ -288,6 +289,57 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
                 return redirect(f'/allNotificaciones/Permiso/{id_solicitud}')
 
         return render_template("templates/light/verNotificaciones.html", solicitudes_permiso=solicitudes_permiso[0], tipo_solicitud=tipo_solicitud)
+    elif tipo_solicitud == "Permiso_Empresa":
+        if session['cargo'] != 1 and session['cargo'] != 0:
+            return redirect('/miCartelera')
+        query = "SELECT solicitud_permiso_extra.*, DATE_FORMAT(fecha_inicio, %s) AS fecha_permiso, DATE_FORMAT(fecha_fin, %s) AS fecha_fin_permiso, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permiso_extra LEFT JOIN general_users ON solicitud_permiso_extra.id_usuario = general_users.usuario WHERE id_extra=%s ORDER BY fecha_solicitud DESC;"
+        cursor.execute(query, ('%d-%M-%Y %H:%i %p', '%d-%M-%Y %H:%i %p', id_solicitud))
+        solicitudes_permiso = cursor.fetchall()
+        conexion.commit()
+        print(solicitudes_permiso)
+        if request.method == 'POST':
+            if 'aceptarSolicitudPermisoEX' in request.form:
+
+                comentarioSolicitudRecuperar = request.form['comentarioSolicitudRecuperar']
+                user_permiso = request.form['user_permiso']
+                mensaje = 'Ha solucionado su petición de Permiso'
+                estado_solicitud = "Aceptado"
+                tipo_notificacion = 'Permiso_Empresa'
+                query = "UPDATE solicitud_permiso_extra SET estado_solicitud = %s ,fecha_resolucion=%s ,observaciones=%s,resuelto_por=%s WHERE id_extra = %s"
+                params = [estado_solicitud, fechaResolucion, comentarioSolicitudRecuperar,
+                          persona_resuelve_solicitud, id_solicitud]
+                cursor.execute(query, params)
+                conexion.commit()
+
+                query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+                params = [generarID(), tipo_notificacion, user_permiso, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+                cursor.execute(query, params)
+                conexion.commit()
+                flash('Respuesta realizada correctamente', 'correcto')
+                return redirect(f'/allNotificaciones/Permiso_Empresa/{id_solicitud}')
+
+            if 'rechazarSolicitudPermisoEX' in request.form:
+                comentarioSolicitudRecuperar = request.form['comentarioSolicitudRecuperar']
+                estado_solicitud = "Rechazado"
+                user_permiso = request.form['user_permiso']
+                tipo_notificacion = 'Permiso_Empresa'
+                mensaje = 'Ha solucionado su petición de Permiso'
+                query = "UPDATE solicitud_permiso_extra SET estado_solicitud = %s ,fecha_resolucion=%s ,observaciones=%s,resuelto_por=%s WHERE id_extra = %s"
+                params = [estado_solicitud, fechaResolucion,
+                          comentarioSolicitudRecuperar, persona_resuelve_solicitud, id_solicitud]
+                cursor.execute(query, params)
+                conexion.commit()
+                query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+                params = [generarID(), tipo_notificacion, user_permiso, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+                cursor.execute(query, params)
+                conexion.commit()
+                flash('Respuesta realizada correctamente', 'correcto')
+                return redirect(f'/allNotificaciones/Permiso_Empresa/{id_solicitud}')
+
+        return render_template("templates/light/verNotificaciones.html", solicitudes_permiso=solicitudes_permiso[0], tipo_solicitud=tipo_solicitud)
+
     elif tipo_solicitud == "Inventario":
         cursor.execute("SELECT movimientos.*, general_users.Nombre, general_users.Apellido, general_users.foto , inventario.* FROM movimientos LEFT JOIN general_users ON movimientos.responsable = general_users.usuario LEFT JOIN inventario ON movimientos.id_elemento=inventario.id_elemento WHERE id_movimiento=%s ORDER BY fecha_solicitud DESC;", id_solicitud)
         solicitudes_inventario = cursor.fetchall()
@@ -407,10 +459,15 @@ def miCartelera():
     cursor.execute(query, ('%d %M %Y %h:%i %p',
                    '%d %M %Y %h:%i %p', session['usuario']))
     solicitudes_vacaciones = cursor.fetchall()
+
+    query = "SELECT DATE_FORMAT(fecha_solicitud, %s) AS fecha_solicitud,solicitud_permiso_extra.estado_solicitud,solicitud_permiso_extra.observaciones,DATE_FORMAT(fecha_resolucion, %s) AS fecha_resolucion,solicitud_permiso_extra.resuelto_por, general_users.Nombre, general_users.Apellido FROM solicitud_permiso_extra LEFT JOIN general_users ON solicitud_permiso_extra.resuelto_por = general_users.usuario WHERE id_usuario=%s;"
+    cursor.execute(query, ('%d %M %Y %h:%i %p',
+                   '%d %M %Y %h:%i %p', session['usuario']))
+    solicitud_permiso_extra = cursor.fetchall()
     conexion.commit()
     cursos_con_tiempo = agregar_tiempo_transcurrido(cursosInscritos, 11)
 
-    return render_template('templates/light/miCartelera.html', datosCursos=cursos_con_tiempo, reportes_inventario=reportes_inventario, solicitudes_certificado=solicitudes_certificado, solicitudes_nomina=solicitudes_nomina, solicitudes_permiso=solicitudes_permiso, solicitudes_vacaciones=solicitudes_vacaciones)
+    return render_template('templates/light/miCartelera.html', datosCursos=cursos_con_tiempo, reportes_inventario=reportes_inventario, solicitudes_certificado=solicitudes_certificado, solicitudes_nomina=solicitudes_nomina, solicitudes_permiso=solicitudes_permiso, solicitudes_vacaciones=solicitudes_vacaciones,solicitud_permiso_extra=solicitud_permiso_extra)
 
 
 @app.route('/Noticias')

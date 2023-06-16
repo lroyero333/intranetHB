@@ -163,16 +163,18 @@ def verPermisos():
         fecha_solicitud = datetime.now()
         duracion_permiso = dt.datetime.strptime(
             fin_permiso, '%Y-%m-%d %H:%M:%S') - dt.datetime.strptime(inicio_permiso, '%Y-%m-%d %H:%M:%S')
-        
+
         inicio_dia_recuperar = request.form['inicio_dia_recuperar']
         inicio_hora_recuperar = request.form['inicio_hora_recuperar']
         fin_dia_recuperar = request.form['fin_dia_recuperar']
         fin_hora_recuperar = request.form['fin_hora_recuperar']
         fecha_inicio_recuperar = inicio_dia_recuperar + ' ' + inicio_hora_recuperar
-        fecha_hora = dt.datetime.strptime( fecha_inicio_recuperar, '%Y-%m-%d %I:%M %p')
+        fecha_hora = dt.datetime.strptime(
+            fecha_inicio_recuperar, '%Y-%m-%d %I:%M %p')
         inicio_recuperar = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
         fecha_fin_recuperar = fin_dia_recuperar + ' ' + fin_hora_recuperar
-        fecha_hora = dt.datetime.strptime(fecha_fin_recuperar, '%Y-%m-%d %I:%M %p')
+        fecha_hora = dt.datetime.strptime(
+            fecha_fin_recuperar, '%Y-%m-%d %I:%M %p')
         fin_recuperar = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
         print(duracion_permiso)
         print(inicio_permiso)
@@ -247,6 +249,51 @@ def verPermisos():
         query = "INSERT INTO solicitud_permisos (id_permisos,fecha_inicio_permiso, fecha_fin_permiso, fecha_solicitud, horas_de_permiso, id_usuario, motivo_permiso , fecha_inicio_recuperacion, fecha_fin_recuperacion ) VALUES (%s, %s,%s, %s, %s, %s, %s,%s,%s)"
         params = [id_permisos, inicio_permiso, fin_permiso,
                   fecha_solicitud, cantidad_horas, id_usuario, motivo_permiso, inicio_recuperar, fin_recuperar]
+        cursor.execute(query, params)
+        conexion.commit()
+
+        for usuariosRH in usuariosRH:
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, usuariosRH[0],
+                      id_permisos, id_usuario, mensaje, fecha_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+
+        flash('Permiso solicitado satisfactoriamente', 'correcto')
+        return redirect('/permisos')
+    if 'agendar_permisoEX' in request.form:
+        mensaje = 'Ha solicitado una nueva petición de Permiso a la empresa'
+        tipo_notificacion = 'Permiso_Empresa'
+        id_permisos = generarID()
+        id_usuario = session['usuario']
+        inicio_dia_permiso = request.form['inicio_dia_permisoEX']  # 2023-03-28
+        inicio_hora_permiso = request.form['inicio_hora_permisoEX']  # 10:00 am
+        fin_dia_permiso = request.form['fin_dia_permisoEX']
+        fin_hora_permiso = request.form['fin_hora_permisoEX']
+        motivo_permiso = request.form['motivo_permiso']
+        fecha_inicio_permiso = inicio_dia_permiso + ' ' + inicio_hora_permiso
+        fecha_hora = dt.datetime.strptime(
+            fecha_inicio_permiso, '%Y-%m-%d %I:%M %p')
+        inicio_permiso = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
+        fecha_fin_permiso = fin_dia_permiso + ' ' + fin_hora_permiso
+        fecha_hora = dt.datetime.strptime(
+            fecha_fin_permiso, '%Y-%m-%d %I:%M %p')
+        fin_permiso = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
+        fecha_solicitud = datetime.now()
+        duracion_permiso = dt.datetime.strptime(
+            fin_permiso, '%Y-%m-%d %H:%M:%S') - dt.datetime.strptime(inicio_permiso, '%Y-%m-%d %H:%M:%S')
+
+        print(duracion_permiso)
+        print(inicio_permiso)
+        print(fin_permiso)
+        
+        cursor.execute(
+            'SELECT usuario FROM general_users WHERE id_cargo_fk = 1')
+        usuariosRH = cursor.fetchall()
+
+        query = "INSERT INTO solicitud_permiso_extra (id_extra,fecha_inicio, fecha_fin, fecha_solicitud, id_usuario, motivo) VALUES (%s, %s,%s, %s, %s, %s)"
+        params = [id_permisos, inicio_permiso, fin_permiso,
+                  fecha_solicitud, id_usuario, motivo_permiso]
         cursor.execute(query, params)
         conexion.commit()
 

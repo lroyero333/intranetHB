@@ -171,6 +171,7 @@
                         <td>{{solicitudes_permiso[3]}}</td>
                       </tr>
                       {%endfor%}
+                      
                       {% for solicitudes_vacaciones in solicitudes_vacaciones %}
                       <tr>
                         <td>Vacaciones</td>
@@ -191,6 +192,28 @@
                           {{solicitudes_vacaciones[6]}}
                         </td>
                         <td>{{solicitudes_vacaciones[2]}}</td>
+                      </tr>
+                      {%endfor%}
+                      {% for permiso_extra in solicitud_permiso_extra %}
+                      <tr>
+                        <td>Permiso Empresa</td>
+                        <td>Permiso de acceso a la empresa</td>
+                        <td>{{permiso_extra[0]}}</td>
+                        <td>
+                          {% if permiso_extra[1]=="Pendiente" %}<span
+                            class="badge badge-lg badge-pill badge-warning text-uppercase">
+                            Pendiente </span>{%endif%} {% if permiso_extra[1]=="Rechazado"
+                          %}<span class="badge badge-lg badge-pill badge-danger text-uppercase">
+                            Rechazado </span>{%endif%} {% if permiso_extra[1]=="Aceptado" %}<span
+                            class="badge badge-lg badge-pill badge-success text-uppercase">
+                            Aceptado </span>{%endif%}
+                        </td>
+                        <td>{{permiso_extra[3]}}</td>
+                        <td>
+                          {{permiso_extra[5]}}
+                          {{permiso_extra[6]}}
+                        </td>
+                        <td>{{permiso_extra[2]}}</td>
                       </tr>
                       {%endfor%}
                     </tbody>

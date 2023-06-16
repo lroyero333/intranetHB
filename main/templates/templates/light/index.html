@@ -236,11 +236,11 @@
                       {% for datosNoticias in datosNoticias %}
                       <div class="col-md-4">
                         <div class="card">
-                          <div class="image-containerNoticia">
-                            <img class="card-img-top img-fluid"
-                              src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
-                              alt="Imagen de Noticia" class="img-fluid" />
-                          </div>
+
+                          <img class="card-img-top img-fluid"
+                            src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
+                            alt="Imagen de Noticia" class="img-fluid" />
+
                           <div class="card-body">
                             <h4 class="card-title">{{datosNoticias[1]}}</h4>
                             <h6 class="heading heading-sm strong-400 text-muted mb-4">

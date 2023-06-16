@@ -16,6 +16,11 @@
           <span class="btn-inner--visible">Agendar Permiso</span>
           <span class="btn-inner--hidden"><i class="fa fa-plane"></i></span>
         </button>
+        <button type="button" class="btn btn-primary ml-2 btn-animated btn-animated-y" data-toggle="modal"
+          data-target="#agendarPermisoEX">
+          <span class="btn-inner--visible">Agendar Permiso a Empresa</span>
+          <span class="btn-inner--hidden"><i class="fa fa-plane"></i></span>
+        </button>
         <button type="button" class="btn btn-danger ml-2 btn-animated btn-animated-y" data-toggle="modal"
           data-target="#cancelarPermiso">
           <span class="btn-inner--visible">Cancelar Permiso</span>
@@ -353,5 +358,69 @@
     </div>
   </div>
 </div>
+
+<!--AGENDAR PERMISO HORAS EXTRA-->
+<!-- Modal Solicitate Permission-->
+<div class="modal fade" id="agendarPermisoEX" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <label><strong>Agendar Permisos de entrada a la Empresa</strong></label>
+      </div>
+      <form action="" method="POST">
+        <div class="modal-body">
+          <div class="row clearfix">
+            <div class="col-6">
+              <div class="form-group demo-masked-input">
+                <label for="fecha_inicio_extemporaneaEX"><strong>Inicio:</strong></label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
+                  </div>
+                  <input data-provide="datepicker" data-date-format="yyyy-mm-dd" min="1960-01-01"
+                    data-date-autoclose="true" class="form-control" name="inicio_dia_permisoEX"
+                    id="inicio_dia_permisoEX" value="" placeholder="Inicio de Permiso" />
+                  <input type="text" class="form-control time12" placeholder="Ex: 11:59 pm" id="inicio_hora_permisoEX"
+                    name="inicio_hora_permisoEX">
+
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group demo-masked-input">
+                <label for="fin_dia_permisoEX"><strong>Inicio:</strong></label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
+                  </div>
+                  <input data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true"
+                    class="form-control" name="fin_dia_permisoEX" id="fin_dia_permisoEX" value=""
+                    placeholder="Fin de Permiso" />
+                  <input type="text" class="form-control time12" placeholder="Ex: 11:59 pm" id="fin_hora_permisoEX"
+                    name="fin_hora_permisoEX">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="motivo_permiso" class="form-label">Motivo del permiso:</label>
+            <textarea class="form-control" name="motivo_permiso" id="motivo_permiso" rows="3" required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" name="agendar_permisoEX" class="btn btn-success">
+            Agendar
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+    </div>
+    </form>
+  </div>
+</div>
+</div>
+
 
 {% endblock %}

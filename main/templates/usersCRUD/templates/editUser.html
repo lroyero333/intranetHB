@@ -23,7 +23,8 @@
                                         <div class="form-group">
                                             <label for="foto"><strong>Foto:</strong></label>
                                             <div>
-                                                <input type="file" name="foto" id="foto" class="custom-input-file" accept=".jpg, .jpeg, .png"/>
+                                                <input type="file" name="foto" id="foto" class="custom-input-file"
+                                                    accept=".jpg, .jpeg, .png" />
                                                 <label for="foto">
                                                     <i class="fa fa-upload"></i>
                                                     <span>Selecciona una foto…</span>
@@ -77,7 +78,7 @@
                                                 id="Fecha_nacimiento" value="{{datosUsuarios[6] }}"
                                                 placeholder="Fecha Nacimiento">
                                         </div>
-                                    
+
                                         <h6></h6>
                                         <div class="form-group">
                                             <label for="correo"><strong>Correo:</strong></label>
@@ -123,7 +124,7 @@
                                                 id="departamento" value="{{datosUsuarios[12] }}"
                                                 placeholder="Departamento">
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label for="pais"><strong>País:</strong></label>
                                             <input type="text" class="form-control" name="pais" id="pais"
@@ -150,25 +151,26 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="lugar_pension"><strong>Administradora de pensión:</strong></label>
+                                            <label for="lugar_pension"><strong>Administradora de
+                                                    pensión:</strong></label>
                                             <input type="text" class="form-control" name="lugar_pension"
                                                 id="lugar_pension" placeholder="Lugar de pension"
-                                                value="{{datosUsuarios[21] }}" >
+                                                value="{{datosUsuarios[21] }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="arl"><strong>ARL:</strong></label>
-                                            <input type="text" class="form-control" name="arl"
-                                                id="arl" placeholder="ARL"
-                                                value="{{datosUsuarios[37] }}">
+                                            <input type="text" class="form-control" name="arl" id="arl"
+                                                placeholder="ARL" value="{{datosUsuarios[37] }}">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="caja_compensacion"><strong>Caja de compensación:</strong></label>
+                                            <label for="caja_compensacion"><strong>Caja de
+                                                    compensación:</strong></label>
                                             <input type="text" class="form-control" name="caja_compensacion"
                                                 id="caja_compensacion" placeholder="Caja de compensación"
-                                                value="{{datosUsuarios[38] }}" >
+                                                value="{{datosUsuarios[38] }}">
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
                                             <select class="form-control" name="tipo_sangre" id="tipo_sangre"
@@ -211,9 +213,11 @@
                                                 value="{{datosUsuarios[20] }}" placeholder="Posgrado">
                                         </div>
                                         <div class="form-group">
-                                            <label for="institucion_posgrado"><strong>Intitución Posgrado:</strong></label>
-                                            <input type="text" class="form-control" name="institucion_posgrado" id="institucion_posgrado"
-                                                value="{{datosUsuarios[33] }}" placeholder="Intitución Posgrado">
+                                            <label for="institucion_posgrado"><strong>Intitución
+                                                    Posgrado:</strong></label>
+                                            <input type="text" class="form-control" name="institucion_posgrado"
+                                                id="institucion_posgrado" value="{{datosUsuarios[33] }}"
+                                                placeholder="Intitución Posgrado">
                                         </div>
                                         <div class="form-group">
                                             <label for="cargo"><strong>Cargo:</strong></label>
@@ -232,14 +236,13 @@
                                             <label for="departamentoHB"><strong>Departamento:</strong></label>
                                             <select class="form-control" name="departamentoHB" id="departamentoHB"
                                                 value="{{datosUsuarios[36] }}">
-                                                <option value="">-- Seleccione la Profesion --</option>
-                                                <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
-                                                <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
-                                                <option value="Ingenieria Mecatronica">Ingenieria Mecatronica</option>
-                                                <option value="Diseño Industrial">Diseño Industrial</option>
-                                                <option value="Diseño Grafico">Diseño Grafico</option>
-                                                <option value="Marketing">Marketing</option>
-
+                                                <option value="">-- Seleccione el departamento --</option>
+                                                <option value="Sistemas y Programación">Sistemas y Programación</option>
+                                                <option value="Robótica y Electrónica">Robótica y Electrónica</option>
+                                                <option value="Diseño y Publicidad">Diseño y Publicidad</option>
+                                                <option value="Biomédica">Biomédica</option>
+                                                <option value="Industrial y Prototipado">Industrial y Prototipado
+                                                </option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -280,12 +283,12 @@
                                             <label for="entidad_bancaria"><strong>Entidad Bancaria:</strong></label>
                                             <input type="text" class="form-control" name="entidad_bancaria"
                                                 id="entidad_bancaria" placeholder="Entidad Bancaria"
-                                                value="{{datosUsuarios[21] }}" >
+                                                value="{{datosUsuarios[21] }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="tipo_cuenta"><strong>Tipo de Cuenta:</strong></label>
                                             <select class="form-control" name="tipo_cuenta" id="tipo_cuenta"
-                                            value="{{datosUsuarios[21] }}" >
+                                                value="{{datosUsuarios[21] }}">
                                                 <option value="">-- Seleccione un tipo --</option>
                                                 <option value="Ahorro">Ahorro</option>
                                                 <option value="Corriente">Corriente</option>
@@ -295,7 +298,7 @@
                                             <label for="numero_cuenta"><strong>Número de cuenta:</strong></label>
                                             <input type="number" class="form-control" name="numero_cuenta"
                                                 id="numero_cuenta" placeholder="Número de cuenta"
-                                                value="{{datosUsuarios[21] }}" >
+                                                value="{{datosUsuarios[21] }}">
                                         </div>
 
                                         <div class="form-group">
