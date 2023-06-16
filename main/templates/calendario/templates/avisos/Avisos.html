@@ -8,15 +8,8 @@
       <a class="navbar-brand" href="javascript:void(0);">
         <h4>Avisos</h4>
       </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fa fa-align-justify"></i>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -33,12 +26,7 @@
 
             <div class="body">
               <div class="tab-content" id="myTabContent">
-                <div
-                  class="tab-pane fade show active"
-                  id="todos"
-                  role="tabpanel"
-                  aria-labelledby="todos-tab"
-                >
+                <div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
                   <h1 class="text-center">Avisos</h1>
                   <hr />
 
@@ -46,41 +34,16 @@
                     <div class="row">
                       {% for datosAvisos in datosAvisos %}
                       <div class="col-lg-4 col-md-6">
-                        <div class="card">
-                          <div class="card-header">
-                            <div class="row align-items-center">
-                              <div class="col-8">
-                                <h4 class="heading h6 mb-0">
-                                  {{datosAvisos[1]}}
-                                </h4>
+                        <div class="card bg-dark">
+                          <div class="card-body py-5">
+                            <div class="d-flex align-items-start">
+                              <div class="icon icon-lg">
+                                <i class="fa fa-exclamation text-white"></i>
                               </div>
-                              <div class="col-4">
-                                <div class="card-icon-actions text-right">
-                                  <a
-                                    href="#"
-                                    class="favorite active"
-                                    data-toggle="tooltip"
-                                    data-original-title="Save to favorites"
-                                    ><i class="fa fa-star"></i
-                                  ></a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card-body">
-                            <p class="card-text small">
-                              {{datosAvisos[4] | safe}}
-                            </p>
-                          </div>
-                          <div class="card-footer">
-                            <div class="row align-items-center">
-                              <div class="col-6">
-                                <p>Fecha: {{datosAvisos[5]}}</p>
-                              </div>
-                              <div class="col-6 text-right">
-                                <span class="text-muted small"
-                                  >{{datosAvisos[9]}}</span
-                                >
+                              <div class="icon-text">
+                                <h4 class="heading text-white">{{datosAvisos[1]}} </h4>
+                                <p class="text-white">{{datosAvisos[4] | safe}}.</p>
+                                <p class="text-white">Fecha: {{datosAvisos[5]}}</p>
                               </div>
                             </div>
                           </div>

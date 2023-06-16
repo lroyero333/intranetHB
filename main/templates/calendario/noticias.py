@@ -10,9 +10,10 @@ from werkzeug.utils import secure_filename
 
 from main.routes import (app, bcrypt, mysql, redirect, render_template,
                          request, session, url_for)
-from main.run import (agregar_tiempo_transcurrido, app, bcrypt, flash,
-                      generarID, jsonify, mysql, redirect, render_template,
-                      request, session, stringAleatorio, url_for)
+from main.run import (agregar_tiempo_transcurrido, app, bcrypt, fecha_actualCO,
+                      flash, generarID, jsonify, mysql, redirect,
+                      render_template, request, session, stringAleatorio,
+                      url_for)
 
 extensionesImagenes = ['.jpg', '.jpeg', '.png']
 conexion = mysql.connect()
@@ -32,7 +33,7 @@ def stringAleatorio():
 def noticias():
     if not 'login' in session:
         return redirect('/')
-    fecha_actual = datetime.now()
+    fecha_actual =datetime.now()
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT noticias.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM noticias LEFT JOIN general_users ON noticias.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
@@ -51,7 +52,7 @@ def noticias():
 def editNoticia(noticia_id):
     if not 'login' in session:
         return redirect('/')
-    if session['cargo'] != 1:
+    if session['cargo'] != 1 and  session['cargo'] != 0:
         return redirect('/inicio')
     cursor.execute("SELECT * FROM noticias WHERE id_noticia= %s", noticia_id)
     noticia = cursor.fetchone()
@@ -64,7 +65,7 @@ def editNoticia(noticia_id):
 
         descripcion_noticia = request.form.get(
             'descripcion_noticia') or noticia[3]
-        fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        fecha_publicacion =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         if request.files['imagen_noticia'].filename != '':
             imagen_noticia = request.files['imagen_noticia']
@@ -111,7 +112,7 @@ def crearNoticia():
             titulo_noticia = request.form['titulo_noticia']
             imagen_noticia = request.files['imagen_noticia']
             descripcion_noticia = request.form['descripcion_noticia']
-            fecha_publicacion = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_publicacion =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             filename, file_extension = os.path.splitext(
                 imagen_noticia.filename)
             if file_extension.lower() not in extensionesImagenes:

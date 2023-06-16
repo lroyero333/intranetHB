@@ -29,11 +29,13 @@
     <link href="{{ url_for('static', filename='css/mobiscroll.jquery.min.css') }}" rel="stylesheet" />
     <script src="{{ url_for('static', filename='js/mobiscroll.jquery.min.js') }}"></script>
     <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/summernote/dist/summernote.min.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/jquery-datatable/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/summernote/dist/summernote.min.css') }}" />
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='vendor/jquery-datatable/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/jquery-scrollbar/css/jquery-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/highlight/css/highlight.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/demo.css') }}" rel="stylesheet">
+
 
 </head>
 
@@ -56,13 +58,11 @@
             <nav class="sidebar">
                 <div class="user-info">
                     <div class="image"><a href="/myProfile">
-                        {%if g.usuario_base is none %}
-                        <img src="{{ url_for('static', filename='images/users/userMale.png') }}"
-                                alt="User">
-                        {%else%}
-                        <img src="{{ url_for('static', filename='images/users/' + g.usuario_base[2]) }}"
-                                alt="User">
-                        {%endif%}</a>
+                            {%if g.usuario_base is none %}
+                            <img src="{{ url_for('static', filename='images/users/userMale.png') }}" alt="User">
+                            {%else%}
+                            <img src="{{ url_for('static', filename='images/users/' + g.usuario_base[2]) }}" alt="User">
+                            {%endif%}</a>
                     </div>
                     <div class="detail mt-3">
 
@@ -74,16 +74,19 @@
                         <a href="https://trello.com/" title="Trello" target="_blank"><i class="ti-trello"></i></a>
                         <a href="https://app.slack.com" target="_blank" title="Slack"><i class="fa fa-slack"></i></a>
                         <a href="https://mail.hostinger.com/?_task=mail&_mbox=INBOX" title="Correo" target="_blank"><i
-                            class="ti-email"></i></a>
-                        <a href="https://meet.google.com/qjs-ghch-gku" title="Reuniones" target="_blank"><i class="fa fa-video-camera"></i></a>
+                                class="ti-email"></i></a>
+                        <a href="https://meet.google.com/qjs-ghch-gku" title="Reuniones" target="_blank"><i
+                                class="fa fa-video-camera"></i></a>
 
-                        <a href="https://github.com/HuBionics" title="github" target="_blank"><i class="ti-github"></i></a>
-                        
+                        <a href="https://github.com/HuBionics" title="github" target="_blank"><i
+                                class="ti-github"></i></a>
+
                     </div>
                 </div>
                 <ul id="main-menu" class="metismenu">
                     <li class="g_heading">Cartelera</li>
-                    <li {% if current_path == '/inicio' %} class="active"{% endif %}><a href="/inicio"><i class="ti-home"></i><span>General</span></a></li>
+                    <li {% if current_path=='/inicio' %} class="active" {% endif %}><a href="/inicio"><i
+                                class="ti-home"></i><span>General</span></a></li>
                     <li><a href="/miCartelera"><i class="fa fa-calendar-o"></i><span>Mi cartelera</span></a></li>
                     <li><a href="/avisos"><i class="fa fa-exclamation"></i><span>Avisos</span></a></li>
                     <li><a href="/cursos"><i class="ti-layout"></i><span>Cursos</span></a></li>
@@ -95,17 +98,17 @@
                                 class="ti-notepad"></i><span>Mis Tareas</span></a></li>
                     <li><a href="/misProyectos"><i class="fa fa-folder-o"></i><span>Mis Proyectos</span></a></li>
                     <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Mi Inventario</span></a></li>
-                    <li><a  href="/nomina_certificados/" ><i class="fa fa-file"></i><span>Nómina / Certificados
-                                </span></a></li>
-                    
+                    <li><a href="/nomina_certificados/"><i class="fa fa-file-o"></i><span>Nómina / Certificados
+                            </span></a></li>
+
                     <li class="g_heading">Usuarios</li>
                     <li><a href="/myProfile"><i class="ti-user"></i><span>Mi Perfil</span></a></li>
                     <li><a href="/contactos"><i class="ti-id-badge"></i><span>Lista de Contactos</span></a></li>
-                    
+
                     <li class="g_heading">Administracion</li>
-                    
+
                     {% if session["cargo"] == 1 or session["cargo"] == 0 %}
-                    
+
                     <li><a href="/empleados"><i class="fa fa-users"></i><span>Gestión de Usuarios</span></a></li>
                     <li>
                         <a href="javascript:void(0)" class="has-arrow"><i class="fa fa-check-square
@@ -115,10 +118,11 @@
                             <li><a href="/vacaciones">Vacaciones</a></li>
                         </ul>
                     </li>
-                    <li><a  href="/nomina_certificados"  ><i class="fa fa-file-o"></i><span>Nómina / Certificados
-                    </span></a></li>
+                    <li><a href="/nomina_certificados"><i class="fa fa-file"></i><span>Nómina / Certificados
+                            </span></a></li>
                     <li>
-                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-cubes"></i><span>Gestión de Cursos</span></a>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-cubes"></i><span>Gestión de
+                                Cursos</span></a>
                         <ul>
                             <li><a href="/curso/crear">Crear Curso</a></li>
                             <li><a href="/cursos/lista/editar">Editar Curso</a></li>
@@ -126,7 +130,8 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-flag"></i><span>Gestión de Noticias</span></a>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-flag"></i><span>Gestión de
+                                Noticias</span></a>
                         <ul>
                             <li><a href="/noticias/crear">Crear Noticia</a></li>
                             <li><a href="/noticias/lista/editar">Editar Noticia</a></li>
@@ -134,7 +139,8 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-info-circle"></i><span>Gestión de Avisos</span></a>
+                        <a href="javascript:void(0)" class="has-arrow"><i class=" fa fa-info-circle"></i><span>Gestión
+                                de Avisos</span></a>
                         <ul>
                             <li><a href="/aviso/crear">Crear Aviso</a></li>
                             <li><a href="/avisos/lista/editar">Editar Aviso</a></li>

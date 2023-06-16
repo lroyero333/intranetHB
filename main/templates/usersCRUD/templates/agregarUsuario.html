@@ -6,7 +6,7 @@
     <div class="page">
         <div class="container">
             <h1 class="text-center">Registro de Usuarios</h1>
-           
+
             <br>
 
             <div class="row justify-content-center">
@@ -24,49 +24,39 @@
                                     <div class="col-md-6 col-12">
 
                                         <div class="form-group">
-                                            <label for="usuario"><strong>Foto:</strong></label>
+                                            <label for="foto"><strong>Foto:</strong></label>
                                             <div>
-                                                <input type="file" name="foto" id="foto"
-                                                    class="custom-input-file"  accept=".jpg, .jpeg, .png"/>
+                                                <input type="file" name="foto" id="foto" class="custom-input-file"
+                                                    accept=".jpg, .jpeg, .png" />
                                                 <label for="foto">
                                                     <i class="fa fa-upload"></i>
                                                     <span>Selecciona una foto…</span>
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="usuario"><strong>Usuario:</strong></label>
-                                            <input type="text" class="form-control" name="usuario" id="usuario"
-                                                placeholder="Usuario" value="{{ campos.get('usuario', '') }}" required>
-
-                                        </div>
 
                                         <div class="form-group">
                                             <label for="Nombre"><strong>Primer nombre:</strong></label>
                                             <input type="text" class="form-control" name="Nombre" id="Nombre"
-                                                placeholder="Primer Nombre" value="{{ campos.get('Nombre', '') }}"
-                                                required>
+                                                placeholder="Primer Nombre">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="segundo_nombre"><strong>Segundo nombre:</strong></label>
                                             <input type="text" class="form-control" name="segundo_nombre"
-                                                id="segundo_nombre" placeholder="Segundo Nombre"
-                                                value="{{ campos.get('segundo_nombre', '') }}" required>
+                                                id="segundo_nombre" placeholder="Segundo Nombre">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="Apellido"><strong>Primer apellido:</strong></label>
                                             <input type="text" class="form-control" name="Apellido" id="Apellido"
-                                                placeholder="Primer Apellido" value="{{ campos.get('Apellido', '') }}"
-                                                required>
+                                                placeholder="Primer Apellido">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="segundo_apellido"><strong>Segundo Apellido:</strong></label>
                                             <input type="text" class="form-control" name="segundo_apellido"
-                                                id="segundo_apellido" placeholder="Segundo Apellido"
-                                                value="{{ campos.get('segundo_apellido', '') }}" required>
+                                                id="segundo_apellido" placeholder="Segundo Apellido">
                                         </div>
                                         <h6><strong>Genero:</strong></h6>
                                         <div>
@@ -86,171 +76,99 @@
                                             </div>
                                             <input data-provide="datepicker" data-date-format="yyyy-mm-dd"
                                                 data-date-autoclose="true" class="form-control" name="Fecha_nacimiento"
-                                                id="Fecha_nacimiento" placeholder="Fecha Nacimiento"
-                                                value="{{ campos.get('Fecha_nacimiento', '') }}" required>
+                                                id="Fecha_nacimiento" placeholder="Fecha Nacimiento">
                                         </div>
-                                    </div>
 
-                                    <div class="col-md-6 col-12">
                                         <h6></h6>
                                         <div class="form-group">
                                             <label for="correo"><strong>Correo:</strong></label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control" name="correo" id="correo"
-                                                    placeholder="Correo" value="{{ campos.get('correo', '') }}"
-                                                    aria-label="Enter your email" aria-describedby="basic-addon2">
+                                                    placeholder="Correo" aria-label="Enter your email"
+                                                    aria-describedby="basic-addon2">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text"
                                                         id="correo">@humanbionics.com.co</span>
                                                 </div>
                                             </div>
-
-                                            <!--input type="email" class="form-control" name="correo" id="correo"
-                                                placeholder="Correo" value="{{ campos.get('correo', '') }}" required-->
                                         </div>
 
                                         <div class="form-group">
                                             <label for="identificacion"><strong>Identificación:</strong></label>
                                             <input type="text" class="form-control" name="identificacion"
-                                                id="identificacion" placeholder="Identificación"
-                                                value="{{ campos.get('identificacion', '') }}" required>
+                                                id="identificacion" placeholder="Identificación">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="direccion"><strong>Direccion:</strong></label>
                                             <input type="text" class="form-control" name="direccion" id="direccion"
-                                                placeholder="Direccion" value="{{ campos.get('direccion', '') }}"
-                                                required>
+                                                placeholder="Direccion">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="barrio"><strong>Barrio:</strong></label>
                                             <input type="text" class="form-control" name="barrio" id="barrio"
-                                                placeholder="Barrio" value="{{ campos.get('barrio', '') }}" required>
+                                                placeholder="Barrio">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="ciudad"><strong>Ciudad:</strong></label>
                                             <input type="text" class="form-control" name="ciudad" id="ciudad"
-                                                placeholder="Ciudad" value="{{ campos.get('ciudad', '') }}" required>
+                                                placeholder="Ciudad">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="departamento"><strong>Departamento:</strong></label>
                                             <input type="text" class="form-control" name="departamento"
-                                                id="departamento" placeholder="Departamento"
-                                                value="{{ campos.get('departamento', '') }}" required>
+                                                id="departamento" placeholder="Departamento">
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-12">
 
                                         <div class="form-group">
-                                            <label for="pais"><strong>Pais:</strong></label>
+                                            <label for="pais"><strong>País:</strong></label>
                                             <input type="text" class="form-control" name="pais" id="pais"
-                                                placeholder="Pais" value="{{ campos.get('pais', '') }}" required>
+                                                placeholder="Pais">
                                         </div>
+
                                         <div class="form-group">
                                             <label for="telefono"><strong>Teléfono:</strong></label>
                                             <input type="text" class="form-control" name="telefono" id="telefono"
-                                                placeholder="Telefono" value="{{ campos.get('telefono', '') }}"
-                                                required>
+                                                placeholder="Telefono">
                                         </div>
 
                                         <div class="form-group">
                                             <label for="celular"><strong>Celular:</strong></label>
                                             <input type="text" class="form-control" name="celular" id="celular"
-                                                placeholder="Celular" value="{{ campos.get('celular', '') }}" required>
+                                                placeholder="Celular">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="habilidades"><strong>Habilidades:</strong></label>
-                                            <input type="text" class="form-control" name="habilidades" id="habilidades"
-                                                placeholder="Habilidades" value="{{ campos.get('habilidades', '') }}"
-                                                required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="profesion"><strong>Profesion:</strong></label>
-                                            <select class="form-control" name="profesion" id="profesion"
-                                                value="{{ campos.get('profesion', '') }}" required>
-                                                <option value="">-- Seleccione la Profesion --</option>
-                                                <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
-                                                <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
-                                                <option value="Ingenieria Mecatronica">Ingenieria Mecatronica</option>
-                                                <option value="Diseño Industrial">Diseño Industrial</option>
-                                                <option value="Diseño Grafico">Diseño Grafico</option>
-                                                <option value="Marketing">Marketing</option>
-
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="cargo"><strong>Cargo:</strong></label>
-                                            <select class="form-control" name="cargo" id="cargo"
-                                                value="{{ campos.get('cargo', '') }}" required>
-                                                <option value="">-- Seleccione el cargo --</option>
-                                                <option value="0">CEO</option>
-                                                <option value="1">Recursos Humanos</option>
-                                                <option value="2">Empleado</option>
-                                                <option value="3">Lider de Taller</option>
-                                                <option value="4">Director de proyectos</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="entidad_salud"><strong>Entidad de salud:</strong></label>
+                                            <label for="entidad_salud"><strong>Entidad de salud EPS:</strong></label>
                                             <input type="text" class="form-control" name="entidad_salud"
-                                                id="entidad_salud" placeholder="Entidad de salud"
-                                                value="{{ campos.get('entidad_salud', '') }}" required>
+                                                id="entidad_salud" placeholder="Entidad de salud">
                                         </div>
+
                                         <div class="form-group">
-                                            <label for="lugar_pension"><strong>Lugar de pension:</strong></label>
+                                            <label for="lugar_pension"><strong>Administradora de
+                                                    pensión:</strong></label>
                                             <input type="text" class="form-control" name="lugar_pension"
-                                                id="lugar_pension" placeholder="Lugar de pension"
-                                                value="{{ campos.get('lugar_pension', '') }}" required>
+                                                id="lugar_pension" placeholder="Lugar de pension">
                                         </div>
                                         <div class="form-group">
-                                            <label for="entidad_bancaria"><strong>Entidad Bancaria:</strong></label>
-                                            <input type="text" class="form-control" name="entidad_bancaria"
-                                                id="entidad_bancaria" placeholder="Entidad Bancaria"
-                                                value="{{ campos.get('entidad_bancaria', '') }}" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="tipo_cuenta"><strong>Tipo de Cuenta:</strong></label>
-                                            <select class="form-control" name="tipo_cuenta" id="tipo_cuenta"
-                                                value="{{ campos.get('tipo_cuenta', '') }}" required>
-                                                <option value="">-- Seleccione un tipo --</option>
-                                                <option value="Ahorro">Ahorro</option>
-                                                <option value="Corriente">Corriente</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="numero_cuenta"><strong>Numero de cuenta:</strong></label>
-                                            <input type="number" class="form-control" name="numero_cuenta"
-                                                id="numero_cuenta" placeholder="Numero de cuenta"
-                                                value="{{ campos.get('numero_cuenta', '') }}" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-
-                                        <div class="form-group">
-                                            <label for="institucion"><strong>Institucion:</strong></label>
-                                            <input type="text" class="form-control" name="institucion" id="institucion"
-                                                placeholder="Institucion" value="{{ campos.get('institucion', '') }}"
-                                                required>
+                                            <label for="arl"><strong>ARL:</strong></label>
+                                            <input type="text" class="form-control" name="arl" id="arl"
+                                                placeholder="ARL">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="posgrado"><strong>Posgrado:</strong></label>
-                                            <input type="text" class="form-control" name="posgrado" id="posgrado"
-                                                placeholder="Posgrado" value="{{ campos.get('posgrado', '') }}"
-                                                required>
+                                            <label for="caja_compensacion"><strong>Caja de
+                                                    compensación:</strong></label>
+                                            <input type="text" class="form-control" name="caja_compensacion"
+                                                id="caja_compensacion" placeholder="Caja de compensación">
                                         </div>
 
-                                       
                                         <div class="form-group">
                                             <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
-                                            <select class="form-control" name="tipo_sangre" id="tipo_sangre"
-                                                value="{{ campos.get('tipo_sangre', '') }}" required>
+                                            <select class="form-control" name="tipo_sangre" id="tipo_sangre">
                                                 <option value="">-- Seleccione su tipo de sangre --</option>
                                                 <option value="A+">A+</option>
                                                 <option value="A-">A-</option>
@@ -262,22 +180,121 @@
                                                 <option value="O-">O-</option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="profesion"><strong>Profesion:</strong></label>
+                                            <select class="form-control" name="profesion" id="profesion">
+                                                <option value="">-- Seleccione la Profesion --</option>
+                                                <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
+                                                <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
+                                                <option value="Ingenieria Mecatronica">Ingenieria Mecatronica</option>
+                                                <option value="Diseño Industrial">Diseño Industrial</option>
+                                                <option value="Diseño Grafico">Diseño Grafico</option>
+                                                <option value="Marketing">Marketing</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="institucion"><strong>Institucion Pregrado:</strong></label>
+                                            <input type="text" class="form-control" name="institucion" id="institucion"
+                                                placeholder="Institucion">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="posgrado"><strong>Posgrado:</strong></label>
+                                            <input type="text" class="form-control" name="posgrado" id="posgrado"
+                                                placeholder="Posgrado">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="institucion_posgrado"><strong>Intitución
+                                                    Posgrado:</strong></label>
+                                            <input type="text" class="form-control" name="institucion_posgrado"
+                                                id="institucion_posgrado" placeholder="Intitución Posgrado">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cargo"><strong>Cargo:</strong></label>
+                                            <select class="form-control" name="cargo" id="cargo">
+                                                <option value="">-- Seleccione el cargo --</option>
+                                                <option value="0">CEO</option>
+                                                <option value="1">Recursos Humanos</option>
+                                                <option value="2">Empleado</option>
+                                                <option value="3">Lider de Taller</option>
+                                                <option value="4">Director de proyectos</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="departamentoHB"><strong>Departamento:</strong></label>
+                                            <select class="form-control" name="departamentoHB" id="departamentoHB">
+                                                <option value="">-- Seleccione la Profesion --</option>
+                                                <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
+                                                <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
+                                                <option value="Ingenieria Mecatronica">Ingenieria Mecatronica</option>
+                                                <option value="Diseño Industrial">Diseño Industrial</option>
+                                                <option value="Diseño Grafico">Diseño Grafico</option>
+                                                <option value="Marketing">Marketing</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="habilidades"><strong>Habilidades:</strong></label>
+                                            <input type="text" class="form-control" name="habilidades" id="habilidades"
+                                                placeholder="Habilidades">
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="nombre_contacto"><strong>Nombre de contacto:</strong></label>
                                             <input type="text" class="form-control" name="nombre_contacto"
-                                                id="nombre_contacto" placeholder="Nombre de contacto"
-                                                value="{{ campos.get('nombre_contacto', '') }}" required>
+                                                id="nombre_contacto" placeholder="Nombre de contacto">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="numero_contacto"><strong>Número de contacto:</strong></label>
+                                            <input type="text" class="form-control" name="numero_contacto"
+                                                id="numero_contacto" placeholder="Número de contacto">
                                         </div>
                                         <div class="form-group">
-                                            <label for="numero_contacto"><strong>Numero de contacto:</strong></label>
-                                            <input type="text" class="form-control" name="numero_contacto"
-                                                id="numero_contacto" placeholder="Numero de contacto"
-                                                value="{{ campos.get('numero_contacto', '') }}" required>
+                                            <label for="usuario"><strong>Usuario Intranet:</strong></label>
+                                            <input type="text" class="form-control" name="usuario"
+                                                id="usuario" placeholder="Usuario Intranet">
                                         </div>
+                                        <div class="form-group">
+                                            <label for="usuario_trello"><strong>Usuario Trello:</strong></label>
+                                            <input type="text" class="form-control" name="usuario_trello"
+                                                id="usuario_trello" placeholder="Usuario Trello">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="usuario_slack"><strong>Usuario Slack:</strong></label>
+                                            <input type="text" class="form-control" name="usuario_slack"
+                                                id="usuario_slack" placeholder="Usuario Slack">
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="entidad_bancaria"><strong>Entidad Bancaria:</strong></label>
+                                            <input type="text" class="form-control" name="entidad_bancaria"
+                                                id="entidad_bancaria" placeholder="Entidad Bancaria">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="tipo_cuenta"><strong>Tipo de Cuenta:</strong></label>
+                                            <select class="form-control" name="tipo_cuenta" id="tipo_cuenta">
+                                                <option value="">-- Seleccione un tipo --</option>
+                                                <option value="Ahorro">Ahorro</option>
+                                                <option value="Corriente">Corriente</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="numero_cuenta"><strong>Número de cuenta:</strong></label>
+                                            <input type="number" class="form-control" name="numero_cuenta"
+                                                id="numero_cuenta" placeholder="Número de cuenta">
+                                        </div>
+
+
                                         <div class="form-group">
                                             <label for="contrasena"><strong>Contraseña:</strong></label>
                                             <input type="password" class="form-control" name="contrasena"
-                                                id="contrasena" placeholder="Contraseña" value="{{ campo }}" required>
+                                                id="contrasena" placeholder="Contraseña">
                                         </div>
 
                                     </div>

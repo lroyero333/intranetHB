@@ -77,9 +77,7 @@
                                                 id="Fecha_nacimiento" value="{{datosUsuarios[6] }}"
                                                 placeholder="Fecha Nacimiento">
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-6 col-12">
+                                    
                                         <h6></h6>
                                         <div class="form-group">
                                             <label for="correo"><strong>Correo:</strong></label>
@@ -126,16 +124,12 @@
                                                 placeholder="Departamento">
                                         </div>
                                         
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 col-12">
-
                                         <div class="form-group">
-                                            <label for="pais"><strong>Pais:</strong></label>
+                                            <label for="pais"><strong>País:</strong></label>
                                             <input type="text" class="form-control" name="pais" id="pais"
                                                 value="{{datosUsuarios[13] }}" placeholder="Pais">
                                         </div>
+
                                         <div class="form-group">
                                             <label for="telefono"><strong>Teléfono:</strong></label>
                                             <input type="text" class="form-control" name="telefono" id="telefono"
@@ -149,10 +143,49 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="habilidades"><strong>Habilidades:</strong></label>
-                                            <input type="text" class="form-control" name="habilidades" id="habilidades"
-                                                value="{{datosUsuarios[16] }}" placeholder="Habilidades">
+                                            <label for="entidad_salud"><strong>Entidad de salud EPS:</strong></label>
+                                            <input type="text" class="form-control" name="entidad_salud"
+                                                id="entidad_salud" placeholder="Entidad de salud"
+                                                value="{{datosUsuarios[21] }}">
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="lugar_pension"><strong>Administradora de pensión:</strong></label>
+                                            <input type="text" class="form-control" name="lugar_pension"
+                                                id="lugar_pension" placeholder="Lugar de pension"
+                                                value="{{datosUsuarios[21] }}" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="arl"><strong>ARL:</strong></label>
+                                            <input type="text" class="form-control" name="arl"
+                                                id="arl" placeholder="ARL"
+                                                value="{{datosUsuarios[37] }}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="caja_compensacion"><strong>Caja de compensación:</strong></label>
+                                            <input type="text" class="form-control" name="caja_compensacion"
+                                                id="caja_compensacion" placeholder="Caja de compensación"
+                                                value="{{datosUsuarios[38] }}" >
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
+                                            <select class="form-control" name="tipo_sangre" id="tipo_sangre"
+                                                value="{{datosUsuarios[22] }}">
+                                                <option value="">-- Seleccione su tipo de sangre --</option>
+                                                <option value="A+">A+</option>
+                                                <option value="A-">A-</option>
+                                                <option value="B+">B+</option>
+                                                <option value="B-">B-</option>
+                                                <option value="AB+">AB+</option>
+                                                <option value="AB-">AB-</option>
+                                                <option value="O+">O+</option>
+                                                <option value="O-">O-</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="profesion"><strong>Profesion:</strong></label>
                                             <select class="form-control" name="profesion" id="profesion"
@@ -168,6 +201,21 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
+                                            <label for="institucion"><strong>Institucion Pregrado:</strong></label>
+                                            <input type="text" class="form-control" name="institucion" id="institucion"
+                                                value="{{datosUsuarios[19] }}" placeholder="Institucion">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="posgrado"><strong>Posgrado:</strong></label>
+                                            <input type="text" class="form-control" name="posgrado" id="posgrado"
+                                                value="{{datosUsuarios[20] }}" placeholder="Posgrado">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="institucion_posgrado"><strong>Intitución Posgrado:</strong></label>
+                                            <input type="text" class="form-control" name="institucion_posgrado" id="institucion_posgrado"
+                                                value="{{datosUsuarios[33] }}" placeholder="Intitución Posgrado">
+                                        </div>
+                                        <div class="form-group">
                                             <label for="cargo"><strong>Cargo:</strong></label>
                                             <select class="form-control" name="cargo" id="cargo"
                                                 value="{{datosUsuarios[30] }}">
@@ -179,19 +227,55 @@
                                                 <option value="4">Director de proyectos</option>
                                             </select>
                                         </div>
+
                                         <div class="form-group">
-                                            <label for="entidad_salud"><strong>Entidad de salud:</strong></label>
-                                            <input type="text" class="form-control" name="entidad_salud"
-                                                id="entidad_salud" placeholder="Entidad de salud"
-                                                value="{{datosUsuarios[21] }}">
+                                            <label for="departamentoHB"><strong>Departamento:</strong></label>
+                                            <select class="form-control" name="departamentoHB" id="departamentoHB"
+                                                value="{{datosUsuarios[36] }}">
+                                                <option value="">-- Seleccione la Profesion --</option>
+                                                <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
+                                                <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
+                                                <option value="Ingenieria Mecatronica">Ingenieria Mecatronica</option>
+                                                <option value="Diseño Industrial">Diseño Industrial</option>
+                                                <option value="Diseño Grafico">Diseño Grafico</option>
+                                                <option value="Marketing">Marketing</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="habilidades"><strong>Habilidades:</strong></label>
+                                            <input type="text" class="form-control" name="habilidades" id="habilidades"
+                                                value="{{datosUsuarios[16] }}" placeholder="Habilidades">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="lugar_pension"><strong>Lugar de pension:</strong></label>
-                                            <input type="text" class="form-control" name="lugar_pension"
-                                                id="lugar_pension" placeholder="Lugar de pension"
-                                                value="{{datosUsuarios[21] }}" >
+                                            <label for="nombre_contacto"><strong>Nombre de contacto:</strong></label>
+                                            <input type="text" class="form-control" name="nombre_contacto"
+                                                id="nombre_contacto" placeholder="Nombre de contacto"
+                                                value="{{datosUsuarios[24] }}">
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="numero_contacto"><strong>Número de contacto:</strong></label>
+                                            <input type="text" class="form-control" name="numero_contacto"
+                                                id="numero_contacto" value="{{datosUsuarios[25] }}"
+                                                placeholder="Número de contacto">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="usuario_trello"><strong>Usuario Trello:</strong></label>
+                                            <input type="text" class="form-control" name="usuario_trello"
+                                                id="usuario_trello" placeholder="Usuario Trello"
+                                                value="{{datosUsuarios[34] }}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="usuario_slack"><strong>Usuario Slack:</strong></label>
+                                            <input type="text" class="form-control" name="usuario_slack"
+                                                id="usuario_slack" value="{{datosUsuarios[35] }}"
+                                                placeholder="Usuario Slack">
+                                        </div>
+
+
                                         <div class="form-group">
                                             <label for="entidad_bancaria"><strong>Entidad Bancaria:</strong></label>
                                             <input type="text" class="form-control" name="entidad_bancaria"
@@ -208,54 +292,10 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="numero_cuenta"><strong>Numero de cuenta:</strong></label>
+                                            <label for="numero_cuenta"><strong>Número de cuenta:</strong></label>
                                             <input type="number" class="form-control" name="numero_cuenta"
-                                                id="numero_cuenta" placeholder="Numero de cuenta"
+                                                id="numero_cuenta" placeholder="Número de cuenta"
                                                 value="{{datosUsuarios[21] }}" >
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-
-                                        <div class="form-group">
-                                            <label for="institucion"><strong>Institucion:</strong></label>
-                                            <input type="text" class="form-control" name="institucion" id="institucion"
-                                                value="{{datosUsuarios[19] }}" placeholder="Institucion">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="posgrado"><strong>Posgrado:</strong></label>
-                                            <input type="text" class="form-control" name="posgrado" id="posgrado"
-                                                value="{{datosUsuarios[20] }}" placeholder="Posgrado">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
-                                            <select class="form-control" name="tipo_sangre" id="tipo_sangre"
-                                                value="{{datosUsuarios[22] }}">
-                                                <option value="">-- Seleccione su tipo de sangre --</option>
-                                                <option value="A+">A+</option>
-                                                <option value="A-">A-</option>
-                                                <option value="B+">B+</option>
-                                                <option value="B-">B-</option>
-                                                <option value="AB+">AB+</option>
-                                                <option value="AB-">AB-</option>
-                                                <option value="O+">O+</option>
-                                                <option value="O-">O-</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="nombre_contacto"><strong>Nombre de contacto:</strong></label>
-                                            <input type="text" class="form-control" name="nombre_contacto"
-                                                id="nombre_contacto" placeholder="Nombre de contacto"
-                                                value="{{datosUsuarios[24] }}">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="numero_contacto"><strong>Numero de contacto:</strong></label>
-                                            <input type="text" class="form-control" name="numero_contacto"
-                                                id="numero_contacto" value="{{datosUsuarios[25] }}"
-                                                placeholder="Numero de contacto">
                                         </div>
 
                                         <div class="form-group">

@@ -58,7 +58,11 @@
       </div>
       {% endif %} {% endfor %} {% endif %} {% endwith %}
       <div class="row clearfix">
-        {% for datosProyectos in datosProyectos %}
+        {% if not datosProyectos %}
+        <div class="col-xl-12 col-lg-12 col-md-12">
+          <div class="alert alert-info">No hay proyectos disponibles.</div>
+        </div>
+        {% else %} {% for datosProyectos in datosProyectos %}
 
         <div class="col-xl-3 col-lg-3 col-md-6">
           <div class="card mcard_4">
@@ -84,82 +88,8 @@
             </div>
           </div>
         </div>
-        {% endfor %}
+        {% endfor %}{%endif%}
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="verProyectos" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <label for="fecha_inicio_curso"
-          ><strong>Opciones de Proyectos</strong></label
-        >
-      </div>
-      <form action="" method="POST">
-        <div class="modal-body">
-          <div class="row clearfix">
-            <div class="col-12">
-              <div class="form-group">
-                <label for="titulo_noticia"
-                  ><strong>Proyectos creados</strong></label
-                >
-                <select
-                  class="selectpicker"
-                  name="proyecto_id"
-                  title="Selecciona un curso"
-                  data-live-search="true"
-                  data-live-search-placeholder="Buscar ..."
-                >
-                  <option value="" selected disabled>
-                    Selecciona un proyecto
-                  </option>
-                  {% for datosProyectos in datosProyectos %}
-                  <option value="{{ datosProyectos[0] }}">
-                    {{ datosProyectos[1] }}
-                  </option>
-                  {% endfor %}
-                </select>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <form action="" method="POST">
-                <input
-                  type="hidden"
-                  name="proyecto_id"
-                  value="{{ datosProyectos[0] }}"
-                />
-                <button
-                  type="submit"
-                  name="editar_proyecto"
-                  value="{{ datosProyectos[0] }}"
-                  class="btn btn-primary"
-                >
-                  Editar
-                </button>
-                <button
-                  type="submit"
-                  name="borrar_proyecto"
-                  value="{{ datosProyectos[0] }}"
-                  class="btn btn-danger"
-                >
-                  Eliminar <i class="fa fa-trash"></i>
-                </button>
-
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Cerrar
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </form>
     </div>
   </div>
 </div>

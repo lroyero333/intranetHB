@@ -5,15 +5,8 @@
       <a class="navbar-brand" href="javascript:void(0);">
         <h4>Mi Cartelera</h4>
       </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fa fa-align-justify"></i>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -41,9 +34,7 @@
                         <h5 class="heading heading-5 strong-600">
                           {{datosCursos[8]}}
                         </h5>
-                        <h6
-                          class="heading heading-sm strong-400 text-muted mb-4"
-                        >
+                        <h6 class="heading heading-sm strong-400 text-muted mb-4">
                           {{datosCursos[19]}}
                         </h6>
                         <p class="card-text">
@@ -52,29 +43,19 @@
 
                         <br />
                         <p class="card-text">Ubicacion: {{datosCursos[12]}}</p>
-                        <a
-                          href="/cursos/{{datosCursos[2]}}"
-                          class="btn btn-sm btn-primary"
-                          >Ver Más...</a
-                        >
+                        <a href="/cursos/{{datosCursos[2]}}" class="btn btn-sm btn-primary">Ver Más...</a>
                       </div>
                       <div class="card-footer">
                         <div class="row align-items-center">
                           <div class="col">
                             {% if datosCursos[10] is none %}
-                            <img
-                              src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
-                              class="avatar avatar-lg mr-3"
-                            />
+                            <img src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
+                              class="avatar avatar-lg mr-3" />
                             {% else %}
-                            <img
-                              src="{{ url_for('static', filename='images/users/' + datosCursos[18]) }}"
-                              class="avatar avatar-lg mr-3"
-                            />
+                            <img src="{{ url_for('static', filename='images/users/' + datosCursos[18]) }}"
+                              class="avatar avatar-lg mr-3" />
                             {%endif%}
-                            <span class="avatar-content"
-                              >{{datosCursos[16]}} {{datosCursos[17]}}</span
-                            >
+                            <span class="avatar-content">{{datosCursos[16]}} {{datosCursos[17]}}</span>
                           </div>
                           <div class="col text-right text-xs-right"></div>
                         </div>
@@ -88,12 +69,10 @@
                 <hr />
 
                 <div class="table-responsive">
-                  <table
-                    class="table table-bordered table-striped table-hover mb-0 c_table"
-                  >
+                  <table class="table table-bordered table-striped table-hover mb-0 c_table">
                     <thead>
                       <tr>
-                        <th>Solicitude</th>
+                        <th>Solicitudes</th>
                         <th>Nombre</th>
                         <th>Fecha Solicitud</th>
                         <th>Estado Solicitud</th>
@@ -111,19 +90,12 @@
                         <td>{{reportes_inventario[6]}}</td>
                         <td>
                           {% if reportes_inventario[4]=="Pendiente" %}<span
-                            class="badge badge-lg badge-pill badge-warning text-uppercase"
-                          >
-                            Pendiente </span
-                          >{%endif%} {% if reportes_inventario[4]=="Rechazado"
-                          %}<span
-                            class="badge badge-lg badge-pill badge-danger text-uppercase"
-                          >
-                            Rechazado </span
-                          >{%endif%} {% if reportes_inventario[4]=="Aceptado" %}<span
-                            class="badge badge-lg badge-pill badge-success text-uppercase"
-                          >
-                            Aceptado </span
-                          >{%endif%}
+                            class="badge badge-lg badge-pill badge-warning text-uppercase">
+                            Pendiente </span>{%endif%} {% if reportes_inventario[4]=="Rechazado"
+                          %}<span class="badge badge-lg badge-pill badge-danger text-uppercase">
+                            Rechazado </span>{%endif%} {% if reportes_inventario[4]=="Aceptado" %}<span
+                            class="badge badge-lg badge-pill badge-success text-uppercase">
+                            Aceptado </span>{%endif%}
                         </td>
                         <td>No aplica</td>
                         <td>
@@ -134,122 +106,94 @@
                       </tr>
                       {%endif%} {%endfor%}
                       {% for solicitudes_certificado in solicitudes_certificado %}
-                        <tr>
-                          <td>Certificado</td>
-                          <td>{{solicitudes_certificado[0]}}</td>
-                          <td>{{solicitudes_certificado[1]}}</td>
-                          <td>
-                            {% if solicitudes_certificado[2]=="Pendiente" %}<span
-                              class="badge badge-lg badge-pill badge-warning text-uppercase"
-                            >
-                              Pendiente </span
-                            >{%endif%} {% if solicitudes_certificado[2]=="Rechazado"
-                            %}<span
-                              class="badge badge-lg badge-pill badge-danger text-uppercase"
-                            >
-                              Rechazado </span
-                            >{%endif%} {% if solicitudes_certificado[2]=="Aceptado" %}<span
-                              class="badge badge-lg badge-pill badge-success text-uppercase"
-                            >
-                              Aceptado </span
-                            >{%endif%}
-                          </td>
-                          <td>{{solicitudes_certificado[4]}}</td>
-                          <td>
-                            {{solicitudes_certificado[6]}}
-                            {{solicitudes_certificado[7]}}
-                          </td>
-                          <td>{{solicitudes_certificado[3]}}</td>
-                        </tr>
-                         {%endfor%}
-                         {% for solicitudes_nomina in solicitudes_nomina %}
-                        <tr>
-                          <td>Nómina</td>
-                          <td>{{solicitudes_nomina[0]}}</td>
-                          <td>{{solicitudes_nomina[1]}}</td>
-                          <td>
-                            {% if solicitudes_nomina[2]=="Pendiente" %}<span
-                              class="badge badge-lg badge-pill badge-warning text-uppercase"
-                            >
-                              Pendiente </span
-                            >{%endif%} {% if solicitudes_nomina[2]=="Rechazado"
-                            %}<span
-                              class="badge badge-lg badge-pill badge-danger text-uppercase"
-                            >
-                              Rechazado </span
-                            >{%endif%} {% if solicitudes_nomina[2]=="Aceptado" %}<span
-                              class="badge badge-lg badge-pill badge-success text-uppercase"
-                            >
-                              Aceptado </span
-                            >{%endif%}
-                          </td>
-                          <td>{{solicitudes_nomina[4]}}</td>
-                          <td>
-                            {{solicitudes_nomina[6]}}
-                            {{solicitudes_nomina[7]}}
-                          </td>
-                          <td>{{solicitudes_nomina[3]}}</td>
-                        </tr>
-                         {%endfor%}
-                         {% for solicitudes_permiso in solicitudes_permiso %}
-                        <tr>
-                          <td>Permiso</td>
-                          <td>{{solicitudes_permiso[0]}}</td>
-                          <td>{{solicitudes_permiso[1]}}</td>
-                          <td>
-                            {% if solicitudes_permiso[2]=="Pendiente" %}<span
-                              class="badge badge-lg badge-pill badge-warning text-uppercase"
-                            >
-                              Pendiente </span
-                            >{%endif%} {% if solicitudes_permiso[2]=="Rechazado"
-                            %}<span
-                              class="badge badge-lg badge-pill badge-danger text-uppercase"
-                            >
-                              Rechazado </span
-                            >{%endif%} {% if solicitudes_permiso[2]=="Aceptado" %}<span
-                              class="badge badge-lg badge-pill badge-success text-uppercase"
-                            >
-                              Aceptado </span
-                            >{%endif%}
-                          </td>
-                          <td>{{solicitudes_permiso[4]}}</td>
-                          <td>
-                            {{solicitudes_permiso[6]}}
-                            {{solicitudes_permiso[7]}}
-                          </td>
-                          <td>{{solicitudes_permiso[3]}}</td>
-                        </tr>
-                         {%endfor%}
-                         {% for solicitudes_vacaciones in solicitudes_vacaciones %}
-                         <tr>
-                           <td>Vacaciones</td>
-                           <td>Vacaciones Extemporaneas</td>
-                           <td>{{solicitudes_vacaciones[0]}}</td>
-                           <td>
-                            {% if solicitudes_vacaciones[1]=="Pendiente" %}<span
-                              class="badge badge-lg badge-pill badge-warning text-uppercase"
-                            >
-                              Pendiente </span
-                            >{%endif%} {% if solicitudes_vacaciones[1]=="Rechazado"
-                            %}<span
-                              class="badge badge-lg badge-pill badge-danger text-uppercase"
-                            >
-                              Rechazado </span
-                            >{%endif%} {% if solicitudes_vacaciones[1]=="Aceptado" %}<span
-                              class="badge badge-lg badge-pill badge-success text-uppercase"
-                            >
-                              Aceptado </span
-                            >{%endif%}
-                          </td>
-                           <td>{{solicitudes_vacaciones[3]}}</td>
-                           <td>
-                             {{solicitudes_vacaciones[5]}}
-                             {{solicitudes_vacaciones[6]}}
-                           </td>
-                           <td>{{solicitudes_vacaciones[2]}}</td>
-                         </tr>
-                          {%endfor%}
-                      </tbody>
+                      <tr>
+                        <td>Certificado</td>
+                        <td>{{solicitudes_certificado[0]}}</td>
+                        <td>{{solicitudes_certificado[1]}}</td>
+                        <td>
+                          {% if solicitudes_certificado[2]=="Pendiente" %}<span
+                            class="badge badge-lg badge-pill badge-warning text-uppercase">
+                            Pendiente </span>{%endif%} {% if solicitudes_certificado[2]=="Rechazado"
+                          %}<span class="badge badge-lg badge-pill badge-danger text-uppercase">
+                            Rechazado </span>{%endif%} {% if solicitudes_certificado[2]=="Aceptado" %}<span
+                            class="badge badge-lg badge-pill badge-success text-uppercase">
+                            Aceptado </span>{%endif%}
+                        </td>
+                        <td>{{solicitudes_certificado[4]}}</td>
+                        <td>
+                          {{solicitudes_certificado[6]}}
+                          {{solicitudes_certificado[7]}}
+                        </td>
+                        <td>{{solicitudes_certificado[3]}}</td>
+                      </tr>
+                      {%endfor%}
+                      {% for solicitudes_nomina in solicitudes_nomina %}
+                      <tr>
+                        <td>Nómina</td>
+                        <td>{{solicitudes_nomina[0]}}</td>
+                        <td>{{solicitudes_nomina[1]}}</td>
+                        <td>
+                          {% if solicitudes_nomina[2]=="Pendiente" %}<span
+                            class="badge badge-lg badge-pill badge-warning text-uppercase">
+                            Pendiente </span>{%endif%} {% if solicitudes_nomina[2]=="Rechazado"
+                          %}<span class="badge badge-lg badge-pill badge-danger text-uppercase">
+                            Rechazado </span>{%endif%} {% if solicitudes_nomina[2]=="Aceptado" %}<span
+                            class="badge badge-lg badge-pill badge-success text-uppercase">
+                            Aceptado </span>{%endif%}
+                        </td>
+                        <td>{{solicitudes_nomina[4]}}</td>
+                        <td>
+                          {{solicitudes_nomina[6]}}
+                          {{solicitudes_nomina[7]}}
+                        </td>
+                        <td>{{solicitudes_nomina[3]}}</td>
+                      </tr>
+                      {%endfor%}
+                      {% for solicitudes_permiso in solicitudes_permiso %}
+                      <tr>
+                        <td>Permiso</td>
+                        <td>{{solicitudes_permiso[0]}}</td>
+                        <td>{{solicitudes_permiso[1]}}</td>
+                        <td>
+                          {% if solicitudes_permiso[2]=="Pendiente" %}<span
+                            class="badge badge-lg badge-pill badge-warning text-uppercase">
+                            Pendiente </span>{%endif%} {% if solicitudes_permiso[2]=="Rechazado"
+                          %}<span class="badge badge-lg badge-pill badge-danger text-uppercase">
+                            Rechazado </span>{%endif%} {% if solicitudes_permiso[2]=="Aceptado" %}<span
+                            class="badge badge-lg badge-pill badge-success text-uppercase">
+                            Aceptado </span>{%endif%}
+                        </td>
+                        <td>{{solicitudes_permiso[4]}}</td>
+                        <td>
+                          {{solicitudes_permiso[6]}}
+                          {{solicitudes_permiso[7]}}
+                        </td>
+                        <td>{{solicitudes_permiso[3]}}</td>
+                      </tr>
+                      {%endfor%}
+                      {% for solicitudes_vacaciones in solicitudes_vacaciones %}
+                      <tr>
+                        <td>Vacaciones</td>
+                        <td>Vacaciones Extemporaneas</td>
+                        <td>{{solicitudes_vacaciones[0]}}</td>
+                        <td>
+                          {% if solicitudes_vacaciones[1]=="Pendiente" %}<span
+                            class="badge badge-lg badge-pill badge-warning text-uppercase">
+                            Pendiente </span>{%endif%} {% if solicitudes_vacaciones[1]=="Rechazado"
+                          %}<span class="badge badge-lg badge-pill badge-danger text-uppercase">
+                            Rechazado </span>{%endif%} {% if solicitudes_vacaciones[1]=="Aceptado" %}<span
+                            class="badge badge-lg badge-pill badge-success text-uppercase">
+                            Aceptado </span>{%endif%}
+                        </td>
+                        <td>{{solicitudes_vacaciones[3]}}</td>
+                        <td>
+                          {{solicitudes_vacaciones[5]}}
+                          {{solicitudes_vacaciones[6]}}
+                        </td>
+                        <td>{{solicitudes_vacaciones[2]}}</td>
+                      </tr>
+                      {%endfor%}
+                    </tbody>
                     </tbody>
                   </table>
                 </div>

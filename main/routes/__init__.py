@@ -11,7 +11,7 @@ from flask import (flash, g, redirect, render_template, request, send_file,
 from werkzeug.utils import secure_filename
 
 from main.run import (agregar_tiempo_transcurrido, app, generarID, mysql,
-                      stringAleatorio)
+                      stringAleatorio,fecha_actualCO)
 from main.templates.calendario import (avisos, calendario, cursos, noticias,
                                        proyectos)
 from main.templates.error import error
@@ -75,7 +75,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
     fechaResolucion = datetime.now()
 
     if tipo_solicitud == "Nomina":
-        if session['cargo'] != 1:
+        if session['cargo'] != 1 and  session['cargo'] != 0:
             return redirect('/miCartelera')
         cursor.execute("SELECT solicitud_nomina.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_nomina LEFT JOIN general_users ON solicitud_nomina.solicitante = general_users.usuario WHERE id_solicitud_nomina=%s ORDER BY fecha_solicitud DESC;", id_solicitud)
         solicitudes_nomina = cursor.fetchall()
@@ -123,7 +123,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
                 return redirect('/nomina_certificados')
         return render_template("templates/light/verNotificaciones.html", solicitudes_nomina=solicitudes_nomina[0], tipo_solicitud=tipo_solicitud)
     elif tipo_solicitud == "Vacaciones":
-        if session['cargo'] != 1:
+        if session['cargo'] != 1 and  session['cargo'] != 0:
             return redirect('/miCartelera')
         query = "SELECT vacaciones_extemporaneas.*, DATE_FORMAT(fecha_inicio, %s) AS fecha_inicio, DATE_FORMAT(fecha_fin, %s) AS fecha_fin, general_users.Nombre, general_users.Apellido, general_users.foto FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario WHERE id_vacaciones_extemporaneas = %s ORDER BY fecha_solicitud DESC;"
         cursor.execute(query, ('%d-%M-%Y', '%d-%M-%Y', id_solicitud))
@@ -183,7 +183,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
 
         return render_template("templates/light/verNotificaciones.html", solicitudes_va_extemporaneas=solicitudes_va_extemporaneas[0], tipo_solicitud=tipo_solicitud)
     elif tipo_solicitud == "Certificado":
-        if session['cargo'] != 1:
+        if session['cargo'] != 1 and  session['cargo'] != 0:
             return redirect('/miCartelera')
         cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.solicitante = general_users.usuario WHERE id_solicitud=%s ORDER BY fecha_solicitud DESC;", id_solicitud)
         solicitudes_certificado = cursor.fetchall()
@@ -239,35 +239,24 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
         return render_template("templates/light/verNotificaciones.html", solicitudes_certificado=solicitudes_certificado[0],
                                tipo_solicitud=tipo_solicitud)
     elif tipo_solicitud == "Permiso":
-        if session['cargo'] != 1:
+        if session['cargo'] != 1 and  session['cargo'] != 0:
             return redirect('/miCartelera')
-        query = "SELECT solicitud_permisos.*, DATE_FORMAT(fecha_inicio_permiso, %s) AS fecha_permiso, DATE_FORMAT(fecha_fin_permiso, %s) AS fecha_fin_permiso,general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario WHERE id_permisos=%s ORDER BY fecha_solicitud DESC;"
-        cursor.execute(query, ('%d-%M-%Y', '%d-%M-%Y', id_solicitud))
+        query = "SELECT solicitud_permisos.*, DATE_FORMAT(fecha_inicio_permiso, %s) AS fecha_permiso, DATE_FORMAT(fecha_fin_permiso, %s) AS fecha_fin_permiso, DATE_FORMAT(fecha_inicio_recuperacion, %s) AS fecha_inicio_recuperacion, DATE_FORMAT(fecha_fin_recuperacion, %s) AS fecha_fin_recuperacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario WHERE id_permisos=%s ORDER BY fecha_solicitud DESC;"
+        cursor.execute(query, ('%d-%M-%Y', '%d-%M-%Y','%d-%b-%Y %H:%i %p','%d-%b-%Y %H:%i %p', id_solicitud))
         solicitudes_permiso = cursor.fetchall()
         conexion.commit()
         print(solicitudes_permiso)
         if request.method == 'POST':
             if 'aceptarSolicitudPermiso' in request.form:
-                inicio_dia_recuperar = request.form['inicio_dia_recuperar']
-                inicio_hora_recuperar = request.form['inicio_hora_recuperar']
-                fin_dia_recuperar = request.form['fin_dia_recuperar']
-                fin_hora_recuperar = request.form['fin_hora_recuperar']
-                fecha_inicio_recuperar = inicio_dia_recuperar + ' ' + inicio_hora_recuperar
-                fecha_hora = dt.datetime.strptime(
-                    fecha_inicio_recuperar, '%Y-%m-%d %I:%M %p')
-                inicio_recuperar = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
-                fecha_fin_recuperar = fin_dia_recuperar + ' ' + fin_hora_recuperar
-                fecha_hora = dt.datetime.strptime(
-                    fecha_fin_recuperar, '%Y-%m-%d %I:%M %p')
-                fin_recuperar = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
+        
                 comentarioSolicitudRecuperar = request.form['comentarioSolicitudRecuperar']
                 user_permiso = request.form['user_permiso']
                 mensaje = 'Ha solucionado su petición de Permiso'
                 estado_solicitud = "Aceptado"
                 tipo_notificacion = 'Permiso'
-                query = "UPDATE solicitud_permisos SET estado_solicitud = %s ,fecha_resolucion=%s ,observaciones=%s,persona_aprueba=%s, fecha_inicio_recuperacion=%s, fecha_fin_recuperacion=%s WHERE id_permisos = %s"
+                query = "UPDATE solicitud_permisos SET estado_solicitud = %s ,fecha_resolucion=%s ,observaciones=%s,persona_aprueba=%s WHERE id_permisos = %s"
                 params = [estado_solicitud, fechaResolucion, comentarioSolicitudRecuperar,
-                          persona_resuelve_solicitud, inicio_recuperar, fin_recuperar, id_solicitud]
+                          persona_resuelve_solicitud, id_solicitud]
                 cursor.execute(query, params)
                 conexion.commit()
 

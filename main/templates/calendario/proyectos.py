@@ -8,9 +8,9 @@ from flask import jsonify
 from pymysql import IntegrityError
 from werkzeug.utils import secure_filename
 
-from main.run import (app, bcrypt, flash, generarID, jsonify, mysql, redirect,
-                      render_template, request, session, stringAleatorio,
-                      url_for)
+from main.run import (app, bcrypt, fecha_actualCO, flash, generarID, jsonify,
+                      mysql, redirect, render_template, request, session,
+                      stringAleatorio, url_for)
 
 extensionesImagenes = ['.jpg', '.jpeg', '.png']
 
@@ -31,7 +31,7 @@ def userProyecto(project_id):
         'SELECT nombre_proyecto FROM proyectos WHERE id_proyecto=%s;', project_id)
     proyecto_nombre = cursor.fetchone()
     conexion.commit()
-    fecha_user = datetime.now()
+    fecha_user =datetime.now()
     if request.method == 'POST':
         if 'desactivar_usuario_proyecto' in request.form:
             id_usuario = request.form['desactivar_usuario_proyecto']
@@ -124,6 +124,8 @@ def misProyectos():
 def verProyectos():
     if not 'login' in session:
         return redirect('/')
+    if session['cargo'] != 4:
+        return redirect('/inicio')
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT *  FROM proyectos ;")

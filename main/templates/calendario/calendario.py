@@ -9,9 +9,9 @@ from flask import jsonify
 from pymysql import IntegrityError
 from werkzeug.utils import secure_filename
 
-from main.run import (app, bcrypt, flash, generarID, jsonify, mysql, redirect,
-                      render_template, request, session, stringAleatorio,
-                      url_for)
+from main.run import (app, bcrypt, fecha_actualCO, flash, generarID, jsonify,
+                      mysql, redirect, render_template, request, session,
+                      stringAleatorio, url_for)
 
 extensionesImagenes = ['.jpg', '.jpeg', '.png']
 conexion = mysql.connect()
@@ -163,6 +163,17 @@ def verPermisos():
         fecha_solicitud = datetime.now()
         duracion_permiso = dt.datetime.strptime(
             fin_permiso, '%Y-%m-%d %H:%M:%S') - dt.datetime.strptime(inicio_permiso, '%Y-%m-%d %H:%M:%S')
+        
+        inicio_dia_recuperar = request.form['inicio_dia_recuperar']
+        inicio_hora_recuperar = request.form['inicio_hora_recuperar']
+        fin_dia_recuperar = request.form['fin_dia_recuperar']
+        fin_hora_recuperar = request.form['fin_hora_recuperar']
+        fecha_inicio_recuperar = inicio_dia_recuperar + ' ' + inicio_hora_recuperar
+        fecha_hora = dt.datetime.strptime( fecha_inicio_recuperar, '%Y-%m-%d %I:%M %p')
+        inicio_recuperar = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
+        fecha_fin_recuperar = fin_dia_recuperar + ' ' + fin_hora_recuperar
+        fecha_hora = dt.datetime.strptime(fecha_fin_recuperar, '%Y-%m-%d %I:%M %p')
+        fin_recuperar = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
         print(duracion_permiso)
         print(inicio_permiso)
         print(fin_permiso)
@@ -233,9 +244,9 @@ def verPermisos():
             'SELECT usuario FROM general_users WHERE id_cargo_fk = 1')
         usuariosRH = cursor.fetchall()
 
-        query = "INSERT INTO solicitud_permisos (id_permisos,fecha_inicio_permiso, fecha_fin_permiso, fecha_solicitud, horas_de_permiso, id_usuario, motivo_permiso ) VALUES (%s, %s,%s, %s, %s, %s, %s)"
+        query = "INSERT INTO solicitud_permisos (id_permisos,fecha_inicio_permiso, fecha_fin_permiso, fecha_solicitud, horas_de_permiso, id_usuario, motivo_permiso , fecha_inicio_recuperacion, fecha_fin_recuperacion ) VALUES (%s, %s,%s, %s, %s, %s, %s,%s,%s)"
         params = [id_permisos, inicio_permiso, fin_permiso,
-                  fecha_solicitud, cantidad_horas, id_usuario, motivo_permiso]
+                  fecha_solicitud, cantidad_horas, id_usuario, motivo_permiso, inicio_recuperar, fin_recuperar]
         cursor.execute(query, params)
         conexion.commit()
 

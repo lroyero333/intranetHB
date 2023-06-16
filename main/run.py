@@ -5,6 +5,7 @@ import bcrypt
 from flask import (Flask, flash, jsonify, redirect, render_template, request,
                    session, url_for)
 from flaskext.mysql import MySQL
+import pytz
 from werkzeug.utils import secure_filename
 
 app=Flask(__name__, static_url_path='/static')
@@ -30,6 +31,11 @@ app.config['MYSQL_DATABASE_DB']='u122395259_intranerHB'
 mysql.init_app(app)
 app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024
 
+def fecha_actualCO():
+    colombia_tz = pytz.timezone('America/Bogota')
+    fecha_actual_colombia = datetime.now(colombia_tz)
+    fecha_formateada = fecha_actual_colombia.strftime('%Y-%m-%d %H:%M:%S')  # Formato de fecha deseado
+    return fecha_formateada
 def stringAleatorio():
     string_aleatorio = "0123456789abcdefghijklmnñopqrstuvwxyz_"
     longitud = 10

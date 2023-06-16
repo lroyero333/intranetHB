@@ -32,7 +32,7 @@ def crearEmpleados():
     if not 'login' in session:
         return redirect('/')
     print(session['cargo'])
-    if session['cargo'] != 1:
+    if session['cargo'] != 1 and session['cargo'] != 0 :
         return redirect('/inicio')
     conexion = mysql.connect()
     cursor = conexion.cursor()
@@ -40,7 +40,6 @@ def crearEmpleados():
     datosUsuarios = cursor.fetchall()
     conexion.commit()
     if request.method == 'POST':
-
         usuario = request.form['usuario']
         # Verificar si el usuario ya existe
         cursor.execute(
@@ -78,8 +77,13 @@ def crearEmpleados():
         entidad_bancaria = request.form['entidad_bancaria']
         tipo_cuenta = request.form['tipo_cuenta']
         numero_cuenta = request.form['numero_cuenta']
+        institucion_posgrado = request.form['institucion_posgrado']
+        departamentoHB = request.form['departamentoHB']
+        usuario_trello = request.form['usuario_trello']
+        usuario_slack = request.form['usuario_slack']
+        arl = request.form['arl']
+        caja_compensacion = request.form['caja_compensacion']
         contrasena = request.form['contrasena']
-
         hashed_password = bcrypt.hashpw(
             contrasena.encode('utf-8'), bcrypt.gensalt())
 
@@ -97,9 +101,9 @@ def crearEmpleados():
         foto.save(upload_path)
 
         # Insertar un nuevo usuario en la tabla
-        query = "INSERT INTO general_users (Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion, id_cargo_fk, institucion, posgrado, entidad_salud, tipo_sangre,foto, nombre_contacto, numero_contacto, usuario,contrasena,lugar_pension,entidad_bancaria,tipo_cuenta,numero_cuenta) VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s)"
+        query = "INSERT INTO general_users (Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion, id_cargo_fk, institucion, posgrado, entidad_salud, tipo_sangre,foto, nombre_contacto, numero_contacto, usuario,contrasena,lugar_pension,entidad_bancaria,tipo_cuenta,numero_cuenta,institucion_posgrado,usuario_trello,usuario_slack,departamentoHB,arl,caja_compensacion) VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s)"
         params = [Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion,
-                  cargo, institucion, posgrado, entidad_salud, tipo_sangre, nuevoNombreFoto, nombre_contacto, numero_contacto, usuario, hashed_password, lugar_pension, entidad_bancaria, tipo_cuenta, numero_cuenta]
+                  cargo, institucion, posgrado, entidad_salud, tipo_sangre, nuevoNombreFoto, nombre_contacto, numero_contacto, usuario, hashed_password, lugar_pension, entidad_bancaria, tipo_cuenta, numero_cuenta,institucion_posgrado,usuario_trello,usuario_slack,departamentoHB,arl,caja_compensacion]
 
         # Ejecutar la consulta SQL
         cursor.execute(query, params)
@@ -107,9 +111,10 @@ def crearEmpleados():
         # Confirmar los cambios en la base de datos
         conexion.commit()
         return redirect('/empleados')
+    else:
+        print('HAY ALGO MAL')
 
     return render_template('usersCRUD/templates/agregarUsuario.html', datosUsuarios=datosUsuarios, campos=request.form)
-
 
 @app.route('/eliminar-usuario/<usuario>', methods=['GET', 'POST'])
 def eliminarUsuario(usuario):
@@ -120,9 +125,10 @@ def eliminarUsuario(usuario):
         cursor = conexion.cursor()
         cursor.execute("DELETE FROM general_users WHERE usuario=%s;", usuario)
         conexion.commit()
-        flash('El usuario ha sido eliminado.', 'success')
+        flash('El usuario ha sido eliminado.', 'correcto')
         return redirect('/empleados')
     else:
+        flash('El usuario no ha sido eliminado.', 'error')
         return render_template('usersCRUD/templates/contactEdit.html', usuario=usuario)
 
 
@@ -130,7 +136,7 @@ def eliminarUsuario(usuario):
 def verEmpleados(usuario_id):
     if not 'login' in session:
         return redirect('/')
-    if session['cargo'] != 1:
+    if session['cargo'] != 1 and  session['cargo'] != 0:
         return redirect('/inicio')
     conexion = mysql.connect()
     cursor = conexion.cursor()
@@ -146,7 +152,7 @@ def editEmpleados(usuario_id):
     if not 'login' in session:
         return redirect('/')
     print(session['cargo'])
-    if session['cargo'] != 1:
+    if session['cargo'] != 1 and  session['cargo'] != 0:
         return redirect('/inicio')
     conexion = mysql.connect()
     cursor = conexion.cursor()
@@ -184,6 +190,12 @@ def editEmpleados(usuario_id):
         tipo_cuenta = request.form['tipo_cuenta']
         numero_cuenta = request.form['numero_cuenta']
         contrasena = request.form['contrasena']
+        institucion_posgrado = request.form['institucion_posgrado']
+        departamentoHB = request.form['departamentoHB']
+        usuario_trello = request.form['usuario_trello']
+        usuario_slack = request.form['usuario_slack']
+        arl = request.form['arl']
+        caja_compensacion = request.form['caja_compensacion']
 
         filename, file_extension = os.path.splitext(foto.filename)
 
@@ -295,20 +307,34 @@ def editEmpleados(usuario_id):
         if tipo_cuenta:
             query += " tipo_cuenta = %s,"
             params.append(tipo_cuenta)
+        if institucion_posgrado:
+            query += " institucion_posgrado = %s,"
+            params.append(institucion_posgrado)
+        if departamentoHB:
+            query += " departamentoHB = %s,"
+            params.append(departamentoHB)
+        if usuario_trello:
+            query += " usuario_trello = %s,"
+            params.append(usuario_trello)
+        if usuario_slack:
+            query += " usuario_slack = %s,"
+            params.append(usuario_slack)
+        if arl:
+            query += " arl = %s,"
+            params.append(arl)
+        if caja_compensacion:
+            query += " caja_compensacion = %s,"
+            params.append(caja_compensacion)
         if contrasena:
             hashed_password = bcrypt.hashpw(
                 contrasena.encode('utf-8'), bcrypt.gensalt())
             query += "contrasena = %s,"
             params.append(hashed_password)
 
-        # Eliminar la coma final de la consulta SQL
         query = query.rstrip(',')
-        # Agregar la cláusula WHERE
         query += " WHERE usuario = %s"
         params.append(usuario_id)
-        # Ejecutar la consulta SQL
         cursor.execute(query, params)
-        # Confirmar los cambios en la base de datos
         conexion.commit()
 
         # Redirigir a la página de detalles del usuario actualizado
