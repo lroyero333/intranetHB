@@ -137,8 +137,9 @@ def verPermisos():
         return redirect('/')
     cursor.execute("SELECT solicitud_permisos.*,  DATE_FORMAT(fecha_inicio_permiso, '%d-%m-%Y %H:%i %p') AS inicio_permiso, DATE_FORMAT(fecha_fin_permiso, '%d-%m-%Y %H:%i %p') AS fin_permiso, DATE_FORMAT(fecha_inicio_recuperacion, '%d-%m-%Y %H:%i %p') AS inicio_recuperacion, DATE_FORMAT(fecha_fin_recuperacion, '%d-%m-%Y %H:%i %p') AS fin_recuperacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario;")
     solicitudes_permisos = cursor.fetchall()
-    cursor.execute("SELECT solicitud_permisos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.persona_aprueba = general_users.usuario;")
-    solicitudes_permisos2 = cursor.fetchall()
+    cursor.execute(
+        "SELECT solicitud_permiso_extra.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permiso_extra LEFT JOIN general_users ON solicitud_permiso_extra.resuelto_por = general_users.usuario WHERE id_usuario = %s AND estado_solicitud= 'Pendiente';", session['usuario'])
+    solicitud_permiso_extra = cursor.fetchall()
     conexion.commit()
 
     if 'agendar_permiso' in request.form:
@@ -286,7 +287,7 @@ def verPermisos():
         print(duracion_permiso)
         print(inicio_permiso)
         print(fin_permiso)
-        
+
         cursor.execute(
             'SELECT usuario FROM general_users WHERE id_cargo_fk = 1')
         usuariosRH = cursor.fetchall()
@@ -308,12 +309,20 @@ def verPermisos():
         return redirect('/permisos')
     if 'cancelarPermiso' in request.form:
         permiso_id = request.form['permiso_id']
-        cursor.execute(
-            "DELETE FROM solicitud_permisos WHERE id_permisos = %s;", (permiso_id,))
+        cursor.execute("DELETE FROM solicitud_permisos WHERE id_permisos = %s;", (permiso_id,))
         conexion.commit()
         flash('Permiso cancelado satisfactoriamente', 'correcto')
         return redirect('/permisos')
-    return render_template('calendario/templates/permisos/permisos.html', solicitudes_permisos=solicitudes_permisos, solicitudes_permisos2=solicitudes_permisos2)
+    if 'cancelarPermisoEx' in request.form:
+        print('BOTON BOTON')
+        permiso_id = request.form['permiso_id_ex']
+        print('BOTON BOTON', permiso_id)
+
+        cursor.execute( "DELETE FROM solicitud_permiso_extra WHERE id_extra = %s;", (permiso_id,))
+        conexion.commit()
+        flash('Permiso de acceso a la empresa cancelado satisfactoriamente', 'correcto')
+        return redirect('/permisos')
+    return render_template('calendario/templates/permisos/permisos.html', solicitudes_permisos=solicitudes_permisos, solicitud_permiso_extra=solicitud_permiso_extra)
 
 
 @app.route('/eventos')

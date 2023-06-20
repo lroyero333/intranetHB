@@ -142,7 +142,7 @@
           <div class="row clearfix">
             <div class="col-12">
               <div class="form-group">
-                <label for="vacaciones_solicitadas"><strong>Permisos solicitados</strong></label>
+                <label for="permiso_id"><strong>Permisos solicitados</strong></label>
                 <select class="selectpicker" name="permiso_id" title="Selecciona una opcion" data-live-search="true"
                   data-live-search-placeholder="Buscar ...">
                   <option value="" selected disabled>
@@ -159,15 +159,33 @@
                   {% endif %} {% endif %} {% endfor %}
                 </select>
               </div>
+              <div class="form-group">
+                <label for="permiso_id_ex"><strong>Permisos solicitados de acceso a la empresa</strong></label>
+                <select class="selectpicker" name="permiso_id_ex" title="Selecciona una opcion" data-live-search="true"
+                  data-live-search-placeholder="Buscar ...">
+                  <option value="" selected disabled>
+                    Selecciona un Usuario
+                  </option>
+                  {% for solicitud_permiso_extra in solicitud_permiso_extra %}
+                  <option value="{{ solicitud_permiso_extra[0] }}">
+                    <strong>Inicio:</strong> {{ solicitud_permiso_extra[1] }}
+                    <strong>Fin: </strong> {{solicitud_permiso_extra[2]}}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
             </div>
-            <div class="modal-footer">
-              <button type="submit" name="cancelarPermiso" class="btn btn-danger">
-                Cancelar
-              </button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                Cerrar
-              </button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" name="cancelarPermiso" class="btn btn-danger">
+              Cancelar Permiso
+            </button>
+            <button type="submit" name="cancelarPermisoEx" class="btn btn-danger">
+              Cancelar Permiso de acceso
+            </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              Cerrar
+            </button>
           </div>
         </div>
       </form>
