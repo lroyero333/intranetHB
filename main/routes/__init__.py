@@ -41,7 +41,7 @@ def notificacionesRH():
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute(
-        "SELECT general_users.Nombre, general_users.Apellido, general_users.foto, cargos.nombre_cargo FROM general_users LEFT JOIN usuario_cargo ON general_users.id = usuario_cargo.id_usuario_fk LEFT JOIN cargos ON usuario_cargo.id_cargo_fk = cargos.id_cargo WHERE usuario= %s;", session['usuario'])
+        "SELECT general_users.Nombre, general_users.Apellido, general_users.foto, cargos.nombre_cargo, general_users.usuario_trello, general_users.usuario_slack FROM general_users LEFT JOIN usuario_cargo ON general_users.id = usuario_cargo.id_usuario_fk LEFT JOIN cargos ON usuario_cargo.id_cargo_fk = cargos.id_cargo WHERE usuario= %s;", session['usuario'])
     usuario_base = cursor.fetchone()
 
     cursor.execute("SELECT notificaciones.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM notificaciones LEFT JOIN general_users ON notificaciones.creador_solicitud= general_users.usuario WHERE id_usuario= %s and estado_notificacion= %s ORDER BY fecha_notificacion DESC;",

@@ -7,7 +7,11 @@
         <div class="container">
             <h1 class="text-center">Información de Usuarios</h1>
             <div class="circle-image">
+                {%if datosUsuarios[23]==none %}
+                <img src="{{ url_for('static', filename='images/users/userMale.png') }}" alt="Imagen de perfil">
+                {%else%}
                 <img src="{{ url_for('static', filename='images/users/' + datosUsuarios[23]) }}" alt="Imagen de perfil">
+                {%endif%}
             </div>
             <br>
 
@@ -19,7 +23,8 @@
                                 <div class="row">
 
                                     <div class="col-md-6 col-12">
-
+                                        <h4>Datos Personales</h4>
+                                        <hr>
                                         <div class="form-group">
                                             <label for="foto"><strong>Foto:</strong></label>
                                             <div>
@@ -78,8 +83,11 @@
                                                 id="Fecha_nacimiento" value="{{datosUsuarios[6] }}"
                                                 placeholder="Fecha Nacimiento">
                                         </div>
-
-                                        <h6></h6>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-6 col-12">
+                                        <h4>Contacto</h4>
+                                        <hr>
                                         <div class="form-group">
                                             <label for="correo"><strong>Correo:</strong></label>
                                             <div class="input-group">
@@ -95,7 +103,7 @@
 
                                         <div class="form-group">
                                             <label for="identificacion"><strong>Identificación:</strong></label>
-                                            <input type="text" class="form-control" name="identificacion"
+                                            <input type="number" class="form-control" name="identificacion"
                                                 id="identificacion" value="{{datosUsuarios[8] }}"
                                                 placeholder="Identificación">
                                         </div>
@@ -142,52 +150,11 @@
                                             <input type="text" class="form-control" name="celular" id="celular"
                                                 value="{{datosUsuarios[15] }}" placeholder="Celular">
                                         </div>
-
-                                        <div class="form-group">
-                                            <label for="entidad_salud"><strong>Entidad de salud EPS:</strong></label>
-                                            <input type="text" class="form-control" name="entidad_salud"
-                                                id="entidad_salud" placeholder="Entidad de salud"
-                                                value="{{datosUsuarios[21] }}">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="lugar_pension"><strong>Administradora de
-                                                    pensión:</strong></label>
-                                            <input type="text" class="form-control" name="lugar_pension"
-                                                id="lugar_pension" placeholder="Lugar de pension"
-                                                value="{{datosUsuarios[21] }}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="arl"><strong>ARL:</strong></label>
-                                            <input type="text" class="form-control" name="arl" id="arl"
-                                                placeholder="ARL" value="{{datosUsuarios[37] }}">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="caja_compensacion"><strong>Caja de
-                                                    compensación:</strong></label>
-                                            <input type="text" class="form-control" name="caja_compensacion"
-                                                id="caja_compensacion" placeholder="Caja de compensación"
-                                                value="{{datosUsuarios[38] }}">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
-                                            <select class="form-control" name="tipo_sangre" id="tipo_sangre"
-                                                value="{{datosUsuarios[22] }}">
-                                                <option value="">-- Seleccione su tipo de sangre --</option>
-                                                <option value="A+">A+</option>
-                                                <option value="A-">A-</option>
-                                                <option value="B+">B+</option>
-                                                <option value="B-">B-</option>
-                                                <option value="AB+">AB+</option>
-                                                <option value="AB-">AB-</option>
-                                                <option value="O+">O+</option>
-                                                <option value="O-">O-</option>
-                                            </select>
-                                        </div>
                                     </div>
+                                    <br>
                                     <div class="col-md-6 col-12">
+                                        <h4>Formación y Cargo</h4>
+                                        <hr>
                                         <div class="form-group">
                                             <label for="profesion"><strong>Profesion:</strong></label>
                                             <select class="form-control" name="profesion" id="profesion"
@@ -226,7 +193,7 @@
                                                 <option value="">-- Seleccione el cargo --</option>
                                                 <option value="0">CEO</option>
                                                 <option value="1">Recursos Humanos</option>
-                                                <option value="2">Empleado</option>
+                                                <option value="2">Desarrollador</option>
                                                 <option value="3">Lider de Taller</option>
                                                 <option value="4">Director de proyectos</option>
                                             </select>
@@ -237,6 +204,8 @@
                                             <select class="form-control" name="departamentoHB" id="departamentoHB"
                                                 value="{{datosUsuarios[36] }}">
                                                 <option value="">-- Seleccione el departamento --</option>
+                                                <option value="Administrativo">Administrativo</option>
+                                                <option value="Directivo">Directivo</option>
                                                 <option value="Sistemas y Programación">Sistemas y Programación</option>
                                                 <option value="Robótica y Electrónica">Robótica y Electrónica</option>
                                                 <option value="Diseño y Publicidad">Diseño y Publicidad</option>
@@ -250,7 +219,11 @@
                                             <input type="text" class="form-control" name="habilidades" id="habilidades"
                                                 value="{{datosUsuarios[16] }}" placeholder="Habilidades">
                                         </div>
-
+                                    </div>
+                                    <br>
+                                    <div class="col-md-6 col-12">
+                                        <h4>Información Adicional</h4>
+                                        <hr>
                                         <div class="form-group">
                                             <label for="nombre_contacto"><strong>Nombre de contacto:</strong></label>
                                             <input type="text" class="form-control" name="nombre_contacto"
@@ -260,7 +233,7 @@
 
                                         <div class="form-group">
                                             <label for="numero_contacto"><strong>Número de contacto:</strong></label>
-                                            <input type="text" class="form-control" name="numero_contacto"
+                                            <input type="number" class="form-control" name="numero_contacto"
                                                 id="numero_contacto" value="{{datosUsuarios[25] }}"
                                                 placeholder="Número de contacto">
                                         </div>
@@ -277,13 +250,73 @@
                                                 id="usuario_slack" value="{{datosUsuarios[35] }}"
                                                 placeholder="Usuario Slack">
                                         </div>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-6 col-12">
+                                        <h4>Seguridad Social</h4>
+                                        <hr>
+                                        <div class="form-group">
+                                            <label for="entidad_salud"><strong>Entidad de salud EPS:</strong></label>
+                                            <input type="text" class="form-control" name="entidad_salud"
+                                                id="entidad_salud" placeholder="Entidad de salud"
+                                                value="{{datosUsuarios[21] }}">
+                                        </div>
 
+                                        <div class="form-group">
+                                            <label for="ips"><strong>IPS de atención de
+                                                    urgencias:</strong></label>
+                                            <input type="text" class="form-control" name="ips"
+                                                id="ips" placeholder="IPS de atención de
+                                                urgencias"
+                                                value="{{datosUsuarios[39] }}">
+                                        </div>
 
+                                        <div class="form-group">
+                                            <label for="lugar_pension"><strong>Administradora de
+                                                    pensión:</strong></label>
+                                            <input type="text" class="form-control" name="lugar_pension"
+                                                id="lugar_pension" placeholder="Lugar de pension"
+                                                value="{{datosUsuarios[29] }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="arl"><strong>ARL:</strong></label>
+                                            <input type="text" class="form-control" name="arl" id="arl"
+                                                placeholder="ARL" value="{{datosUsuarios[37] }}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="caja_compensacion"><strong>Caja de
+                                                    compensación:</strong></label>
+                                            <input type="text" class="form-control" name="caja_compensacion"
+                                                id="caja_compensacion" placeholder="Caja de compensación"
+                                                value="{{datosUsuarios[38] }}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="tipo_sangre"><strong>Tipo de sangre:</strong></label>
+                                            <select class="form-control" name="tipo_sangre" id="tipo_sangre"
+                                                value="{{datosUsuarios[22] }}">
+                                                <option value="">-- Seleccione su tipo de sangre --</option>
+                                                <option value="A+">A+</option>
+                                                <option value="A-">A-</option>
+                                                <option value="B+">B+</option>
+                                                <option value="B-">B-</option>
+                                                <option value="AB+">AB+</option>
+                                                <option value="AB-">AB-</option>
+                                                <option value="O+">O+</option>
+                                                <option value="O-">O-</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-6 col-12">
+                                        <h4>Información Bancaria</h4>
+                                        <hr>
                                         <div class="form-group">
                                             <label for="entidad_bancaria"><strong>Entidad Bancaria:</strong></label>
                                             <input type="text" class="form-control" name="entidad_bancaria"
                                                 id="entidad_bancaria" placeholder="Entidad Bancaria"
-                                                value="{{datosUsuarios[21] }}">
+                                                value="{{datosUsuarios[30] }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="tipo_cuenta"><strong>Tipo de Cuenta:</strong></label>
@@ -298,7 +331,7 @@
                                             <label for="numero_cuenta"><strong>Número de cuenta:</strong></label>
                                             <input type="number" class="form-control" name="numero_cuenta"
                                                 id="numero_cuenta" placeholder="Número de cuenta"
-                                                value="{{datosUsuarios[21] }}">
+                                                value="{{datosUsuarios[32] }}">
                                         </div>
 
                                         <div class="form-group">

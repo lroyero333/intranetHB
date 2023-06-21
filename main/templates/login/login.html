@@ -29,17 +29,17 @@
         <div class="vertical-align-wrap">
             <div class="vertical-align-middle auth-main">
                 {% if error %}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
-                        <span class="alert-inner--text"><strong>Error </strong> Usuario o contraseña incorrecto!</span>
-                        <button type="button" class="undo" aria-label="Undo">cerrar</button>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        </div>
-                    {% endif %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+                    <span class="alert-inner--text"><strong>Error </strong> Usuario o contraseña incorrecto!</span>
+                    <button type="button" class="undo" aria-label="Undo">cerrar</button>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %}
                 <div class="auth-box">
-                    
+
                     <div class="top">
                         <img src="{{ url_for('static', filename='images/isotipohb.svg') }}" alt="logoHB">
                         <strong>Human</strong> <span>Bionics</span>
@@ -49,7 +49,7 @@
                             <p class="lead">Iniciar sesion en su cuenta</p>
                         </div>
                         <div class="body">
-                           
+
                             <form class="form-auth-small" method="POST">
                                 <div class="form-group">
                                     <label for="username" class="control-label sr-only">Usuario</label>
@@ -63,14 +63,12 @@
                                 </div>
                                 <div class="form-group clearfix">
                                     <label class="fancy-checkbox element-left">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="recuerdame">
                                         <span>Recuérdame</span>
                                     </label>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-lg btn-block">INICIAR SESIÓN</button>
                                 <div class="bottom">
-                                    <span class="helper-text m-b-10"><i class="fa fa-lock"></i> <a
-                                            href="/recuperar-contrasena">¿Olvidó su contraseña?</a></span>
                                     <span>¿No tienes una cuenta? <a href="/register">Registrar</a></span>
                                 </div>
                             </form>

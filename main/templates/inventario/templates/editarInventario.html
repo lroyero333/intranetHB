@@ -7,9 +7,9 @@
           <div class="card planned_task">
             <div class="modal-content">
               <div class="modal-header">
-                <label
-                  ><strong><h1>Editar Elemento</h1></strong></label
-                >
+                <label><strong></strong>
+                    <h1>Editar Elemento</h1>
+                  </strong></label>
               </div>
               <form action="" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
@@ -18,12 +18,7 @@
                       <div class="form-group">
                         <label for="foto"><strong>Imagen:</strong></label>
                         <div>
-                          <input
-                            type="file"
-                            name="imagen_elemento"
-                            id="imagen_elemento"
-                            class="custom-input-file"
-                          />
+                          <input type="file" name="imagen_elemento" id="imagen_elemento" class="custom-input-file" />
                           <label for="imagen_elemento">
                             <i class="fa fa-upload"></i>
                             <span>Selecciona una imagen…</span>
@@ -31,79 +26,43 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="nombre_elemento"
-                          ><strong>Nombre del elemento:</strong></label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="nombre_elemento"
-                          id="nombre_elemento"
-                          value="{{inventario[1]}}"
-                          placeholder="Nombre del elemento"
-                        />
+                        <label for="nombre_elemento"><strong>Nombre del elemento:</strong></label>
+                        <input type="text" class="form-control" name="nombre_elemento" id="nombre_elemento"
+                          value="{{inventario[1]}}" placeholder="Nombre del elemento" />
                       </div>
                       <div class="form-group">
-                        <label for="categoria"
-                          ><strong>Categoria</strong></label
-                        >
-                        <select
-                          class="selectpicker"
-                          name="categoria"
-                          title="Selecciona una categoria"
-                          data-live-search="true"
-                          data-live-search-placeholder="Buscar ..."
-                        >
+                        <label for="categoria"><strong>Categoria</strong></label>
+                        <select class="selectpicker" name="categoria" title="Selecciona una categoria"
+                          data-live-search="true" data-live-search-placeholder="Buscar ...">
                           <option value="" selected disabled>
                             Selecciona su categoria
                           </option>
-                          <option value="Categoria 1">Categoria 1</option>
-                          <option value="Categoria 2">Categoria 2</option>
-                          <option value="Categoria 3">Categoria 3</option>
-                          <option value="Categoria 4">Categoria 4</option>
+                          <option value="Herramienta manual">Herramienta manual</option>
+                          <option value="Herramienta electromanual">Herramienta electromanual</option>
+                          <option value="Equipo">Equipo</option>
+                          <option value="Accesorios">Accesorios</option>
+                          <option value="Insumos o Material">Insumos o Material</option>
+                          <option value="Otros">Otros</option>
+
                         </select>
                       </div>
                       <div class="mb-3">
-                        <label for="ubicacion_elemento" class="form-label"
-                          >Ubicacion:</label
-                        >
-                        <textarea
-                          class="form-control"
-                          name="ubicacion_elemento"
-                          id="ubicacion_elemento"
-                          rows="3"
-                          required
-                        >
-{{inventario[4]}}</textarea
-                        >
+                        <label for="ubicacion_elemento" class="form-label">Ubicacion:</label>
+                        <textarea class="form-control" name="ubicacion_elemento" id="ubicacion_elemento" rows="3"
+                          required>
+{{inventario[4]}}</textarea>
                       </div>
                     </div>
                     <div class="col-6">
                       <div class="form-group">
-                        <label for="cantidad_elemento"
-                          ><strong>Cantidad:</strong></label
-                        >
-                        <input
-                          type="number"
-                          min="0"
-                          class="form-control"
-                          name="cantidad_elemento"
-                          id="cantidad_elemento"
-                          value="{{inventario[3]}}"
-                          placeholder="Cantidad"
-                        />
+                        <label for="cantidad_elemento"><strong>Cantidad:</strong></label>
+                        <input type="number" min="0" class="form-control" name="cantidad_elemento"
+                          id="cantidad_elemento" value="{{inventario[3]}}" placeholder="Cantidad" />
                       </div>
                       <div class="form-group">
-                        <label for="tipo_elemento"
-                          ><strong>Tipo de Elemento</strong></label
-                        >
-                        <select
-                          class="selectpicker"
-                          name="tipo_elemento"
-                          title="Selecciona un tipo"
-                          data-live-search="true"
-                          data-live-search-placeholder="Buscar ..."
-                        >
+                        <label for="tipo_elemento"><strong>Tipo de Elemento</strong></label>
+                        <select class="selectpicker" name="tipo_elemento" title="Selecciona un tipo"
+                          data-live-search="true" data-live-search-placeholder="Buscar ...">
                           <option value="" selected disabled>
                             Selecciona un tipo
                           </option>
@@ -112,34 +71,19 @@
                         </select>
                       </div>
                       <div class="mb-3">
-                        <label for="descripcion_elemento" class="form-label"
-                          >Descripcion:</label
-                        >
-                        <textarea
-                          class="form-control"
-                          name="descripcion_elemento"
-                          id="descripcion_elemento"
-                          rows="3"
-                          required
-                        >
-{{inventario[2]}}</textarea
-                        >
+                        <label for="descripcion_elemento" class="form-label">Descripcion:</label>
+                        <textarea class="form-control" name="descripcion_elemento" id="descripcion_elemento" rows="3"
+                          required>
+{{inventario[2]}}</textarea>
                       </div>
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button
-                      type="submit"
-                      name="actualizar_elemento"
-                      class="btn btn-success"
-                    >
+                    <button type="submit" name="actualizar_elemento" class="btn btn-success">
                       Actualizar
                     </button>
-                    <a
-                      href="javascript:history.go(-1)"
-                      class="btn btn-secondary"
-                      ><i class="fa fa-arrow-left"></i> <span>Volver</span></a
-                    >
+                    <a href="javascript:history.go(-1)" class="btn btn-secondary"><i class="fa fa-arrow-left"></i>
+                      <span>Volver</span></a>
                   </div>
                 </div>
               </form>

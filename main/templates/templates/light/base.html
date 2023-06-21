@@ -71,7 +71,7 @@
                         <small>{{g.usuario_base[3]}}</small>
                     </div>
                     <div class="social">
-                        <a href="https://trello.com/" title="Trello" target="_blank"><i class="ti-trello"></i></a>
+                        <a href="https://trello.com/u/{{g.usuario_base[4]}}/cards" title="Trello" target="_blank"><i class="ti-trello"></i></a>
                         <a href="https://app.slack.com" target="_blank" title="Slack"><i class="fa fa-slack"></i></a>
                         <a href="https://mail.hostinger.com/?_task=mail&_mbox=INBOX" title="Correo" target="_blank"><i
                                 class="ti-email"></i></a>
@@ -94,7 +94,7 @@
 
                     <li class="g_heading">Aplicaciones</li>
                     <li><a href="/calendario"><i class="fa fa-calendar"></i><span>Mi Calendario</span></a></li>
-                    <li><a href="https://trello.com/u/{{session['usuario']}}/cards" target="_blank"><i
+                    <li><a href="https://trello.com/u/{{g.usuario_base[4]}}/cards" target="_blank"><i
                                 class="ti-notepad"></i><span>Mis Tareas</span></a></li>
                     <li><a href="/misProyectos"><i class="fa fa-folder-o"></i><span>Mis Proyectos</span></a></li>
                     <li><a href="/verInventario"><i class="fa fa-dropbox"></i><span>Mi Inventario</span></a></li>
@@ -154,6 +154,7 @@
                             <li><a href="/crearInventario">Añadir Inventario</a></li>
                             <li><a href="/inventario/listaInventario">Editar / Eliminar Inventario</a></li>
                             <li><a href="/inventario/asignarInventario">Asignar Inventario</a></li>
+                            <li><a href="/inventario/listaReportarInventario">Inventario</a></li>
                         </ul>
                     </li>
                     {%elif session['cargo']==4%}
@@ -175,7 +176,7 @@
                             "></i><span>Gestión de Inventario</span></a>
                         <ul>
                             <li><a href="/inventario/listaEntregarInventario">Entregar Inventario Prestado</a></li>
-                            <li><a href="/inventario/listaReportarInventario">Reportar Inventario</a></li>
+                            <li><a href="/inventario/listaReportarInventario">Inventario</a></li>
                         </ul>
                     </li>
                     {%else%}

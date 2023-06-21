@@ -22,7 +22,8 @@
                                 <div class="row">
 
                                     <div class="col-md-6 col-12">
-
+                                        <h4>Datos Personales</h4>
+                                        <hr>
                                         <div class="form-group">
                                             <label for="foto"><strong>Foto:</strong></label>
                                             <div>
@@ -78,8 +79,11 @@
                                                 data-date-autoclose="true" class="form-control" name="Fecha_nacimiento"
                                                 id="Fecha_nacimiento" placeholder="Fecha Nacimiento">
                                         </div>
-
-                                        <h6></h6>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-6 col-12">
+                                        <h4>Contacto</h4>
+                                        <hr>
                                         <div class="form-group">
                                             <label for="correo"><strong>Correo:</strong></label>
                                             <div class="input-group">
@@ -95,7 +99,7 @@
 
                                         <div class="form-group">
                                             <label for="identificacion"><strong>Identificación:</strong></label>
-                                            <input type="text" class="form-control" name="identificacion"
+                                            <input type="number" class="form-control" name="identificacion"
                                                 id="identificacion" placeholder="Identificación">
                                         </div>
 
@@ -140,11 +144,122 @@
                                             <input type="text" class="form-control" name="celular" id="celular"
                                                 placeholder="Celular">
                                         </div>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-6 col-12">
+                                        <h4>Formación y Cargo</h4>
+                                        <hr>
+                                        <div class="form-group">
+                                            <label for="profesion"><strong>Profesion:</strong></label>
+                                            <select class="form-control" name="profesion" id="profesion">
+                                                <option value="">-- Seleccione la Profesion --</option>
+                                                <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
+                                                <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
+                                                <option value="Ingenieria Mecatronica">Ingenieria Mecatronica</option>
+                                                <option value="Diseño Industrial">Diseño Industrial</option>
+                                                <option value="Diseño Grafico">Diseño Grafico</option>
+                                                <option value="Marketing">Marketing</option>
 
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="institucion"><strong>Institucion Pregrado:</strong></label>
+                                            <input type="text" class="form-control" name="institucion" id="institucion"
+                                                placeholder="Institucion">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="posgrado"><strong>Posgrado:</strong></label>
+                                            <input type="text" class="form-control" name="posgrado" id="posgrado"
+                                                placeholder="Posgrado">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="institucion_posgrado"><strong>Intitución
+                                                    Posgrado:</strong></label>
+                                            <input type="text" class="form-control" name="institucion_posgrado"
+                                                id="institucion_posgrado" placeholder="Intitución Posgrado">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cargo"><strong>Cargo:</strong></label>
+                                            <select class="form-control" name="cargo" id="cargo">
+                                                <option value="">-- Seleccione el cargo --</option>
+                                                <option value="0">CEO</option>
+                                                <option value="1">Recursos Humanos</option>
+                                                <option value="2">Desarrollador</option>
+                                                <option value="3">Lider de Taller</option>
+                                                <option value="4">Director de proyectos</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="departamentoHB"><strong>Departamento:</strong></label>
+                                            <select class="form-control" name="departamentoHB" id="departamentoHB">
+                                                <option value="">-- Seleccione el departamento --</option>
+                                                <option value="Administrativo">Administrativo</option>
+                                                <option value="Directivo">Directivo</option>
+                                                <option value="Sistemas y Programación">Sistemas y Programación</option>
+                                                <option value="Robótica y Electrónica">Robótica y Electrónica</option>
+                                                <option value="Diseño y Publicidad">Diseño y Publicidad</option>
+                                                <option value="Biomédica">Biomédica</option>
+                                                <option value="Industrial y Prototipado">Industrial y Prototipado
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="habilidades"><strong>Habilidades:</strong></label>
+                                            <input type="text" class="form-control" name="habilidades" id="habilidades"
+                                                placeholder="Habilidades">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-6 col-12">
+                                        <h4>Información Adicional</h4>
+                                        <hr>
+                                        <div class="form-group">
+                                            <label for="nombre_contacto"><strong>Nombre de contacto:</strong></label>
+                                            <input type="text" class="form-control" name="nombre_contacto"
+                                                id="nombre_contacto" placeholder="Nombre de contacto">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="parentesco"><strong>Parentesco:</strong></label>
+                                            <input type="text" class="form-control" name="parentesco"
+                                                id="parentesco" placeholder="Parentesco">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="numero_contacto"><strong>Número de contacto:</strong></label>
+                                            <input type="number" class="form-control" name="numero_contacto"
+                                                id="numero_contacto" placeholder="Número de contacto">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="usuario"><strong>Usuario Intranet:</strong></label>
+                                            <input type="text" class="form-control" name="usuario"
+                                                id="usuario" placeholder="Usuario Intranet">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="usuario_trello"><strong>Usuario Trello:</strong></label>
+                                            <input type="text" class="form-control" name="usuario_trello"
+                                                id="usuario_trello" placeholder="Usuario Trello">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="usuario_slack"><strong>Usuario Slack:</strong></label>
+                                            <input type="text" class="form-control" name="usuario_slack"
+                                                id="usuario_slack" placeholder="Usuario Slack">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-6 col-12">
+                                        <h4>Seguridad Social</h4>
+                                        <hr>
                                         <div class="form-group">
                                             <label for="entidad_salud"><strong>Entidad de salud EPS:</strong></label>
                                             <input type="text" class="form-control" name="entidad_salud"
                                                 id="entidad_salud" placeholder="Entidad de salud">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ips"><strong>IPS de atención de urgencias:</strong></label>
+                                            <input type="text" class="form-control" name="ips"
+                                                id="ips" placeholder="IPS de atención de urgencias">
                                         </div>
 
                                         <div class="form-group">
@@ -181,94 +296,10 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <br>
                                     <div class="col-md-6 col-12">
-                                        <div class="form-group">
-                                            <label for="profesion"><strong>Profesion:</strong></label>
-                                            <select class="form-control" name="profesion" id="profesion">
-                                                <option value="">-- Seleccione la Profesion --</option>
-                                                <option value="Ingenieria de Sistemas">Ingenieria de Sistemas</option>
-                                                <option value="Ingenieria Biomedica">Ingenieria Biomedica</option>
-                                                <option value="Ingenieria Mecatronica">Ingenieria Mecatronica</option>
-                                                <option value="Diseño Industrial">Diseño Industrial</option>
-                                                <option value="Diseño Grafico">Diseño Grafico</option>
-                                                <option value="Marketing">Marketing</option>
-
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="institucion"><strong>Institucion Pregrado:</strong></label>
-                                            <input type="text" class="form-control" name="institucion" id="institucion"
-                                                placeholder="Institucion">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="posgrado"><strong>Posgrado:</strong></label>
-                                            <input type="text" class="form-control" name="posgrado" id="posgrado"
-                                                placeholder="Posgrado">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="institucion_posgrado"><strong>Intitución
-                                                    Posgrado:</strong></label>
-                                            <input type="text" class="form-control" name="institucion_posgrado"
-                                                id="institucion_posgrado" placeholder="Intitución Posgrado">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="cargo"><strong>Cargo:</strong></label>
-                                            <select class="form-control" name="cargo" id="cargo">
-                                                <option value="">-- Seleccione el cargo --</option>
-                                                <option value="0">CEO</option>
-                                                <option value="1">Recursos Humanos</option>
-                                                <option value="2">Empleado</option>
-                                                <option value="3">Lider de Taller</option>
-                                                <option value="4">Director de proyectos</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="departamentoHB"><strong>Departamento:</strong></label>
-                                            <select class="form-control" name="departamentoHB" id="departamentoHB">
-                                                <option value="">-- Seleccione el departamento --</option>
-                                                <option value="Sistemas y Programación">Sistemas y Programación</option>
-                                                <option value="Robótica y Electrónica">Robótica y Electrónica</option>
-                                                <option value="Diseño y Publicidad">Diseño y Publicidad</option>
-                                                <option value="Biomédica">Biomédica</option>
-                                                <option value="Industrial y Prototipado">Industrial y Prototipado</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="habilidades"><strong>Habilidades:</strong></label>
-                                            <input type="text" class="form-control" name="habilidades" id="habilidades"
-                                                placeholder="Habilidades">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="nombre_contacto"><strong>Nombre de contacto:</strong></label>
-                                            <input type="text" class="form-control" name="nombre_contacto"
-                                                id="nombre_contacto" placeholder="Nombre de contacto">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="numero_contacto"><strong>Número de contacto:</strong></label>
-                                            <input type="text" class="form-control" name="numero_contacto"
-                                                id="numero_contacto" placeholder="Número de contacto">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="usuario"><strong>Usuario Intranet:</strong></label>
-                                            <input type="text" class="form-control" name="usuario"
-                                                id="usuario" placeholder="Usuario Intranet">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="usuario_trello"><strong>Usuario Trello:</strong></label>
-                                            <input type="text" class="form-control" name="usuario_trello"
-                                                id="usuario_trello" placeholder="Usuario Trello">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="usuario_slack"><strong>Usuario Slack:</strong></label>
-                                            <input type="text" class="form-control" name="usuario_slack"
-                                                id="usuario_slack" placeholder="Usuario Slack">
-                                        </div>
-
-
+                                        <h4>Información Bancaria</h4>
+                                        <hr>
                                         <div class="form-group">
                                             <label for="entidad_bancaria"><strong>Entidad Bancaria:</strong></label>
                                             <input type="text" class="form-control" name="entidad_bancaria"
@@ -287,7 +318,6 @@
                                             <input type="number" class="form-control" name="numero_cuenta"
                                                 id="numero_cuenta" placeholder="Número de cuenta">
                                         </div>
-
 
                                         <div class="form-group">
                                             <label for="contrasena"><strong>Contraseña:</strong></label>
