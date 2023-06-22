@@ -26,8 +26,9 @@
   <div class="list-group" style="max-height: 400px; overflow-y: scroll">
     <form action="/routes/__init__.py" method="POST">
       {%for notificaciones in g.notificaciones%}
-      <a
-        href="/allNotificaciones/{{notificaciones[1]}}/{{notificaciones[3]}}"
+      <input type="hidden" value="{{notificaciones[1]}}" name="tipo_notificacion">
+      <input type="hidden" value="{{notificaciones[3]}}" name="id_solicitud">
+      <button
         class="list-group-item list-group-item-action d-flex"
         name="ver_notificacion_nomina"
         value="{{notificaciones[0]}}"
@@ -45,7 +46,7 @@
           </div>
           <p class="text-sm">{{notificaciones[5]}}</p>
         </div>
-      </a>
+      </button>
       {%endfor%}
     </form>
     <div class="py-3 text-center">

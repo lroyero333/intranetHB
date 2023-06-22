@@ -37,7 +37,6 @@ url_inicio = '/inicio'
 def notificacionesRH():
     if not 'login' in session:
         return
-
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute(
@@ -51,6 +50,17 @@ def notificacionesRH():
     conexion.commit()
     solicitudes_total_count = len(notificaciones)
 
+    if 'ver_notificacion_nomina' in request.form:
+        tipo_notificacion=request.form['tipo_notificacion']
+        id_solicitud=request.form['id_solicitud']
+        estado_notificacion = "Visto"
+        query = "UPDATE notificaciones SET estado_notificacion = %s WHERE id_solicitud = %s"
+        params = [estado_notificacion, id_solicitud]
+        print(query, params)
+        cursor.execute(query, params)
+        conexion.commit()
+        return redirect(f'/allNotificaciones/{tipo_notificacion}/{id_solicitud}')
+    
     notificaciones_con_tiempo = agregar_tiempo_transcurrido(notificaciones, 6)
     g.usuario_base = usuario_base
     g.solicitudes_total_count = solicitudes_total_count
@@ -64,13 +74,6 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
     conexion = mysql.connect()
     cursor = conexion.cursor()
     print(id_solicitud)
-    estado_notificacion = "Visto"
-    query = "UPDATE notificaciones SET estado_notificacion = %s WHERE id_solicitud = %s"
-    params = [estado_notificacion, id_solicitud]
-    print(query, params)
-    cursor.execute(query, params)
-    conexion.commit()
-
     persona_resuelve_solicitud = session['usuario']
     fechaResolucion = datetime.now()
 
