@@ -165,6 +165,8 @@ def editInventario(inventario_id):
         return redirect('/')
     if session['cargo'] != 1 and  session['cargo'] != 0:
         return redirect('/inicio')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     cursor.execute(
         "SELECT * FROM inventario WHERE id_elemento= %s", inventario_id)
     inventario = cursor.fetchone()

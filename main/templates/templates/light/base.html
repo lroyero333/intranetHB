@@ -71,7 +71,8 @@
                         <small>{{g.usuario_base[3]}}</small>
                     </div>
                     <div class="social">
-                        <a href="https://trello.com/u/{{g.usuario_base[4]}}/cards" title="Trello" target="_blank"><i class="ti-trello"></i></a>
+                        <a href="https://trello.com/u/{{g.usuario_base[4]}}/cards" title="Trello" target="_blank"><i
+                                class="ti-trello"></i></a>
                         <a href="https://app.slack.com" target="_blank" title="Slack"><i class="fa fa-slack"></i></a>
                         <a href="https://mail.hostinger.com/?_task=mail&_mbox=INBOX" title="Correo" target="_blank"><i
                                 class="ti-email"></i></a>
@@ -232,6 +233,9 @@
     <script src="{{ url_for('static', filename='js/pages/charts/c3.js')}}"></script>
     <script src="{{ url_for('static', filename='js/pages/todo-js.js')}}"></script>
     <script src="{{ url_for('static', filename='vendor/summernote/dist/summernote.js')}}"></script>
+    <script>
+        $('.sparkbar-mini').sparkline('html', { type: 'bar', height: '18px', barWidth: 5, barSpacing: 2 });
+    </script>
     <script>
         $('.undo').click(function () {
             $(this).closest('.alert').remove();

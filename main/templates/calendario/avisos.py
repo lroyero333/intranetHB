@@ -12,8 +12,7 @@ from main.run import (agregar_tiempo_transcurrido, app, bcrypt, fecha_actualCO,
                       flash, generarID, jsonify, mysql, redirect,
                       render_template, request, session, url_for)
 
-conexion = mysql.connect()
-cursor = conexion.cursor()
+
 
 
 @app.route('/avisos')
@@ -31,6 +30,8 @@ def avisos():
 
 @app.route('/aviso/crear', methods=['GET', 'POST'])
 def crearAviso():
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     if request.method == 'POST':
         if 'crear_aviso' in request.form:
             id_usuario_fk = session["usuario"]
@@ -52,6 +53,8 @@ def crearAviso():
 
 @app.route('/avisos/lista/editar', methods=['GET', 'POST'])
 def listaavisoEditar():
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     if request.method == 'POST':
         aviso_id = request.form.get('aviso_id')
         if request.form.get('editar_aviso'):
@@ -63,6 +66,8 @@ def listaavisoEditar():
 
 @app.route('/avisos/lista/eliminar', methods=['GET', 'POST'])
 def listaavisoEliminar():
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     if request.method == 'POST':
         aviso_id = request.form.get('aviso_id')
         if request.form.get('borrar_aviso'):
@@ -82,7 +87,8 @@ def editaviso(aviso_id):
         return redirect('/')
     if session['cargo'] != 1 and  session['cargo'] != 0:
         return redirect('/inicio')
-
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     cursor.execute("SELECT * FROM avisos WHERE id_aviso= %s", aviso_id)
     aviso = cursor.fetchone()
 
