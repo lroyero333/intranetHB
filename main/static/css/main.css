@@ -18511,8 +18511,8 @@ body *:hover::-webkit-scrollbar-thumb {
   .fc-day-number,
 .fc .fc-view-container .fc-view.fc-agenda > table tbody tr td .fc-day-number {
   font-size: 16px;
-  padding: 5px 10px;
-  margin: 5px;
+  padding: 0px 10px;
+  margin: 0px;
   color: #292b30;
 }
 
