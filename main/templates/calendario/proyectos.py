@@ -68,6 +68,7 @@ def userProyecto(project_id):
                 cursor.execute(query, params)
                 conexion.commit()
                 flash('Usuario agregado satisfactoriamente', 'correcto')
+                return redirect(request.url)
         elif 'editar_usuario_proyecto' in request.form:
             id_participante = request.form['editar_usuario_proyecto']
             return redirect(f'/proyectos/editarUsuarios/{id_participante}')
@@ -86,7 +87,7 @@ def editarUserProyecto(project_id):
         return redirect('/')
     conexion = mysql.connect()
     cursor = conexion.cursor()
-    cursor.execute('SELECT proyecto_users.*, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido FROM proyecto_users JOIN general_users ON proyecto_users.id_usuario= general_users.usuario;')
+    cursor.execute('SELECT proyecto_users.*, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido FROM proyecto_users JOIN general_users ON proyecto_users.id_usuario= general_users.usuario WHERE id_proyecto_usuario=%s;', project_id)
     project_user = cursor.fetchone()
 
     if 'editar_usuario_proyecto' in request.form:
