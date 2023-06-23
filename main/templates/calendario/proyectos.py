@@ -24,8 +24,8 @@ def userProyecto(project_id):
     cursor.execute(
         "SELECT Nombre, segundo_nombre, Apellido, segundo_apellido, usuario FROM general_users")
     integrante = cursor.fetchall()
-    query = "SELECT proyecto_users.*,proyectos.*, DATE_FORMAT(fecha_inicio_user, %s)as inicio_user, DATE_FORMAT(fecha_fin_user, %s)as fecha_fin_user, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto FROM proyecto_users JOIN proyectos ON proyecto_users.id_proyecto= proyectos.id_proyecto JOIN general_users ON proyecto_users.id_usuario= general_users.usuario;"
-    cursor.execute(query, ('%d-%m-%Y', '%d-%m-%Y'))
+    query = "SELECT proyecto_users.*, proyectos.*, DATE_FORMAT(fecha_inicio_user, %s) as inicio_user, DATE_FORMAT(fecha_fin_user, %s) as fecha_fin_user, general_users.Nombre, general_users.segundo_nombre, general_users.Apellido, general_users.segundo_apellido, general_users.foto FROM proyecto_users JOIN proyectos ON proyecto_users.id_proyecto = proyectos.id_proyecto JOIN general_users ON proyecto_users.id_usuario = general_users.usuario WHERE proyecto_users.id_proyecto = %s;"
+    cursor.execute(query, ('%d-%m-%Y', '%d-%m-%Y', project_id))
     project_user = cursor.fetchall()
     cursor.execute(
         'SELECT nombre_proyecto FROM proyectos WHERE id_proyecto=%s;', project_id)
