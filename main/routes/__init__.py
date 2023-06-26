@@ -162,7 +162,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
                 conexion.commit()
 
                 flash('Respuesta a solicitud realizada correctamente', 'correcto')
-                return redirect("/vacaciones")
+                return redirect("/misVacaciones")
             if 'rechazarSolicitudVacaciones' in request.form:
                 tipo_vacaciones = request.form['tipo_vacaciones']
                 id_solicitud = request.form['rechazarSolicitudVacaciones']
@@ -182,7 +182,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
                 cursor.execute(query, params)
                 conexion.commit()
                 flash('Respuesta a solicitud realizada correctamente', 'correcto')
-                return redirect("/vacaciones")
+                return redirect("/misVacaciones")
 
         return render_template("templates/light/verNotificaciones.html", solicitudes_va_extemporaneas=solicitudes_va_extemporaneas[0], tipo_solicitud=tipo_solicitud)
     elif tipo_solicitud == "Certificado":

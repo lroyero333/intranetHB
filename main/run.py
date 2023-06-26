@@ -36,6 +36,7 @@ def fecha_actualCO():
     fecha_actual_colombia = datetime.now(colombia_tz)
     fecha_formateada = fecha_actual_colombia.strftime('%Y-%m-%d %H:%M:%S')  # Formato de fecha deseado
     return fecha_formateada
+
 def stringAleatorio():
     string_aleatorio = "0123456789abcdefghijklmnñopqrstuvwxyz_"
     longitud = 10

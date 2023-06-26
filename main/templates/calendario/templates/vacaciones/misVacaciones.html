@@ -11,11 +11,17 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto"></ul>
-        <button type="button" data-toggle="modal" data-target="#asignarVacaciones"
-          class="btn btn-primary ml-2 btn-animated btn-animated-y">
-          <span class="btn-inner--visible">Asignar Vacaciones</span>
+        <button type="button" class="btn btn-primary ml-2 btn-animated btn-animated-y" data-toggle="modal"
+          data-target="#programarVacaciones">
+          <span class="btn-inner--visible">Programar Vacaciones</span>
           <span class="btn-inner--hidden"><i class="fa fa-plane"></i></span>
         </button>
+        <button type="button" class="btn btn-danger ml-2 btn-animated btn-animated-y" data-toggle="modal"
+          data-target="#cancelarProgramarVacaciones">
+          <span class="btn-inner--visible">Cancelar Programacion</span>
+          <span class="btn-inner--hidden"><i class="fa fa-times-circle"></i></span>
+        </button>
+
       </div>
     </nav>
     <div class="container-fluid">
@@ -69,14 +75,13 @@
                   <hr />
                   <h1>Vacaciones</h1>
                   <hr />
-
+                  <!--TABLA DE VACACIONES DE USUARIO-->
                   <div class="body">
                     <div class="table-responsive">
                       <table class="table table-bordered table-striped table-hover mb-0 c_table dataTable">
                         <thead>
                           <tr>
-                            <th>Usuario</th>
-                            <th data-breakpoints="xs">Tipo de vacaciones</th>
+                            <th>Tipo de vacaciones</th>
                             <th data-breakpoints="xs">Inicio de vacaciones</th>
                             <th data-breakpoints="xs">Fin de vacaciones</th>
                             <th data-breakpoints="xs">Días Totales</th>
@@ -85,56 +90,16 @@
                         </thead>
                         <tbody>
                           {% for solicitudes_vacaciones in
-                          solicitudes_vacaciones %}
+                          solicitudes_vacaciones %} {% if
+                          solicitudes_vacaciones[4] == session["usuario"] %}
 
                           <tr>
-                            <td>
-                              <img src="{{ url_for('static', filename='images/users/' + solicitudes_vacaciones[11]) }}"
-                                class="avatar w30" alt="" />
-                              <span class="ml-2">
-                                {{solicitudes_vacaciones[9]}}
-                                {{solicitudes_vacaciones[10]}}</span>
-                            </td>
                             <td>{{solicitudes_vacaciones[1]}}</td>
                             <td>{{solicitudes_vacaciones[7]}}</td>
                             <td>{{solicitudes_vacaciones[8]}}</td>
 
                             <td>{{solicitudes_vacaciones[5]}}</td>
                             <td>{{solicitudes_vacaciones[6]}}</td>
-                          </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <hr />
-                  <h1>Vacaciones Extemporaneas</h1>
-                  <hr />
-
-                  <div class="body">
-                    <div class="table-responsive">
-                      <table class="table table-bordered table-striped table-hover mb-0 c_table dataTable">
-                        <thead>
-                          <tr>
-                            <th>Usuario</th>
-                            <th data-breakpoints="xs">Inicio de Adelanto</th>
-                            <th data-breakpoints="xs">Fin de adelanto</th>
-                            <th data-breakpoints="xs">Días Totales</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% for solicitudes_va_extemporaneas in
-                          solicitudes_va_extemporaneas %} {% if
-                          solicitudes_va_extemporaneas[8] == 'Aceptado' %}
-                          <tr>
-                            <td>
-                              {{solicitudes_va_extemporaneas[13]}}
-                              {{solicitudes_va_extemporaneas[14]}}
-                            </td>
-                            <td>{{solicitudes_va_extemporaneas[11]}}</td>
-                            <td>{{solicitudes_va_extemporaneas[12]}}</td>
-                            <td>{{solicitudes_va_extemporaneas[4]}}</td>
                           </tr>
                           {% endif %} {% endfor %}
                         </tbody>
@@ -142,51 +107,7 @@
                     </div>
                   </div>
                   <hr />
-                </div>
-                <div class="tab-pane fade" id="vacaciones" role="tabpanel" aria-labelledby="vacaciones-tab">
-                  <hr />
-                  <h1>Vacaciones</h1>
-                  <hr />
-                  <div class="body">
-                    <div class="table-responsive">
-                      <table class="table table-bordered table-striped table-hover mb-0 c_table dataTable">
-                        <thead>
-                          <tr>
-                            <th>Usuario</th>
-                            <th data-breakpoints="xs">Tipo de vacaciones</th>
-                            <th data-breakpoints="xs">Inicio de vacaciones</th>
-                            <th data-breakpoints="xs">Fin de vacaciones</th>
-                            <th data-breakpoints="xs">Días Totales</th>
-                            <th data-breakpoints="xs">Días Restantes</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% for solicitudes_vacaciones in
-                          solicitudes_vacaciones %}
-
-                          <tr>
-                            <td>
-                              <img src="{{ url_for('static', filename='images/users/' +  solicitudes_vacaciones[11]) }}"
-                                class="avatar w30" alt="" />
-                              <span class="ml-2">
-                                {{solicitudes_vacaciones[9]}}
-                                {{solicitudes_vacaciones[10]}}</span>
-                            </td>
-                            <td>{{solicitudes_vacaciones[1]}}</td>
-                            <td>{{solicitudes_vacaciones[7]}}</td>
-                            <td>{{solicitudes_vacaciones[8]}}</td>
-
-                            <td>{{solicitudes_vacaciones[5]}}</td>
-                            <td>{{solicitudes_vacaciones[6]}}</td>
-                          </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="tab-pane fade" id="vacaciones_ex" role="tabpanel" aria-labelledby="vacaciones_ex-tab">
+                  <!--TABLA DE EXTEMPORANEAS DE USUARIO-->
                   <hr />
                   <h1>Vacaciones Extemporáneas</h1>
                   <hr />
@@ -195,26 +116,88 @@
                       <table class="table table-bordered table-striped table-hover mb-0 c_table dataTable">
                         <thead>
                           <tr>
-                            <th>Usuario</th>
-                            <th data-breakpoints="xs">Inicio de Adelanto</th>
+                            <th>Inicio de Adelanto</th>
                             <th data-breakpoints="xs">Fin de adelanto</th>
-                            <th data-breakpoints="xs">Días Totales</th>
+                            <th data-breakpoints="xs">Días</th>
                           </tr>
                         </thead>
                         <tbody>
                           {% for solicitudes_va_extemporaneas in
                           solicitudes_va_extemporaneas %} {% if
-                          solicitudes_va_extemporaneas[8] == 'Aceptado' %}
+                          solicitudes_va_extemporaneas[10] == session["usuario"]
+                          %} {% if solicitudes_va_extemporaneas[8] == 'Aceptado'
+                          %}
                           <tr>
-                            <td>
-                              {{solicitudes_va_extemporaneas[13]}}
-                              {{solicitudes_va_extemporaneas[14]}}
-                            </td>
                             <td>{{solicitudes_va_extemporaneas[11]}}</td>
                             <td>{{solicitudes_va_extemporaneas[12]}}</td>
                             <td>{{solicitudes_va_extemporaneas[4]}}</td>
                           </tr>
+                          {% endif %} {% endif %} {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <hr />
+                </div>
+                <div class="tab-pane fade" id="vacaciones" role="tabpanel" aria-labelledby="vacaciones-tab">
+
+                  <!--TABLA DE VACACIONES DE USUARIO-->
+                  <div class="body">
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-striped table-hover mb-0 c_table dataTable">
+                        <thead>
+                          <tr>
+                            <th>Tipo de vacaciones</th>
+                            <th data-breakpoints="xs">Inicio de vacaciones</th>
+                            <th data-breakpoints="xs">Fin de vacaciones</th>
+                            <th data-breakpoints="xs">Días Totales</th>
+                            <th data-breakpoints="xs">Días Restantes</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for solicitudes_vacaciones in
+                          solicitudes_vacaciones %} {% if
+                          solicitudes_vacaciones[4] == session["usuario"] %}
+
+                          <tr>
+                            <td>{{solicitudes_vacaciones[1]}}</td>
+                            <td>{{solicitudes_vacaciones[7]}}</td>
+                            <td>{{solicitudes_vacaciones[8]}}</td>
+
+                            <td>{{solicitudes_vacaciones[5]}}</td>
+                            <td>{{solicitudes_vacaciones[6]}}</td>
+                          </tr>
                           {% endif %} {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="tab-pane fade" id="vacaciones_ex" role="tabpanel" aria-labelledby="vacaciones_ex-tab">
+
+                  <div class="body">
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-striped table-hover mb-0 c_table dataTable">
+                        <thead>
+                          <tr>
+                            <th>Inicio de Adelanto</th>
+                            <th data-breakpoints="xs">Fin de adelanto</th>
+                            <th data-breakpoints="xs">Días</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for solicitudes_va_extemporaneas in
+                          solicitudes_va_extemporaneas %} {% if
+                          solicitudes_va_extemporaneas[10] == session["usuario"]
+                          %} {% if solicitudes_va_extemporaneas[8] == 'Aceptado'
+                          %}
+                          <tr>
+                            <td>{{solicitudes_va_extemporaneas[11]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[12]}}</td>
+                            <td>{{solicitudes_va_extemporaneas[4]}}</td>
+                          </tr>
+                          {% endif %} {% endif %} {% endfor %}
                         </tbody>
                       </table>
                     </div>
@@ -228,69 +211,90 @@
     </div>
   </div>
 </div>
-
-<div class="modal fade" id="asignarVacaciones" tabindex="-1" role="dialog">
+<div class="modal fade" id="programarVacaciones" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <label><strong>Asignar Vacaciones</strong></label>
+        <label><strong>Programar Vacaciones Extemporáneas</strong></label>
       </div>
       <form action="" method="POST">
         <div class="modal-body">
           <div class="row clearfix">
             <div class="col-12">
               <div class="form-group">
-                <label for="nombre_usuario"><strong>Asignar Vacaciones a Usuarios</strong></label>
-                <select class="selectpicker" name="usuario_id" title="Selecciona un Usuario" data-live-search="true"
-                  data-live-search-placeholder="Buscar ...">
-                  <option value="" selected disabled>
-                    Selecciona un Usuario
-                  </option>
-                  {% for usuarios_vacaciones in usuarios_vacaciones %}
-                  <option value="{{ usuarios_vacaciones[0] }}">
-                    {{ usuarios_vacaciones[1] }} {{usuarios_vacaciones[2]}}
-                  </option>
-                  {% endfor %}
-                </select>
+                <label for="fecha_inicio_extemporanea"><strong>Inicio:</strong></label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
+                  </div>
+                  <input data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true"
+                    class="form-control" name="fecha_inicio_extemporanea" id="fecha_inicio_extemporanea" value=""
+                    placeholder="Fecha de inicio de vacaciones Extemporaneas" />
+                </div>
               </div>
               <div class="form-group">
-                <label for="tipo_vacaciones"><strong>Tipo de Vacaciones</strong></label>
-                <select class="selectpicker" name="tipo_vacaciones" title="Selecciona un Usuario"
+                <label for="fecha_fin_extemporanea"><strong>Fin:</strong></label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
+                  </div>
+                  <input data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true"
+                    class="form-control" name="fecha_fin_extemporanea" id="fecha_fin_extemporanea" value=""
+                    placeholder="Fecha de fin de vacaciones Extemporaneas" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" name="programar_vacaciones" value="{{ usuarios_vacaciones[0] }}"
+              class="btn btn-success">
+              Programar
+            </button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="cancelarProgramarVacaciones" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <label><strong>Cancelar Programacion de Vacaciones Extemporáneas</strong></label>
+      </div>
+      <form action="" method="POST">
+        <div class="modal-body">
+          <div class="row clearfix">
+            <div class="col-12">
+              <div class="form-group">
+                <label for="vacaciones_solicitadas"><strong>Vacaciones solicitadas</strong></label>
+                <select class="selectpicker" name="vacaciones_ex_id" title="Selecciona una opcion"
                   data-live-search="true" data-live-search-placeholder="Buscar ...">
                   <option value="" selected disabled>
                     Selecciona un Usuario
                   </option>
-                  <option value="Remunerado">Remunerado</option>
-                  <option value="No Remunerado">No Remunerado</option>
+                  {% for solicitudes_va_extemporaneas in
+                  solicitudes_va_extemporaneas %} {% if
+                  solicitudes_va_extemporaneas[10] == session['usuario'] and
+                  (solicitudes_va_extemporaneas[8] == 'Aceptado' or
+                  solicitudes_va_extemporaneas[8] == 'Pendiente') %}
+                  <option value="{{ solicitudes_va_extemporaneas[0] }}">
+                    <strong>Inicio:</strong> {{ solicitudes_va_extemporaneas[11]
+                    }}
+                    <strong>Fin: </strong> {{solicitudes_va_extemporaneas[12]}},
+                    Días: {{solicitudes_va_extemporaneas[4]}}
+                  </option>
+                  {% endif %} {% endfor %}
                 </select>
-              </div>
-              <div class="form-group">
-                <label for="fecha_inicio_vacaciones"><strong>Inicio de Vacaciones:</strong></label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
-                  </div>
-                  <input data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true"
-                    class="form-control" name="fecha_inicio_vacaciones" id="fecha_inicio_vacaciones" value=""
-                    placeholder="Fecha de inicio de vacaciones" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="fecha_fin_vacaciones"><strong>Fin de Vacaciones:</strong></label>
-                <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
-                  </div>
-                  <input data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true"
-                    class="form-control" name="fecha_fin_vacaciones" id="fecha_fin_vacaciones" value=""
-                    placeholder="Fecha de fin de vacaciones" />
-                </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" name="asignar_vacaciones" value="{{ usuarios_vacaciones[0] }}"
-                class="btn btn-success">
-                Asignar
+              <button type="submit" name="cancelar_programar_vacaciones" class="btn btn-danger">
+                Cancelar
               </button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">
                 Cerrar
@@ -302,5 +306,4 @@
     </div>
   </div>
 </div>
-
 {% endblock %}

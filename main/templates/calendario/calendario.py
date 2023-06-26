@@ -14,8 +14,7 @@ from main.run import (app, bcrypt, fecha_actualCO, flash, generarID, jsonify,
                       stringAleatorio, url_for)
 
 extensionesImagenes = ['.jpg', '.jpeg', '.png']
-conexion = mysql.connect()
-cursor = conexion.cursor()
+
 
 
 @app.route('/calendario', methods=['GET', 'POST'])
@@ -25,8 +24,8 @@ def calendario():
     return render_template('calendario/templates/app-calendar.html')
 
 
-@app.route('/vacaciones', methods=['GET', 'POST'])
-def verVacaciones():
+@app.route('/misVacaciones', methods=['GET', 'POST'])
+def misVacaciones():
     if not 'login' in session:
         return redirect('/')
     conexion = mysql.connect()
@@ -41,33 +40,6 @@ def verVacaciones():
     cursor.execute('SELECT usuario FROM general_users WHERE id_cargo_fk = 1')
     usuariosRH = cursor.fetchall()
     conexion.commit()
-
-    if 'asignar_vacaciones' in request.form:
-        id_usuario = request.form['usuario_id']
-        tipo_vacaciones = request.form['tipo_vacaciones']
-        fecha_inicio_vacaciones = request.form['fecha_inicio_vacaciones']
-        fecha_fin_vacaciones = request.form['fecha_fin_vacaciones']
-        diferencia_dias = datetime.strptime(
-            fecha_fin_vacaciones, "%Y-%m-%d")-datetime.strptime(fecha_inicio_vacaciones, "%Y-%m-%d")
-        dias_vacaciones = diferencia_dias.days+1
-        print(dias_vacaciones)
-        # Verificar si el usuario ya existe
-        resultado = None
-        sql = "SELECT id_usuario FROM vacaciones WHERE id_usuario = %s "
-        cursor.execute(sql, id_usuario)
-        resultado = cursor.fetchone()
-        if resultado is not None:
-            # El usuario ya existe
-
-            flash('El usuario ya tiene vacaciones asignadas', 'error')
-            return render_template('calendario/templates/vacaciones/vacaciones.html', usuarios_vacaciones=usuarios_vacaciones, solicitudes_vacaciones=solicitudes_vacaciones)
-        else:
-            query = "INSERT INTO vacaciones (id_vacaciones,tipo_vacaciones, fecha_inicio_vacaciones, fecha_fin_vacaciones, id_usuario, dias_vacaciones, dias_restantes ) VALUES (%s,%s,%s, %s,%s,%s,%s)"
-            params = [generarID(), tipo_vacaciones, fecha_inicio_vacaciones,
-                      fecha_fin_vacaciones, id_usuario, dias_vacaciones, dias_vacaciones]
-            cursor.execute(query, params)
-            conexion.commit()
-            flash('Vacaciones asignadas satisfactoriamente', 'correcto')
 
     if 'programar_vacaciones' in request.form:
         id_usuario = session['usuario']
@@ -123,7 +95,59 @@ def verVacaciones():
                 "DELETE FROM vacaciones_extemporaneas WHERE id_vacaciones_extemporaneas = %s;", (id_vacaciones_ex,))
             conexion.commit()
         flash('Vacaciones canceladas satisfactoriamente', 'correcto')
-        return redirect('/vacaciones')
+        return redirect('/misVacaciones')
+
+    cursor.execute("SELECT vacaciones_extemporaneas.*, DATE_FORMAT(fecha_inicio, '%d-%m-%Y')as inicio_adelanto,DATE_FORMAT(fecha_fin, '%d-%m-%Y') as fin_adelanto, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.persona_aprueba = general_users.usuario;")
+    solicitudes_vacaciones_extemporaneas = cursor.fetchall()
+    conexion.commit()
+    return render_template('calendario/templates/vacaciones/misVacaciones.html', usuarios_vacaciones=usuarios_vacaciones, solicitudes_vacaciones=solicitudes_vacaciones, solicitudes_vacaciones_extemporaneas=solicitudes_vacaciones_extemporaneas, solicitudes_va_extemporaneas=solicitudes_va_extemporaneas)
+
+
+@app.route('/vacaciones', methods=['GET', 'POST'])
+def verVacaciones():
+    if not 'login' in session:
+        return redirect('/')
+    if session['cargo']!= 1 and session['cargo']!=0:
+        return redirect('/inicio')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT usuario, Nombre, Apellido,foto FROM general_users;")
+    usuarios_vacaciones = cursor.fetchall()
+    cursor.execute("SELECT vacaciones.*,DATE_FORMAT(fecha_inicio_vacaciones, '%d-%m-%Y') AS inicio_vacaciones,DATE_FORMAT(fecha_fin_vacaciones, '%d-%m-%Y') AS fin_vacaciones, general_users.Nombre, general_users.Apellido, general_users.foto FROM vacaciones LEFT JOIN general_users ON vacaciones.id_usuario = general_users.usuario ;")
+    solicitudes_vacaciones = cursor.fetchall()
+
+    cursor.execute("SELECT vacaciones_extemporaneas.*,DATE_FORMAT(fecha_inicio, '%d-%m-%Y') AS inicio_adelanto, DATE_FORMAT(fecha_fin, '%d-%m-%Y') AS fin_adelanto, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario;")
+    solicitudes_va_extemporaneas = cursor.fetchall()
+    cursor.execute('SELECT usuario FROM general_users WHERE id_cargo_fk = 1')
+    usuariosRH = cursor.fetchall()
+    conexion.commit()
+
+    if 'asignar_vacaciones' in request.form:
+        id_usuario = request.form['usuario_id']
+        tipo_vacaciones = request.form['tipo_vacaciones']
+        fecha_inicio_vacaciones = request.form['fecha_inicio_vacaciones']
+        fecha_fin_vacaciones = request.form['fecha_fin_vacaciones']
+        diferencia_dias = datetime.strptime(
+            fecha_fin_vacaciones, "%Y-%m-%d")-datetime.strptime(fecha_inicio_vacaciones, "%Y-%m-%d")
+        dias_vacaciones = diferencia_dias.days+1
+        print(dias_vacaciones)
+        # Verificar si el usuario ya existe
+        resultado = None
+        sql = "SELECT id_usuario FROM vacaciones WHERE id_usuario = %s "
+        cursor.execute(sql, id_usuario)
+        resultado = cursor.fetchone()
+        if resultado is not None:
+            # El usuario ya existe
+
+            flash('El usuario ya tiene vacaciones asignadas', 'error')
+            return render_template('calendario/templates/vacaciones/vacaciones.html', usuarios_vacaciones=usuarios_vacaciones, solicitudes_vacaciones=solicitudes_vacaciones)
+        else:
+            query = "INSERT INTO vacaciones (id_vacaciones,tipo_vacaciones, fecha_inicio_vacaciones, fecha_fin_vacaciones, id_usuario, dias_vacaciones, dias_restantes ) VALUES (%s,%s,%s, %s,%s,%s,%s)"
+            params = [generarID(), tipo_vacaciones, fecha_inicio_vacaciones,
+                      fecha_fin_vacaciones, id_usuario, dias_vacaciones, dias_vacaciones]
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Vacaciones asignadas satisfactoriamente', 'correcto')
 
     cursor.execute("SELECT vacaciones_extemporaneas.*, DATE_FORMAT(fecha_inicio, '%d-%m-%Y')as inicio_adelanto,DATE_FORMAT(fecha_fin, '%d-%m-%Y') as fin_adelanto, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.persona_aprueba = general_users.usuario;")
     solicitudes_vacaciones_extemporaneas = cursor.fetchall()
@@ -131,14 +155,23 @@ def verVacaciones():
     return render_template('calendario/templates/vacaciones/vacaciones.html', usuarios_vacaciones=usuarios_vacaciones, solicitudes_vacaciones=solicitudes_vacaciones, solicitudes_vacaciones_extemporaneas=solicitudes_vacaciones_extemporaneas, solicitudes_va_extemporaneas=solicitudes_va_extemporaneas)
 
 
-@app.route('/permisos', methods=['GET', 'POST'])
-def verPermisos():
+
+
+
+@app.route('/misPermisos', methods=['GET', 'POST'])
+def misPermisos():
     if not 'login' in session:
         return redirect('/')
-    cursor.execute("SELECT solicitud_permisos.*,  DATE_FORMAT(fecha_inicio_permiso, '%d-%m-%Y %H:%i %p') AS inicio_permiso, DATE_FORMAT(fecha_fin_permiso, '%d-%m-%Y %H:%i %p') AS fin_permiso, DATE_FORMAT(fecha_inicio_recuperacion, '%d-%m-%Y %H:%i %p') AS inicio_recuperacion, DATE_FORMAT(fecha_fin_recuperacion, '%d-%m-%Y %H:%i %p') AS fin_recuperacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario;")
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    query="SELECT solicitud_permisos.*,  DATE_FORMAT(fecha_inicio_permiso, %s) AS inicio_permiso, DATE_FORMAT(fecha_fin_permiso, %s) AS fin_permiso, DATE_FORMAT(fecha_inicio_recuperacion, %s) AS inicio_recuperacion, DATE_FORMAT(fecha_fin_recuperacion, %s) AS fin_recuperacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario WHERE id_usuario=%s;"
+    cursor.execute(query,('%d-%m-%Y %H:%i %p', '%d-%m-%Y %H:%i %p', '%d-%m-%Y %H:%i %p', '%d-%m-%Y %H:%i %p', session['usuario']))
     solicitudes_permisos = cursor.fetchall()
-    cursor.execute(
-        "SELECT solicitud_permiso_extra.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permiso_extra LEFT JOIN general_users ON solicitud_permiso_extra.resuelto_por = general_users.usuario WHERE id_usuario = %s AND estado_solicitud= 'Pendiente';", session['usuario'])
+    query="SELECT id_extra, DATE_FORMAT(fecha_inicio, %s) AS fecha_inicio, DATE_FORMAT(fecha_fin, %s) AS fecha_fin FROM solicitud_permiso_extra WHERE id_usuario = %s AND estado_solicitud= 'Pendiente';"
+    cursor.execute(query,('%d-%m-%Y %H:%i %p', '%d-%m-%Y %H:%i %p', session['usuario']))
+    solicitud_permiso_ex = cursor.fetchall()
+    query="SELECT solicitud_permiso_extra.*, general_users.Nombre, general_users.Apellido, general_users.foto, DATE_FORMAT(fecha_inicio, %s) AS inicio_permiso, DATE_FORMAT(fecha_fin, %s) AS fecha_fin FROM solicitud_permiso_extra LEFT JOIN general_users ON solicitud_permiso_extra.resuelto_por = general_users.usuario WHERE estado_solicitud= 'Aceptado' AND id_usuario=%s;"
+    cursor.execute(query,('%d-%m-%Y %H:%i %p', '%d-%m-%Y %H:%i %p', session['usuario']))
     solicitud_permiso_extra = cursor.fetchall()
     conexion.commit()
 
@@ -261,7 +294,7 @@ def verPermisos():
             conexion.commit()
 
         flash('Permiso solicitado satisfactoriamente', 'correcto')
-        return redirect('/permisos')
+        return redirect('/misPermisos')
     if 'agendar_permisoEX' in request.form:
         mensaje = 'Ha solicitado una nueva petición de Permiso a la empresa'
         tipo_notificacion = 'Permiso_Empresa'
@@ -306,13 +339,13 @@ def verPermisos():
             conexion.commit()
 
         flash('Permiso solicitado satisfactoriamente', 'correcto')
-        return redirect('/permisos')
+        return redirect('/misPermisos')
     if 'cancelarPermiso' in request.form:
         permiso_id = request.form['permiso_id']
         cursor.execute("DELETE FROM solicitud_permisos WHERE id_permisos = %s;", (permiso_id,))
         conexion.commit()
         flash('Permiso cancelado satisfactoriamente', 'correcto')
-        return redirect('/permisos')
+        return redirect('/misPermisos')
     if 'cancelarPermisoEx' in request.form:
         print('BOTON BOTON')
         permiso_id = request.form['permiso_id_ex']
@@ -321,7 +354,22 @@ def verPermisos():
         cursor.execute( "DELETE FROM solicitud_permiso_extra WHERE id_extra = %s;", (permiso_id,))
         conexion.commit()
         flash('Permiso de acceso a la empresa cancelado satisfactoriamente', 'correcto')
-        return redirect('/permisos')
+        return redirect('/misPermisos')
+    return render_template('calendario/templates/permisos/misPermisos.html', solicitudes_permisos=solicitudes_permisos, solicitud_permiso_ex=solicitud_permiso_ex, solicitud_permiso_extra=solicitud_permiso_extra)
+
+@app.route('/permisos', methods=['GET', 'POST'])
+def verPermisos():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    query="SELECT solicitud_permisos.*,  DATE_FORMAT(fecha_inicio_permiso, %s) AS inicio_permiso, DATE_FORMAT(fecha_fin_permiso, %s) AS fin_permiso, DATE_FORMAT(fecha_inicio_recuperacion, %s) AS inicio_recuperacion, DATE_FORMAT(fecha_fin_recuperacion, %s) AS fin_recuperacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario WHERE estado_solicitud= 'Aceptado'"
+    cursor.execute(query,('%d-%m-%Y %H:%i %p', '%d-%m-%Y %H:%i %p', '%d-%m-%Y %H:%i %p', '%d-%m-%Y %H:%i %p'))
+    solicitudes_permisos = cursor.fetchall()
+    query="SELECT solicitud_permiso_extra.*, general_users.Nombre, general_users.Apellido, general_users.foto, DATE_FORMAT(fecha_inicio, %s) AS inicio_permiso, DATE_FORMAT(fecha_fin, %s) AS fecha_fin FROM solicitud_permiso_extra LEFT JOIN general_users ON solicitud_permiso_extra.resuelto_por = general_users.usuario WHERE estado_solicitud= 'Aceptado';"
+    cursor.execute(query,('%d-%m-%Y %H:%i %p', '%d-%m-%Y %H:%i %p'))
+    solicitud_permiso_extra = cursor.fetchall()
+    conexion.commit()
     return render_template('calendario/templates/permisos/permisos.html', solicitudes_permisos=solicitudes_permisos, solicitud_permiso_extra=solicitud_permiso_extra)
 
 
@@ -360,22 +408,22 @@ def obtener_cursos():
             '%Y-%m-%d'),  'location': evento[6], 'allDay': 'true', "className": 'bg-info'}
         eventos_json.append(evento_json)
     for vacaciones in vacaciones:
-        evento_json = {'title': 'Vacaciones ' + vacaciones[0], 'url': '/vacaciones', 'start': vacaciones[1].strftime(
+        evento_json = {'title': 'Vacaciones ' + vacaciones[0], 'url': '/misVacaciones', 'start': vacaciones[1].strftime(
             '%Y-%m-%d'), 'end': vacaciones[2].strftime(
             '%Y-%m-%d'), 'allDay': 'true', "className": 'bg-success'}
         eventos_json.append(evento_json)
     for vacaciones_ex in vacaciones_ex:
-        evento_json = {'title': 'Vacaciones Extemporanea ' + vacaciones_ex[0], 'url': '/vacaciones', 'start': vacaciones_ex[1].strftime(
+        evento_json = {'title': 'Vacaciones Extemporanea ' + vacaciones_ex[0], 'url': '/misVacaciones', 'start': vacaciones_ex[1].strftime(
             '%Y-%m-%d'), 'end': vacaciones_ex[2].strftime(
             '%Y-%m-%d'), 'allDay': 'true',  "backgroundColor": "#D0A9F5"}
         eventos_json.append(evento_json)
     for permisos in permisos:
-        evento_json = {'title': 'Permiso ', 'url': '/permisos', 'start': permisos[0].strftime(
+        evento_json = {'title': 'Permiso ', 'url': '/misPermisos', 'start': permisos[0].strftime(
             '%Y-%m-%d %H:%M:%S'), 'end': permisos[1].strftime(
             '%Y-%m-%d %H:%M:%S'), 'allDay': 'false', "backgroundColor": "#2D89DA"}
         eventos_json.append(evento_json)
     for permisos_recuperar in permisos_recuperar:
-        evento_json = {'title': 'Recuperar Permiso ', 'url': '/permisos', 'start': permisos_recuperar[0].strftime(
+        evento_json = {'title': 'Recuperar Permiso ', 'url': '/misPermisos', 'start': permisos_recuperar[0].strftime(
             '%Y-%m-%d %H:%M:%S'), 'end': permisos_recuperar[1].strftime(
             '%Y-%m-%d %H:%M:%S'), 'allDay': 'false', "backgroundColor": "#9B2DDA"}
         eventos_json.append(evento_json)
