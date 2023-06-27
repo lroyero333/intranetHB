@@ -91,7 +91,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
                 id_solicitud = request.form['aceptarSolicitudNomina']
                 user_nomina = request.form['user_nomina']
                 comentarioSolicitudNomina = request.form['comentarioSolicitudNomina']
-                estado_solicitud = "Completado"
+                estado_solicitud = "Aceptado"
                 tipo_notificacion = 'Nomina'
                 mensaje = 'Ha solucionado su petición de Nómina'
                 query = "UPDATE solicitud_nomina SET estado_solicitud = %s ,fecha_resolucion=%s ,comentario=%s,resuelto_por=%s WHERE id_solicitud_nomina = %s"
@@ -201,7 +201,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
                 tipo_notificacion = 'Certificado'
                 mensaje = 'Ha solucionado su petición de Certificado'
                 comentarioSolicitudCertificado = request.form['comentarioSolicitudCertificado']
-                estado_solicitud = "Completado"
+                estado_solicitud = "Aceptado"
                 query = "UPDATE solicitud_certificado SET estado_solicitud = %s ,fecha_resolucion=%s ,comentario_solicitud=%s,resuelto_por=%s WHERE id_solicitud = %s"
                 params = [estado_solicitud, fechaResolucion,
                           comentarioSolicitudCertificado, persona_resuelve_solicitud, id_solicitud]
