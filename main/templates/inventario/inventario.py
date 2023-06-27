@@ -38,7 +38,7 @@ def verInventario():
     cursor.execute(query, (session['usuario'],))
     prestados = cursor.fetchall()
 
-    fecha_actual =datetime.now()
+    fecha_actual =fecha_actualCO()
 
     return render_template('inventario/templates/verInventario.html', inventario_cargo=inventario_cargo, inventario=inventario, prestados=prestados)
 
@@ -52,7 +52,7 @@ def listaEntregarInventario():
     if request.method == 'POST':
 
         if 'entregar_inventario' in request.form:
-            fecha_actual =datetime.now()
+            fecha_actual =fecha_actualCO()
             id_inventario = request.form['inventario_id']
             tipo_movimiento = 'Entrada'
             cantidad = request.form['cantidad_elemento']
@@ -233,7 +233,7 @@ def asignarInventario():
             usuario_elemento = request.form['usuario_elemento']
             cantidad_elemento = request.form['cantidad_elemento']
             descripcion_elemento = request.form['descripcion_elemento']
-            fecha_actual =datetime.now()
+            fecha_actual =fecha_actualCO()
             query = "INSERT INTO elementos_entregados (id_entregados, empleado_id, elemento_id, cantidad, fecha_entrega, observaciones) VALUES (%s, %s,%s,%s, %s,%s)"
             params = [generarID(), usuario_elemento, elemento,
                       cantidad_elemento, fecha_actual, descripcion_elemento]
@@ -252,7 +252,7 @@ def solicitarInventario(id_inventario):
     conexion = mysql.connect()
     cursor = conexion.cursor()
     responsable = session['usuario']
-    feha_actual =datetime.now()
+    feha_actual =fecha_actualCO()
     cursor.execute('SELECT usuario FROM general_users WHERE id_cargo_fk = 3')
     usuariosRH = cursor.fetchall()
     if request.method == 'POST':
@@ -313,7 +313,7 @@ def reportarInventario(id_inventario):
     cursor.execute(
         'SELECT * FROM inventario WHERE id_elemento =%s', id_inventario)
     inventario = cursor.fetchone()
-    feha_actual =datetime.now()
+    feha_actual =fecha_actualCO()
     responsable = session['usuario']
     if request.method == 'POST':
         if 'reportarElemento' in request.form:

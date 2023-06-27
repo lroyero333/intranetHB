@@ -19,7 +19,7 @@ def cursos():
         return redirect('/')
     conexion = mysql.connect()
     cursor = conexion.cursor()
-    fecha_actual =datetime.now()
+    fecha_actual =fecha_actualCO()
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT cursos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM cursos LEFT JOIN general_users ON cursos.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
@@ -64,7 +64,7 @@ def verCursos(curso_id):
             # Insertar un nuevo usuario en la tabla de inscripción de cursos
             id_usuario_fk = session['usuario']
             id_curso_fk = curso_id
-            fecha_inscripcion_curso =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_inscripcion_curso =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
 
             query = "INSERT INTO inscripcion_cursos (id_inscripcion_cursos,id_usuario_fk, id_curso_fk, fecha_inscripcion_curso) VALUES (%s, %s, %s, %s)"
             params = [generarID(), id_usuario_fk, id_curso_fk,
@@ -94,7 +94,7 @@ def crearCurso():
             descripcion = request.form['descripcion']
             descripcion_corta = request.form['descripcion_corta']
             horario = request.form['horario_curso']
-            fecha_publicacion =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_publicacion =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
 
             query = "INSERT INTO cursos (id_curso,id_usuario_fk,nombre_curso, fecha_inicio, fecha_fin, fecha_publicacion, ubicacion, descripcion, descripcion_corta, horario) VALUES (%s, %s,%s,%s, %s, %s, %s, %s, %s, %s)"
             params = [generarID(), id_usuario_fk, nombre_curso, fecha_inicio_curso,
@@ -160,7 +160,7 @@ def editCurso(curso_id):
         descripcion = request.form.get('descripcion') or curso[7]
         descripcion_corta = request.form.get('descripcion_corta') or curso[8]
         horario = request.form.get('horario_curso') or curso[9]
-        fecha_publicacion =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        fecha_publicacion =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
 
         query = "UPDATE cursos SET id_usuario_fk = %s, nombre_curso = %s, fecha_inicio = %s, fecha_fin = %s, ubicacion = %s, descripcion = %s, fecha_publicacion = %s , descripcion_corta=%s, horario=%s WHERE id_curso = %s"
         params = [id_usuario_fk, nombre_curso, fecha_inicio_curso,

@@ -51,7 +51,7 @@ def verCertificados(usuario_id):
         if 'crear_certificado' in request.form:
             nombre_certificado = request.form['nombre_certificado']
             usuario_sube_certificado = session["usuario"]
-            fecha_subida =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_subida =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
             archivo_certificado = request.files['archivo_certificado']
             filename, file_extension = os.path.splitext(
                 archivo_certificado.filename)
@@ -66,7 +66,7 @@ def verCertificados(usuario_id):
 
             extension = os.path.splitext(filename)[1]
             nuevoNombreCertificado = 'CERT' + \
-                str(datetime.now().strftime("%d%m%y")) + \
+                str(fecha_actualCO().strftime("%d%m%y")) + \
                 stringAleatorio() + extension
 
             upload_path = os.path.join(
@@ -130,7 +130,7 @@ def verNominas(usuario_id):
         if 'crear_nomina' in request.form:
             nombre_nomina = request.form['nombre_nomina']
             usuario_sube_nomina = session["usuario"]
-            fecha_subida =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_subida =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
             archivo_nomina = request.files['archivo_nomina']
 
             filename, file_extension = os.path.splitext(
@@ -146,7 +146,7 @@ def verNominas(usuario_id):
 
             extension = os.path.splitext(filename)[1]
             nuevoNombreNomina = 'NOM' + \
-                str(datetime.now().strftime("%d%m%y")) + \
+                str(fecha_actualCO().strftime("%d%m%y")) + \
                 stringAleatorio() + extension
 
             upload_path = os.path.join(
@@ -232,7 +232,7 @@ def verNominaCertificadosUsuario():
             solicitante = session["usuario"]
             tipo_notificacion = 'Certificado'
             mensaje = 'Ha solicitado una nueva petición de Certificado'
-            fecha_solicitud =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_solicitud =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
 
             query = "INSERT INTO solicitud_certificado (id_solicitud,tipo_certificado, nombre_certificado, solicitante, fecha_solicitud ,motivo) VALUES (%s, %s, %s,%s,%s,%s)"
             params = [id_certificado, tipo_certificado, nombre_certificado,
@@ -263,7 +263,7 @@ def verNominaCertificadosUsuario():
             tipo_notificacion = 'Nomina'
             solicitante = session["usuario"]
             nombre_nomina = request.form['nombre_nomina']
-            fecha_solicitud =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_solicitud =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
             motivo_solicitud = request.form['motivo_solicitud']
             query = "INSERT INTO solicitud_nomina (id_solicitud_nomina,nombre_nomina, solicitante, fecha_solicitud ,motivo_solicitud) VALUES (%s,%s,%s,%s,%s)"
             params = [id_nomina, nombre_nomina, solicitante,

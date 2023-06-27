@@ -75,7 +75,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
     cursor = conexion.cursor()
     print(id_solicitud)
     persona_resuelve_solicitud = session['usuario']
-    fechaResolucion = datetime.now()
+    fechaResolucion = fecha_actualCO()
 
     if tipo_solicitud == "Nomina":
         if session['cargo'] != 1 and session['cargo'] != 0:
@@ -398,7 +398,7 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
 def inicio():
     if not 'login' in session:
         return redirect('/')
-    fecha_actual = datetime.now()
+    fecha_actual = fecha_actualCO()
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT cursos.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM cursos LEFT JOIN general_users ON cursos.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")

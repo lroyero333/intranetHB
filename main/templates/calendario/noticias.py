@@ -33,7 +33,7 @@ def stringAleatorio():
 def noticias():
     if not 'login' in session:
         return redirect('/')
-    fecha_actual =datetime.now()
+    fecha_actual =fecha_actualCO()
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT noticias.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM noticias LEFT JOIN general_users ON noticias.id_usuario_fk = general_users.usuario ORDER BY fecha_publicacion DESC;")
@@ -65,7 +65,7 @@ def editNoticia(noticia_id):
 
         descripcion_noticia = request.form.get(
             'descripcion_noticia') or noticia[3]
-        fecha_publicacion =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        fecha_publicacion =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
 
         if request.files['imagen_noticia'].filename != '':
             imagen_noticia = request.files['imagen_noticia']
@@ -112,7 +112,7 @@ def crearNoticia():
             titulo_noticia = request.form['titulo_noticia']
             imagen_noticia = request.files['imagen_noticia']
             descripcion_noticia = request.form['descripcion_noticia']
-            fecha_publicacion =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_publicacion =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
             filename, file_extension = os.path.splitext(
                 imagen_noticia.filename)
             if file_extension.lower() not in extensionesImagenes:

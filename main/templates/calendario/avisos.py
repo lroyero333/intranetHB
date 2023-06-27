@@ -37,7 +37,7 @@ def crearAviso():
             id_usuario_fk = session["usuario"]
             nombre_aviso = request.form['nombre_aviso']
             descripcion = request.form['descripcion']
-            fecha_publicacion =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_publicacion =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
 
             query = "INSERT INTO avisos (id_aviso,titulo_aviso, usuario_publica, fecha_publicacion, descripcion) VALUES (%s,%s,%s,%s, %s)"
             params = [generarID(), nombre_aviso, id_usuario_fk,
@@ -97,7 +97,7 @@ def editaviso(aviso_id):
         id_usuario_fk = session["usuario"]
         nombre_aviso = request.form.get('nombre_aviso') or aviso[1]
         descripcion = request.form.get('descripcion') or aviso[4]
-        fecha_publicacion =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        fecha_publicacion =fecha_actualCO().strftime('%Y-%m-%d %H:%M:%S')
 
         query = "UPDATE avisos SET usuario_publica = %s, titulo_aviso = %s , descripcion = %s, fecha_publicacion = %s WHERE id_aviso = %s"
         params = [id_usuario_fk, nombre_aviso,

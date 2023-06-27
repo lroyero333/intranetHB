@@ -34,8 +34,7 @@ app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024
 def fecha_actualCO():
     colombia_tz = pytz.timezone('America/Bogota')
     fecha_actual_colombia = datetime.now(colombia_tz)
-    fecha_formateada = fecha_actual_colombia.strftime('%Y-%m-%d %H:%M:%S')  # Formato de fecha deseado
-    return fecha_formateada
+    return fecha_actual_colombia
 
 def stringAleatorio():
     string_aleatorio = "0123456789abcdefghijklmnñopqrstuvwxyz_"

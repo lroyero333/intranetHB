@@ -31,7 +31,7 @@ def userProyecto(project_id):
         'SELECT nombre_proyecto FROM proyectos WHERE id_proyecto=%s;', project_id)
     proyecto_nombre = cursor.fetchone()
     conexion.commit()
-    fecha_user =datetime.now()
+    fecha_user =fecha_actualCO()
     if request.method == 'POST':
         if 'desactivar_usuario_proyecto' in request.form:
             id_usuario = request.form['desactivar_usuario_proyecto']

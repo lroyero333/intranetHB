@@ -45,7 +45,7 @@ def misVacaciones():
         id_usuario = session['usuario']
         fecha_inicio_extemporanea = request.form['fecha_inicio_extemporanea']
         fecha_fin_extemporanea = request.form['fecha_fin_extemporanea']
-        fecha_solicitud = datetime.now()
+        fecha_solicitud = fecha_actualCO()
         estado_solicitud = 'Pendiente'
         id_vacaciones_extemporaneas = generarID()
         tipo_notificacion = 'Vacaciones'
@@ -194,7 +194,7 @@ def misPermisos():
         fecha_hora = dt.datetime.strptime(
             fecha_fin_permiso, '%Y-%m-%d %I:%M %p')
         fin_permiso = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
-        fecha_solicitud = datetime.now()
+        fecha_solicitud = fecha_actualCO()
         duracion_permiso = dt.datetime.strptime(
             fin_permiso, '%Y-%m-%d %H:%M:%S') - dt.datetime.strptime(inicio_permiso, '%Y-%m-%d %H:%M:%S')
 
@@ -313,7 +313,7 @@ def misPermisos():
         fecha_hora = dt.datetime.strptime(
             fecha_fin_permiso, '%Y-%m-%d %I:%M %p')
         fin_permiso = fecha_hora.strftime('%Y-%m-%d %H:%M:%S')
-        fecha_solicitud = datetime.now()
+        fecha_solicitud = fecha_actualCO()
         duracion_permiso = dt.datetime.strptime(
             fin_permiso, '%Y-%m-%d %H:%M:%S') - dt.datetime.strptime(inicio_permiso, '%Y-%m-%d %H:%M:%S')
 
