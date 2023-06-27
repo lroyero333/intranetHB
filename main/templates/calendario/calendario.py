@@ -140,7 +140,7 @@ def verVacaciones():
             # El usuario ya existe
 
             flash('El usuario ya tiene vacaciones asignadas', 'error')
-            return render_template('calendario/templates/vacaciones/vacaciones.html', usuarios_vacaciones=usuarios_vacaciones, solicitudes_vacaciones=solicitudes_vacaciones)
+            return redirect(request.url)
         else:
             query = "INSERT INTO vacaciones (id_vacaciones,tipo_vacaciones, fecha_inicio_vacaciones, fecha_fin_vacaciones, id_usuario, dias_vacaciones, dias_restantes ) VALUES (%s,%s,%s, %s,%s,%s,%s)"
             params = [generarID(), tipo_vacaciones, fecha_inicio_vacaciones,
@@ -148,7 +148,7 @@ def verVacaciones():
             cursor.execute(query, params)
             conexion.commit()
             flash('Vacaciones asignadas satisfactoriamente', 'correcto')
-
+            return redirect(request.url)
     cursor.execute("SELECT vacaciones_extemporaneas.*, DATE_FORMAT(fecha_inicio, '%d-%m-%Y')as inicio_adelanto,DATE_FORMAT(fecha_fin, '%d-%m-%Y') as fin_adelanto, general_users.Nombre, general_users.Apellido FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.persona_aprueba = general_users.usuario;")
     solicitudes_vacaciones_extemporaneas = cursor.fetchall()
     conexion.commit()
