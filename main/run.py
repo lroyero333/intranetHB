@@ -1,6 +1,6 @@
 import os
 import uuid
-
+from dateutil import tz
 import bcrypt
 from flask import (Flask, flash, jsonify, redirect, render_template, request,
                    session, url_for)
@@ -49,7 +49,8 @@ def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
     fecha_actual = fecha_actualCO()
 
     for solicitud in solicitudes:
-        fecha_insertado = solicitud[fecha_posicion]
+        fecha_insertado = solicitud[fecha_posicion].replace(tzinfo=tz.gettz('America/Bogota'))
+        
         diferencia = relativedelta(fecha_actual, fecha_insertado)
         if diferencia.years > 0:
             tiempo_transcurrido = f"hace {diferencia.years} años"

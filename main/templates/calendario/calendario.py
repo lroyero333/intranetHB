@@ -377,7 +377,7 @@ def verPermisos():
 def obtener_cursos():
     conexion = mysql.connect()
     cursor = conexion.cursor()
-    fecha_actual = datetime.now()
+    fecha_actual = fecha_actualCO()
     cursor.execute(
         'SELECT * FROM cursos')
     eventos = cursor.fetchall()
