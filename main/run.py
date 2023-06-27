@@ -46,7 +46,7 @@ def stringAleatorio():
 
 def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
     solicitudes_con_tiempo = []
-    fecha_actual = datetime.now()
+    fecha_actual = fecha_actualCO()
 
     for solicitud in solicitudes:
         fecha_insertado = solicitud[fecha_posicion]
