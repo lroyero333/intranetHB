@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 
 from main.run import (app, bcrypt, fecha_actualCO, flash, generarID, jsonify,
                       mysql, redirect, render_template, request, session,
-                      stringAleatorio, url_for)
+                      stringAleatorio, url_for,tz)
 
 extensionesImagenes = ['.jpg', '.jpeg', '.png']
 
@@ -431,10 +431,10 @@ def obtener_cursos():
     for cumpleaños in cumpleaños:
         fecha_nacimiento = cumpleaños[2]
         proximo_cumpleaños = datetime(
-            fecha_actual.year, fecha_nacimiento.month, fecha_nacimiento.day)
+        fecha_actual.year, fecha_nacimiento.month, fecha_nacimiento.day, tzinfo=fecha_actual.tzinfo)
         if proximo_cumpleaños < fecha_actual:
             proximo_cumpleaños = proximo_cumpleaños.replace(
-                year=fecha_actual.year + 1)
+            year=fecha_actual.year + 1, tzinfo=fecha_actual.tzinfo)
         while proximo_cumpleaños <= fecha_actual + timedelta(days=365):
             evento_json = {
                 'title': f"Cumpleaños de {cumpleaños[0]} {cumpleaños[1]}",
