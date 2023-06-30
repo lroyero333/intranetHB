@@ -73,7 +73,7 @@ def crearEmpleados():
         posgrado = request.form['posgrado']
         entidad_salud = request.form['entidad_salud']
         tipo_sangre = request.form['tipo_sangre']
-        nombre_contacto_parentesco = request.form['nombre_contacto']
+        nombre_contacto = request.form['nombre_contacto']
         parentesco = request.form['parentesco']
         numero_contacto = request.form['numero_contacto']
         lugar_pension = request.form['lugar_pension']
@@ -89,9 +89,6 @@ def crearEmpleados():
         ips = request.form['ips']
 
         contrasena = request.form['contrasena']
-
-        nombre_contacto=nombre_contacto_parentesco + ' ( ' +  parentesco + ' )'
-
         hashed_password = bcrypt.hashpw(
             contrasena.encode('utf-8'), bcrypt.gensalt())
 
@@ -109,9 +106,9 @@ def crearEmpleados():
         foto.save(upload_path)
 
         # Insertar un nuevo usuario en la tabla
-        query = "INSERT INTO general_users (Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion, id_cargo_fk, institucion, posgrado, entidad_salud, tipo_sangre,foto, nombre_contacto, numero_contacto, usuario,contrasena,lugar_pension,entidad_bancaria,tipo_cuenta,numero_cuenta,institucion_posgrado,usuario_trello,usuario_slack,departamentoHB,arl,caja_compensacion,IPS) VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s)"
+        query = "INSERT INTO general_users (Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion, id_cargo_fk, institucion, posgrado, entidad_salud, tipo_sangre,foto, nombre_contacto, numero_contacto, usuario,contrasena,lugar_pension,entidad_bancaria,tipo_cuenta,numero_cuenta,institucion_posgrado,usuario_trello,usuario_slack,departamentoHB,arl,caja_compensacion,IPS,parentesco_contacto) VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s,%s)"
         params = [Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion,
-                  cargo, institucion, posgrado, entidad_salud, tipo_sangre, nuevoNombreFoto, nombre_contacto, numero_contacto, usuario, hashed_password, lugar_pension, entidad_bancaria, tipo_cuenta, numero_cuenta,institucion_posgrado,usuario_trello,usuario_slack,departamentoHB,arl,caja_compensacion,ips]
+                  cargo, institucion, posgrado, entidad_salud, tipo_sangre, nuevoNombreFoto, nombre_contacto, numero_contacto, usuario, hashed_password, lugar_pension, entidad_bancaria, tipo_cuenta, numero_cuenta,institucion_posgrado,usuario_trello,usuario_slack,departamentoHB,arl,caja_compensacion,ips,parentesco]
 
         # Ejecutar la consulta SQL
         print('dsfdfdfs')
@@ -207,6 +204,7 @@ def editEmpleados(usuario_id):
         arl = request.form['arl']
         ips = request.form['ips']
         caja_compensacion = request.form['caja_compensacion']
+        parentesco=request.form['parentesco']
 
         filename, file_extension = os.path.splitext(foto.filename)
 
@@ -339,7 +337,11 @@ def editEmpleados(usuario_id):
         if ips:
             query += " IPS = %s,"
             params.append(ips)
+        if parentesco:
+            query += " parentesco_contacto = %s,"
+            params.append(parentesco)
         if contrasena:
+            
             hashed_password = bcrypt.hashpw(
                 contrasena.encode('utf-8'), bcrypt.gensalt())
             query += "contrasena = %s,"

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeMakker">
+    <link rel="icon" href="{{ url_for('static', filename='images/isotipohb.svg') }}" type="image/x-icon">
+    <title>:: Human Bionics :: 404</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/themify-icons/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/font-awesome.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css">
+</head>
+
+<body class="theme-indigo">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="m-t-30"><img src="{{ url_for('static', filename='images/isotipohb.svg') }}" width="48"
+                    height="48" alt="ArrOw"></div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- WRAPPER -->
+    <div id="wrapper">
+        <div class="vertical-align-wrap">
+            <div class="vertical-align-middle auth-main">
+                <div class="auth-box">
+                    <div class="top">
+                        <img src="{{ url_for('static', filename='images/isotipohb.svg') }}" alt="Lucid">
+                        <strong>Human</strong> <span>Bionics</span>
+                    </div>
+                    <div class="card">
+                        <div class="header">
+                            <h3 class="w-100 text-center">
+                                <span class="clearfix title">
+                                    <span class="number left">404</span>
+                                    <span class="text">Oops! La pagina no ha sido encontrada</span>
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="body">
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                            {% for category, message in messages %}
+                            {% if category == 'error' %}
+                            <p>{{message}}</p>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            {% endwith %}
+                            <div class="margin-top-30">
+                                <a href="javascript:history.go(-1)" class="btn btn-default"><i
+                                        class="fa fa-arrow-left"></i> <span>Volver</span></a>
+                                <a href="/inicio" class="btn btn-primary"><i class="fa fa-home"></i>
+                                    <span>Inicio</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END WRAPPER -->
+
+    <!-- Core -->
+    <script src="{{ url_for('static', filename='bundles/libscripts.bundle.js') }}"></script>
+    <script src="{{ url_for('static', filename='bundles/vendorscripts.bundle.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+</body>
+
+</html>

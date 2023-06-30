@@ -5,36 +5,32 @@
 <div class="main_content" id="main-content">
 
     <div class="page">
-        {% if alerta == 1 %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        {% if category == 'error' %}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
-            <span class="alert-inner--text"><strong>Error:</strong> Las contraseñas no coinciden.</span>
+            <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
             <button type="button" class="undo" aria-label="Undo">Cerrar</button>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        {% elif alerta == 2 %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
-            <span class="alert-inner--text"><strong>Error:</strong> La contraseña actual es incorrecta.</span>
-            <button type="button" class="undo" aria-label="Undo">Cerrar</button>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        {%elif alerta == 0%}
-
+        {% endif %}
+        {% if category == 'correcto' %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
-            <span class="alert-inner--text"><strong>Completado!</strong> La contraseña se ha actualizado correctamente!</span>
+            <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
             <button type="button" class="undo" aria-label="Undo">Cerrar</button>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-
         {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6">

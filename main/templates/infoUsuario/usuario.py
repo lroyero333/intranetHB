@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 from main.routes import (app, bcrypt, mysql, redirect, render_template,
                          request, session, url_for)
 from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
-                      render_template, request, session, url_for)
+                      render_template, request, session, url_for,is_password_strong)
 
 
 @app.route('/enviar_correo/<correo>')
@@ -66,6 +66,10 @@ def configuration():
             new_password = request.form['new_password']
             confirm_password = request.form['confirm_password']
 
+            if not is_password_strong(new_password):
+                flash('La contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un dígito.','error')
+                return redirect(request.url)
+
             # Realizar la consulta para obtener la contraseña almacenada
             usuario = session['usuario']
             cursor.execute(
@@ -82,16 +86,16 @@ def configuration():
                     params = [hashed_password, usuario]
                     cursor.execute(query, params)
                     conexion.commit()
-                    alerta = 0
-                    return render_template('infoUsuario/templates/configuration.html', alerta=alerta)
+                    flash('¡La contraseña se ha cambiado correctamente!', 'correcto')
+                    return redirect(request.url)
                 else:
-
-                    alerta = 1
-                    return render_template('infoUsuario/templates/configuration.html', alerta=alerta)
+                    flash('Las contraseñas no coinciden. Por favor, asegúrate de ingresar la misma contraseña en ambos campos.','error')
+                    return redirect(request.url)
             else:
 
-                alerta = 2
-                return render_template('infoUsuario/templates/configuration.html', alerta=alerta)
+                flash('La contraseña actual no es correcta. Por favor, verifica que has ingresado la contraseña actual correctamente','error')
+                return redirect(request.url)
+
         else:
             print('No es POST')
 

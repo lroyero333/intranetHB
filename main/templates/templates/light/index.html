@@ -35,6 +35,32 @@
       </div>
     </nav>
     <div class="container-fluid">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      {% if category == 'error' %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+        <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
+        <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endif %}
+      {% if category == 'correcto' %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+        <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
+        <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
       <div class="row clearfix">
         <div class="col-lg-12 col-md-12">
           <div class="card-title planned_task">
@@ -45,9 +71,55 @@
             <div class="body">
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
+
+                  <h1 class="text-center">Noticias</h1>
+                  <hr />
+                  <div class="container-fluid">
+                    <div class="row">
+                      {% for datosNoticias in datosNoticias %}
+                      <div class="col-md-4">
+                        <div class="card" style="width: 400; height: 600">
+                          <img class="card-img-top img-fluid"
+                            src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
+                            alt="Imagen de Noticia" class="img-fluid" />
+                          <div class="card-body">
+                            <h4 class="card-title">{{datosNoticias[1]}}</h4>
+                            <h6 class="heading heading-sm strong-400 text-muted mb-4">
+                              {{datosNoticias[9]}}
+                            </h6>
+                            <p class="card-text">
+                              {{datosNoticias[3] | safe | truncate(400)}}
+                            </p>
+                            <a href="/noticia/{{datosNoticias[0]}}" class="btn btn-sm btn-primary">Ver mas...</a>
+                          </div>
+                          <div class="card-footer">
+                            <div class="row align-items-center">
+                              <div class="col">
+                                {% if datosNoticias[8] is none %}
+                                <img src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
+                                  class="avatar avatar-lg mr-3" />
+                                {% else %}
+                                <img src="{{ url_for('static', filename='images/users/' + datosNoticias[8]) }}"
+                                  class="avatar avatar-lg mr-3" />
+                                {% endif %}
+                              </div>
+                              <div class="col text-right text-xs-right">
+                                <ul class="list-inline mb-0">
+                                  <li class="list-inline-item pr-2">
+                                    <span class="avatar-content">{{datosNoticias[6]}}
+                                      {{datosNoticias[7]}}</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
                   <h1 class="text-center">Avisos</h1>
                   <hr />
-
                   <div class="container-fluid">
                     <div class="row">
                       {% for datosAvisos in datosAvisos %}
@@ -70,10 +142,8 @@
                       {%endfor%}
                     </div>
                   </div>
-
                   <h1 class="text-center">Cursos</h1>
                   <hr />
-
                   <div class="container-fluid">
                     <div class="row">
                       {% for datosCursos in datosCursos %}
@@ -125,52 +195,7 @@
                       {% endfor %}
                     </div>
                   </div>
-                  <h1 class="text-center">Noticias</h1>
-                  <hr />
-                  <div class="container-fluid">
-                    <div class="row">
-                      {% for datosNoticias in datosNoticias %}
-                      <div class="col-md-4">
-                        <div class="card" style="width: 400; height: 600">
-                          <img class="card-img-top img-fluid"
-                            src="{{ url_for('static', filename='images/Noticias/' + datosNoticias[2]) }}"
-                            alt="Imagen de Noticia" class="img-fluid" />
-                          <div class="card-body">
-                            <h4 class="card-title">{{datosNoticias[1]}}</h4>
-                            <h6 class="heading heading-sm strong-400 text-muted mb-4">
-                              {{datosNoticias[9]}}
-                            </h6>
-                            <p class="card-text">
-                              {{datosNoticias[3] | safe | truncate(400)}}
-                            </p>
-                            <a href="/noticia/{{datosNoticias[0]}}" class="btn btn-sm btn-primary">Ver mas...</a>
-                          </div>
-                          <div class="card-footer">
-                            <div class="row align-items-center">
-                              <div class="col">
-                                {% if datosNoticias[8] is none %}
-                                <img src="{{ url_for('static', filename='images/users/userMale.PNG') }}"
-                                  class="avatar avatar-lg mr-3" />
-                                {% else %}
-                                <img src="{{ url_for('static', filename='images/users/' + datosNoticias[8]) }}"
-                                  class="avatar avatar-lg mr-3" />
-                                {% endif %}
-                              </div>
-                              <div class="col text-right text-xs-right">
-                                <ul class="list-inline mb-0">
-                                  <li class="list-inline-item pr-2">
-                                    <span class="avatar-content">{{datosNoticias[6]}}
-                                      {{datosNoticias[7]}}</span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {% endfor %}
-                    </div>
-                  </div>
+
                 </div>
                 <div class="tab-pane fade" id="cursos" role="tabpanel" aria-labelledby="cursos-tab">
                   <h1 class="text-center">Cursos</h1>
@@ -286,13 +311,13 @@
                     <div class="row">
                       {% for datosAvisos in datosAvisos %}
                       <div class="col-lg-4 col-md-6">
-                        <div class="card bg-dark" >
+                        <div class="card bg-dark">
                           <div class="card-body py-5">
                             <div class="d-flex align-items-start">
                               <div class="icon icon-lg">
                                 <i class="fa fa-exclamation text-white"></i>
                               </div>
-                              <div class="icon-text" >
+                              <div class="icon-text">
                                 <h4 class="heading text-white">{{datosAvisos[1]}} </h4>
                                 <p class="text-white">{{datosAvisos[4]}}</p>
                                 <p class="text-white">Fecha: {{datosAvisos[5]}}</p>

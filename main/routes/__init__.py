@@ -24,7 +24,7 @@ from main.templates.nomina_certificados import nomina_certificado
 from main.templates.register import register
 from main.templates.usersCRUD import usersCRUD
 
-
+# Route for logging out
 @app.route('/cerrar')
 def cerrar():
     session.clear()
@@ -33,7 +33,7 @@ def cerrar():
 
 url_inicio = '/inicio'
 
-
+# Before each request, this function is executed to retrieve notifications related to the current user
 @app.before_request
 def notificacionesRH():
     if not 'login' in session:
@@ -63,10 +63,10 @@ def notificacionesRH():
         return redirect(f'/allNotificaciones/{tipo_notificacion}/{id_solicitud}')
     
     notificaciones_con_tiempo = agregar_tiempo_transcurrido(notificaciones, 6)
+    # Store the information in the global context to make it available in the templates
     g.usuario_base = usuario_base
     g.solicitudes_total_count = solicitudes_total_count
     g.notificaciones = notificaciones_con_tiempo
-
 
 @app.route('/allNotificaciones/<tipo_solicitud>/<id_solicitud>', methods=['GET', 'POST'])
 def allNotificaciones(tipo_solicitud, id_solicitud):
@@ -343,7 +343,6 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
                 return redirect(f'/allNotificaciones/Permiso_Empresa/{id_solicitud}')
 
         return render_template("templates/light/verNotificaciones.html", solicitudes_permiso=solicitudes_permiso[0], tipo_solicitud=tipo_solicitud)
-
     elif tipo_solicitud == "Inventario":
         cursor.execute("SELECT movimientos.*, general_users.Nombre, general_users.Apellido, general_users.foto , inventario.* FROM movimientos LEFT JOIN general_users ON movimientos.responsable = general_users.usuario LEFT JOIN inventario ON movimientos.id_elemento=inventario.id_elemento WHERE id_movimiento=%s ORDER BY fecha_solicitud DESC;", id_solicitud)
         solicitudes_inventario = cursor.fetchall()
@@ -390,6 +389,30 @@ def allNotificaciones(tipo_solicitud, id_solicitud):
         return render_template("templates/light/verNotificaciones.html", solicitudes_inventario=solicitudes_inventario[0], tipo_solicitud=tipo_solicitud)
     elif tipo_solicitud == "Reporte":
         return redirect('/miCartelera')
+    elif tipo_solicitud == "Registro":
+        if session['cargo'] != 1 and session['cargo'] != 0:
+            return redirect('/miCartelera')
+        cursor.execute("SELECT Nombre, segundo_nombre, Apellido, segundo_apellido, usuario, correo FROM general_users WHERE id=%s;", id_solicitud)
+        solicitud_registro = cursor.fetchone()
+        conexion.commit()
+        if request.method == 'POST':
+            if 'rechazarRegistro' in request.form:
+                cursor.execute("DELETE FROM general_users WHERE id = %s", id_solicitud)
+                cursor.execute("DELETE FROM notificaciones WHERE id_solicitud = %s", id_solicitud)
+                conexion.commit()
+                flash('Usuario rechazado con éxito','correcto')
+                return redirect('/inicio')
+            if 'aceptarRegistro' in request.form:
+                estado_usuario='Aceptado'
+                query = "UPDATE general_users SET estado_usuario = %s  WHERE id = %s"
+                params = [estado_usuario, id_solicitud]
+                cursor.execute(query, params)
+                cursor.execute("DELETE FROM notificaciones WHERE id_solicitud = %s", id_solicitud)
+                conexion.commit()
+                flash('Usuario aceptado correctamente', 'correcto')
+                return redirect('/inicio')
+            return('No es Post')
+        return render_template("templates/light/verNotificaciones.html", tipo_solicitud=tipo_solicitud,solicitud_registro=solicitud_registro)
     else:
         # Si el tipo de solicitud no es reconocido, se redirige al usuario a una página de error o a otra acción
         return "Tipo de solicitud no reconocido"

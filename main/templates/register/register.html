@@ -18,28 +18,45 @@
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
-            <div class="m-t-30"><img src="{{ url_for('static', filename='images/isotipohb.svg') }}" width="48" height="48" alt="ArrOw"></div>
+            <div class="m-t-30"><img src="{{ url_for('static', filename='images/isotipohb.svg') }}" width="48"
+                    height="48" alt="ArrOw"></div>
             <p>Please wait...</p>
         </div>
     </div>
-	<!-- WRAPPER -->
-	<div id="wrapper">
+    <!-- WRAPPER -->
+    <div id="wrapper">
 
 
-        {% if error %}
-			<div class="alert alert-danger" role="alert">
-				{{ error }}
-			</div>
-		{% endif %}
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %} {% if category ==
+        'error' %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span class="alert-inner--icon"><i class="fa fa-times"></i></span>
+            <span class="alert-inner--text"><strong>Error</strong> {{ message }}!</span>
+            <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %} {% if category == 'correcto' %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span class="alert-inner--icon"><i class="fa fa-check"></i></span>
+            <span class="alert-inner--text"><strong>Correcto!</strong> {{ message }}!</span>
+            <button type="button" class="undo" aria-label="Undo">Cerrar</button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endif %} {% endfor %} {% endif %} {% endwith %}
 
-		<div class="vertical-align-wrap">
-			<div class="vertical-align-middle auth-main">
-				<div class="auth-box">
+        <div class="vertical-align-wrap">
+            <div class="vertical-align-middle auth-main">
+                <div class="auth-box auth-box-register">
                     <div class="top">
                         <img src="{{ url_for('static', filename='images/isotipohb.svg') }}" alt="logoHB">
                         <strong>Human</strong> <span>Bionics</span>
                     </div>
-					<div class="card">
+                    <div class="card">
                         <div class="header">
                             <p class="lead">Crear una Cuenta</p>
                         </div>
@@ -47,53 +64,62 @@
                             <form class="form-auth-small" method="POST">
                                 <div class="form-group">
                                     <label for="fullname" class="control-label sr-only">Nombre</label>
-                                    <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Nombre" required>
+                                    <input type="text" class="form-control" id="fullname" name="fullname"
+                                        placeholder="Nombre" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="fulllastname" class="control-label sr-only">Apellido</label>
-                                    <input type="text" class="form-control" id="fulllastname" name="fulllastname" placeholder="Apellido" required>
+                                    <input type="text" class="form-control" id="fulllastname" name="fulllastname"
+                                        placeholder="Apellido" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email" class="control-label sr-only">Email</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control"  name="email" id="email"
-                                        placeholder="Correo" value="{{ campos.get('correo', '') }}" aria-label="Enter your email" aria-describedby="basic-addon2">
+                                        <input type="text" class="form-control" name="email" id="email"
+                                            placeholder="Correo" value="{{ campos.get('correo', '') }}"
+                                            aria-label="Enter your email" aria-describedby="basic-addon2">
                                         <div class="input-group-append">
-                                            <span class="input-group-text"  id="email">@humanbionics.com.co</span>
+                                            <span class="input-group-text" id="email">@humanbionics.com.co</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="username" class="control-label sr-only">Usuario</label>
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required>
+                                    <input type="text" class="form-control" id="username" name="username"
+                                        placeholder="Usuario" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="password" class="control-label sr-only">Confirmar Contraseña</label>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        placeholder="Contraseña" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="confirm_password" class="control-label sr-only">Confirmar Contraseña</label>
-                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirmar Contraseña" required>
+                                    <label for="confirm_password" class="control-label sr-only">Confirmar
+                                        Contraseña</label>
+                                    <input type="password" class="form-control" id="confirm_password"
+                                        name="confirm_password" placeholder="Confirmar Contraseña" required>
                                 </div>
                                 <!--button type="submit" class="btn btn-primary btn-lg btn-block">REGISTER</button-->
                                 <button type="submit" class="btn btn-primary w-100">Registrarse</button>
                                 <div class="bottom">
-                                    <span class="helper-text">¿Ya tienes una cuenta? <a href="/">Iniciar sesion</a></span>
+                                    <span class="helper-text">¿Ya tienes una cuenta? <a href="/">Iniciar
+                                            sesion</a></span>
                                 </div>
                             </form>
                         </div>
                     </div>
-				</div>
-			</div>
-		</div>
+                </div>
+            </div>
+        </div>
 
-	</div>
+    </div>
     <!-- END WRAPPER -->
-    
-<!-- Core -->
-<script src="{{ url_for('static', filename='bundles/libscripts.bundle.js') }}"></script>
-<script src="{{ url_for('static', filename='bundles/vendorscripts.bundle.js') }}"></script>
 
-<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <!-- Core -->
+    <script src="{{ url_for('static', filename='bundles/libscripts.bundle.js') }}"></script>
+    <script src="{{ url_for('static', filename='bundles/vendorscripts.bundle.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 </body>
+
 </html>

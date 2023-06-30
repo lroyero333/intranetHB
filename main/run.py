@@ -8,34 +8,61 @@ from flaskext.mysql import MySQL
 import pytz
 from werkzeug.utils import secure_filename
 
-app=Flask(__name__, static_url_path='/static')
+app = Flask(__name__, static_url_path='/static')
+# Create an instance of the Flask application with the module name and static URL path
 app.config['DEBUG'] = True
-app.secret_key="18*=70Y3DugTJ;-~&Jnr"
-mysql=MySQL()
-"""
-app.config['MYSQL_DATABASE_HOST']='localhost'
-app.config['MYSQL_DATABASE_USER']='root'
-app.config['MYSQL_DATABASE_PASSWORD']=''
-app.config['MYSQL_DATABASE_DB']='login'
-"""
-app.config['MYSQL_DATABASE_HOST']='34.16.128.53'
-app.config['MYSQL_DATABASE_USER']='usuarioHB'
-app.config['MYSQL_DATABASE_PASSWORD']='Human100.'
-app.config['MYSQL_DATABASE_DB']='IntranetHB'
+# Enable debug mode for the Flask application
+app.secret_key = "18*=70Y3DugTJ;-~&Jnr"
+# Set a secret key for the Flask application, used for signing cookies and sessions
+mysql = MySQL()
+# Create an instance of the MySQL extension to interact with the database
 
-"""app.config['MYSQL_DATABASE_HOST']='srv652.hstgr.io'
-app.config['MYSQL_DATABASE_USER']='u122395259_HumanBionics'
-app.config['MYSQL_DATABASE_PASSWORD']='Human100.'
-app.config['MYSQL_DATABASE_DB']='u122395259_intranerHB'
+
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = ''
+app.config['MYSQL_DATABASE_DB'] = 'IntranetHB'
 """
+app.config['MYSQL_DATABASE_HOST'] = '34.16.128.53'
+app.config['MYSQL_DATABASE_USER'] = 'usuarioHB'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'Human100.'
+app.config['MYSQL_DATABASE_DB'] = 'IntranetHB'
+
+
+app.config['MYSQL_DATABASE_HOST'] = 'srv652.hstgr.io'
+app.config['MYSQL_DATABASE_USER'] = 'u122395259_HumanBionics'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'Human100.'
+app.config['MYSQL_DATABASE_DB'] = 'u122395259_intranerHB'
+"""
+# Configure the database parameters, such as host, user, password, and database name
 mysql.init_app(app)
+# Initialize the MySQL extension with the Flask application
 app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024
+# Set the maximum file size limit for requests
 
+def is_password_strong(password):
+    # Verificar si la contraseña cumple con los requisitos de fortaleza
+    if len(password) < 8:
+        return False
+
+    if not any(c.isupper() for c in password):
+        return False
+
+    if not any(c.islower() for c in password):
+        return False
+
+    if not any(c.isdigit() for c in password):
+        return False
+
+    return True
+
+# Get the current date and time in the Colombia time zone
 def fecha_actualCO():
     colombia_tz = pytz.timezone('America/Bogota')
     fecha_actual_colombia = datetime.now(colombia_tz)
     return fecha_actual_colombia
 
+# Generate a random string of length 10
 def stringAleatorio():
     string_aleatorio = "0123456789abcdefghijklmnñopqrstuvwxyz_"
     longitud = 10
@@ -44,13 +71,15 @@ def stringAleatorio():
     string_aleatorio = "".join(resultado_aleatorio)
     return string_aleatorio
 
+# Add the elapsed time to the requests
 def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
     solicitudes_con_tiempo = []
     fecha_actual = fecha_actualCO()
 
     for solicitud in solicitudes:
-        fecha_insertado = solicitud[fecha_posicion].replace(tzinfo=tz.gettz('America/Bogota'))
-        
+        fecha_insertado = solicitud[fecha_posicion].replace(
+            tzinfo=tz.gettz('America/Bogota'))
+
         diferencia = relativedelta(fecha_actual, fecha_insertado)
         if diferencia.years > 0:
             tiempo_transcurrido = f"hace {diferencia.years} años"
@@ -69,6 +98,7 @@ def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
         solicitudes_con_tiempo.append(solicitud_con_tiempo)
     return solicitudes_con_tiempo
 
+# Generate a unique ID using the uuid module
 def generarID():
     return str(uuid.uuid4())
 from main.routes import *

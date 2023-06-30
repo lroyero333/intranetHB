@@ -230,7 +230,11 @@
                                                 id="nombre_contacto" placeholder="Nombre de contacto"
                                                 value="{{datosUsuarios[24] }}">
                                         </div>
-
+                                        <div class="form-group">
+                                            <label for="parentesco"><strong>Parentesco:</strong></label>
+                                            <input type="text" class="form-control" name="parentesco"
+                                                id="parentesco" value="{{datosUsuarios[40] }}" placeholder="Parentesco">
+                                        </div>
                                         <div class="form-group">
                                             <label for="numero_contacto"><strong>Número de contacto:</strong></label>
                                             <input type="number" class="form-control" name="numero_contacto"
@@ -323,7 +327,7 @@
                                             <select class="form-control" name="tipo_cuenta" id="tipo_cuenta"
                                                 value="{{datosUsuarios[21] }}">
                                                 <option value="">-- Seleccione un tipo --</option>
-                                                <option value="Ahorro">Ahorro</option>
+                                                <option value="Ahorros">Ahorros</option>
                                                 <option value="Corriente">Corriente</option>
                                             </select>
                                         </div>

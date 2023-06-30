@@ -12878,12 +12878,12 @@ button.bg-lighter:focus {
 }
 
 .alert-dismissible .close > span:not(.sr-only) {
-  background-color: rgba(255, 255, 255, 0.3);
-  line-height: 19px;
-  height: 20px;
-  width: 20px;
+  /*background-color: rgba(255, 255, 255, 0.3);*/
+  line-height: 27px;
+  height: 28px;
+  width: 28px;
   border-radius: 50%;
-  font-size: 0.8rem;
+  font-size: 1.1rem;
   display: block;
 }
 
@@ -19544,6 +19544,10 @@ body *:hover::-webkit-scrollbar-thumb {
   height: auto;
   margin-left: auto;
   margin-right: auto;
+}
+.auth-box-register {
+  width: fit-content;
+  
 }
 
 .auth-box .top {
