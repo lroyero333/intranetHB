@@ -21,7 +21,7 @@ def listaEmpleados():
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute(
-        "SELECT Nombre, Apellido, correo, celular, foto ,profesion ,usuario FROM general_users;")
+        "SELECT Nombre, Apellido, correo, celular, foto ,profesion ,usuario FROM general_users WHERE estado_usuario='Aceptado';")
     datosUsuarios = cursor.fetchall()
     conexion.commit()
     return render_template('usersCRUD/templates/contactEdit.html', datosUsuarios=datosUsuarios)
@@ -130,6 +130,7 @@ def eliminarUsuario(usuario):
     if request.method == 'POST':
         conexion = mysql.connect()
         cursor = conexion.cursor()
+        cursor.execute("DELETE FROM notificaciones WHERE creador_solicitud=%s;", usuario)
         cursor.execute("DELETE FROM general_users WHERE usuario=%s;", usuario)
         conexion.commit()
         flash('El usuario ha sido eliminado.', 'correcto')

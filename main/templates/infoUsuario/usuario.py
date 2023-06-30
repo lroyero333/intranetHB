@@ -27,7 +27,7 @@ def listaEmpleadosContact():
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute(
-        "SELECT Nombre, Apellido, correo, celular, foto ,profesion FROM general_users WHERE usuario != %s;", session["usuario"])
+        "SELECT Nombre, Apellido, correo, celular, foto ,profesion FROM general_users WHERE usuario != %s and estado_usuario='Aceptado';", session["usuario"])
     datosUsuarios = cursor.fetchall()
     conexion.commit()
     print(datosUsuarios)
