@@ -130,6 +130,8 @@ def listaCursoEliminar():
         if request.form.get('borrar_curso'):
             cursor.execute(
                 "DELETE FROM cursos WHERE id_curso = %s;", (curso_id,))
+            cursor.execute(
+                "DELETE FROM inscripcion_cursos WHERE id_curso = %s;", (curso_id,))
             conexion.commit()
             flash('El curso ha sido eliminado.', 'correcto')
             return redirect('/calendario')

@@ -444,6 +444,7 @@ def inicio():
     datos_a_eliminar = cursor.fetchall()
     for dato in datos_a_eliminar:
         cursor.execute("DELETE FROM cursos WHERE id_curso = %s", (dato[0],))
+        cursor.execute("DELETE FROM inscripcion_cursos WHERE id_curso = %s;", (dato[0],))
     fecha_limite = fecha_actual - dt.timedelta(days=6 * 30)
     cursor = conexion.cursor()
     cursor.execute(

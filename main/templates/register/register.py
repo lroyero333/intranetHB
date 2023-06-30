@@ -9,9 +9,15 @@ def register():
     if request.method == 'POST':
         # Obtener datos del formulario de registro
         _fullname = request.form['fullname']
-        nombre, segundoNombre = _fullname.split(" ", 1)
+        nombre_parts = _fullname.split()
+        nombre = nombre_parts[0]
+        segundoNombre = nombre_parts[1] if len(nombre_parts) > 1 else ''
         _fulllastname = request.form['fulllastname']
-        apelliddo, segundoApellido = _fulllastname.split(" ", 1)
+
+        apellido_parts = _fulllastname.split()
+        apelliddo = apellido_parts[0]
+        segundoApellido = apellido_parts[1] if len(apellido_parts) > 1 else ''
+
         _email = request.form['email']
         _username = request.form['username']
         _password = request.form['password']

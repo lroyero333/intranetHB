@@ -77,7 +77,8 @@ def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
     fecha_actual = fecha_actualCO()
 
     for solicitud in solicitudes:
-        fecha_insertado = solicitud[fecha_posicion].replace(
+        if solicitud[fecha_posicion] is not None:
+         fecha_insertado = solicitud[fecha_posicion].replace(
             tzinfo=tz.gettz('America/Bogota'))
 
         diferencia = relativedelta(fecha_actual, fecha_insertado)
