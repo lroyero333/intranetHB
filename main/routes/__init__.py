@@ -528,6 +528,320 @@ def ver_imagen(tipo_archivo, nombre_archivo):
         return "Tipo de solicitud no reconocido"
     return send_file(ruta_archivo)
 
+@app.route('/notificaciones', methods=['GET', 'POST'])
+def notificaciones():
+    if not 'login' in session:
+        return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    persona_resuelve_solicitud = session['usuario']
+    fechaResolucion = fecha_actualCO()
+    cursor.execute("SELECT solicitud_nomina.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_nomina LEFT JOIN general_users ON solicitud_nomina.solicitante = general_users.usuario Where estado_solicitud='Pendiente' ORDER BY fecha_solicitud DESC;")
+    solicitudes_nomina = cursor.fetchall()
+    conexion.commit()
+    print(solicitudes_nomina)
+
+    if request.method == 'POST':
+        if 'aceptarSolicitudNomina' in request.form:
+            id_solicitud = request.form['aceptarSolicitudNomina']
+            user_nomina = request.form['user_nomina']
+            comentarioSolicitudNomina = request.form['comentarioSolicitudNomina']
+            estado_solicitud = "Aceptado"
+            tipo_notificacion = 'Nomina'
+            mensaje = 'Ha solucionado su petición de Nómina'
+            query = "UPDATE solicitud_nomina SET estado_solicitud = %s ,fecha_resolucion=%s ,comentario=%s,resuelto_por=%s WHERE id_solicitud_nomina = %s"
+            params = [estado_solicitud, fechaResolucion,
+                          comentarioSolicitudNomina, persona_resuelve_solicitud, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_nomina, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            return redirect(f'/nominas/{user_nomina}')
+        if 'rechazarSolicitudNomina' in request.form:
+            id_solicitud = request.form['rechazarSolicitudNomina']
+            comentarioSolicitudNomina = request.form['comentarioSolicitudNomina']
+            estado_solicitud = "Rechazado"
+            tipo_notificacion = 'Nomina'
+            mensaje = 'Ha rechazado su petición de Nómina'
+            user_nomina = request.form['user_nomina']
+            mensaje = 'Ha rechazado su petición de Nómina'
+            query = "UPDATE solicitud_nomina SET estado_solicitud = %s ,fecha_resolucion=%s ,comentario=%s ,resuelto_por=%s WHERE id_solicitud_nomina = %s"
+            params = [estado_solicitud, fechaResolucion,
+                          comentarioSolicitudNomina, persona_resuelve_solicitud, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_nomina, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            return redirect('/nomina_certificados')
+    
+    query = "SELECT vacaciones_extemporaneas.*, DATE_FORMAT(fecha_inicio, %s) AS fecha_inicio, DATE_FORMAT(fecha_fin, %s) AS fecha_fin, general_users.Nombre, general_users.Apellido, general_users.foto FROM vacaciones_extemporaneas LEFT JOIN general_users ON vacaciones_extemporaneas.id_usuario = general_users.usuario Where estado_solicitud='Pendiente' ORDER BY fecha_solicitud DESC;"
+    cursor.execute(query, ('%d-%M-%Y', '%d-%M-%Y'))
+    solicitudes_va_extemporaneas = cursor.fetchall()
+    print(solicitudes_va_extemporaneas)
+    if request.method == 'POST':
+        if 'aceptarSolicitudVacaciones' in request.form:
+            id_solicitud = request.form['aceptarSolicitudVacaciones']
+            user_vacaiones = request.form['user_vacaciones']
+            dias_extemporanea = request.form['dias_extemporanea']
+            tipo_vacaciones = request.form['tipo_vacaciones']
+            comentarioSolicitudVacaciones = request.form['comentarioSolicitudVacaciones']
+            estado_solicitud = "Aceptado"
+            tipo_notificacion = 'Vacaciones'
+            mensaje = 'Ha solucionado su petición de Vacaciones'
+            cursor.execute(
+                    'SELECT dias_restantes FROM vacaciones WHERE id_usuario=%s', user_vacaiones)
+            dias_actuales = cursor.fetchone()
+            dias_restantes = dias_actuales[0]-int(dias_extemporanea)
+            query = "UPDATE vacaciones SET dias_restantes=%s WHERE id_usuario = %s"
+            params = [dias_restantes, user_vacaiones]
+            cursor.execute(query, params)
+            query = "UPDATE vacaciones_extemporaneas SET tipo_vacaciones=%s,estado_solicitud = %s ,fecha_resolucion=%s ,comentario=%s ,persona_aprueba=%s WHERE id_vacaciones_extemporaneas = %s"
+            params = [tipo_vacaciones, estado_solicitud, fechaResolucion,
+                          comentarioSolicitudVacaciones, persona_resuelve_solicitud, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_vacaiones, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+
+            flash('Respuesta a solicitud realizada correctamente', 'correcto')
+            return redirect("/misVacaciones")
+        if 'rechazarSolicitudVacaciones' in request.form:
+            tipo_vacaciones = request.form['tipo_vacaciones']
+            id_solicitud = request.form['rechazarSolicitudVacaciones']
+            comentarioSolicitudVacaciones = request.form['comentarioSolicitudVacaciones']
+            estado_solicitud = "Rechazado"
+            tipo_notificacion = 'Vacaciones'
+            user_vacaiones = request.form['user_vacaciones']
+            mensaje = 'Ha rechazado su petición de Vacaciones'
+            query = "UPDATE vacaciones_extemporaneas SET tipo_vacaciones=%s,estado_solicitud = %s ,fecha_resolucion=%s ,comentario=%s ,persona_aprueba=%s WHERE id_vacaciones_extemporaneas = %s"
+            params = [tipo_vacaciones, estado_solicitud, fechaResolucion,
+                          comentarioSolicitudVacaciones, persona_resuelve_solicitud, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_vacaiones, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Respuesta a solicitud realizada correctamente', 'correcto')
+            return redirect("/misVacaciones")
+
+    cursor.execute("SELECT solicitud_certificado.*, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_certificado LEFT JOIN general_users ON solicitud_certificado.solicitante = general_users.usuario WHERE estado_solicitud='Pendiente' ORDER BY fecha_solicitud DESC;")
+    solicitudes_certificado = cursor.fetchall()
+    conexion.commit()
+    print(solicitudes_certificado)
+    print("ttttttttt")
+    if request.method == 'POST':
+        if 'aceptarSolicitudCertificado' in request.form:
+            id_solicitud = request.form['aceptarSolicitudCertificado']
+            user_certificate = request.form['user_certificate']
+            tipo_notificacion = 'Certificado'
+            mensaje = 'Ha solucionado su petición de Certificado'
+            comentarioSolicitudCertificado = request.form['comentarioSolicitudCertificado']
+            estado_solicitud = "Aceptado"
+            query = "UPDATE solicitud_certificado SET estado_solicitud = %s ,fecha_resolucion=%s ,comentario_solicitud=%s,resuelto_por=%s WHERE id_solicitud = %s"
+            params = [estado_solicitud, fechaResolucion,
+                          comentarioSolicitudCertificado, persona_resuelve_solicitud, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_certificate, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            print("GGGGGGG333333GGGGGGG")
+            return redirect(f'/certificados/{user_certificate}')
+        if 'rechazarSolicitudCertificado' in request.form:
+            id_solicitud = request.form['rechazarSolicitudCertificado']
+            comentarioSolicitudCertificado = request.form['comentarioSolicitudCertificado']
+            estado_solicitud = "Rechazado"
+            user_certificate = request.form['user_certificate']
+            tipo_notificacion = 'Certificado'
+            mensaje = 'Ha rechazado su petición de Certificado'
+            query = "UPDATE solicitud_certificado SET estado_solicitud = %s ,fecha_resolucion=%s ,comentario_solicitud=%s,resuelto_por=%s WHERE id_solicitud = %s"
+            params = [estado_solicitud, fechaResolucion,
+                          comentarioSolicitudCertificado, persona_resuelve_solicitud, id_solicitud]
+
+            cursor.execute(query, params)
+            conexion.commit()
+
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_certificate, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            return redirect('/nomina_certificados')
+        else:
+            print('No Entró')
+    else:
+        print("no entro primer if")
+    query = "SELECT solicitud_permisos.*, DATE_FORMAT(fecha_inicio_permiso, %s) AS fecha_permiso, DATE_FORMAT(fecha_fin_permiso, %s) AS fecha_fin_permiso, DATE_FORMAT(fecha_inicio_recuperacion, %s) AS fecha_inicio_recuperacion, DATE_FORMAT(fecha_fin_recuperacion, %s) AS fecha_fin_recuperacion, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permisos LEFT JOIN general_users ON solicitud_permisos.id_usuario = general_users.usuario WHERE estado_solicitud='Pendiente' ORDER BY fecha_solicitud DESC;"
+    cursor.execute(query, ('%d-%M-%Y', '%d-%M-%Y',
+                       '%d-%b-%Y %H:%i %p', '%d-%b-%Y %H:%i %p'))
+    solicitudes_permiso = cursor.fetchall()
+    conexion.commit()
+    print(solicitudes_permiso)
+    if request.method == 'POST':
+        if 'aceptarSolicitudPermiso' in request.form:
+
+            comentarioSolicitudRecuperar = request.form['comentarioSolicitudRecuperar']
+            user_permiso = request.form['user_permiso']
+            mensaje = 'Ha solucionado su petición de Permiso'
+            estado_solicitud = "Aceptado"
+            tipo_notificacion = 'Permiso'
+            query = "UPDATE solicitud_permisos SET estado_solicitud = %s ,fecha_resolucion=%s ,observaciones=%s,persona_aprueba=%s WHERE id_permisos = %s"
+            params = [estado_solicitud, fechaResolucion, comentarioSolicitudRecuperar,
+                          persona_resuelve_solicitud, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_permiso, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Respuesta realizada correctamente', 'correcto')
+            return redirect(f'/allNotificaciones/Permiso/{id_solicitud}')
+
+        if 'rechazarSolicitudPermiso' in request.form:
+            comentarioSolicitudRecuperar = request.form['comentarioSolicitudRecuperar']
+            estado_solicitud = "Rechazado"
+            user_permiso = request.form['user_permiso']
+            tipo_notificacion = 'Permiso'
+            mensaje = 'Ha solucionado su petición de Permiso'
+            query = "UPDATE solicitud_permisos SET estado_solicitud = %s ,fecha_resolucion=%s ,observaciones=%s,persona_aprueba=%s WHERE id_permisos = %s"
+            params = [estado_solicitud, fechaResolucion,
+                          comentarioSolicitudRecuperar, persona_resuelve_solicitud, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_permiso, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Respuesta realizada correctamente', 'correcto')
+            return redirect(f'/allNotificaciones/Permiso/{id_solicitud}')
+
+    query = "SELECT solicitud_permiso_extra.*, DATE_FORMAT(fecha_inicio, %s) AS fecha_permiso, DATE_FORMAT(fecha_fin, %s) AS fecha_fin_permiso, general_users.Nombre, general_users.Apellido, general_users.foto FROM solicitud_permiso_extra LEFT JOIN general_users ON solicitud_permiso_extra.id_usuario = general_users.usuario WHERE estado_solicitud='Pendiente' ORDER BY fecha_solicitud DESC;"
+    cursor.execute(query, ('%d-%M-%Y %H:%i %p', '%d-%M-%Y %H:%i %p'))
+    solicitudes_permiso = cursor.fetchall()
+    conexion.commit()
+    print(solicitudes_permiso)
+    if request.method == 'POST':
+        if 'aceptarSolicitudPermisoEX' in request.form:
+            comentarioSolicitudRecuperar = request.form['comentarioSolicitudRecuperar']
+            user_permiso = request.form['user_permiso']
+            mensaje = 'Ha solucionado su petición de Permiso'
+            estado_solicitud = "Aceptado"
+            tipo_notificacion = 'Permiso_Empresa'
+            query = "UPDATE solicitud_permiso_extra SET estado_solicitud = %s ,fecha_resolucion=%s ,observaciones=%s,resuelto_por=%s WHERE id_extra = %s"
+            params = [estado_solicitud, fechaResolucion, comentarioSolicitudRecuperar,
+                          persona_resuelve_solicitud, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_permiso, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Respuesta realizada correctamente', 'correcto')
+            return redirect(f'/allNotificaciones/Permiso_Empresa/{id_solicitud}')
+
+        if 'rechazarSolicitudPermisoEX' in request.form:
+            comentarioSolicitudRecuperar = request.form['comentarioSolicitudRecuperar']
+            estado_solicitud = "Rechazado"
+            user_permiso = request.form['user_permiso']
+            tipo_notificacion = 'Permiso_Empresa'
+            mensaje = 'Ha solucionado su petición de Permiso'
+            query = "UPDATE solicitud_permiso_extra SET estado_solicitud = %s ,fecha_resolucion=%s ,observaciones=%s,resuelto_por=%s WHERE id_extra = %s"
+            params = [estado_solicitud, fechaResolucion,
+                          comentarioSolicitudRecuperar, persona_resuelve_solicitud, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_permiso, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Respuesta realizada correctamente', 'correcto')
+            return redirect(f'/allNotificaciones/Permiso_Empresa/{id_solicitud}')
+
+    
+    cursor.execute("SELECT movimientos.*, general_users.Nombre, general_users.Apellido, general_users.foto , inventario.* FROM movimientos LEFT JOIN general_users ON movimientos.responsable = general_users.usuario LEFT JOIN inventario ON movimientos.id_elemento=inventario.id_elemento WHERE estado_solicitud='Pendiente' ORDER BY fecha_solicitud DESC;")
+    solicitudes_inventario = cursor.fetchall()
+    conexion.commit()
+    print(solicitudes_inventario)
+    if request.method == 'POST':
+        if 'aceptarSolicitudInventario' in request.form:
+            tipo_notificacion = 'Inventario'
+            mensaje = 'Ha solucionado su petición de Inventario'
+            user_inventario = request.form['user_inventario']
+            observaciones = request.form['comentarioSolicitudInventario']
+            estado_solicitud = "Aceptado"
+            query = "UPDATE movimientos SET  persona_aprueba = %s ,fecha_movimiento=%s ,estado_solicitud=%s ,observaciones=%s WHERE id_movimiento = %s"
+            params = [persona_resuelve_solicitud, fechaResolucion,
+                          estado_solicitud, observaciones, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_inventario, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Respuesta realizada correctamente', 'correcto')
+            return redirect(f'/allNotificaciones/Inventario/{id_solicitud}')
+
+        if 'rechazarSolicitudInventario' in request.form:
+            tipo_notificacion = 'Inventario'
+            mensaje = 'Ha rechazado su petición de Inventario'
+            user_inventario = request.form['user_inventario']
+            observaciones = request.form['comentarioSolicitudInventario']
+            estado_solicitud = "Rechazado"
+            query = "UPDATE movimientos SET  persona_aprueba = %s ,fecha_movimiento=%s ,estado_solicitud=%s ,observaciones=%s WHERE id_movimiento = %s"
+            params = [persona_resuelve_solicitud, fechaResolucion,
+                          estado_solicitud, observaciones, id_solicitud]
+            cursor.execute(query, params)
+            conexion.commit()
+            query = "INSERT INTO notificaciones (id_notificacion, tipo_notificacion, id_usuario, id_solicitud, creador_solicitud ,mensaje, fecha_notificacion) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+            params = [generarID(), tipo_notificacion, user_inventario, id_solicitud,
+                          persona_resuelve_solicitud, mensaje, fechaResolucion]
+            cursor.execute(query, params)
+            conexion.commit()
+            flash('Respuesta realizada correctamente', 'correcto')
+            return redirect(f'/allNotificaciones/Inventario/{id_solicitud}')
+    
+    cursor.execute("SELECT Nombre, segundo_nombre, Apellido, segundo_apellido, usuario, correo, id FROM general_users WHERE estado_usuario='Pendiente'")
+    solicitud_registro = cursor.fetchall()
+    conexion.commit()
+    if request.method == 'POST':
+        id_usuario=request.form['id_usuario']
+        if 'rechazarRegistro' in request.form:
+            cursor.execute("DELETE FROM general_users WHERE id = %s", id_usuario)
+            cursor.execute("DELETE FROM notificaciones WHERE id_solicitud = %s", id_usuario)
+            conexion.commit()
+            flash('Usuario rechazado con éxito','correcto')
+            return redirect('/inicio')
+        if 'aceptarRegistro' in request.form:
+            estado_usuario='Aceptado'
+            query = "UPDATE general_users SET estado_usuario = %s  WHERE id = %s"
+            params = [estado_usuario, id_usuario]
+            cursor.execute(query, params)
+            cursor.execute("DELETE FROM notificaciones WHERE id_solicitud = %s", id_solicitud)
+            conexion.commit()
+            flash('Usuario aceptado correctamente', 'correcto')
+            return redirect('/inicio')
+        return('No es Post')
+    return render_template('templates/light/allNotificaciones.html',solicitudes_certificado=solicitudes_certificado,solicitudes_nomina=solicitudes_nomina,solicitudes_va_extemporaneas=solicitudes_va_extemporaneas,solicitudes_permiso=solicitudes_permiso,solicitud_registro=solicitud_registro,solicitudes_inventario=solicitudes_inventario)
 
 @app.route('/url_pruebas')
 def url_pruebas():
