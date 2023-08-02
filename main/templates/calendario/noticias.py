@@ -54,6 +54,8 @@ def editNoticia(noticia_id):
         return redirect('/')
     if session['cargo'] != 1 and  session['cargo'] != 0:
         return redirect('/inicio')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     cursor.execute("SELECT * FROM noticias WHERE id_noticia= %s", noticia_id)
     noticia = cursor.fetchone()
 
@@ -106,6 +108,8 @@ def editNoticia(noticia_id):
 
 @app.route('/noticias/crear', methods=['GET', 'POST'])
 def crearNoticia():
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     if request.method == 'POST':
         if 'crear_noticia' in request.form:
             usuarioPublica = session["usuario"]
@@ -159,6 +163,8 @@ def listaNoticiaEditar():
 
 @app.route('/noticia/lista/eliminar', methods=['GET', 'POST'])
 def listaNoticiaEliminar():
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     if request.method == 'POST':
         noticia_id = request.form.get('noticia_id')
         if request.form.get('borrar_noticia'):
@@ -184,6 +190,8 @@ def listaNoticiaEliminar():
 def verNoticia(noticia_id):
     if not 'login' in session:
         return redirect('/')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
     cursor.execute("SELECT * FROM noticias WHERE id_noticia= %s;", noticia_id)
     datosNoticias = cursor.fetchone()
     conexion.commit()
