@@ -1,0 +1,840 @@
+{% extends 'templates/light/base.html' %} {% block content %}
+//TODO: Actualizar precio RRHH cuando se cambia la cantidad de colaboradores
+//TODO: Arreglar las opciones de las listas que no se refrescan bien
+<script>
+  const HORAS_EN_DIA = 8;
+  const DIAS_EN_SEMANA = 5;
+  const SEMANAS_EN_MES = 4
+</script>
+<div class="main_content" id="main-content">
+  <div class="page">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="javascript:void(0);">
+        <h4>Calculadora de Proyectos</h4>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-align-justify"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto"></ul>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+          <div class="card-title planned_task">
+            <div class="header">
+              <h2></h2>
+            </div>
+
+            <div class="body">
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
+                  <h1 class="text-center">Estimación de Costos</h1>
+                  <hr />
+
+                  <form action="" method="POST" e>
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col">
+                          <h3>Datos del proyecto</h2>
+                            <div class="form-group">
+                              <label>Nombre del proyecto</label>
+                              <input name="nombre_proyecto" type="text" class="form-control"
+                                placeholder="Ingrese el nombre del proyecto...">
+                            </div>
+                            <div class="form-group">
+                              <label>Descripción del proyecto</label>
+                              <textarea name="desc_proyecto" class="form-control" id="desc_proyecto"
+                                placeholder="Ingrese la descripcióm del proyecto..." rows="3" resize="none"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                          <h3>Duración del proyecto</h2>
+                            <div class="form-group">
+                              <label>Meses</label>
+                              <input name="meses_proyecto" type="number" class="form-control" placeholder="0"
+                                id="meses_proyecto">
+                            </div>
+                            <div class="form-group">
+                              <label>Semanas</label>
+                              <input name="semanas_proyecto" type="number" class="form-control" placeholder="0"
+                                id="semanas_proyecto">
+                            </div>
+                            <div class="form-group">
+                              <label>Días</label>
+                              <input name="dias_proyecto" type="number" class="form-control" placeholder="0"
+                                id="dias_proyecto">
+                            </div>
+                            <div>
+                              <h4 id="display-dias-totales">0 días en total</h2>
+                            </div>
+                        </div>
+                      </div>
+                      <h3 class="mb-3">Departamentos involucrados</h3>
+                      <div class="row ml-1">
+                        <div class="col-md-">
+                          <div class="input-group input-group-transparent d-flex">
+                            <div class="mr-auto p-2 align-self-center">
+                              <div class="input-group-prepend align-self-center mr-2">
+                                <div class="custom-control custom-checkbox">
+                                  <input name="dept_robElect_check" type="checkbox" class="custom-control-input" id="dept_robElect_check" />
+                                  <label class="custom-control-label" for="dept_robElect_check">Robótica y Electrónica</label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="p-2">
+                              <input name="dept_robElect_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_robElect_colab">
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="input-group input-group-transparent d-flex">
+                            <div class="mr-auto p-2 align-self-center">
+                              <div class="input-group-prepend align-self-center mr-2">
+                                <div class="custom-control custom-checkbox">
+                                  <input name="dept_disPub_check" type="checkbox" class="custom-control-input" id="dept_disPub_check" />
+                                  <label class="custom-control-label" for="dept_disPub_check">Diseño y Publicidad</label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="p-2">
+                              <input name="dept_disPub_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_disPub_colab">
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="input-group input-group-transparent d-flex">
+                            <div class="mr-auto p-2 align-self-center">
+                              <div class="input-group-prepend align-self-center mr-2">
+                                <div class="custom-control custom-checkbox">
+                                  <input name="dept_biomed_check" type="checkbox" class="custom-control-input" id="dept_biomed_check" />
+                                  <label class="custom-control-label" for="dept_biomed_check">Biomédica</label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="p-2">
+                              <input name="dept_biomed_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_biomed_colab">
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="input-group input-group-transparent d-flex">
+                            <div class="mr-auto p-2 align-self-center">
+                              <div class="input-group-prepend align-self-center mr-2">
+                                <div class="custom-control custom-checkbox">
+                                  <input name="dept_indsProt_check" type="checkbox" class="custom-control-input" id="dept_indsProt_check" />
+                                  <label class="custom-control-label" for="dept_indsProt_check">Industrial y Prototipado</label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="p-2">
+                              <input name="dept_indsProt_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_indsProt_colab">
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="input-group input-group-transparent d-flex">
+                            <div class="mr-auto p-2 align-self-center">
+                              <div class="input-group-prepend align-self-center mr-2">
+                                <div class="custom-control custom-checkbox">
+                                  <input name="dept_sisProg_check" type="checkbox" class="custom-control-input" id="dept_sisProg_check" />
+                                  <label class="custom-control-label" for="dept_sisProg_check">Sistemas y Programación</label>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="p-2">
+                              <input name="dept_sisProg_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_sisProg_colab">
+                            </div>
+                          </div>
+                          <hr>
+
+                        </div>
+                      </div>
+                      <h3 class="mt-3">Fases del proyecto</h3>
+                      <div class="body taskboard planned_task">
+                        <div class="dd" data-plugin="nestable">
+                          <ol class="dd-list bg-secondary" id="listaActividades">
+                            <li class="dd-item card bg-secondary" data-id="1" id="actividadItem">
+                              <div class="dd-handle d-flex justify-content-between align-items-center">
+                                <i class="fa fa-arrows-v"></i>
+                              </div>
+                              <div class="dd-content p-15">
+                                <div class="row">
+                                  <div class="col-md-7">
+                                    <div class="row mx-2 mb-2">
+                                      <input name="actividad-1-nombre" type="text" class="form-control" placeholder="Nombre de la actividad" id="actividad-1-nombre">
+                                    </div>
+                                    <div class="row">
+                                      <div class="col mx-2">
+                                        <select class="selectpicker" title="Seleccione un departamento" data-live-search="true" data-live-search-placeholder="Buscar..." id="actividad-1-departamentoPicker">
+                                        </select>
+                                      </div>
+                                      <div class="col mx-2">
+                                        <div class="form-group">
+                                          <div class="input-group">
+                                            <input name="actividad-1-tiempo" type="text" class="form-control" placeholder="Duración de la actividad" id="actividad-1-tiempo">
+                                            <div class="input-group-append">
+                                              <select class="selectpicker" id="actividad-1-tipoTiempoPicker" name="actividad-1-tipoTiempoPicker">
+                                                <option value="h">Horas</option>
+                                                <option value="d">Dias</option>
+                                                <option value="s">Semanas</option>
+                                                <option value="m">Meses</option>
+                                              </select>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3 d-flex flex-column">
+                                    <div class="row p-2">
+                                      <h4>Costo de la actividad:</h2>
+                                    </div>
+                                    <div class="row p-2">
+                                      <h3 id="actividad-1-costo">$-</h3>
+                                    </div>
+                                  </div>
+                                  <div class="col d-flex align-items-end flex-column">
+                                    <div class="mt-auto p-2">
+                                      <button type="button" class="btn btn-danger btn-icon-only" id="eliminarActividad">
+                                        <span class="btn-inner--icon"><i class="fa fa-trash-o"></i></span>
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </li>
+                          </ol>
+                        </div>
+                      </div>
+                      <button id="agregarActividad" type="button" class="btn btn-primary btn-block btn-animated btn-animated-y">
+                        <span class="btn-inner--visible">Agregar Actividad</span>
+                        <span class="btn-inner--hidden"><i class="fa fa-plus"></i></span>
+                      </button>
+                      <div class="progress-wrapper mt-4">
+                        <h4 class="progress-label">Días inicialmente proyectados que se están usando</h4>
+                        <h4 class="progress-percentage text-uppercase" id="progressbar-text">0%</h4>
+                        <div class="progress" style="height: 5px;">
+                            <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;" id="progressbar-bar"></div>
+                        </div>
+                      </div>
+                      <h3 class="mt-5">Personal Administrativo</h3>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <input data-type="currency" name="costo_admin" type="number" class="form-control" placeholder="Costo estimando" id="costo_admin">
+                        </div>
+                      </div>
+                      <h3 class="mt-5" id="costo_RRHH">Costo RRHH: $-</h3>
+                      <hr>
+                      <h3 class="mt-5">Recursos Materiales</h3>
+                      <div class="row">
+                        <div class="form-outline col-md-5">
+                          <label for="costo_matProt" class="form-label">Materiales de Prototipos + Insumos</label>
+                          <input type="number" class="form-control" id="costo_matProt" name="costo_matProt">
+                        </div>
+                        <div class="form-outline col-md-5">
+                          <label for="costo_maqTerc" class="form-label">Maquila - Producción de Terceros</label>
+                          <input type="number" class="form-control" id="costo_maqTerc" name="costo_maqTerc">
+                        </div>
+                      </div>
+                      <div class="row mt-2">
+                        <div class="form-outline col-md-5">
+                          <label for="costo_fijo_infLoc" class="form-label">Infraestructura / Locativos</label>
+                          <input type="text" class="form-control" id="costo_fijo_infLoc" name="costo_fijo_infLoc" readonly>
+                        </div>
+                        <div class="form-outline col-md-5">
+                          <label for="costo_fijo_maq" class="form-label">Maquinaria</label>
+                          <input type="text" class="form-control" id="costo_fijo_maq" name="costo_fijo_maq" readonly>
+                        </div>
+                      </div>
+                      <h5 class="mt-2 mb-4" id="costo_mat">Costo Recursos Materiales: $-</h5>
+                      <h3 class="mt-4">Recursos Tecnológicos</h3>
+                      <div class="row mt-2">
+                        <div class="form-outline col-md-5">
+                          <label for="costo_softAd" class="form-label">Software Adicional</label>
+                          <input type="number" class="form-control" id="costo_softAd" name="costo_softAd">
+                        </div>
+                        <div class="form-outline col-md-5">
+                          <label for="costo_maqAd" class="form-label">Equipo Tecnológico Adicional</label>
+                          <input type="number" class="form-control" id="costo_maqAd" name="costo_maqAd">
+                        </div>
+                      </div>
+                      <h5 class="mt-2 mb-4" id="costo_tec">Costo Recursos Tecnológicos: $-</h5>
+                      <hr>
+                      <h3 class="mt-5">Resumen Final</h3>
+                      <div class="row mt-2">
+                        <div class="col-md-6">
+                          <input type="text" class="form-control" id="costo_final" name="costo_final" readonly>
+                          <label for="costo_final" class="form-label text-primary">Costo Total</label>
+                        </div>
+                        <div class="col-md-4 form-outline">
+                          <input type="number" class="form-control" id="porcentaje_retorno" name="porcentaje_retorno">
+                          <label for="porcentaje_retorno" class="form-label text-primary">Rentabilidad Esperada (%)</label>
+                        </div>
+                      </div>
+                      <div class="row mt-2">
+                        <div class="col-md-6">
+                          <input type="text" class="form-control" id="costo_cliente" name="costo_cliente" readonly>
+                          <label for="costo_cliente" class="form-label text-primary">Costo para el Cliente</label>
+                        </div>
+                        <div class="col-md-4 form-outline">
+                          <input type="text" class="form-control" id="dinero_retorno" name="dinero_retorno" readonly>
+                          <label for="dinero_retorno" class="form-label text-success">Rentabilidad Esperada ($)</label>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Registrar Proyecto</button>
+                      </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  class DatosGenerales {
+    constructor() {
+      this._dias = 0;
+      this._semanas = 0;
+      this._meses = 0;
+
+      this._infoDepartamentos = {
+        robElectCheck: false,
+        robElectColab: 0,
+        robElectSal: 50000, //TODO: Actualizar a valores reales haciendo fetch desde el backend
+        disPubCheck: false,
+        disPubColab: 0,
+        disPubSal: 60000, //TODO: Actualizar a valores reales haciendo fetch desde el backend
+        biomedCheck: false,
+        biomedColab: 0,
+        biomedSal: 70000, //TODO: Actualizar a valores reales haciendo fetch desde el backend
+        indsProtCheck: false,
+        indsProtColab: 0,
+        indsProtSal: 80000, //TODO: Actualizar a valores reales haciendo fetch desde el backend
+        sisProgCheck: false,
+        sisProgColab: 0,
+        sisProgSal: 90000 //TODO: Actualizar a valores reales haciendo fetch desde el backend
+      };
+
+      this._horasActividadesDicPrivado = {};
+      this._costoActividadesDicPrivado = {};
+
+      this._costoActividadesTotal = 0;
+      this._costoAdmin = 0;
+
+      this._costoMaterialesPrototipos = 0;
+      this._costoMaquilaTerceros = 0;
+      this._costoSoftwareAd = 0;
+      this._costoTecAd = 0;
+
+      this._listeners = [];
+    }
+    get dias() { return this._dias}
+    set dias(newValue) {
+      this._dias = newValue;
+      this._listeners.forEach(listener => listener(this._dias));
+    }
+    
+    get semanas() { return this._semanas}
+    set semanas(newValue) {
+      this._semanas = newValue;
+      this._listeners.forEach(listener => listener(this._semanas));
+    }
+    
+    get infoDepartamentos() { return this._infoDepartamentos}
+    set infoDepartamentos(newValue) {
+      this._infoDepartamentos = newValue;
+      this._listeners.forEach(listener => listener(this._infoDepartamentos));
+    }
+
+    get meses() { return this._meses}
+    set meses(newValue) {
+      this._meses = newValue;
+      this._listeners.forEach(listener => listener(this._meses));
+    }
+
+    get diasTotales() { return this._meses * (SEMANAS_EN_MES * DIAS_EN_SEMANA) + this._semanas * DIAS_EN_SEMANA + this._dias; }
+    
+    get horasActividadesDic() { return this._horasActividadesDicPrivado}
+    set horasActividadesDic(newValue) {
+      this._horasActividadesDicPrivado = newValue;
+      this._listeners.forEach(listener => listener(this._horasActividadesDicPrivado));
+    }
+    
+    get costoActividadesDic() { return this._costoActividadesDicPrivado}
+    set costoActividadesDic(newValue) {
+      this._costoActividadesDicPrivado = newValue;
+      this._listeners.forEach(listener => listener(this._costoActividadesDicPrivado));
+    }
+    
+    get costoActividadesTotal() { return this._costoActividadesTotal }
+    set costoActividadesTotal(newValue) {
+      this._costoActividadesTotal = newValue;
+    }
+
+    get costoAdmin() { return this._costoAdmin }
+    set costoAdmin(newValue) {
+      this._costoAdmin = newValue;
+      this._listeners.forEach(listener => listener(this._costoAdmin));
+    }
+
+    get costoMaterialesPrototipos() { return this._costoMaterialesPrototipos }
+    set costoMaterialesPrototipos(newValue) {
+      this._costoMaterialesPrototipos = newValue;
+      this._listeners.forEach(listener => listener(this._costoMaterialesPrototipos));
+    }
+
+    get costoMaquilaTerceros() { return this._costoMaquilaTerceros }
+    set costoMaquilaTerceros(newValue) {
+      this._costoMaquilaTerceros = newValue;
+      this._listeners.forEach(listener => listener(this._costoMaquilaTerceros));
+    }
+
+    get costoSoftwareAd() { return this._costoSoftwareAd }
+    set costoSoftwareAd(newValue) {
+      this._costoSoftwareAd = newValue;
+      this._listeners.forEach(listener => listener(this._costoSoftwareAd));
+    }
+
+    get costoTecAd() { return this._costoTecAd }
+    set costoTecAd(newValue) {
+      this._costoTecAd = newValue;
+      this._listeners.forEach(listener => listener(this._costoTecAd));
+    }
+
+
+    addListener(listener) {
+      this._listeners.push(listener);
+    }
+    
+  }
+  const datGenerales = new DatosGenerales();
+
+  //---------------------------------------------------------------
+
+  const formatear_Dinero = (numero) => {
+    return numero.toLocaleString('es-CO', {
+      style: 'currency',
+      currency: 'COP'
+      });
+  };
+  const robElectCheck = document.getElementById('dept_robElect_check');
+  const robElectColab = document.getElementById('dept_robElect_colab');
+  robElectCheck.addEventListener('change', (event) => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.robElectCheck = event.currentTarget.checked;
+    datGenerales.infoDepartamentos = copy;
+  });
+  robElectColab.addEventListener('input', () => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.robElectColab = parseInt(robElectColab.value) || 0;
+    datGenerales.infoDepartamentos = copy;
+  });
+
+  const disPubCheck = document.getElementById('dept_disPub_check');
+  const disPubColab = document.getElementById('dept_disPub_colab');
+  disPubCheck.addEventListener('change', (event) => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.disPubCheck = event.currentTarget.checked;
+    datGenerales.infoDepartamentos = copy;
+  });
+  disPubColab.addEventListener('input', () => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.disPubColab = parseInt(disPubColab.value) || 0;
+    datGenerales.infoDepartamentos = copy;
+  });
+
+  const biomedCheck = document.getElementById('dept_biomed_check');
+  const biomedColab = document.getElementById('dept_biomed_colab');
+  biomedCheck.addEventListener('change', (event) => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.biomedCheck = event.currentTarget.checked;
+    datGenerales.infoDepartamentos = copy;
+  });
+  biomedColab.addEventListener('input', () => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.biomedColab = parseInt(biomedColab.value) || 0;
+    datGenerales.infoDepartamentos = copy;
+  });
+
+  const indsProtCheck = document.getElementById('dept_indsProt_check');
+  const indsProtColab = document.getElementById('dept_indsProt_colab');
+  indsProtCheck.addEventListener('change', (event) => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.indsProtCheck = event.currentTarget.checked;
+    datGenerales.infoDepartamentos = copy;
+  });
+  indsProtColab.addEventListener('input', () => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.indsProtColab = parseInt(indsProtColab.value) || 0;
+    datGenerales.infoDepartamentos = copy;
+  });
+
+  const sisProgCheck = document.getElementById('dept_sisProg_check');
+  const sisProgColab = document.getElementById('dept_sisProg_colab');
+  sisProgCheck.addEventListener('change', (event) => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.sisProgCheck = event.currentTarget.checked;
+    datGenerales.infoDepartamentos = copy;
+  });
+  sisProgColab.addEventListener('input', () => {
+    const copy = datGenerales.infoDepartamentos;
+    copy.sisProgColab = parseInt(sisProgColab.value) || 0;
+    datGenerales.infoDepartamentos = copy;
+  });
+
+  //---------------------------------------------------------------
+
+  let diasTotales = 0;
+
+  const mesesInput = document.getElementById('meses_proyecto');
+  const semanasInput = document.getElementById('semanas_proyecto');
+  const diasInput = document.getElementById('dias_proyecto');
+
+  const diasTotalesElem = document.getElementById('display-dias-totales');
+  const msg = ' días totales'
+
+  datGenerales.addListener(newVal => {
+    diasTotalesElem.textContent = `${datGenerales.diasTotales} ${msg}`;
+  });
+
+  mesesInput.addEventListener('input', () => {
+    datGenerales.meses = parseInt(mesesInput.value) || 0;
+  });
+  semanasInput.addEventListener('input', () => {
+    datGenerales.semanas = parseInt(semanasInput.value) || 0;
+  });
+  diasInput.addEventListener('input', () => {
+    datGenerales.dias = parseInt(diasInput.value) || 0;
+  });
+
+  //---------------------------------------------------------------
+
+  const diasUsadosPorcentaje = document.getElementById('progressbar-text');
+  const diasUsadosBarra = document.getElementById('progressbar-bar');
+
+  const actualizarBarraFunc = () => {
+    if (Object.keys(datGenerales.horasActividadesDic).length > 0) {
+      let horasUsadasTotales = 0;
+      for (const property in datGenerales.horasActividadesDic) {
+        horasUsadasTotales += datGenerales.horasActividadesDic[property];
+      }
+      const porcentaje = ((horasUsadasTotales / (datGenerales.diasTotales * HORAS_EN_DIA)) * 100).toFixed(2);
+      diasUsadosPorcentaje.textContent = `${porcentaje}%`;
+      diasUsadosBarra.ariaValueNow = porcentaje;
+      diasUsadosBarra.style = `width: ${porcentaje}%`;
+    } else {
+      diasUsadosPorcentaje.textContent = `${0}%`;
+      diasUsadosBarra.ariaValueNow = 0;
+      diasUsadosBarra.style = `width: ${0}%`;
+    }
+  };
+
+  const costoRRHH = document.getElementById('costo_RRHH');
+  const calcularCostoFuncion_NoFormato = (costoPorHora, numColaboradores, horasTotales) => {
+    return costoPorHora * numColaboradores * horasTotales;
+  };
+  const calcularCostoFuncion = (costoPorHora, numColaboradores, horasTotales) => {
+    const value = costoPorHora * numColaboradores * horasTotales;
+    const formatedValue = formatear_Dinero(value);
+
+    if (Object.keys(datGenerales.costoActividadesDic).length > 0) {
+      let costoTotal = 0;
+      for (const property in datGenerales.costoActividadesDic) {
+        costoTotal += datGenerales.costoActividadesDic[property];
+      }
+      const formatedTotalValue = formatear_Dinero(costoTotal);
+      datGenerales.costoActividadesTotal = costoTotal;
+    } else {
+      datGenerales.costoActividadesTotal = 0;
+    }
+    return formatedValue
+  };
+  const tempCostoHora = 50000;
+  let numActividades = 0;
+  const agregarActividadBtn = document.getElementById('agregarActividad');
+  const listaActividades = document.getElementById('listaActividades');
+  const actividadOriginal = document.getElementById('actividadItem');
+  
+  const actividadTemplate = actividadOriginal.cloneNode(true);
+  actividadOriginal.remove();
+
+  agregarActividadBtn.addEventListener('click', () => {
+    const nuevaActividad = actividadTemplate.cloneNode(true);
+    nuevaActividad.id = `actividad-${numActividades}`;
+    nuevaActividad.name = `actividad-${numActividades}`;
+    const actNombre = nuevaActividad.querySelector('#actividad-1-nombre');
+    actNombre.id = `actividad-${numActividades}-nombre`;
+    actNombre.name = `actividad-${numActividades}-nombre`;
+
+    nuevaActividad.querySelector("#eliminarActividad").addEventListener('click', () => {
+      delete datGenerales.horasActividadesDic[`${nuevaActividad.name}`];
+      delete datGenerales.costoActividadesDic[`${nuevaActividad.name}`];
+      nuevaActividad.remove();
+    });
+
+    const actDept = nuevaActividad.querySelector('#actividad-1-departamentoPicker');
+    const actualizarOpciones = () => {
+      while (actDept.firstChild) {
+        actDept.removeChild(actDept.firstChild);
+      }
+      for (const property in datGenerales.infoDepartamentos) {
+        switch (property) {
+          case 'robElectCheck':
+            if (datGenerales.infoDepartamentos[property]){
+              const robElectOption = document.createElement('option');
+              robElectOption.textContent = 'Robótica y Electrónica';
+              robElectOption.value = 'robElectColab'
+              actDept.appendChild(robElectOption);
+              $('.selectpicker').selectpicker('refresh');
+            }
+            break;          
+          case 'disPubCheck':
+            if (datGenerales.infoDepartamentos[property]){
+              const disPubOption = document.createElement('option');
+              disPubOption.textContent = 'Diseño y Publicidad';
+              disPubOption.value = 'disPubColab'
+              actDept.appendChild(disPubOption);
+              $('.selectpicker').selectpicker('refresh');
+            }
+            break;
+          case 'biomedCheck':
+            if (datGenerales.infoDepartamentos[property]){
+              const biomedOption = document.createElement('option');
+              biomedOption.textContent = 'Biomédica';
+              biomedOption.value = 'biomedColab'
+              actDept.appendChild(biomedOption);
+              $('.selectpicker').selectpicker('refresh');
+            }
+            break;
+          case 'indsProtCheck':
+            if (datGenerales.infoDepartamentos[property]){
+              const indsProtOption = document.createElement('option');
+              indsProtOption.textContent = 'Industrial y Prototipado';
+              indsProtOption.value = 'indsProtColab'
+              actDept.appendChild(indsProtOption);
+              $('.selectpicker').selectpicker('refresh');
+            }
+            break;
+          case 'sisProgCheck':
+            if (datGenerales.infoDepartamentos[property]){
+              const sisProgOption = document.createElement('option');
+              sisProgOption.textContent = 'Sistemas y Programación';
+              sisProgOption.value = 'sisProgColab'
+              actDept.appendChild(sisProgOption);
+              $('.selectpicker').selectpicker('refresh');
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    actualizarOpciones();
+    const conseguirSalario = () => {
+      switch (actDept.value) {
+        case 'robElectColab':
+          return datGenerales.infoDepartamentos.robElectSal;
+          break;
+        case 'disPubColab':
+          return datGenerales.infoDepartamentos.disPubSal;
+          break;
+        case 'biomedColab':
+          return datGenerales.infoDepartamentos.biomedSal;
+          break;
+        case 'indsProtColab':
+          return datGenerales.infoDepartamentos.indsProtSal;
+          break;
+        case 'sisProgColab':
+          return datGenerales.infoDepartamentos.sisProgSal;
+          break;
+        default:
+          return 0;
+          break;
+      }
+    };
+
+    const actCosto = nuevaActividad.querySelector('#actividad-1-costo');
+
+    const actTiempo = nuevaActividad.querySelector('#actividad-1-tiempo');
+    actTiempo.id = `actividad-${numActividades}-tiempo`;
+    actTiempo.name = `actividad-${numActividades}-tiempo`;
+
+    const actTiempoTipo = nuevaActividad.querySelector('#actividad-1-tipoTiempoPicker');
+    actTiempoTipo.id = `actividad-${numActividades}-tipoTiempoPicker`;
+    actTiempoTipo.name = `actividad-${numActividades}-tipoTiempoPicker`;
+
+    const calcularTiempo = () => {
+      const valorTiempo = parseFloat(actTiempo.value) || 0;
+      switch (actTiempoTipo.value) {
+        case 'h':
+          return valorTiempo;
+          break;
+        case 'd':
+          return valorTiempo*HORAS_EN_DIA;
+          break;
+        case 's':
+          return valorTiempo*DIAS_EN_SEMANA*HORAS_EN_DIA;
+          break;
+        case 'm':
+          return valorTiempo*SEMANAS_EN_MES*DIAS_EN_SEMANA*HORAS_EN_DIA;
+          break;
+        default:
+          return 0;
+          break;
+      }
+    }
+
+    actTiempo.addEventListener('input', () => {
+      const valorTiempo = calcularTiempo();
+
+      const copyHorasActividades = datGenerales.horasActividadesDic;
+      copyHorasActividades[nuevaActividad.name] = valorTiempo;
+      datGenerales.horasActividadesDic = copyHorasActividades;
+
+      const valorColaboradores = parseFloat(datGenerales.infoDepartamentos[actDept.value]) || 0;
+
+      const copyCostoActividades = datGenerales.costoActividadesDic;
+      copyCostoActividades[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), valorColaboradores, valorTiempo);
+      datGenerales.costoActividadesDic = copyCostoActividades;
+    });
+    actDept.addEventListener('change', () => {
+      const valorTiempo = calcularTiempo();
+      const valorColaboradores = parseFloat(datGenerales.infoDepartamentos[actDept.value]) || 0;
+
+      const copyCostoActividades = datGenerales.costoActividadesDic;
+      copyCostoActividades[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), valorColaboradores, valorTiempo);
+      datGenerales.costoActividadesDic = copyCostoActividades;
+    });
+    actTiempoTipo.addEventListener('change', () => {
+      const valorTiempo = calcularTiempo();
+
+      const copyHorasActividades = datGenerales.horasActividadesDic;
+      copyHorasActividades[nuevaActividad.name] = valorTiempo;
+      datGenerales.horasActividadesDic = copyHorasActividades;
+
+      const valorColaboradores = parseFloat(datGenerales.infoDepartamentos[actDept.value]) || 0;
+
+      const copyCostoActividades = datGenerales.costoActividadesDic;
+      copyCostoActividades[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), valorColaboradores, valorTiempo);
+      datGenerales.costoActividadesDic = copyCostoActividades;
+    });
+    datGenerales.addListener(newVal => {
+      const fixSelect = actDept.value;
+      //actualizarOpciones();
+      actDept.value = fixSelect;
+      //$('.selectpicker').selectpicker('refresh');
+
+      const valorTiempo = calcularTiempo();
+      const numColab = parseFloat(datGenerales.infoDepartamentos[actDept.value]) || 0;
+      datGenerales.costoActividadesDic[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), numColab, valorTiempo);
+      actCosto.textContent = calcularCostoFuncion(conseguirSalario(), numColab, valorTiempo);
+      
+      actualizarBarraFunc();
+    });
+    
+    numActividades++;
+    listaActividades.appendChild(nuevaActividad);
+    $(".selectpicker").selectpicker("render");                                
+  });
+
+  //---------------------------------------------------------------
+
+  const costoAdminInput = document.getElementById('costo_admin');
+  costoAdminInput.addEventListener('input', () => {
+    datGenerales.costoAdmin = parseFloat(costoAdminInput.value) || 0;
+  })
+  datGenerales.addListener(newVal => {
+    const costoTotalRRHH = datGenerales.costoActividadesTotal + datGenerales.costoAdmin;
+    const costoFormateado = formatear_Dinero(costoTotalRRHH);
+    costoRRHH.textContent = `Costo RRHH: ${costoFormateado}`;
+  });
+
+  //---------------------------------------------------------------
+
+  const costoDia_Loc = 10000; //TODO: Actualizar con datos del backend
+  const costoDia_Maq = 20000; //TODO: Actualizar con datos del backend
+
+  let costoMatTotal = 0;
+  let costoTecTotal = 0;
+
+  console.log('asdas');
+
+  const costoMatProtInput = document.getElementById('costo_matProt');
+  const costMaqTercInput = document.getElementById('costo_maqTerc');
+  const costoFijoInfLocInput = document.getElementById('costo_fijo_infLoc');
+  const costoFijoMaqInput = document.getElementById('costo_fijo_maq');
+
+  const costoMatTotalLbl = document.getElementById('costo_mat');
+
+  const costoSoftAd = document.getElementById('costo_softAd');
+  const costoMaqAd = document.getElementById('costo_maqAd');
+
+  const costoTecTotalLbl = document.getElementById('costo_tec');
+
+  costoMatProtInput.addEventListener('input', () => {
+    datGenerales.costoMaterialesPrototipos = parseFloat(costoMatProtInput.value) || 0;
+  });
+
+  costMaqTercInput.addEventListener('input', () => {
+    datGenerales.costoMaquilaTerceros = parseFloat(costMaqTercInput.value) || 0;
+  });
+
+  costoSoftAd.addEventListener('input', () => {
+    datGenerales.costoSoftwareAd = parseFloat(costoSoftAd.value) || 0;
+  });
+  costoMaqAd.addEventListener('input', () => {
+    datGenerales.costoTecAd = parseFloat(costoMaqAd.value) || 0;
+  });
+
+  const actualizarCostosFijos = () => {
+    costoFijoInfLocInput.value = formatear_Dinero((datGenerales.diasTotales * costoDia_Loc));
+    costoFijoMaqInput.value = formatear_Dinero((datGenerales.diasTotales * costoDia_Maq));
+  };
+
+  datGenerales.addListener(newVal => {
+    actualizarCostosFijos();
+    const infLoc = datGenerales.diasTotales * costoDia_Loc;
+    const maq = datGenerales.diasTotales * costoDia_Maq;
+    costoMatTotalLbl.textContent = `Costo Recursos Materiales: ${formatear_Dinero(datGenerales.costoMaterialesPrototipos + datGenerales.costoMaquilaTerceros + infLoc + maq)}`;
+    costoTecTotalLbl.textContent = `Costo Recursos Tecnológicos: ${formatear_Dinero(datGenerales.costoSoftwareAd + datGenerales.costoTecAd)}`;
+  });
+
+  //---------------------------------------------------------------
+
+  const costoFinalLbl = document.getElementById('costo_final');
+  const porcentajeRetornoLbl = document.getElementById('porcentaje_retorno');
+  const costoClienteLbl = document.getElementById('costo_cliente');
+  const dineroRetornoLbl = document.getElementById('dinero_retorno');
+
+  datGenerales.addListener(newVal => {
+    const infLoc = datGenerales.diasTotales * costoDia_Loc;
+    const maq = datGenerales.diasTotales * costoDia_Maq;
+    
+    const costoTotal =
+      datGenerales.costoActividadesTotal + datGenerales.costoAdmin
+      + datGenerales.costoMaterialesPrototipos + datGenerales.costoMaquilaTerceros
+      + datGenerales.costoSoftwareAd + datGenerales.costoTecAd + infLoc + maq;
+
+      const rentPor = parseFloat(porcentajeRetornoLbl.value) || 0;
+      const retorno = costoTotal * (rentPor/100)
+
+      costoFinalLbl.value = formatear_Dinero(costoTotal);
+      
+      costoClienteLbl.value = formatear_Dinero(costoTotal + retorno)
+      dineroRetornoLbl.value = formatear_Dinero(retorno);
+
+  });
+
+
+</script>
+{% endblock %}

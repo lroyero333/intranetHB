@@ -23,6 +23,7 @@ from main.templates.miTrabajo import miTrabajo
 from main.templates.nomina_certificados import nomina_certificado
 from main.templates.register import register
 from main.templates.usersCRUD import usersCRUD
+from main.templates.calculadora_proyectos import calculadora_proyectos
 
 # Route for logging out
 @app.route('/cerrar')
