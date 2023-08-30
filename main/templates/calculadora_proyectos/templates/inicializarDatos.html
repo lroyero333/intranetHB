@@ -1,0 +1,44 @@
+{% extends 'templates/light/base.html' %} {% block content %}
+<div class="main_content" id="main-content">
+    <div class="page">
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="javascript:void(0);">
+                <h4>Herramientas Admin: Inicializar Datos</h4>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-align-justify"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto"></ul>
+            </div>
+        </nav>
+      <div class="container-fluid">
+        <button type="button" id="inicializarBtn">Inicializar Datos</button>
+      </div>
+    </div>
+</div>
+
+<script>
+    const peticion = {
+        tipo: 'inicializarDatos'
+    };
+    const boton = document.getElementById('inicializarBtn');
+    boton.addEventListener('click', () => {
+        fetch('/adminTools', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(peticion)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+        });
+    });
+
+
+</script>
+{% endblock %}

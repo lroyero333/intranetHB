@@ -1,0 +1,130 @@
+{% extends 'templates/light/base.html' %} {% block content %}
+<div class="main_content" id="main-content">
+    <script>
+        const formatear_Dinero = (numero) => {
+            const numeroConFormato = new Intl.NumberFormat(undefined, { 
+            style: 'currency', 
+            currency: 'COP',
+            maximumFractionDigits: 0, 
+            minimumFractionDigits: 0, 
+            }).format(numero)
+            return numeroConFormato;
+        };
+    </script>
+    <div class="page">
+        
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="javascript:void(0);">
+                <h4>Lista de proyectos</h4>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-align-justify"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto"></ul>
+            </div>
+        </nav>
+      <div class="container-fluid">
+        <h3>Propuestas de Proyectos</h3>
+        <button class="btn btn-primary" onclick="window.location.href='/calculadoraProyectos'">Crear Propuesta de Proyecto</button>
+        <table class="table table-hover table-cards align-items-center">
+        <thead>
+            <tr>
+                <th scope="col">Nombre del Proyecto</th>
+                <th scope="col">Presupuesto</th>
+                <th scope="col">Duración</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proyecto in pInactivos %}
+            <tr class="bg-white" scope="row">
+                <td>
+                    {{proyecto[1]}}                    
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-md-8 font-weight-bold">Presupuesto Total:</div>
+                        <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 font-weight-bold">Presupuesto Total (Cliente):</div>
+                        <div class="col-md-4 font-weight-bold" id="dinero">{{(proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) + (proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) * (proyecto[13]/100)}}</div>
+                    </div>
+                </td>
+                <td>
+                    {{(proyecto[7] + proyecto[8]) / 20}} meses
+                </td>
+                <td>
+                    <button class="btn btn-secondary" onclick="window.location.href='/activarProyecto/{{ proyecto[0] }}'">Activar Proyecto</button>
+                </td>
+            </tr>
+            {%endfor%}
+            
+        </tbody>
+        </table>
+
+        <hr>
+
+        <h3>Proyectos Activos</h3>
+        <table class="table table-hover table-cards align-items-center">
+        <thead>
+            <tr>
+                <th scope="col">Nombre del Proyecto</th>
+                <th scope="col">Presupuesto</th>
+                <th scope="col">Duración</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proyecto in pActivos %}
+            <tr class="bg-white" scope="row">
+                <td>
+                    {{proyecto[1]}}                    
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-md-8 font-weight-bold">Presupuesto Total:</div>
+                        <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 font-weight-bold">Presupuesto Total (Cliente):</div>
+                        <div class="col-md-4 font-weight-bold" id="dinero">{{(proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) + (proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) * (proyecto[13]/100)}}</div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-8 font-weight-bold">Presupuesto Ejecutado:</div>
+                        {% if proyecto[18] is not none and proyecto[19] is not none %}
+                            <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[18] + proyecto[19]}}</div>
+                        {% elif proyecto[18] is not none and proyecto[19] is none %}
+                            <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[18]}}</div>
+                        {% elif proyecto[18] is none and proyecto[19] is not none %}
+                            <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[19]}}</div>
+                        {% else %}
+                            <div class="col-md-4 font-weight-bold" id="dinero">0</div>
+                        {% endif %}
+                    </div>
+                </td>
+                <td>
+                    {{(proyecto[7] + proyecto[8]) / 20}} meses
+                </td>
+                <td>
+                    <button class="btn btn-secondary" onclick="window.location.href='/registroCostos/{{ proyecto[0] }}'">Registrar Costos</button>
+                </td>
+            </tr>
+            {%endfor%}
+        </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const dineroDisplayList = document.querySelectorAll('#dinero');
+        dineroDisplayList.forEach(element => {
+            element.textContent = formatear_Dinero(parseFloat(element.textContent));
+        });
+    });
+</script>
+{% endblock %}

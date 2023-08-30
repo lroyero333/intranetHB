@@ -102,4 +102,15 @@ def agregar_tiempo_transcurrido(solicitudes, fecha_posicion):
 # Generate a unique ID using the uuid module
 def generarID():
     return str(uuid.uuid4())
+
+constantes = {
+    'id_dept_sisProg': '0c3134a5-06e0-4a98-966c-65b44e509ab8',
+    'id_dept_biomedica': '0ea84002-9d4e-4e36-baf2-b291b919074e',
+    'id_dept_robElect': '84b29dc6-d9ce-4e14-a99e-1e52c3928078',
+    'id_dept_indProt': 'ad1369e7-7569-4e85-b530-8deffd7e5f31',
+    'id_dept_disPub': 'e9a8b714-f21a-4a5f-9c09-c701d67c0427',
+    'id_admin': 'fb0cfeba-e4a7-4c21-ab5e-e8e9f603a5b4'
+}
+
+
 from main.routes import *

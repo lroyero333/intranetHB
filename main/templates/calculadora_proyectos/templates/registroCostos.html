@@ -1,10 +1,30 @@
 {% extends 'templates/light/base.html' %} {% block content %}
-<!-- TODO: Hacer fetch del nombre del proyecto y hacer el display -->
+<script>
+    let costo_rrhh_ejecutado = 0;
+    let costo_mat_ejecutado = 0;
+    let mesActual = 0;
+    const formatear_Dinero = (numero) => {
+        const numeroConFormato = new Intl.NumberFormat(undefined, { 
+        style: 'currency', 
+        currency: 'COP',
+        maximumFractionDigits: 0, 
+        minimumFractionDigits: 0, 
+        }).format(numero)
+        return numeroConFormato;
+    };
+    function formatearFecha(date) {
+        const newDate = new Date(date)
+        const day = String(newDate.getDate()).padStart(2, '0');
+        const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const year = newDate.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+</script>
 <div class="main_content" id="main-content">
     <div class="page">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="javascript:void(0);">
-          <h4>Registro Costos - NOMBRE PROYECTO</h4>
+          <h4>Registro Costos - {{datosProyecto['nombre_proyecto']}}</h4>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,17 +35,21 @@
         </div>
       </nav>
       <div class="container-fluid">
+        <div class="d-flex flex-row-reverse mb-5">
+            <button class="btn btn-danger" type="button" onclick="window.location.href='/eliminarProyecto/{{ datosProyecto['id_proyecto'] }}'">Eliminar Proyecto</button>
+            <button class="btn btn-warning mr-4" type="button" onclick="window.location.href='/desactivarProyecto/{{ datosProyecto['id_proyecto'] }}'">Desactivar Proyecto</button>            
+        </div>
         <div class="row">
             <div class="col-md-4">
                 <div class="card tasks_report">
                     <div class="body">
                         <h5 class="text-center">Costo RRHH Estimado</h5>
-                        <h5 class="text-center">$ 123.456.789,00</h5>
+                        <h5 class="text-center dinero">{{datosProyecto['costo_rrhh']}}</h5>
                         <div class="row justify-content-center my-3">
-                            <input type="text" class="knob" value="66" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#26dad2" readonly>
+                            <input id="costo_rrhh_progress" type="text" type="text" class="knob" value="0" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#26dad2" readonly>
                         </div>
                         <h5 class="text-center">Costo RRHH Ejecutado</h5>
-                        <h5 class="text-center">$ 123.456.789,00</h5>
+                        <h5 class="text-center" id="costo_rrhh_ejecutado">$ 123.456.789,00</h5>
                     </div>
                 </div>
             </div>
@@ -33,12 +57,12 @@
                 <div class="card tasks_report">
                     <div class="body">
                         <h5 class="text-center">Tiempo Estimado</h5>
-                        <h5 class="text-center">4 Meses</h5>
+                        <h5 class="text-center">{{(datosProyecto['proyecto_duracion'] + datosProyecto['proyecto_dias_extra'])/20}} Meses</h5>
                         <div class="row justify-content-center my-3">
-                            <input type="text" class="knob" value="75" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#26dad2" readonly>
+                            <input id="tiempo_progress" type="text" class="knob" value="75" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#26dad2" readonly>
                         </div>
                         <h5 class="text-center">Tiempo Ejecutado</h5>
-                        <h5 class="text-center">3 Meses</h5>
+                        <h5 class="text-center" id="tiempo_ejecutado">3 Meses</h5>
                     </div>
                 </div>
             </div>
@@ -52,13 +76,10 @@
                                     <tr>
                                         <th class="bg-white" style="position:sticky;top:0px"># Mes</th>
                                         <th class="bg-white" style="position:sticky;top:0px">Dinero Invertido</th>
+                                        <th class="bg-white" style="position:sticky;top:0px">F. de Registro</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>$ 123.456.789,00</td>
-                                    </tr>
+                                <tbody id="tabla_costos_rrhh">
                                 </tbody>
                             </table>
                         </div>
@@ -67,99 +88,89 @@
 
                         <!-- Modal -->
                         <div class="modal modal-secondary fade" id="modal_registrarCostoMensual" tabindex="-1" role="dialog" aria-labelledby="modal_registrarCostoMensual" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="modal_title_6">Registrar costos de un mes - RRHH</h5>
+                                        <h5 class="modal-title" id="modal_title_6">Registrar costos de un mes</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="py-3 text-center">
-                                            <div class="row ml-1">
-                                                <div class="col-md-">
-                                                  <div class="input-group input-group-transparent d-flex">
-                                                    <div class="mr-auto p-2 align-self-center">
-                                                      <div class="input-group-prepend align-self-center mr-2">
-                                                        <div class="custom-control custom-checkbox">
-                                                          <input name="dept_robElect_check" type="checkbox" class="custom-control-input" id="dept_robElect_check" />
-                                                          <label class="custom-control-label" for="dept_robElect_check">Robótica y Electrónica</label>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="p-2">
-                                                      <input name="dept_robElect_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_robElect_colab">
-                                                    </div>
-                                                  </div>
-                                                  <hr>
-                        
-                                                  <div class="input-group input-group-transparent d-flex">
-                                                    <div class="mr-auto p-2 align-self-center">
-                                                      <div class="input-group-prepend align-self-center mr-2">
-                                                        <div class="custom-control custom-checkbox">
-                                                          <input name="dept_disPub_check" type="checkbox" class="custom-control-input" id="dept_disPub_check" />
-                                                          <label class="custom-control-label" for="dept_disPub_check">Diseño y Publicidad</label>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="p-2">
-                                                      <input name="dept_disPub_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_disPub_colab">
-                                                    </div>
-                                                  </div>
-                                                  <hr>
-                        
-                                                  <div class="input-group input-group-transparent d-flex">
-                                                    <div class="mr-auto p-2 align-self-center">
-                                                      <div class="input-group-prepend align-self-center mr-2">
-                                                        <div class="custom-control custom-checkbox">
-                                                          <input name="dept_biomed_check" type="checkbox" class="custom-control-input" id="dept_biomed_check" />
-                                                          <label class="custom-control-label" for="dept_biomed_check">Biomédica</label>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="p-2">
-                                                      <input name="dept_biomed_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_biomed_colab">
-                                                    </div>
-                                                  </div>
-                                                  <hr>
-                        
-                                                  <div class="input-group input-group-transparent d-flex">
-                                                    <div class="mr-auto p-2 align-self-center">
-                                                      <div class="input-group-prepend align-self-center mr-2">
-                                                        <div class="custom-control custom-checkbox">
-                                                          <input name="dept_indsProt_check" type="checkbox" class="custom-control-input" id="dept_indsProt_check" />
-                                                          <label class="custom-control-label" for="dept_indsProt_check">Industrial y Prototipado</label>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="p-2">
-                                                      <input name="dept_indsProt_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_indsProt_colab">
-                                                    </div>
-                                                  </div>
-                                                  <hr>
-                        
-                                                  <div class="input-group input-group-transparent d-flex">
-                                                    <div class="mr-auto p-2 align-self-center">
-                                                      <div class="input-group-prepend align-self-center mr-2">
-                                                        <div class="custom-control custom-checkbox">
-                                                          <input name="dept_sisProg_check" type="checkbox" class="custom-control-input" id="dept_sisProg_check" />
-                                                          <label class="custom-control-label" for="dept_sisProg_check">Sistemas y Programación</label>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="p-2">
-                                                      <input name="dept_sisProg_colab" type="number" class="form-control" placeholder="# de Colaboradores" id="dept_sisProg_colab">
-                                                    </div>
-                                                  </div>
-                                                  <hr>
-                        
+                                            <div class="row">
+                                            <div class="col">
+                                                <h3>RRHH</h3>
+                                                <div class="form-outline">
+                                                    <label for="dept_robElect_horasTotales" class="form-label">Robótica y Electrónica</label>
+                                                    <input type="number" class="form-control" id="dept_robElect_horasTotales" name="dept_robElect_horasTotales" placeholder="# de horas invertidas">
                                                 </div>
-                                              </div>
+                                                <hr>
+                                                
+                                                <div class="form-outline">
+                                                    <label for="dept_disPub_horasTotales" class="form-label">Diseño y Publicidad</label>
+                                                    <input type="number" class="form-control" id="dept_disPub_horasTotales" name="dept_disPub_horasTotales" placeholder="# de horas invertidas">
+                                                </div>
+                                                <hr>
+
+                                                <div class="form-outline">
+                                                    <label for="dept_biomed_horasTotales" class="form-label">Biomédica</label>
+                                                    <input type="number" class="form-control" id="dept_biomed_horasTotales" name="dept_biomed_horasTotales" placeholder="# de horas invertidas">
+                                                </div>
+                                                <hr>
+
+                                                <div class="form-outline">
+                                                    <label for="dept_indProt_horasTotales" class="form-label">Industrial y Prototipado</label>
+                                                    <input type="number" class="form-control" id="dept_indProt_horasTotales" name="dept_indProt_horasTotales" placeholder="# de horas invertidas">
+                                                </div>
+                                                <hr>
+
+                                                <div class="form-outline">
+                                                    <label for="dept_sisProg_horasTotales" class="form-label">Sistemas y Programación</label>
+                                                    <input type="number" class="form-control" id="dept_sisProg_horasTotales" name="dept_sisProg_horasTotales" placeholder="# de horas invertidas">
+                                                </div>
+                                                <hr>
+                                                <div class="form-outline">
+                                                    <label for="costoFijo_Admin" class="form-label">Costo Administración</label>
+                                                    <input value="{{datosCostos_fijosUltimo['costo_admin_mensual']}}" type="text" class="form-control dinero" id="costoFijo_Admin dinero" name="costoFijo_Admin" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <h3>Recursos Materiales</h3>
+                                                <div class="form-outline">
+                                                    <label for="registrar_matProt" class="form-label">Materiales de Prototipos + Insumos</label>
+                                                    <input type="number" class="form-control" id="registrar_matProt" name="registrar_matProt" placeholder="Ingrese el costo a registrar...">
+                                                </div>
+                                                <hr>
+                                                <div class="form-outline">
+                                                    <label for="registrar_maqTerc" class="form-label">Maquila - Producción de Terceros</label>
+                                                    <input type="number" class="form-control" id="registrar_maqTerc" name="registrar_maqTerc" placeholder="Ingrese el costo a registrar...">
+                                                </div>
+                                                <hr>
+                                                <div class="form-outline">
+                                                    <label for="registrar_softAd" class="form-label">Software Adicional</label>
+                                                    <input type="number" class="form-control" id="registrar_softAd" name="registrar_softAd" placeholder="Ingrese el costo a registrar...">
+                                                </div>
+                                                <hr>
+                                                <div class="form-outline">
+                                                    <label for="registrar_tec" class="form-label">Equipo Tecnológico Adicional</label>
+                                                    <input type="number" class="form-control" id="registrar_tec" name="registrar_tec" placeholder="Ingrese el costo a registrar...">
+                                                </div>
+                                                <hr>
+                                                <div class="form-outline">
+                                                    <label for="costoFijo_Loc" class="form-label">Costo Locativo</label>
+                                                    <input value="{{datosCostos_fijosUltimo['costo_locativo_mensual']}}" type="text" class="form-control dinero" id="costoFijo_Loc" name="costoFijo_Loc" readonly>
+                                                </div>
+                                                <div class="form-outline">
+                                                    <label for="costoFijo_Maq" class="form-label">Costo Maquinaria</label>
+                                                    <input value="{{datosCostos_fijosUltimo['costo_maquinaria_mensual']}}" type="text" class="form-control dinero" id="costoFijo_Maq" name="costoFijo_Maq" readonly>
+                                                </div>
+                                            </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Agregar Registro</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="enviar_costos">Agregar Registro</button>
                                     </div>
                                 </div>
                             </div>
@@ -174,67 +185,34 @@
                 <div class="card tasks_report">
                     <div class="body">
                         <h6 class="text-center">Costo Recursos Materiales Estimados</h6>
-                        <h5 class="text-center">$ 123.456.789,00</h5>
+                        <h5 class="text-center dinero">{{datosProyecto['proyeccion_mat_prot'] + datosProyecto['proyeccion_maq_terc'] + datosProyecto['proyeccion_soft'] + datosProyecto['proyeccion_tec'] + datosProyecto['costo_loc'] + datosProyecto['costo_maq']}}</h5>
                         <div class="row justify-content-center my-3">
-                            <input type="text" class="knob" value="66" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#26dad2" readonly>
+                            <input id="costo_mat_progress" class="knob" value="66" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#26dad2" readonly>
                         </div>
                         <h6 class="text-center">Costo Recursos Materiales Ejecutado</h6>
-                        <h5 class="text-center">$ 123.456.789,00</h5>
+                        <h5 class="text-center" id="costo_mat_ejecutado">$ 123.456.789,00</h5>
                     </div>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="card tasks_report">
                     <div class="body">
-                        <h5 class="text-center">Ingresar Gastos</h5>
-                        <div class="form-outline">
-                            <label for="registrar_matProt" class="form-label">Materiales de Prototipos + Insumos</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="registrar_matProt" name="registrar_matProt" placeholder="Ingrese el costo a registrar...">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary btn-icon-only">
-                                        <span class="btn-inner--icon"><i class="fa fa-arrow-right"></i></span>
-                                    </button>
-                                </div>
-                            </div>
+                        <h6>Historial</h6>
+                        <div style="display: block; height: 200px; overflow: auto;">
+                            <table width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-white" style="position:sticky;top:0px"># Mes</th>
+                                        <th class="bg-white" style="position:sticky;top:0px">Dinero Invertido</th>
+                                        <th class="bg-white" style="position:sticky;top:0px">Fecha de Registro</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_costos_mat">
+                                </tbody>
+                            </table>
                         </div>
-                        <hr>
-                        <div class="form-outline">
-                            <label for="registrar_maqTerc" class="form-label">Maquila - Producción de Terceros</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="registrar_maqTerc" name="registrar_maqTerc" placeholder="Ingrese el costo a registrar...">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary btn-icon-only">
-                                        <span class="btn-inner--icon"><i class="fa fa-arrow-right"></i></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="form-outline">
-                            <label for="registrar_softAd" class="form-label">Software Adicional</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="registrar_softAd" name="registrar_softAd" placeholder="Ingrese el costo a registrar...">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary btn-icon-only">
-                                        <span class="btn-inner--icon"><i class="fa fa-arrow-right"></i></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="form-outline">
-                            <label for="registrar_tec" class="form-label">Equipo Tecnológico Adicional</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="registrar_tec" name="registrar_tec" placeholder="Ingrese el costo a registrar...">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary btn-icon-only">
-                                        <span class="btn-inner--icon"><i class="fa fa-arrow-right"></i></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
+                        <!-- Boton para el Modal -->
+                        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#modal_registrarCostoMensual">Registrar costos de un mes</button>
                     </div>
                 </div>
             </div>
@@ -244,7 +222,7 @@
             <div class="col-md-4">
                 <h3>Costo Total</h3>
                 <div>
-                    <input type="text" class="form-control" id="costo_estimado" name="costo_estimado" readonly>
+                    <input value="{{datosProyecto['proyeccion_mat_prot'] + datosProyecto['proyeccion_maq_terc'] + datosProyecto['proyeccion_soft'] + datosProyecto['proyeccion_tec'] + datosProyecto['costo_rrhh'] + datosProyecto['costo_loc'] + datosProyecto['costo_maq']}}" type="text" class="form-control dinero" name="costo_estimado" readonly>
                     <label for="costo_estimado" class="form-label">Costo Estimado</label>
                 </div>
                 <div>
@@ -270,7 +248,163 @@
     </div>
 </div>
 <script>
-</script>
+    let mesMax = 0;
 
+    const costos_btn = document.getElementById('enviar_costos');
+    const costos_robElect = document.getElementById('dept_robElect_horasTotales');
+    const costos_disPub = document.getElementById('dept_disPub_horasTotales');
+    const costos_biomedica = document.getElementById('dept_biomed_horasTotales');
+    const costos_indProt = document.getElementById('dept_indProt_horasTotales');
+    const costos_sisProg = document.getElementById('dept_sisProg_horasTotales');
+
+    const costos_matProt = document.getElementById('registrar_matProt');
+    const costos_maqTerc = document.getElementById('registrar_maqTerc');
+    const costos_softAd = document.getElementById('registrar_softAd');
+    const costos_tec = document.getElementById('registrar_tec');
+
+    const tabla_costos_rrhh = document.getElementById('tabla_costos_rrhh');
+    const tabla_costos_mat = document.getElementById('tabla_costos_mat');
+
+    const costo_ejecutadoLbl = document.getElementById('costo_ejecutado');
+    const costo_ejecutadoPorcentaje = document.getElementById('progressbar-text');
+    const costo_ejecutadoBarra = document.getElementById('progressbar-bar');
+
+    const calcularPorcentaje = (num1, num2) => {
+        if(num1 > num2){
+            return 100;
+        } else {
+            return ((num1 / num2) * 100).toFixed(2);
+        }
+    }
+
+    const actualizarDatosFinales = () => {
+        costo_ejecutadoLbl.value = formatear_Dinero(costo_mat_ejecutado + costo_rrhh_ejecutado);
+
+        let porcentaje = calcularPorcentaje((costo_mat_ejecutado + costo_rrhh_ejecutado), {{datosProyecto['proyeccion_mat_prot'] + datosProyecto['proyeccion_maq_terc'] + datosProyecto['proyeccion_soft'] + datosProyecto['proyeccion_tec'] + datosProyecto['costo_rrhh'] + datosProyecto['costo_loc'] + datosProyecto['costo_maq']}});
+        costo_ejecutadoPorcentaje.textContent = `${porcentaje}%`;
+        costo_ejecutadoBarra.ariaValueNow = porcentaje;
+        costo_ejecutadoBarra.style = `width: ${porcentaje}%`;
+    }
+
+    const actualizarTabla_rrhh = (filas) => {
+        let sumatoria = 0;
+        let mesIndex = 0;
+        tabla_costos_rrhh.innerHTML='';
+        filas.forEach(item => {
+            mesIndex += 1;
+            sumatoria += item[0];
+            const row = document.createElement('tr');
+            //row.innerHTML=`<td>${mesIndex}</td><td class="dinero">${formatear_Dinero(item[0])}</td><td>${formatearFecha(item[1])}</td>`
+            row.innerHTML=`<td>${mesIndex}</td><td>${formatear_Dinero(item[0])}</td><td>${formatearFecha(item[1])}</td>`
+            tabla_costos_rrhh.appendChild(row);
+        });
+        costo_rrhh_ejecutado = sumatoria;
+        mesMax = mesIndex;
+
+        const costo_rrhhLbl = document.getElementById('costo_rrhh_ejecutado');
+        const costo_rrhhProgress = document.getElementById('costo_rrhh_progress');
+
+        const tiempo_ejecutadoLbl = document.getElementById('tiempo_ejecutado');
+        const tiempo_progress = document.getElementById('tiempo_progress');
+
+        costo_rrhhLbl.textContent = formatear_Dinero(costo_rrhh_ejecutado);
+
+        costo_rrhhProgress.value = calcularPorcentaje(costo_rrhh_ejecutado, {{datosProyecto['costo_rrhh']}});
+        costo_rrhhProgress.dispatchEvent(new Event('change'));
+
+        tiempo_ejecutadoLbl.textContent = `${mesMax} Meses`;
+
+        tiempo_progress.value = calcularPorcentaje(mesMax, {{(datosProyecto['proyecto_duracion'] + datosProyecto['proyecto_dias_extra'])/20}})
+        tiempo_progress.dispatchEvent(new Event('change'));
+
+        actualizarDatosFinales();
+    };
+
+    const actualizarTabla_mat = (filas) => {
+        let sumatoria = 0;
+        let mesIndex = 0;
+        tabla_costos_mat.innerHTML='';
+        filas.forEach(item => {
+            mesIndex += 1;
+            sumatoria += item[0];
+            const row = document.createElement('tr');
+            row.innerHTML=`<td>${mesIndex}</td><td>${formatear_Dinero(item[0])}</td><td>${formatearFecha(item[1])}</td>`
+            tabla_costos_mat.appendChild(row);
+        });
+        costo_mat_ejecutado = sumatoria;
+
+        const costo_matLbl = document.getElementById('costo_mat_ejecutado');
+        const costo_matProgress = document.getElementById('costo_mat_progress');
+
+        costo_matLbl.textContent = formatear_Dinero(costo_mat_ejecutado);
+
+        costo_matProgress.value = calcularPorcentaje(costo_mat_ejecutado, {{datosProyecto['proyeccion_mat_prot'] + datosProyecto['proyeccion_maq_terc'] + datosProyecto['proyeccion_soft'] + datosProyecto['proyeccion_tec'] + datosProyecto['costo_loc'] + datosProyecto['costo_maq']}});
+        costo_matProgress.dispatchEvent(new Event('change'));
+
+        costo_ejecutadoLbl.value = formatear_Dinero(costo_mat_ejecutado + costo_rrhh_ejecutado);
+        actualizarDatosFinales();
+    };
+
+    costos_btn.addEventListener('click', () => {
+        const costosJson = {
+            rrhh: {
+                robElect: parseFloat(costos_robElect.value) || 0,
+                disPub: parseFloat(costos_disPub.value) || 0,
+                biomedica: parseFloat(costos_biomedica.value) || 0,
+                indProt: parseFloat(costos_indProt.value) || 0,
+                sisProg: parseFloat(costos_sisProg) || 0
+            },
+            materiales: {
+                matProt: parseFloat(costos_matProt.value) || 0,
+                maqTerc: parseFloat(costos_maqTerc.value) || 0,
+                softAd: parseFloat(costos_softAd.value) || 0,
+                tec: parseFloat(costos_tec.value) || 0
+            }
+        }
+
+        costos_robElect.value = "";
+        costos_disPub.value = "";
+        costos_biomedica.value = "";
+        costos_indProt.value = "";
+        costos_sisProg.value = "";
+        costos_matProt.value = "";
+        costos_maqTerc.value = "";
+        costos_softAd.value = "";
+        costos_tec.value = "";
+
+        fetch('/registroCostos/rrhh/{{datosProyecto['id_proyecto']}}', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(costosJson)
+        })
+        .then(response => response.json())
+        .then(data => {
+            return fetch('/registroCostos/rrhh/{{datosProyecto['id_proyecto']}}');
+        })
+        .then(response => response.json())
+        .then(data => {
+            actualizarTabla_rrhh(data.costos_rrhh);
+            actualizarTabla_mat(data.costos_mat);
+        });
+    });
+</script>
+<script>
+    fetch('/registroCostos/rrhh/{{datosProyecto['id_proyecto']}}')
+    .then(response => response.json())
+    .then(data => {
+        actualizarTabla_rrhh(data.costos_rrhh);
+        actualizarTabla_mat(data.costos_mat);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const dineroDisplayList = document.querySelectorAll('.dinero');
+        dineroDisplayList.forEach(element => {
+            element.textContent = formatear_Dinero(parseFloat(element.textContent));
+            element.value = formatear_Dinero(parseFloat(element.value));
+        });
+    });
+</script>
 
 {% endblock %}

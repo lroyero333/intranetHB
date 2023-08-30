@@ -1,12 +1,15 @@
 {% extends 'templates/light/base.html' %} {% block content %}
 <!-- //TODO: Actualizar precio RRHH cuando se cambia la cantidad de colaboradores
+//TODO: Hacer fetch de la cantidad de proyectos activos para poder hacer el cálculo de costos fijos y administrativos
 //TODO: Arreglar las opciones de las listas que no se refrescan bien -->
-<script>
-  const HORAS_EN_DIA = 8;
-  const DIAS_EN_SEMANA = 5;
-  const SEMANAS_EN_MES = 4
-</script>
+
 <div class="main_content" id="main-content">
+  <script>
+    const datos_admin = {{datos_admin|tojson|safe}};
+    const HORAS_EN_DIA = 8;
+    const DIAS_EN_SEMANA = 5;
+    const SEMANAS_EN_MES = 4
+  </script>
   <div class="page">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="javascript:void(0);">
@@ -47,7 +50,7 @@
                             <div class="form-group">
                               <label>Descripción del proyecto</label>
                               <textarea name="desc_proyecto" class="form-control" id="desc_proyecto"
-                                placeholder="Ingrese la descripcióm del proyecto..." rows="3" resize="none"></textarea>
+                                placeholder="Ingrese la descripción del proyecto..." rows="3" resize="none"></textarea>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -58,17 +61,16 @@
                                 id="meses_proyecto">
                             </div>
                             <div class="form-group">
-                              <label>Semanas</label>
-                              <input name="semanas_proyecto" type="number" class="form-control" placeholder="0"
-                                id="semanas_proyecto">
-                            </div>
-                            <div class="form-group">
-                              <label>Días</label>
-                              <input name="dias_proyecto" type="number" class="form-control" placeholder="0"
-                                id="dias_proyecto">
-                            </div>
-                            <div>
-                              <h4 id="display-dias-totales">0 días en total</h2>
+                              <label>Información de duración</label>
+                              <div class="input-group">
+                                <input name="duracion_proyecto" type="text" class="form-control" placeholder="0 días en total" id="duracion_proyecto" readonly>
+                                <div class="input-group-append">
+                                  <select class="selectpicker" id="duracion_proyecto_tipoTiempoPicker" name="duracion_proyecto_tipoTiempoPicker">
+                                    <option value="d">Dias</option>
+                                    <option value="s">Semanas</option>
+                                  </select>
+                                </div>
+                              </div>
                             </div>
                         </div>
                       </div>
@@ -177,10 +179,8 @@
                                             <input name="actividad-1-tiempo" type="text" class="form-control" placeholder="Duración de la actividad" id="actividad-1-tiempo">
                                             <div class="input-group-append">
                                               <select class="selectpicker" id="actividad-1-tipoTiempoPicker" name="actividad-1-tipoTiempoPicker">
-                                                <option value="h">Horas</option>
                                                 <option value="d">Dias</option>
                                                 <option value="s">Semanas</option>
-                                                <option value="m">Meses</option>
                                               </select>
                                             </div>
                                           </div>
@@ -221,12 +221,14 @@
                             <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;" id="progressbar-bar"></div>
                         </div>
                       </div>
-                      <h3 class="mt-5">Personal Administrativo</h3>
+                      
                       <div class="row">
-                        <div class="col-md-5">
-                          <input data-type="currency" name="costo_admin" type="number" class="form-control" placeholder="Costo estimando" id="costo_admin">
+                        <div class="form-outline col-md-5">
+                          <label for="costo_admin" class="form-label">Costos Administrativos con {{datos_admin.num_proyectos_activos - 1}} proyecto(s) activo(s)</label>
+                          <input type="text" class="form-control" id="costo_admin" name="costo_admin" readonly>
                         </div>
                       </div>
+
                       <h3 class="mt-5" id="costo_RRHH">Costo RRHH: $-</h3>
                       <hr>
                       <h3 class="mt-5">Recursos Materiales</h3>
@@ -286,6 +288,27 @@
                         </div>
                       </div>
 
+                      <div class="row mt-4">
+                        <div class="col-md-6">
+                          <input type="text" class="form-control" id="dias_totales_sinReserva" name="dias_totales_sinReserva" readonly>
+                          <label for="dias_totales_sinReserva" class="form-label">Días Totales del Proyecto</label>
+                        </div>
+                        <div class="col-md-4 form-outline">
+                          <input type="number" class="form-control" id="dias_totales_porcentaje" name="dias_totales_porcentaje">
+                          <label for="dias_totales_porcentaje" class="form-label">Días de Reserva (%)</label>
+                        </div>
+                      </div>
+                      <div class="row mt-4">
+                        <div class="col-md-6">
+                          <input type="text" class="form-control" id="dias_totales_conReserva" name="dias_totales_conReserva" readonly>
+                          <label for="dias_totales_conReserva" class="form-label">Días Totales del Proyecto + Reserva</label>
+                        </div>
+                        <div class="col-md-4 form-outline">
+                          <input type="text" class="form-control" id="dias_totales_num" name="dias_totales_num" readonly>
+                          <label for="dias_totales_num" class="form-label">Días de Reserva</label>
+                        </div>
+                      </div>
+
                       <div class="form-group">
                         <button type="submit" class="btn btn-primary">Registrar Proyecto</button>
                       </div>
@@ -310,26 +333,23 @@
       this._infoDepartamentos = {
         robElectCheck: false,
         robElectColab: 0,
-        robElectSal: 50000, //TODO: Actualizar a valores reales haciendo fetch desde el backend
+        robElectSal: datos_admin.salario_rob_elect,
         disPubCheck: false,
         disPubColab: 0,
-        disPubSal: 60000, //TODO: Actualizar a valores reales haciendo fetch desde el backend
+        disPubSal: datos_admin.salario_dis_pub,
         biomedCheck: false,
         biomedColab: 0,
-        biomedSal: 70000, //TODO: Actualizar a valores reales haciendo fetch desde el backend
+        biomedSal: datos_admin.salario_biomedica, 
         indsProtCheck: false,
         indsProtColab: 0,
-        indsProtSal: 80000, //TODO: Actualizar a valores reales haciendo fetch desde el backend
+        indsProtSal: datos_admin.salario_ind_prot, 
         sisProgCheck: false,
         sisProgColab: 0,
-        sisProgSal: 90000 //TODO: Actualizar a valores reales haciendo fetch desde el backend
+        sisProgSal: datos_admin.salario_sis_prog 
       };
 
       this._horasActividadesDicPrivado = {};
       this._costoActividadesDicPrivado = {};
-
-      this._costoActividadesTotal = 0;
-      this._costoAdmin = 0;
 
       this._costoMaterialesPrototipos = 0;
       this._costoMaquilaTerceros = 0;
@@ -363,6 +383,7 @@
     }
 
     get diasTotales() { return this._meses * (SEMANAS_EN_MES * DIAS_EN_SEMANA) + this._semanas * DIAS_EN_SEMANA + this._dias; }
+    get semanasTotales() { return this._meses * SEMANAS_EN_MES + this._semanas }
     
     get horasActividadesDic() { return this._horasActividadesDicPrivado}
     set horasActividadesDic(newValue) {
@@ -376,15 +397,16 @@
       this._listeners.forEach(listener => listener(this._costoActividadesDicPrivado));
     }
     
-    get costoActividadesTotal() { return this._costoActividadesTotal }
-    set costoActividadesTotal(newValue) {
-      this._costoActividadesTotal = newValue;
-    }
-
-    get costoAdmin() { return this._costoAdmin }
-    set costoAdmin(newValue) {
-      this._costoAdmin = newValue;
-      this._listeners.forEach(listener => listener(this._costoAdmin));
+    get costoActividadesTotal() {
+      if (Object.keys(this._costoActividadesDicPrivado).length > 0) {
+        let costoTotal = 0;
+        for (const property in this._costoActividadesDicPrivado) {
+          costoTotal += this._costoActividadesDicPrivado[property];
+        }
+        return costoTotal;
+      } else {
+        return 0;
+      }
     }
 
     get costoMaterialesPrototipos() { return this._costoMaterialesPrototipos }
@@ -422,10 +444,13 @@
   //---------------------------------------------------------------
 
   const formatear_Dinero = (numero) => {
-    return numero.toLocaleString('es-CO', {
-      style: 'currency',
-      currency: 'COP'
-      });
+    const numeroConFormato = new Intl.NumberFormat(undefined, { 
+      style: 'currency', 
+      currency: 'COP',
+      maximumFractionDigits: 0, 
+      minimumFractionDigits: 0, 
+    }).format(numero)
+    return numeroConFormato;
   };
   const robElectCheck = document.getElementById('dept_robElect_check');
   const robElectColab = document.getElementById('dept_robElect_colab');
@@ -497,24 +522,45 @@
   let diasTotales = 0;
 
   const mesesInput = document.getElementById('meses_proyecto');
-  const semanasInput = document.getElementById('semanas_proyecto');
-  const diasInput = document.getElementById('dias_proyecto');
 
-  const diasTotalesElem = document.getElementById('display-dias-totales');
+  const duracionProyectoOutput = document.getElementById('duracion_proyecto');
+  const duracionProyectosTipoOutput = document.getElementById('duracion_proyecto_tipoTiempoPicker');
+
   const msg = ' días totales'
 
+  const displayDuracionProyecto = () => {
+    switch(duracionProyectosTipoOutput.value) {
+      case 'd':
+        duracionProyectoOutput.value = `${datGenerales.diasTotales} dias en total`;
+        break;
+      case 's':
+        duracionProyectoOutput.value = `${datGenerales.semanasTotales} semanas en total`;
+        break;
+      default:
+        break;
+    }
+  };
+
+  duracionProyectosTipoOutput.addEventListener('change', () => {
+    displayDuracionProyecto();
+  })
+
   datGenerales.addListener(newVal => {
-    diasTotalesElem.textContent = `${datGenerales.diasTotales} ${msg}`;
+    displayDuracionProyecto();  
   });
 
   mesesInput.addEventListener('input', () => {
     datGenerales.meses = parseInt(mesesInput.value) || 0;
   });
-  semanasInput.addEventListener('input', () => {
-    datGenerales.semanas = parseInt(semanasInput.value) || 0;
-  });
-  diasInput.addEventListener('input', () => {
-    datGenerales.dias = parseInt(diasInput.value) || 0;
+
+  const costoAdminLbl = document.getElementById('costo_admin');
+
+  const calcularCostosAdministrativos = () => {
+    return (datos_admin.costo_admin / datos_admin.num_proyectos_activos) * datGenerales.diasTotales * 8
+  };
+
+  datGenerales.addListener(newVal => {
+    costoAdminLbl.value = formatear_Dinero(calcularCostosAdministrativos())
   });
 
   //---------------------------------------------------------------
@@ -546,17 +592,7 @@
   const calcularCostoFuncion = (costoPorHora, numColaboradores, horasTotales) => {
     const value = costoPorHora * numColaboradores * horasTotales;
     const formatedValue = formatear_Dinero(value);
-
-    if (Object.keys(datGenerales.costoActividadesDic).length > 0) {
-      let costoTotal = 0;
-      for (const property in datGenerales.costoActividadesDic) {
-        costoTotal += datGenerales.costoActividadesDic[property];
-      }
-      const formatedTotalValue = formatear_Dinero(costoTotal);
-      datGenerales.costoActividadesTotal = costoTotal;
-    } else {
-      datGenerales.costoActividadesTotal = 0;
-    }
+    
     return formatedValue
   };
   const tempCostoHora = 50000;
@@ -577,12 +613,23 @@
     actNombre.name = `actividad-${numActividades}-nombre`;
 
     nuevaActividad.querySelector("#eliminarActividad").addEventListener('click', () => {
-      delete datGenerales.horasActividadesDic[`${nuevaActividad.name}`];
-      delete datGenerales.costoActividadesDic[`${nuevaActividad.name}`];
+      const copyHorasDic = datGenerales.horasActividadesDic;
+      const copyCostoDic = datGenerales.costoActividadesDic;
+      const nombreActividad = nuevaActividad.name
+
+      delete copyHorasDic[nombreActividad];
+      delete copyCostoDic[nombreActividad];
+      
+
+      datGenerales.horasActividadesDic = copyHorasDic;
+      datGenerales.costoActividadesDic = copyCostoDic;
       nuevaActividad.remove();
     });
 
     const actDept = nuevaActividad.querySelector('#actividad-1-departamentoPicker');
+    actDept.id = `actividad-${numActividades}-departamentoPicker`;
+    actDept.name = `actividad-${numActividades}-departamentoPicker`;
+
     const actualizarOpciones = () => {
       while (actDept.firstChild) {
         actDept.removeChild(actDept.firstChild);
@@ -676,17 +723,11 @@
     const calcularTiempo = () => {
       const valorTiempo = parseFloat(actTiempo.value) || 0;
       switch (actTiempoTipo.value) {
-        case 'h':
-          return valorTiempo;
-          break;
         case 'd':
           return valorTiempo*HORAS_EN_DIA;
           break;
         case 's':
           return valorTiempo*DIAS_EN_SEMANA*HORAS_EN_DIA;
-          break;
-        case 'm':
-          return valorTiempo*SEMANAS_EN_MES*DIAS_EN_SEMANA*HORAS_EN_DIA;
           break;
         default:
           return 0;
@@ -736,7 +777,7 @@
 
       const valorTiempo = calcularTiempo();
       const numColab = parseFloat(datGenerales.infoDepartamentos[actDept.value]) || 0;
-      datGenerales.costoActividadesDic[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), numColab, valorTiempo);
+      //datGenerales.costoActividadesDic[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), numColab, valorTiempo);
       actCosto.textContent = calcularCostoFuncion(conseguirSalario(), numColab, valorTiempo);
       
       actualizarBarraFunc();
@@ -748,26 +789,16 @@
   });
 
   //---------------------------------------------------------------
-
-  const costoAdminInput = document.getElementById('costo_admin');
-  costoAdminInput.addEventListener('input', () => {
-    datGenerales.costoAdmin = parseFloat(costoAdminInput.value) || 0;
-  })
   datGenerales.addListener(newVal => {
-    const costoTotalRRHH = datGenerales.costoActividadesTotal + datGenerales.costoAdmin;
+    const costoTotalRRHH = datGenerales.costoActividadesTotal + calcularCostosAdministrativos();
     const costoFormateado = formatear_Dinero(costoTotalRRHH);
     costoRRHH.textContent = `Costo RRHH: ${costoFormateado}`;
   });
 
   //---------------------------------------------------------------
 
-  const costoDia_Loc = 10000; //TODO: Actualizar con datos del backend
-  const costoDia_Maq = 20000; //TODO: Actualizar con datos del backend
-
   let costoMatTotal = 0;
   let costoTecTotal = 0;
-
-  console.log('asdas');
 
   const costoMatProtInput = document.getElementById('costo_matProt');
   const costMaqTercInput = document.getElementById('costo_maqTerc');
@@ -797,14 +828,14 @@
   });
 
   const actualizarCostosFijos = () => {
-    costoFijoInfLocInput.value = formatear_Dinero((datGenerales.diasTotales * costoDia_Loc));
-    costoFijoMaqInput.value = formatear_Dinero((datGenerales.diasTotales * costoDia_Maq));
+    costoFijoInfLocInput.value = formatear_Dinero((datGenerales.diasTotales * datos_admin.costo_loc));
+    costoFijoMaqInput.value = formatear_Dinero((datGenerales.diasTotales * datos_admin.costo_maq));
   };
 
   datGenerales.addListener(newVal => {
     actualizarCostosFijos();
-    const infLoc = datGenerales.diasTotales * costoDia_Loc;
-    const maq = datGenerales.diasTotales * costoDia_Maq;
+    const infLoc = datGenerales.diasTotales * datos_admin.costo_loc;
+    const maq = datGenerales.diasTotales * datos_admin.costo_maq;
     costoMatTotalLbl.textContent = `Costo Recursos Materiales: ${formatear_Dinero(datGenerales.costoMaterialesPrototipos + datGenerales.costoMaquilaTerceros + infLoc + maq)}`;
     costoTecTotalLbl.textContent = `Costo Recursos Tecnológicos: ${formatear_Dinero(datGenerales.costoSoftwareAd + datGenerales.costoTecAd)}`;
   });
@@ -815,25 +846,51 @@
   const porcentajeRetornoLbl = document.getElementById('porcentaje_retorno');
   const costoClienteLbl = document.getElementById('costo_cliente');
   const dineroRetornoLbl = document.getElementById('dinero_retorno');
+  
+  const diasTotalesSinReserva = document.getElementById('dias_totales_sinReserva');
+  const diasTotalesPorcentaje = document.getElementById('dias_totales_porcentaje');
+  const diasTotalesConReserva = document.getElementById('dias_totales_conReserva');
+  const diasTotalesNum = document.getElementById('dias_totales_num');
 
-  datGenerales.addListener(newVal => {
-    const infLoc = datGenerales.diasTotales * costoDia_Loc;
-    const maq = datGenerales.diasTotales * costoDia_Maq;
+  const actualizarDiasFinales = () => {
+    const diasDeReserva = datGenerales.diasTotales * ((parseFloat(diasTotalesPorcentaje.value) || 0) /100 )
+    diasTotalesSinReserva.value = datGenerales.diasTotales;
+    diasTotalesConReserva.value = datGenerales.diasTotales + diasDeReserva;
+    diasTotalesNum.value = diasDeReserva;
+  };
+
+  const actualizarCostosFinales = () => {
+    const infLoc = datGenerales.diasTotales * datos_admin.costo_loc;
+    const maq = datGenerales.diasTotales * datos_admin.costo_maq;
     
     const costoTotal =
-      datGenerales.costoActividadesTotal + datGenerales.costoAdmin
+      datGenerales.costoActividadesTotal + calcularCostosAdministrativos()
       + datGenerales.costoMaterialesPrototipos + datGenerales.costoMaquilaTerceros
       + datGenerales.costoSoftwareAd + datGenerales.costoTecAd + infLoc + maq;
 
-      const rentPor = parseFloat(porcentajeRetornoLbl.value) || 0;
-      const retorno = costoTotal * (rentPor/100)
+    const rentPor = parseFloat(porcentajeRetornoLbl.value) || 0;
+    const retorno = costoTotal * (rentPor/100)
 
-      costoFinalLbl.value = formatear_Dinero(costoTotal);
-      
-      costoClienteLbl.value = formatear_Dinero(costoTotal + retorno)
-      dineroRetornoLbl.value = formatear_Dinero(retorno);
+    costoFinalLbl.value = formatear_Dinero(costoTotal);
+    
+    costoClienteLbl.value = formatear_Dinero(costoTotal + retorno)
+    dineroRetornoLbl.value = formatear_Dinero(retorno);
+  };
 
+  datGenerales.addListener(newVal => {
+    actualizarCostosFinales();
+    actualizarDiasFinales();
   });
+
+  porcentajeRetornoLbl.addEventListener('input', () => {
+    actualizarCostosFinales();
+  });
+
+  diasTotalesPorcentaje.addEventListener('input', () => {
+    actualizarDiasFinales();
+  });
+
+  
 
 
 </script>
