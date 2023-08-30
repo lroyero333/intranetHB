@@ -52,11 +52,11 @@ def calculadoraProyectos():
         activo = 0
         proyectoDuracion = request.form['dias_totales_sinReserva']
         proyectoDiasExtra = request.form['dias_totales_num']
-        proyecccionMatProt = float(request.form['costo_matProt'])
-        proyeccionMaqTerc = float(request.form['costo_maqTerc'])
-        proyeccionSoft = float(request.form['costo_softAd'])
-        proyeccionTec = float(request.form['costo_maqAd'])
-        proyeccionRentabilidad = float(request.form['porcentaje_retorno'])
+        proyecccionMatProt = float(request.form['costo_matProt']) if request.form['costo_matProt'] else 0.0
+        proyeccionMaqTerc = float(request.form['costo_maqTerc']) if request.form['costo_maqTerc'] else 0.0
+        proyeccionSoft = float(request.form['costo_softAd']) if request.form['costo_softAd'] else 0.0
+        proyeccionTec = float(request.form['costo_maqAd']) if request.form['costo_maqAd'] else 0.0
+        proyeccionRentabilidad = float(request.form['porcentaje_retorno']) if request.form['porcentaje_retorno'] else 0.0
         idAdminInfo = ultimaInfoAdmin['id']
 
         query = "INSERT INTO proyectos (id_proyecto, nombre_proyecto, imagen_proyecto, descripcion_proyecto, activo, proyecto_duracion, proyecto_dias_extra, proyeccion_mat_prot, proyeccion_maq_terc, proyeccion_soft, proyeccion_tec, proyeccion_rentabilidad, id_informacion_administrativa) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
