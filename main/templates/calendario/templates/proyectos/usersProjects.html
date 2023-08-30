@@ -116,8 +116,8 @@
                           alt=""
                         />
                         <span class="ml-2">
-                          {{ project_user[13] }} {{ project_user[14] }} {{
-                          project_user[15] }} {{ project_user[16] }}
+                          {{ project_user[24] }} {{ project_user[25] }} {{
+                          project_user[26] }} {{ project_user[27] }}
                         </span>
                       </td>
                       <td>
@@ -135,21 +135,21 @@
                         </span>
                         {% endif %}
                       </td>
-                      <td>{{ project_user[11] }}</td>
-                      <td>{{ project_user[12] }}</td>
+                      <td>{{ project_user[22] }}</td>
+                      <td>{{ project_user[23] }}</td>
                       <td >{{ project_user[6] |safe}}</td>
                     </tr>
                     {% endif %} {% if session['cargo'] == 4 %}
                     <tr>
                       <td>
                         <img
-                          src="{{ url_for('static', filename='images/users/' + project_user[17]) }}"
+                          src="{{ url_for('static', filename='images/users/' + project_user[28]) }}"
                           class="avatar w30"
                           alt=""
                         />
                         <span class="ml-2">
-                          {{ project_user[13] }} {{ project_user[14] }} {{
-                          project_user[15] }} {{ project_user[16] }}
+                          {{ project_user[24] }} {{ project_user[25] }} {{
+                          project_user[26] }} {{ project_user[27] }}
                         </span>
                       </td>
                       <td>
@@ -167,8 +167,8 @@
                         </span>
                         {% endif %}
                       </td>
-                      <td>{{ project_user[11] }}</td>
-                      <td>{{ project_user[12] }}</td>
+                      <td>{{ project_user[22] }}</td>
+                      <td>{{ project_user[23] }}</td>
                       <td data-editable>{{ project_user[6] | safe}}</td>
                       <td class="d-flex justify-content-center">
                         <form action="" method="POST">
@@ -307,8 +307,8 @@
                     </option>
                     {% for project_user in project_user %}
                     <option value="{{ project_user[0] }}">
-                      {{project_user[13]}} {{project_user[14]}} {{project_user[15]}}
-                      {{project_user[16]}} {% endfor %}
+                      {{project_user[24]}} {{project_user[25]}} {{project_user[26]}}
+                      {{project_user[27]}} {% endfor %}
                     </option>
                   </select>
                 </div>
