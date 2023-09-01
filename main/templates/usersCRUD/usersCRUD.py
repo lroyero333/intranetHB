@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 from main.routes import (app, bcrypt, mysql, redirect, render_template,
                          request, session, url_for)
 from main.run import (app, bcrypt, flash, jsonify, mysql, redirect,
-                      render_template, request, session, url_for)
+                      render_template, request, session, url_for, generarID)
 
 extensionesImagenes = ['.jpg', '.jpeg', '.png']
 
@@ -106,8 +106,8 @@ def crearEmpleados():
         foto.save(upload_path)
 
         # Insertar un nuevo usuario en la tabla
-        query = "INSERT INTO general_users (Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion, id_cargo_fk, institucion, posgrado, entidad_salud, tipo_sangre,foto, nombre_contacto, numero_contacto, usuario,contrasena,lugar_pension,entidad_bancaria,tipo_cuenta,numero_cuenta,institucion_posgrado,usuario_trello,usuario_slack,departamentoHB,arl,caja_compensacion,IPS,parentesco_contacto) VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        params = [Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion,
+        query = "INSERT INTO general_users (id, Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion, id_cargo_fk, institucion, posgrado, entidad_salud, tipo_sangre,foto, nombre_contacto, numero_contacto, usuario,contrasena,lugar_pension,entidad_bancaria,tipo_cuenta,numero_cuenta,institucion_posgrado,usuario_trello,usuario_slack,departamentoHB,arl,caja_compensacion,IPS,parentesco_contacto) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        params = [generarID(), Nombre, segundo_nombre, Apellido, segundo_apellido, genero, fecha_nacimiento, correo, identificacion, direccion, barrio, ciudad, departamento, pais, telefono, celular, habilidades, profesion,
                   cargo, institucion, posgrado, entidad_salud, tipo_sangre, nuevoNombreFoto, nombre_contacto, numero_contacto, usuario, hashed_password, lugar_pension, entidad_bancaria, tipo_cuenta, numero_cuenta,institucion_posgrado,usuario_trello,usuario_slack,departamentoHB,arl,caja_compensacion,ips,parentesco]
 
         # Ejecutar la consulta SQL
