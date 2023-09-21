@@ -13,7 +13,8 @@
         return numeroConFormato;
     };
     function formatearFecha(date) {
-        const newDate = new Date(date)
+        console.log(date);
+        const newDate = new Date(date);
         const day = String(newDate.getDate()).padStart(2, '0');
         const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
         const year = newDate.getFullYear();
@@ -71,7 +72,7 @@
                     <div class="body">
                         <h6>Historial</h6>
                         <div style="display: block; height: 200px; overflow: auto;">
-                            <table width="100%">
+                            <table class="table-hover" width="100%">
                                 <thead>
                                     <tr>
                                         <th class="bg-white" style="position:sticky;top:0px"># Mes</th>
@@ -84,11 +85,11 @@
                             </table>
                         </div>
                         <!-- Boton para el Modal -->
-                        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#modal_registrarCostoMensual">Registrar costos de un mes</button>
+                        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#modal_registrarCostoMensual_rrhh">Registrar costos de un mes</button>
 
                         <!-- Modal -->
-                        <div class="modal modal-secondary fade" id="modal_registrarCostoMensual" tabindex="-1" role="dialog" aria-labelledby="modal_registrarCostoMensual" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal modal-secondary fade" id="modal_registrarCostoMensual_rrhh" tabindex="-1" role="dialog" aria-labelledby="modal_registrarCostoMensual_rrhh" aria-hidden="true">
+                            <div class="modal-dialog modal-md" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="modal_title_6">Registrar costos de un mes</h5>
@@ -135,6 +136,66 @@
                                                     <input value="{{datosCostos_fijosUltimo['costo_admin_mensual']}}" type="text" class="form-control dinero" id="costoFijo_Admin dinero" name="costoFijo_Admin" readonly>
                                                 </div>
                                             </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="enviar_costos_rrhh">Agregar Registro</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row d-flex justify-content-between">
+            <div class="col-md-4">
+                <div class="card tasks_report">
+                    <div class="body">
+                        <h6 class="text-center">Costo Recursos Materiales Estimados</h6>
+                        <h5 class="text-center dinero">{{datosProyecto['proyeccion_mat_prot'] + datosProyecto['proyeccion_maq_terc'] + datosProyecto['proyeccion_soft'] + datosProyecto['proyeccion_tec'] + datosProyecto['costo_loc'] + datosProyecto['costo_maq']}}</h5>
+                        <div class="row justify-content-center my-3">
+                            <input id="costo_mat_progress" class="knob" value="66" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#26dad2" readonly>
+                        </div>
+                        <h6 class="text-center">Costo Recursos Materiales Ejecutado</h6>
+                        <h5 class="text-center" id="costo_mat_ejecutado">$ 123.456.789,00</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card tasks_report">
+                    <div class="body">
+                        <h6>Historial</h6>
+                        <div style="display: block; height: 200px; overflow: auto;">
+                            <table class="table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th class="bg-white" style="position:sticky;top:0px"># Mes</th>
+                                        <th class="bg-white" style="position:sticky;top:0px">Dinero Invertido</th>
+                                        <th class="bg-white" style="position:sticky;top:0px">Fecha de Registro</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_costos_mat">
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Boton para el Modal -->
+                        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#modal_registrarCostoMensual_mat">Registrar costos de un mes</button>
+
+                        <div class="modal modal-secondary fade" id="modal_registrarCostoMensual_mat" tabindex="-1" role="dialog" aria-labelledby="modal_registrarCostoMensual_mat" aria-hidden="true">
+                            <div class="modal-dialog modal-md" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modal_title_6">Registrar costos de un mes</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="py-3 text-center">
+                                            <div class="row">
                                             <div class="col">
                                                 <h3>Recursos Materiales</h3>
                                                 <div class="form-outline">
@@ -170,49 +231,12 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="enviar_costos">Agregar Registro</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="enviar_costos_mat">Agregar Registro</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div class="row d-flex justify-content-between">
-            <div class="col-md-4">
-                <div class="card tasks_report">
-                    <div class="body">
-                        <h6 class="text-center">Costo Recursos Materiales Estimados</h6>
-                        <h5 class="text-center dinero">{{datosProyecto['proyeccion_mat_prot'] + datosProyecto['proyeccion_maq_terc'] + datosProyecto['proyeccion_soft'] + datosProyecto['proyeccion_tec'] + datosProyecto['costo_loc'] + datosProyecto['costo_maq']}}</h5>
-                        <div class="row justify-content-center my-3">
-                            <input id="costo_mat_progress" class="knob" value="66" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#26dad2" readonly>
-                        </div>
-                        <h6 class="text-center">Costo Recursos Materiales Ejecutado</h6>
-                        <h5 class="text-center" id="costo_mat_ejecutado">$ 123.456.789,00</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card tasks_report">
-                    <div class="body">
-                        <h6>Historial</h6>
-                        <div style="display: block; height: 200px; overflow: auto;">
-                            <table width="100%">
-                                <thead>
-                                    <tr>
-                                        <th class="bg-white" style="position:sticky;top:0px"># Mes</th>
-                                        <th class="bg-white" style="position:sticky;top:0px">Dinero Invertido</th>
-                                        <th class="bg-white" style="position:sticky;top:0px">Fecha de Registro</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabla_costos_mat">
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- Boton para el Modal -->
-                        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#modal_registrarCostoMensual">Registrar costos de un mes</button>
+
                     </div>
                 </div>
             </div>
@@ -250,7 +274,8 @@
 <script>
     let mesMax = 0;
 
-    const costos_btn = document.getElementById('enviar_costos');
+    const costos_btnRrhh = document.getElementById('enviar_costos_rrhh');
+    const costos_btnMat = document.getElementById('enviar_costos_mat');
     const costos_robElect = document.getElementById('dept_robElect_horasTotales');
     const costos_disPub = document.getElementById('dept_disPub_horasTotales');
     const costos_biomedica = document.getElementById('dept_biomed_horasTotales');
@@ -292,10 +317,15 @@
         tabla_costos_rrhh.innerHTML='';
         filas.forEach(item => {
             mesIndex += 1;
-            sumatoria += item[0];
+            const costoActual =
+                (item.horas_sistemas * item.salario_sis_prog) + (item.horas_biomedica * item.salario_biomedica)
+                + (item.horas_robotica * item.salario_rob_elect) + (item.horas_industrial * item.salario_ind_prot)
+                + (item.horas_diseno * item.salario_dis_pub) + (item.horas_admin * item.costo_administrativo);
+            sumatoria += costoActual;
             const row = document.createElement('tr');
+            row.role = "button";
             //row.innerHTML=`<td>${mesIndex}</td><td class="dinero">${formatear_Dinero(item[0])}</td><td>${formatearFecha(item[1])}</td>`
-            row.innerHTML=`<td>${mesIndex}</td><td>${formatear_Dinero(item[0])}</td><td>${formatearFecha(item[1])}</td>`
+            row.innerHTML=`<td>${mesIndex}</td><td>${formatear_Dinero(costoActual)}</td><td>${formatearFecha(item.fecha_registro)}</td>`
             tabla_costos_rrhh.appendChild(row);
         });
         costo_rrhh_ejecutado = sumatoria;
@@ -321,14 +351,19 @@
     };
 
     const actualizarTabla_mat = (filas) => {
+        console.log(filas);
         let sumatoria = 0;
         let mesIndex = 0;
         tabla_costos_mat.innerHTML='';
         filas.forEach(item => {
             mesIndex += 1;
-            sumatoria += item[0];
+            const costoActual =
+                (item.materiales_prototipos + item.maquila_terceros + item.software_adicional
+                + item.tecnologia_adicional + item.c_loc + item.c_maq);
+            sumatoria += costoActual;
             const row = document.createElement('tr');
-            row.innerHTML=`<td>${mesIndex}</td><td>${formatear_Dinero(item[0])}</td><td>${formatearFecha(item[1])}</td>`
+            row.style="cursor:pointer;";
+            row.innerHTML=`<td>${mesIndex}</td><td>${formatear_Dinero(costoActual)}</td><td>${formatearFecha(item.fecha_registro)}</td>`
             tabla_costos_mat.appendChild(row);
         });
         costo_mat_ejecutado = sumatoria;
@@ -345,7 +380,7 @@
         actualizarDatosFinales();
     };
 
-    costos_btn.addEventListener('click', () => {
+    costos_btnRrhh.addEventListener('click', () => {
         const costosJson = {
             rrhh: {
                 robElect: parseFloat(costos_robElect.value) || 0,
@@ -353,12 +388,6 @@
                 biomedica: parseFloat(costos_biomedica.value) || 0,
                 indProt: parseFloat(costos_indProt.value) || 0,
                 sisProg: parseFloat(costos_sisProg) || 0
-            },
-            materiales: {
-                matProt: parseFloat(costos_matProt.value) || 0,
-                maqTerc: parseFloat(costos_maqTerc.value) || 0,
-                softAd: parseFloat(costos_softAd.value) || 0,
-                tec: parseFloat(costos_tec.value) || 0
             }
         }
 
@@ -367,13 +396,9 @@
         costos_biomedica.value = "";
         costos_indProt.value = "";
         costos_sisProg.value = "";
-        costos_matProt.value = "";
-        costos_maqTerc.value = "";
-        costos_softAd.value = "";
-        costos_tec.value = "";
 
         fetch('/registroCostos/rrhh/{{datosProyecto['id_proyecto']}}', {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -386,6 +411,35 @@
         .then(response => response.json())
         .then(data => {
             actualizarTabla_rrhh(data.costos_rrhh);
+        });
+    });
+    costos_btnMat.addEventListener('click', () => {
+        const costosJson = {
+            materiales: {
+                matProt: parseFloat(costos_matProt.value) || 0,
+                maqTerc: parseFloat(costos_maqTerc.value) || 0,
+                softAd: parseFloat(costos_softAd.value) || 0,
+                tec: parseFloat(costos_tec.value) || 0
+            }
+        }
+        costos_matProt.value = "";
+        costos_maqTerc.value = "";
+        costos_softAd.value = "";
+        costos_tec.value = "";
+
+        fetch('/registroCostos/mat/{{datosProyecto['id_proyecto']}}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(costosJson)
+        })
+        .then(response => response.json())
+        .then(data => {
+            return fetch('/registroCostos/mat/{{datosProyecto['id_proyecto']}}');
+        })
+        .then(response => response.json())
+        .then(data => {
             actualizarTabla_mat(data.costos_mat);
         });
     });
@@ -395,6 +449,10 @@
     .then(response => response.json())
     .then(data => {
         actualizarTabla_rrhh(data.costos_rrhh);
+    });
+    fetch('/registroCostos/mat/{{datosProyecto['id_proyecto']}}')
+    .then(response => response.json())
+    .then(data => {
         actualizarTabla_mat(data.costos_mat);
     });
 

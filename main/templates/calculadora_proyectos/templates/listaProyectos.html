@@ -46,11 +46,11 @@
                 <td>
                     <div class="row">
                         <div class="col-md-8 font-weight-bold">Presupuesto Total:</div>
-                        <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]}}</div>
+                        <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[16] + proyecto[17] + proyecto[18] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-8 font-weight-bold">Presupuesto Total (Cliente):</div>
-                        <div class="col-md-4 font-weight-bold" id="dinero">{{(proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) + (proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) * (proyecto[13]/100)}}</div>
+                        <div class="col-md-4 font-weight-bold" id="dinero">{{(proyecto[16] + proyecto[17] + proyecto[18] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) + (proyecto[16] + proyecto[17] + proyecto[18] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) * (proyecto[13]/100)}}</div>
                     </div>
                 </td>
                 <td>
@@ -86,21 +86,21 @@
                 <td>
                     <div class="row">
                         <div class="col-md-8 font-weight-bold">Presupuesto Total:</div>
-                        <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]}}</div>
+                        <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[16] + proyecto[17] + proyecto[18] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-8 font-weight-bold">Presupuesto Total (Cliente):</div>
-                        <div class="col-md-4 font-weight-bold" id="dinero">{{(proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) + (proyecto[15] + proyecto[16] + proyecto[17] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) * (proyecto[13]/100)}}</div>
+                        <div class="col-md-4 font-weight-bold" id="dinero">{{(proyecto[16] + proyecto[17] + proyecto[18] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) + (proyecto[16] + proyecto[17] + proyecto[18] + proyecto[9] + proyecto[10] + proyecto[11] + proyecto[12]) * (proyecto[13]/100)}}</div>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="col-md-8 font-weight-bold">Presupuesto Ejecutado:</div>
-                        {% if proyecto[18] is not none and proyecto[19] is not none %}
-                            <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[18] + proyecto[19]}}</div>
-                        {% elif proyecto[18] is not none and proyecto[19] is none %}
-                            <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[18]}}</div>
-                        {% elif proyecto[18] is none and proyecto[19] is not none %}
+                        {% if proyecto[19] is not none and proyecto[20] is not none %}
+                            <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[19] + proyecto[20]}}</div>
+                        {% elif proyecto[19] is not none and proyecto[20] is none %}
                             <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[19]}}</div>
+                        {% elif proyecto[19] is none and proyecto[20] is not none %}
+                            <div class="col-md-4 font-weight-bold" id="dinero">{{proyecto[20]}}</div>
                         {% else %}
                             <div class="col-md-4 font-weight-bold" id="dinero">0</div>
                         {% endif %}

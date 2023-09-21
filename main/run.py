@@ -112,5 +112,12 @@ constantes = {
     'id_admin': 'fb0cfeba-e4a7-4c21-ab5e-e8e9f603a5b4'
 }
 
+def quitarFormatoDinero(string: str):
+    stringSinFormato = "".join(char for char in string if char.isdigit() or char==',')
+    stringSinFormato = stringSinFormato.replace(",",".")
+    return stringSinFormato
+
+
+
 
 from main.routes import *

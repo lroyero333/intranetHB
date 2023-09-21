@@ -49,8 +49,8 @@
                             </div>
                             <div class="form-group">
                               <label>Descripción del proyecto</label>
-                              <textarea name="desc_proyecto" class="form-control" id="desc_proyecto"
-                                placeholder="Ingrese la descripción del proyecto..." rows="3" resize="none"></textarea>
+                              <input name="desc_proyecto" id="desc_proyecto" type="text" class="form-control"
+                                placeholder="Ingrese el nombre del proyecto...">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -168,17 +168,19 @@
                                     <div class="row mx-2 mb-2">
                                       <input name="actividad-1-nombre" type="text" class="form-control" placeholder="Nombre de la actividad" id="actividad-1-nombre">
                                     </div>
-                                    <div class="row">
-                                      <div class="col mx-2">
-                                        <select class="selectpicker" title="Seleccione un departamento" data-live-search="true" data-live-search-placeholder="Buscar..." id="actividad-1-departamentoPicker">
-                                        </select>
-                                      </div>
-                                      <div class="col mx-2">
-                                        <div class="form-group">
+                                    <div id="detalles">
+                                      <div class="row mt-2 d-flex align-items-center" id="actividad-1-detalle">
+                                        <div class="col mx-2" id="actividad-1-departamentos">
+                                          <div class="custom-control custom-checkbox">
+                                            <input name="actividad-1-checkbox-departamento-tempDept" type="checkbox" class="custom-control-input" id="actividad-1-checkbox-departamento-tempDept" />
+                                            <label class="custom-control-label" for="actividad-1-checkbox-departamento-tempDept">Departamento Prueba</label>
+                                          </div>
+                                        </div>
+                                        <div class="col mx-2" id="actividad-1-tiempos">
                                           <div class="input-group">
-                                            <input name="actividad-1-tiempo" type="text" class="form-control" placeholder="Duración de la actividad" id="actividad-1-tiempo">
+                                            <input name="actividad-1-tiempo-departamento-deptTemp" type="text" class="form-control" placeholder="Duración de la actividad" id="actividad-1-tiempo-departamento-deptTemp">
                                             <div class="input-group-append">
-                                              <select class="selectpicker" id="actividad-1-tipoTiempoPicker" name="actividad-1-tipoTiempoPicker">
+                                              <select class="selectpicker" id="actividad-1-tipoTiempoPicker-deptTemp" name="actividad-1-tipoTiempoPicker-deptTemp">
                                                 <option value="d">Dias</option>
                                                 <option value="s">Semanas</option>
                                               </select>
@@ -235,11 +237,11 @@
                       <div class="row">
                         <div class="form-outline col-md-5">
                           <label for="costo_matProt" class="form-label">Materiales de Prototipos + Insumos</label>
-                          <input type="number" class="form-control" id="costo_matProt" name="costo_matProt">
+                          <input type="text" class="form-control" id="costo_matProt" name="costo_matProt" data-type="currency">
                         </div>
                         <div class="form-outline col-md-5">
                           <label for="costo_maqTerc" class="form-label">Maquila - Producción de Terceros</label>
-                          <input type="number" class="form-control" id="costo_maqTerc" name="costo_maqTerc">
+                          <input type="text" class="form-control" id="costo_maqTerc" name="costo_maqTerc" data-type="currency">
                         </div>
                       </div>
                       <div class="row mt-2">
@@ -257,11 +259,11 @@
                       <div class="row mt-2">
                         <div class="form-outline col-md-5">
                           <label for="costo_softAd" class="form-label">Software Adicional</label>
-                          <input type="number" class="form-control" id="costo_softAd" name="costo_softAd">
+                          <input type="text" class="form-control" id="costo_softAd" name="costo_softAd" data-type="currency">
                         </div>
                         <div class="form-outline col-md-5">
                           <label for="costo_maqAd" class="form-label">Equipo Tecnológico Adicional</label>
-                          <input type="number" class="form-control" id="costo_maqAd" name="costo_maqAd">
+                          <input type="text" class="form-control" id="costo_maqAd" name="costo_maqAd" data-type="currency">
                         </div>
                       </div>
                       <h5 class="mt-2 mb-4" id="costo_tec">Costo Recursos Tecnológicos: $-</h5>
@@ -324,6 +326,81 @@
   </div>
 </div>
 <script>
+  const currencyInputs = document.querySelectorAll('input[data-type="currency"]');
+
+  currencyInputs.forEach(input => {
+      input.addEventListener('keyup', function() {
+          formatCurrency(this);
+      });
+      
+      input.addEventListener('blur', function() {
+          formatCurrency(this, "blur");
+      });
+  });
+
+  function formatNumber(n) {
+    // format number 1000000 to 1,234,567
+    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+  }
+
+  function formatCurrency(input, blur) {
+    // appends $ to value, validates decimal side
+    // and puts cursor back in right position.
+    
+    // get input value
+    var input_val = input.value;
+    
+    // don't validate empty input
+    if (input_val === "") { return; }
+    
+    // original length
+    var original_len = input_val.length;
+
+    // initial caret position 
+    var caret_pos = input.selectionStart;
+      
+    // check for decimal
+    if (input_val.indexOf(",") >= 0) {
+
+      // get position of first decimal
+      // this prevents multiple decimals from
+      // being entered
+      var decimal_pos = input_val.indexOf(",");
+
+      // split number by decimal point
+      var left_side = input_val.substring(0, decimal_pos);
+      var right_side = input_val.substring(decimal_pos);
+
+      // add commas to left side of number
+      left_side = formatNumber(left_side);
+
+      // validate right side
+      right_side = formatNumber(right_side);
+      
+      // Limit decimal to only 2 digits
+      right_side = right_side.substring(0, 2);
+
+      // join number by .
+      input_val = "$ " + left_side + "," + right_side;
+
+    } else {
+      // no decimal entered
+      // add commas to number
+      // remove all non-digits
+      input_val = formatNumber(input_val);
+      input_val = "$ " + input_val;
+    }
+    
+    // send updated string to input
+    input.value = input_val;
+
+    // put caret back in the right position
+    var updated_len = input_val.length;
+    caret_pos = updated_len - original_len + caret_pos;
+    input.setSelectionRange(caret_pos, caret_pos);
+  }
+</script>
+<script>
   class DatosGenerales {
     constructor() {
       this._dias = 0;
@@ -348,8 +425,20 @@
         sisProgSal: datos_admin.salario_sis_prog 
       };
 
-      this._horasActividadesDicPrivado = {};
-      this._costoActividadesDicPrivado = {};
+      this._horasActividadesDicPrivado = {
+        robElect: {},
+        disPub: {},
+        biomed: {},
+        indsProt: {},
+        sisProg: {}
+      };
+      this._costoActividadesDicPrivado = {
+        robElect: {},
+        disPub: {},
+        biomed: {},
+        indsProt: {},
+        sisProg: {}
+      };
 
       this._costoMaterialesPrototipos = 0;
       this._costoMaquilaTerceros = 0;
@@ -398,15 +487,13 @@
     }
     
     get costoActividadesTotal() {
-      if (Object.keys(this._costoActividadesDicPrivado).length > 0) {
-        let costoTotal = 0;
-        for (const property in this._costoActividadesDicPrivado) {
-          costoTotal += this._costoActividadesDicPrivado[property];
+      let costoTotal = 0;
+      for (const deptName in this._costoActividadesDicPrivado) {
+        for (const actividad in this._costoActividadesDicPrivado[deptName]){
+          costoTotal += this._costoActividadesDicPrivado[deptName][actividad];
         }
-        return costoTotal;
-      } else {
-        return 0;
       }
+      return costoTotal;
     }
 
     get costoMaterialesPrototipos() { return this._costoMaterialesPrototipos }
@@ -452,6 +539,68 @@
     }).format(numero)
     return numeroConFormato;
   };
+
+  const calcularCostoFuncion_NoFormato = (costoPorHora, numColaboradores, horasTotales) => {
+    return costoPorHora * numColaboradores * horasTotales;
+  };
+
+  const conseguirColaboradores = (nombreDepartamento) => {
+    switch (nombreDepartamento) {
+      case 'robElect':
+        return datGenerales.infoDepartamentos.robElectColab;
+        break;
+      case 'disPub':
+        return datGenerales.infoDepartamentos.disPubColab;
+        break;
+      case 'biomed':
+        return datGenerales.infoDepartamentos.biomedColab;
+        break;
+      case 'indsProt':
+        return datGenerales.infoDepartamentos.indsProtColab;
+        break;
+      case 'sisProg':
+        return datGenerales.infoDepartamentos.sisProgColab;
+        break;
+      default:
+        return 0;
+        break;
+    }
+  };
+
+  const conseguirSalario = (nombreDepartamento) => {
+    switch (nombreDepartamento) {
+      case 'robElect':
+        return datGenerales.infoDepartamentos.robElectSal;
+        break;
+      case 'disPub':
+        return datGenerales.infoDepartamentos.disPubSal;
+        break;
+      case 'biomed':
+        return datGenerales.infoDepartamentos.biomedSal;
+        break;
+      case 'indsProt':
+        return datGenerales.infoDepartamentos.indsProtSal;
+        break;
+      case 'sisProg':
+        return datGenerales.infoDepartamentos.sisProgSal;
+        break;
+      default:
+        return 0;
+        break;
+    }
+  };
+
+  const recalcularCostos = (deptName) => {
+    const copyCostoDic = datGenerales.costoActividadesDic;
+
+    for (const property in copyCostoDic[deptName]) {
+      copyCostoDic[deptName][property] = calcularCostoFuncion_NoFormato(conseguirSalario(deptName), conseguirColaboradores(deptName), datGenerales.horasActividadesDic[deptName][property]);
+    }
+    datGenerales.costoActividadesDic = copyCostoDic;  
+  }
+
+  // AQUI
+
   const robElectCheck = document.getElementById('dept_robElect_check');
   const robElectColab = document.getElementById('dept_robElect_colab');
   robElectCheck.addEventListener('change', (event) => {
@@ -463,6 +612,7 @@
     const copy = datGenerales.infoDepartamentos;
     copy.robElectColab = parseInt(robElectColab.value) || 0;
     datGenerales.infoDepartamentos = copy;
+    recalcularCostos('robElect');
   });
 
   const disPubCheck = document.getElementById('dept_disPub_check');
@@ -476,6 +626,7 @@
     const copy = datGenerales.infoDepartamentos;
     copy.disPubColab = parseInt(disPubColab.value) || 0;
     datGenerales.infoDepartamentos = copy;
+    recalcularCostos('disPub');
   });
 
   const biomedCheck = document.getElementById('dept_biomed_check');
@@ -489,6 +640,7 @@
     const copy = datGenerales.infoDepartamentos;
     copy.biomedColab = parseInt(biomedColab.value) || 0;
     datGenerales.infoDepartamentos = copy;
+    recalcularCostos('biomed');
   });
 
   const indsProtCheck = document.getElementById('dept_indsProt_check');
@@ -502,6 +654,7 @@
     const copy = datGenerales.infoDepartamentos;
     copy.indsProtColab = parseInt(indsProtColab.value) || 0;
     datGenerales.infoDepartamentos = copy;
+    recalcularCostos('indsProt');
   });
 
   const sisProgCheck = document.getElementById('dept_sisProg_check');
@@ -515,6 +668,7 @@
     const copy = datGenerales.infoDepartamentos;
     copy.sisProgColab = parseInt(sisProgColab.value) || 0;
     datGenerales.infoDepartamentos = copy;
+    recalcularCostos('sisProg');
   });
 
   //---------------------------------------------------------------
@@ -559,6 +713,14 @@
     return (datos_admin.costo_admin / datos_admin.num_proyectos_activos) * datGenerales.diasTotales * 8
   };
 
+  const calcularCostoInf = () => {
+    return (datGenerales.diasTotales * datos_admin.costo_loc) / datos_admin.num_proyectos_activos;
+  }
+
+  const calcularCostoMaq = () => {
+    return (datGenerales.diasTotales * datos_admin.costo_maq) / datos_admin.num_proyectos_activos;    
+  }
+
   datGenerales.addListener(newVal => {
     costoAdminLbl.value = formatear_Dinero(calcularCostosAdministrativos())
   });
@@ -569,38 +731,48 @@
   const diasUsadosBarra = document.getElementById('progressbar-bar');
 
   const actualizarBarraFunc = () => {
-    if (Object.keys(datGenerales.horasActividadesDic).length > 0) {
-      let horasUsadasTotales = 0;
-      for (const property in datGenerales.horasActividadesDic) {
-        horasUsadasTotales += datGenerales.horasActividadesDic[property];
+    let horasUsadasTotalesDic = {};
+    let horasUsadasTotales = 0;
+    for (const dept in datGenerales.horasActividadesDic){
+      let tiempoMax = 0;
+      for (const actividad in datGenerales.horasActividadesDic[dept]){
+        if (actividad in horasUsadasTotalesDic){
+          if(datGenerales.horasActividadesDic[dept][actividad] > horasUsadasTotalesDic[actividad]){
+            horasUsadasTotalesDic[actividad] = datGenerales.horasActividadesDic[dept][actividad];
+          }
+        } else {
+          horasUsadasTotalesDic[actividad] = datGenerales.horasActividadesDic[dept][actividad];
+        }
       }
-      const porcentaje = ((horasUsadasTotales / (datGenerales.diasTotales * HORAS_EN_DIA)) * 100).toFixed(2);
-      diasUsadosPorcentaje.textContent = `${porcentaje}%`;
-      diasUsadosBarra.ariaValueNow = porcentaje;
-      diasUsadosBarra.style = `width: ${porcentaje}%`;
-    } else {
-      diasUsadosPorcentaje.textContent = `${0}%`;
-      diasUsadosBarra.ariaValueNow = 0;
-      diasUsadosBarra.style = `width: ${0}%`;
     }
+
+    for (const actividad in horasUsadasTotalesDic) {
+      horasUsadasTotales += horasUsadasTotalesDic[actividad];
+    }
+
+    const porcentaje = ((horasUsadasTotales / (datGenerales.diasTotales * HORAS_EN_DIA)) * 100).toFixed(2);
+    diasUsadosPorcentaje.textContent = `${porcentaje}%`;
+    diasUsadosBarra.ariaValueNow = porcentaje;
+    diasUsadosBarra.style = `width: ${porcentaje}%`;
   };
 
   const costoRRHH = document.getElementById('costo_RRHH');
-  const calcularCostoFuncion_NoFormato = (costoPorHora, numColaboradores, horasTotales) => {
-    return costoPorHora * numColaboradores * horasTotales;
-  };
   const calcularCostoFuncion = (costoPorHora, numColaboradores, horasTotales) => {
     const value = costoPorHora * numColaboradores * horasTotales;
     const formatedValue = formatear_Dinero(value);
     
     return formatedValue
   };
-  const tempCostoHora = 50000;
   let numActividades = 0;
   const agregarActividadBtn = document.getElementById('agregarActividad');
   const listaActividades = document.getElementById('listaActividades');
   const actividadOriginal = document.getElementById('actividadItem');
   
+
+  const actividadDetalle = document.getElementById('actividad-1-detalle');
+  const actividadDetalleTemplate = actividadDetalle.cloneNode(true);
+  actividadDetalle.remove();
+
   const actividadTemplate = actividadOriginal.cloneNode(true);
   actividadOriginal.remove();
 
@@ -612,184 +784,188 @@
     actNombre.id = `actividad-${numActividades}-nombre`;
     actNombre.name = `actividad-${numActividades}-nombre`;
 
+    const eliminarActividades = (deptName, nombreActividad) => {
+      for (const property in datGenerales.costoActividadesDic[deptName]) {
+        if(property == nombreActividad){
+          const copyCostoDic = datGenerales.costoActividadesDic;
+          delete copyCostoDic[deptName][nombreActividad];
+          datGenerales.costoActividadesDic = copyCostoDic;
+        }
+      };
+      for (const property in datGenerales.horasActividadesDic[deptName]) {
+        if(property == nombreActividad){
+          const copyHorasDic = datGenerales.horasActividadesDic;
+          delete copyHorasDic[deptName][nombreActividad];
+          datGenerales.horasActividadesDic = copyHorasDic;
+        }
+      };
+    };
+
     nuevaActividad.querySelector("#eliminarActividad").addEventListener('click', () => {
-      const copyHorasDic = datGenerales.horasActividadesDic;
-      const copyCostoDic = datGenerales.costoActividadesDic;
-      const nombreActividad = nuevaActividad.name
-
-      delete copyHorasDic[nombreActividad];
-      delete copyCostoDic[nombreActividad];
-      
-
-      datGenerales.horasActividadesDic = copyHorasDic;
-      datGenerales.costoActividadesDic = copyCostoDic;
+      const copyCostoActividades = datGenerales.costoActividadesDic;
+      for(const dept in copyCostoActividades){
+        for(const actividad in copyCostoActividades[dept]){
+          if(actividad == nuevaActividad.name){
+            delete copyCostoActividades[dept][actividad];
+          }
+        }
+      }
+      const copyHorasActividades = datGenerales.horasActividadesDic;
+      for(const dept in copyHorasActividades){
+        for(const actividad in copyHorasActividades[dept]){
+          if(actividad == nuevaActividad.name){
+            delete copyHorasActividades[dept][actividad];
+          }
+        }
+      }
+      datGenerales.costoActividadesDic = copyCostoActividades;
+      datGenerales.horasActividadesDic = copyHorasActividades;
       nuevaActividad.remove();
     });
 
-    const actDept = nuevaActividad.querySelector('#actividad-1-departamentoPicker');
-    actDept.id = `actividad-${numActividades}-departamentoPicker`;
-    actDept.name = `actividad-${numActividades}-departamentoPicker`;
+    const actividadDetallesContainer = nuevaActividad.querySelector('#detalles');
+
+    const calcularTiempo = (tipoTiempo, valorTiempo) => {
+      switch(tipoTiempo) {
+        case 'd':
+          return valorTiempo * HORAS_EN_DIA;
+        case 's':
+          return valorTiempo * DIAS_EN_SEMANA * HORAS_EN_DIA;
+        default:
+          return 0;
+      }
+    };
+
+    const inicializarOpcionPorDepartamento = (nombreDepartamento, nombreDisplay) => {
+
+      const nuevaOpcion = actividadDetalleTemplate.cloneNode(true);
+      nuevaOpcion.id = `${nuevaActividad.name}-detalle-${nombreDepartamento}`;
+      const checkBox = nuevaOpcion.querySelector('#actividad-1-checkbox-departamento-tempDept');
+      checkBox.name = `${nuevaActividad.name}-checkbox-departamento-${nombreDepartamento}`;
+      checkBox.id = `${nuevaActividad.name}-checkbox-departamento-${nombreDepartamento}`;
+      const lbl = nuevaOpcion.querySelector('label');
+      lbl.htmlFor = `${nuevaActividad.name}-checkbox-departamento-${nombreDepartamento}`;
+      lbl.textContent = nombreDisplay
+
+      const opcionTiempo = nuevaOpcion.querySelector('#actividad-1-tiempo-departamento-deptTemp');
+      opcionTiempo.name = `${nuevaActividad.name}-tiempo-departamento-${nombreDepartamento}`;
+      opcionTiempo.id = `${nuevaActividad.name}-tiempo-departamento-${nombreDepartamento}`;
+      
+      const opcionTipoTiempo = nuevaOpcion.querySelector('#actividad-1-tipoTiempoPicker-deptTemp');
+      opcionTipoTiempo.name = `${nuevaActividad.name}-tiempo-tipoTiempoPicker-${nombreDepartamento}`;
+      opcionTipoTiempo.id = `${nuevaActividad.name}-tiempo-tipoTiempoPicker-${nombreDepartamento}`;
+
+      // Esto toca hacerlo porque a pesar de que se supone que appendChild es sincrónico
+      // si se imprime el DOM, no se ve inmediatamente reflejado ese cambio
+      // así que se agrega un selectpicker que no se puede inicializar a pesar de que apenas se agrega se llame el método de render.
+      // Lo que hace esto es revisar por cambios en el DOM para inmediatamente refrescar los selectpickers.
+      // Creo que es una mejor opcion a esperar x tiempo y luego refrescar, como sería con setTimeout.
+      const observer = new MutationObserver((mutationList, observer) => {
+        for (const mutationIndex in mutationList) {
+          if (mutationList[mutationIndex].target == actividadDetallesContainer) {
+            $('.selectpicker').selectpicker('render');
+            observer.disconnect();
+          }
+        }
+      });
+
+      observer.observe(actividadDetallesContainer, { childList: true });
+
+      actividadDetallesContainer.appendChild(nuevaOpcion);
+
+      const administrarDatosCostosTiempos = () => {
+        if(checkBox.checked) {
+          const copyHorasDic = datGenerales.horasActividadesDic;
+          const copyCostoDic = datGenerales.costoActividadesDic;
+
+          copyHorasDic[nombreDepartamento][nuevaActividad.name] = calcularTiempo(opcionTipoTiempo.value, parseFloat(opcionTiempo.value) || 0);
+          copyCostoDic[nombreDepartamento][nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(nombreDepartamento), conseguirColaboradores(nombreDepartamento), copyHorasDic[nombreDepartamento][nuevaActividad.name]);
+
+          datGenerales.horasActividadesDic = copyHorasDic;
+          datGenerales.costoActividadesDic = copyCostoDic;
+        } else {
+          eliminarActividades(nombreDepartamento, nuevaActividad.name);
+        }
+      };
+
+      checkBox.addEventListener('change', () => {
+        administrarDatosCostosTiempos();
+      });
+
+      opcionTiempo.addEventListener('input', () => {
+        administrarDatosCostosTiempos();
+      });
+
+      opcionTipoTiempo.addEventListener('change', () => {
+        administrarDatosCostosTiempos();
+      });
+
+    };
+
+    const verificarInicializacion = (propiedad, nombreDepartamento, nombreDisplay) => {
+      if (datGenerales.infoDepartamentos[propiedad] && actividadDetallesContainer.querySelector(`#${nuevaActividad.name}-detalle-${nombreDepartamento}`) == null){
+        inicializarOpcionPorDepartamento(nombreDepartamento, nombreDisplay);
+        
+      } else if(!datGenerales.infoDepartamentos[propiedad] && actividadDetallesContainer.querySelector(`#${nuevaActividad.name}-detalle-${nombreDepartamento}`) !== null) {
+        document.getElementById(`${nuevaActividad.name}-detalle-${nombreDepartamento}`).remove();
+        eliminarActividades(nombreDepartamento, nuevaActividad.name);
+      }
+    };
 
     const actualizarOpciones = () => {
-      while (actDept.firstChild) {
-        actDept.removeChild(actDept.firstChild);
-      }
       for (const property in datGenerales.infoDepartamentos) {
         switch (property) {
           case 'robElectCheck':
-            if (datGenerales.infoDepartamentos[property]){
-              const robElectOption = document.createElement('option');
-              robElectOption.textContent = 'Robótica y Electrónica';
-              robElectOption.value = 'robElectColab'
-              actDept.appendChild(robElectOption);
-              $('.selectpicker').selectpicker('refresh');
-            }
+            verificarInicializacion(property, 'robElect', 'Robótica y Electrónica')
             break;          
           case 'disPubCheck':
-            if (datGenerales.infoDepartamentos[property]){
-              const disPubOption = document.createElement('option');
-              disPubOption.textContent = 'Diseño y Publicidad';
-              disPubOption.value = 'disPubColab'
-              actDept.appendChild(disPubOption);
-              $('.selectpicker').selectpicker('refresh');
-            }
+            verificarInicializacion(property, 'disPub', 'Diseño y Publicidad');
             break;
           case 'biomedCheck':
-            if (datGenerales.infoDepartamentos[property]){
-              const biomedOption = document.createElement('option');
-              biomedOption.textContent = 'Biomédica';
-              biomedOption.value = 'biomedColab'
-              actDept.appendChild(biomedOption);
-              $('.selectpicker').selectpicker('refresh');
-            }
+            verificarInicializacion(property, 'biomed', 'Biomédica');
             break;
           case 'indsProtCheck':
-            if (datGenerales.infoDepartamentos[property]){
-              const indsProtOption = document.createElement('option');
-              indsProtOption.textContent = 'Industrial y Prototipado';
-              indsProtOption.value = 'indsProtColab'
-              actDept.appendChild(indsProtOption);
-              $('.selectpicker').selectpicker('refresh');
-            }
+            verificarInicializacion(property, 'indsProt', 'Industrial y Prototipado');
             break;
           case 'sisProgCheck':
-            if (datGenerales.infoDepartamentos[property]){
-              const sisProgOption = document.createElement('option');
-              sisProgOption.textContent = 'Sistemas y Programación';
-              sisProgOption.value = 'sisProgColab'
-              actDept.appendChild(sisProgOption);
-              $('.selectpicker').selectpicker('refresh');
-            }
+            verificarInicializacion(property, 'sisProg', 'Sistemas y Programación');
             break;
           default:
             break;
         }
       }
-    }
-    actualizarOpciones();
-    const conseguirSalario = () => {
-      switch (actDept.value) {
-        case 'robElectColab':
-          return datGenerales.infoDepartamentos.robElectSal;
-          break;
-        case 'disPubColab':
-          return datGenerales.infoDepartamentos.disPubSal;
-          break;
-        case 'biomedColab':
-          return datGenerales.infoDepartamentos.biomedSal;
-          break;
-        case 'indsProtColab':
-          return datGenerales.infoDepartamentos.indsProtSal;
-          break;
-        case 'sisProgColab':
-          return datGenerales.infoDepartamentos.sisProgSal;
-          break;
-        default:
-          return 0;
-          break;
-      }
     };
 
-    const actCosto = nuevaActividad.querySelector('#actividad-1-costo');
+    actualizarOpciones();
 
-    const actTiempo = nuevaActividad.querySelector('#actividad-1-tiempo');
-    actTiempo.id = `actividad-${numActividades}-tiempo`;
-    actTiempo.name = `actividad-${numActividades}-tiempo`;
-
-    const actTiempoTipo = nuevaActividad.querySelector('#actividad-1-tipoTiempoPicker');
-    actTiempoTipo.id = `actividad-${numActividades}-tipoTiempoPicker`;
-    actTiempoTipo.name = `actividad-${numActividades}-tipoTiempoPicker`;
-
-    const calcularTiempo = () => {
-      const valorTiempo = parseFloat(actTiempo.value) || 0;
-      switch (actTiempoTipo.value) {
-        case 'd':
-          return valorTiempo*HORAS_EN_DIA;
-          break;
-        case 's':
-          return valorTiempo*DIAS_EN_SEMANA*HORAS_EN_DIA;
-          break;
-        default:
-          return 0;
-          break;
+    const costoActividadLbl = nuevaActividad.querySelector('#actividad-1-costo');
+    costoActividadLbl.id = `${nuevaActividad.name}-costo`;
+    costoActividadLbl.name = `${nuevaActividad.name}-costo`;
+    
+    const calcularCostoActividad = () => {
+      let sumatoria = 0;
+      for (const property in datGenerales.costoActividadesDic) {
+        for (const actividad in datGenerales.costoActividadesDic[property]) {
+          if (actividad == nuevaActividad.name) {
+            sumatoria += datGenerales.costoActividadesDic[property][actividad];
+          }
+        }
       }
-    }
+      return sumatoria;
+    };
 
-    actTiempo.addEventListener('input', () => {
-      const valorTiempo = calcularTiempo();
-
-      const copyHorasActividades = datGenerales.horasActividadesDic;
-      copyHorasActividades[nuevaActividad.name] = valorTiempo;
-      datGenerales.horasActividadesDic = copyHorasActividades;
-
-      const valorColaboradores = parseFloat(datGenerales.infoDepartamentos[actDept.value]) || 0;
-
-      const copyCostoActividades = datGenerales.costoActividadesDic;
-      copyCostoActividades[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), valorColaboradores, valorTiempo);
-      datGenerales.costoActividadesDic = copyCostoActividades;
-    });
-    actDept.addEventListener('change', () => {
-      const valorTiempo = calcularTiempo();
-      const valorColaboradores = parseFloat(datGenerales.infoDepartamentos[actDept.value]) || 0;
-
-      const copyCostoActividades = datGenerales.costoActividadesDic;
-      copyCostoActividades[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), valorColaboradores, valorTiempo);
-      datGenerales.costoActividadesDic = copyCostoActividades;
-    });
-    actTiempoTipo.addEventListener('change', () => {
-      const valorTiempo = calcularTiempo();
-
-      const copyHorasActividades = datGenerales.horasActividadesDic;
-      copyHorasActividades[nuevaActividad.name] = valorTiempo;
-      datGenerales.horasActividadesDic = copyHorasActividades;
-
-      const valorColaboradores = parseFloat(datGenerales.infoDepartamentos[actDept.value]) || 0;
-
-      const copyCostoActividades = datGenerales.costoActividadesDic;
-      copyCostoActividades[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), valorColaboradores, valorTiempo);
-      datGenerales.costoActividadesDic = copyCostoActividades;
-    });
     datGenerales.addListener(newVal => {
-      const fixSelect = actDept.value;
-      //actualizarOpciones();
-      actDept.value = fixSelect;
-      //$('.selectpicker').selectpicker('refresh');
-
-      const valorTiempo = calcularTiempo();
-      const numColab = parseFloat(datGenerales.infoDepartamentos[actDept.value]) || 0;
-      //datGenerales.costoActividadesDic[nuevaActividad.name] = calcularCostoFuncion_NoFormato(conseguirSalario(), numColab, valorTiempo);
-      actCosto.textContent = calcularCostoFuncion(conseguirSalario(), numColab, valorTiempo);
-      
-      actualizarBarraFunc();
+      actualizarOpciones();
+      costoActividadLbl.textContent = formatear_Dinero(calcularCostoActividad());
     });
     
     numActividades++;
-    listaActividades.appendChild(nuevaActividad);
-    $(".selectpicker").selectpicker("render");                                
+    listaActividades.appendChild(nuevaActividad);                              
   });
 
   //---------------------------------------------------------------
   datGenerales.addListener(newVal => {
+    actualizarBarraFunc();
     const costoTotalRRHH = datGenerales.costoActividadesTotal + calcularCostosAdministrativos();
     const costoFormateado = formatear_Dinero(costoTotalRRHH);
     costoRRHH.textContent = `Costo RRHH: ${costoFormateado}`;
@@ -799,6 +975,13 @@
 
   let costoMatTotal = 0;
   let costoTecTotal = 0;
+
+  const parseFormatedToFloat = (formatedNumber) => {
+    const withoutDots = formatedNumber.replace(/[.]/g, "");
+    const correctDecimals = withoutDots.replace(/[,]/g, '.');
+    const deleteCurrencySymbol = correctDecimals.replace(/[$]/g, '');
+    return (parseFloat(deleteCurrencySymbol.trim()) || 0);
+  }
 
   const costoMatProtInput = document.getElementById('costo_matProt');
   const costMaqTercInput = document.getElementById('costo_maqTerc');
@@ -813,29 +996,29 @@
   const costoTecTotalLbl = document.getElementById('costo_tec');
 
   costoMatProtInput.addEventListener('input', () => {
-    datGenerales.costoMaterialesPrototipos = parseFloat(costoMatProtInput.value) || 0;
+    datGenerales.costoMaterialesPrototipos = parseFormatedToFloat(costoMatProtInput.value);
   });
 
   costMaqTercInput.addEventListener('input', () => {
-    datGenerales.costoMaquilaTerceros = parseFloat(costMaqTercInput.value) || 0;
+    datGenerales.costoMaquilaTerceros = parseFormatedToFloat(costMaqTercInput.value);
   });
 
   costoSoftAd.addEventListener('input', () => {
-    datGenerales.costoSoftwareAd = parseFloat(costoSoftAd.value) || 0;
+    datGenerales.costoSoftwareAd = parseFormatedToFloat(costoSoftAd.value);
   });
   costoMaqAd.addEventListener('input', () => {
-    datGenerales.costoTecAd = parseFloat(costoMaqAd.value) || 0;
+    datGenerales.costoTecAd = parseFormatedToFloat(costoMaqAd.value);
   });
-
+datos_admin.num_proyectos_activos
   const actualizarCostosFijos = () => {
-    costoFijoInfLocInput.value = formatear_Dinero((datGenerales.diasTotales * datos_admin.costo_loc));
-    costoFijoMaqInput.value = formatear_Dinero((datGenerales.diasTotales * datos_admin.costo_maq));
+    costoFijoInfLocInput.value = formatear_Dinero(calcularCostoInf());
+    costoFijoMaqInput.value = formatear_Dinero(calcularCostoMaq());
   };
 
   datGenerales.addListener(newVal => {
     actualizarCostosFijos();
-    const infLoc = datGenerales.diasTotales * datos_admin.costo_loc;
-    const maq = datGenerales.diasTotales * datos_admin.costo_maq;
+    const infLoc = formatear_Dinero(calcularCostoInf());
+    const maq = formatear_Dinero(calcularCostoMaq());
     costoMatTotalLbl.textContent = `Costo Recursos Materiales: ${formatear_Dinero(datGenerales.costoMaterialesPrototipos + datGenerales.costoMaquilaTerceros + infLoc + maq)}`;
     costoTecTotalLbl.textContent = `Costo Recursos Tecnológicos: ${formatear_Dinero(datGenerales.costoSoftwareAd + datGenerales.costoTecAd)}`;
   });
@@ -860,8 +1043,8 @@
   };
 
   const actualizarCostosFinales = () => {
-    const infLoc = datGenerales.diasTotales * datos_admin.costo_loc;
-    const maq = datGenerales.diasTotales * datos_admin.costo_maq;
+    const infLoc = calcularCostoInf();
+    const maq = calcularCostoMaq();
     
     const costoTotal =
       datGenerales.costoActividadesTotal + calcularCostosAdministrativos()
