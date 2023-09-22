@@ -13,7 +13,6 @@
         return numeroConFormato;
     };
     function formatearFecha(date) {
-        console.log(date);
         const newDate = new Date(date);
         const day = String(newDate.getDate()).padStart(2, '0');
         const month = String(newDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -85,7 +84,7 @@
                             </table>
                         </div>
                         <!-- Boton para el Modal -->
-                        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#modal_registrarCostoMensual_rrhh">Registrar costos de un mes</button>
+                        <button id="modal_costos_rrhh" type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#modal_registrarCostoMensual_rrhh">Registrar costos de un mes</button>
 
                         <!-- Modal -->
                         <div class="modal modal-secondary fade" id="modal_registrarCostoMensual_rrhh" tabindex="-1" role="dialog" aria-labelledby="modal_registrarCostoMensual_rrhh" aria-hidden="true">
@@ -133,7 +132,7 @@
                                                 <hr>
                                                 <div class="form-outline">
                                                     <label for="costoFijo_Admin" class="form-label">Costo Administración</label>
-                                                    <input value="{{datosCostos_fijosUltimo['costo_admin_mensual']}}" type="text" class="form-control dinero" id="costoFijo_Admin dinero" name="costoFijo_Admin" readonly>
+                                                    <input id="costoFijo_Admin" value="{{datosCostos_fijosUltimo['costo_admin_mensual']}}" type="text" class="form-control dinero" id="costoFijo_Admin dinero" name="costoFijo_Admin" readonly>
                                                 </div>
                                             </div>
                                             </div>
@@ -141,6 +140,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" data-dismiss="modal" id="enviar_costos_rrhh">Agregar Registro</button>
+                                        <button disabled="true" style="display: none;" type="button" class="btn btn-primary" data-dismiss="modal" id="actualizar_costos_rrhh">Editar Registro</button>
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +182,7 @@
                             </table>
                         </div>
                         <!-- Boton para el Modal -->
-                        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#modal_registrarCostoMensual_mat">Registrar costos de un mes</button>
+                        <button id="modal_costos_mat" type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#modal_registrarCostoMensual_mat">Registrar costos de un mes</button>
 
                         <div class="modal modal-secondary fade" id="modal_registrarCostoMensual_mat" tabindex="-1" role="dialog" aria-labelledby="modal_registrarCostoMensual_mat" aria-hidden="true">
                             <div class="modal-dialog modal-md" role="document">
@@ -200,22 +200,22 @@
                                                 <h3>Recursos Materiales</h3>
                                                 <div class="form-outline">
                                                     <label for="registrar_matProt" class="form-label">Materiales de Prototipos + Insumos</label>
-                                                    <input type="number" class="form-control" id="registrar_matProt" name="registrar_matProt" placeholder="Ingrese el costo a registrar...">
+                                                    <input data-type="currency" type="text" class="form-control" id="registrar_matProt" name="registrar_matProt" placeholder="Ingrese el costo a registrar...">
                                                 </div>
                                                 <hr>
                                                 <div class="form-outline">
                                                     <label for="registrar_maqTerc" class="form-label">Maquila - Producción de Terceros</label>
-                                                    <input type="number" class="form-control" id="registrar_maqTerc" name="registrar_maqTerc" placeholder="Ingrese el costo a registrar...">
+                                                    <input data-type="currency" type="text" class="form-control" id="registrar_maqTerc" name="registrar_maqTerc" placeholder="Ingrese el costo a registrar...">
                                                 </div>
                                                 <hr>
                                                 <div class="form-outline">
                                                     <label for="registrar_softAd" class="form-label">Software Adicional</label>
-                                                    <input type="number" class="form-control" id="registrar_softAd" name="registrar_softAd" placeholder="Ingrese el costo a registrar...">
+                                                    <input data-type="currency" type="text" class="form-control" id="registrar_softAd" name="registrar_softAd" placeholder="Ingrese el costo a registrar...">
                                                 </div>
                                                 <hr>
                                                 <div class="form-outline">
                                                     <label for="registrar_tec" class="form-label">Equipo Tecnológico Adicional</label>
-                                                    <input type="number" class="form-control" id="registrar_tec" name="registrar_tec" placeholder="Ingrese el costo a registrar...">
+                                                    <input data-type="currency" type="text" class="form-control" id="registrar_tec" name="registrar_tec" placeholder="Ingrese el costo a registrar...">
                                                 </div>
                                                 <hr>
                                                 <div class="form-outline">
@@ -232,6 +232,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" data-dismiss="modal" id="enviar_costos_mat">Agregar Registro</button>
+                                        <button style="display: none;" disabled="true" type="button" class="btn btn-primary" data-dismiss="modal" id="actualizar_costos_mat">Editar Registro</button>
                                     </div>
                                 </div>
                             </div>
@@ -272,10 +273,99 @@
     </div>
 </div>
 <script>
+    const currencyInputs = document.querySelectorAll('input[data-type="currency"]');
+  
+    currencyInputs.forEach(input => {
+        input.addEventListener('keyup', function() {
+            formatCurrency(this);
+        });
+        
+        input.addEventListener('blur', function() {
+            formatCurrency(this, "blur");
+        });
+    });
+  
+    function formatNumber(n) {
+      // format number 1000000 to 1,234,567
+      return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+  
+    function formatCurrency(input, blur) {
+      // appends $ to value, validates decimal side
+      // and puts cursor back in right position.
+      
+      // get input value
+      var input_val = input.value;
+      
+      // don't validate empty input
+      if (input_val === "") { return; }
+      
+      // original length
+      var original_len = input_val.length;
+  
+      // initial caret position 
+      var caret_pos = input.selectionStart;
+        
+      // check for decimal
+      if (input_val.indexOf(",") >= 0) {
+  
+        // get position of first decimal
+        // this prevents multiple decimals from
+        // being entered
+        var decimal_pos = input_val.indexOf(",");
+  
+        // split number by decimal point
+        var left_side = input_val.substring(0, decimal_pos);
+        var right_side = input_val.substring(decimal_pos);
+  
+        // add commas to left side of number
+        left_side = formatNumber(left_side);
+  
+        // validate right side
+        right_side = formatNumber(right_side);
+        
+        // Limit decimal to only 2 digits
+        right_side = right_side.substring(0, 2);
+  
+        // join number by .
+        input_val = "$ " + left_side + "," + right_side;
+  
+      } else {
+        // no decimal entered
+        // add commas to number
+        // remove all non-digits
+        input_val = formatNumber(input_val);
+        input_val = "$ " + input_val;
+      }
+      
+      // send updated string to input
+      input.value = input_val;
+  
+      // put caret back in the right position
+      var updated_len = input_val.length;
+      caret_pos = updated_len - original_len + caret_pos;
+      input.setSelectionRange(caret_pos, caret_pos);
+    }
+    const parseFormatedToFloat = (formatedNumber) => {
+        const withoutDots = formatedNumber.replace(/[.]/g, "");
+        const correctDecimals = withoutDots.replace(/[,]/g, '.');
+        const deleteCurrencySymbol = correctDecimals.replace(/[$]/g, '');
+        return (parseFloat(deleteCurrencySymbol.trim()) || 0);
+    }
+</script>
+<script>
     let mesMax = 0;
 
+    let selectedRowId = "";
+
+    const openModal_btnRrhh = document.getElementById('modal_costos_rrhh');
     const costos_btnRrhh = document.getElementById('enviar_costos_rrhh');
+    const costos_btnRrhh_edit = document.getElementById('actualizar_costos_rrhh');
+
+    const openModal_btnMat = document.getElementById('modal_costos_mat');
     const costos_btnMat = document.getElementById('enviar_costos_mat');
+    const costos_btnMat_edit = document.getElementById('actualizar_costos_mat');
+
     const costos_robElect = document.getElementById('dept_robElect_horasTotales');
     const costos_disPub = document.getElementById('dept_disPub_horasTotales');
     const costos_biomedica = document.getElementById('dept_biomed_horasTotales');
@@ -287,12 +377,19 @@
     const costos_softAd = document.getElementById('registrar_softAd');
     const costos_tec = document.getElementById('registrar_tec');
 
+    const costoFijo_Admin = document.getElementById('costoFijo_Admin');
+    const costoFijo_Loc = document.getElementById('costoFijo_Loc');
+    const costoFijo_Maq = document.getElementById('costoFijo_Maq');
+
     const tabla_costos_rrhh = document.getElementById('tabla_costos_rrhh');
     const tabla_costos_mat = document.getElementById('tabla_costos_mat');
 
     const costo_ejecutadoLbl = document.getElementById('costo_ejecutado');
     const costo_ejecutadoPorcentaje = document.getElementById('progressbar-text');
     const costo_ejecutadoBarra = document.getElementById('progressbar-bar');
+
+    const costos_rrhhModal = document.getElementById('modal_registrarCostoMensual_rrhh');
+    const costos_matModal = document.getElementById('modal_registrarCostoMensual_mat');
 
     const calcularPorcentaje = (num1, num2) => {
         if(num1 > num2){
@@ -325,8 +422,30 @@
             const row = document.createElement('tr');
             row.role = "button";
             //row.innerHTML=`<td>${mesIndex}</td><td class="dinero">${formatear_Dinero(item[0])}</td><td>${formatearFecha(item[1])}</td>`
-            row.innerHTML=`<td>${mesIndex}</td><td>${formatear_Dinero(costoActual)}</td><td>${formatearFecha(item.fecha_registro)}</td>`
+            row.innerHTML=`<td>${mesIndex}</td><td>${formatear_Dinero(costoActual)}</td><td>${formatearFecha(item.fecha_registro)}</td>`;
+            row.style="cursor:pointer;";
             tabla_costos_rrhh.appendChild(row);
+            row.addEventListener('click', () =>{
+                fetch(`/registroCostos/rrhh/detalles/${item.id_costos_rrhh_proyectos}`)
+                .then(response => response.json())
+                .then(data => {
+                    const data_rrhh = data.costosMensual_rrhh;
+                    selectedRowId = item.id_costos_rrhh_proyectos;
+                    $(costos_rrhhModal).modal("show");
+                    costos_robElect.value = data_rrhh.horas_robotica;
+                    costos_disPub.value = data_rrhh.horas_diseno;
+                    costos_biomedica.value = data_rrhh.horas_biomedica;
+                    costos_indProt.value = data_rrhh.horas_industrial;
+                    costos_sisProg.value = data_rrhh.horas_sistemas;
+                    costoFijo_Admin.value = formatear_Dinero(data_rrhh.horas_admin * data_rrhh.costo_administrativo);
+
+                    costos_btnRrhh.style.display = "none";
+                    costos_btnRrhh.disabled = true;
+
+                    costos_btnRrhh_edit.style.display = "inline-block";
+                    costos_btnRrhh_edit.disabled = false;
+                });
+            })
         });
         costo_rrhh_ejecutado = sumatoria;
         mesMax = mesIndex;
@@ -351,7 +470,6 @@
     };
 
     const actualizarTabla_mat = (filas) => {
-        console.log(filas);
         let sumatoria = 0;
         let mesIndex = 0;
         tabla_costos_mat.innerHTML='';
@@ -365,6 +483,29 @@
             row.style="cursor:pointer;";
             row.innerHTML=`<td>${mesIndex}</td><td>${formatear_Dinero(costoActual)}</td><td>${formatearFecha(item.fecha_registro)}</td>`
             tabla_costos_mat.appendChild(row);
+            row.addEventListener('click', () =>{
+                fetch(`/registroCostos/mat/detalles/${item.id_costos_mat_proyectos}`)
+                .then(response => response.json())
+                .then(data => {
+                    const data_mat = data.costosMensual_mat;
+                    selectedRowId = item.id_costos_mat_proyectos;
+                    console.log(data);
+                    $(costos_matModal).modal("show");
+
+                    costos_matProt.value = data_mat.materiales_prototipos;
+                    costos_maqTerc.value = data_mat.maquila_terceros;
+                    costos_softAd.value = data_mat.software_adicional;
+                    costos_tec.value = data_mat.tecnologia_adicional;    
+                    costoFijo_Loc.value = data_mat.costo_locativos;
+                    costoFijo_Maq.value = data_mat.costo_maquinaria;
+
+                    costos_btnMat.style.display = "none";
+                    costos_btnMat.disabled = true;
+
+                    costos_btnMat_edit.style.display = "inline-block";
+                    costos_btnMat_edit.disabled = false;
+                });
+            })
         });
         costo_mat_ejecutado = sumatoria;
 
@@ -387,7 +528,7 @@
                 disPub: parseFloat(costos_disPub.value) || 0,
                 biomedica: parseFloat(costos_biomedica.value) || 0,
                 indProt: parseFloat(costos_indProt.value) || 0,
-                sisProg: parseFloat(costos_sisProg) || 0
+                sisProg: parseFloat(costos_sisProg.value) || 0
             }
         }
 
@@ -413,13 +554,48 @@
             actualizarTabla_rrhh(data.costos_rrhh);
         });
     });
+
+    costos_btnRrhh_edit.addEventListener('click', () => {
+        const costosJson = {
+            rrhh: {
+                robElect: parseFloat(costos_robElect.value) || 0,
+                disPub: parseFloat(costos_disPub.value) || 0,
+                biomedica: parseFloat(costos_biomedica.value) || 0,
+                indProt: parseFloat(costos_indProt.value) || 0,
+                sisProg: parseFloat(costos_sisProg.value) || 0
+            }
+        }
+
+        costos_robElect.value = "";
+        costos_disPub.value = "";
+        costos_biomedica.value = "";
+        costos_indProt.value = "";
+        costos_sisProg.value = "";
+
+        fetch(`/registroCostos/rrhh/detalles/${selectedRowId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(costosJson)
+        })
+        .then(response => response.json())
+        .then(data => {
+            return fetch('/registroCostos/rrhh/{{datosProyecto['id_proyecto']}}');
+        })
+        .then(response => response.json())
+        .then(data => {
+            actualizarTabla_rrhh(data.costos_rrhh);
+        });
+    })
+
     costos_btnMat.addEventListener('click', () => {
         const costosJson = {
             materiales: {
-                matProt: parseFloat(costos_matProt.value) || 0,
-                maqTerc: parseFloat(costos_maqTerc.value) || 0,
-                softAd: parseFloat(costos_softAd.value) || 0,
-                tec: parseFloat(costos_tec.value) || 0
+                matProt: parseFormatedToFloat(costos_matProt.value),
+                maqTerc: parseFormatedToFloat(costos_maqTerc.value),
+                softAd: parseFormatedToFloat(costos_softAd.value),
+                tec: parseFormatedToFloat(costos_tec.value)
             }
         }
         costos_matProt.value = "";
@@ -443,6 +619,65 @@
             actualizarTabla_mat(data.costos_mat);
         });
     });
+    costos_btnMat_edit.addEventListener('click', () => {
+        const costosJson = {
+            materiales: {
+                matProt: parseFormatedToFloat(costos_matProt.value),
+                maqTerc: parseFormatedToFloat(costos_maqTerc.value),
+                softAd: parseFormatedToFloat(costos_softAd.value),
+                tec: parseFormatedToFloat(costos_tec.value)
+            }
+        }
+        costos_matProt.value = "";
+        costos_maqTerc.value = "";
+        costos_softAd.value = "";
+        costos_tec.value = "";
+
+        fetch(`/registroCostos/mat/detalles/${selectedRowId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(costosJson)
+        })
+        .then(response => response.json())
+        .then(data => {
+            return fetch('/registroCostos/mat/{{datosProyecto['id_proyecto']}}');
+        })
+        .then(response => response.json())
+        .then(data => {
+            actualizarTabla_mat(data.costos_mat);
+        });
+    });
+
+    openModal_btnRrhh.addEventListener('click', () => {
+        costos_robElect.value = "";
+        costos_disPub.value = "";
+        costos_biomedica.value = "";
+        costos_indProt.value = "";
+        costos_sisProg.value = "";
+        costoFijo_Admin.value = formatear_Dinero({{datosCostos_fijosUltimo['costo_admin_mensual']}});
+
+        costos_btnRrhh.style.display = "inline-block";
+        costos_btnRrhh.disabled = false;
+
+        costos_btnRrhh_edit.style.display = "none";
+        costos_btnRrhh_edit.disabled = true;
+    })
+    openModal_btnMat.addEventListener('click', () => {
+        costos_matProt.value = "";
+        costos_maqTerc.value = "";
+        costos_softAd.value = "";
+        costos_tec.value = "";
+        costoFijo_Loc.value = formatear_Dinero({{datosCostos_fijosUltimo['costo_locativo_mensual']}});
+        costoFijo_Maq.value = formatear_Dinero({{datosCostos_fijosUltimo['costo_maquinaria_mensual']}});
+
+        costos_btnMat.style.display = "inline-block";
+        costos_btnMat.disabled = false;
+
+        costos_btnMat_edit.style.display = "none";
+        costos_btnMat_edit.disabled = true;
+    })
 </script>
 <script>
     fetch('/registroCostos/rrhh/{{datosProyecto['id_proyecto']}}')

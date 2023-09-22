@@ -125,9 +125,103 @@ def calculadoraProyectos():
         print("Método no permitido: " + request.method)
         return redirect('/')
     
-@app.route('/registroCostos/rrhh/<string:p_id>/<string:c_rrhh_id>', methods=['PUT', 'GET'])
-def registroCosto_rrhh(p_id, c_rrhh_id):
-    pass
+@app.route('/registroCostos/rrhh/detalles/<string:c_rrhh_id>', methods=['PUT', 'GET'])
+def detallesCosto_rrhh(c_rrhh_id):
+    if not 'login' in session:
+        return redirect('/')
+    if session['cargo'] != 1 and session['cargo'] != 0 :
+        return redirect('/inicio')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    if (request.method == 'PUT'):
+        datos = request.json
+        print(c_rrhh_id)
+        print(datos)
+        query = '''
+            UPDATE costos_rrhh_proyectos
+            SET horas_sistemas = %s, horas_biomedica = %s, horas_robotica = %s, horas_industrial = %s, horas_diseno = %s, fecha_registro = fecha_registro
+            WHERE id_costos_rrhh_proyectos = %s;
+        '''
+        cursor.execute(query, (datos['rrhh']['sisProg'], datos['rrhh']['biomedica'], datos['rrhh']['robElect'], datos['rrhh']['indProt'], datos['rrhh']['disPub'], c_rrhh_id))
+        conexion.commit()
+        return({'response': 'success'})
+
+    elif (request.method == 'GET'):
+        query='''
+                SELECT c_rrhh.id_costos_rrhh_proyectos, c_rrhh.fecha_registro, c_rrhh.horas_sistemas, infoAdm.salario_sis_prog,
+                    c_rrhh.horas_biomedica, infoAdm.salario_biomedica, c_rrhh.horas_robotica, infoAdm.salario_rob_elect,
+                    c_rrhh.horas_industrial, infoAdm.salario_ind_prot, c_rrhh.horas_diseno, infoAdm.salario_dis_pub, c_rrhh.horas_admin,
+                    infoAdm.costo_administrativo
+                FROM costos_rrhh_proyectos AS c_rrhh
+                JOIN informacion_administrativa AS infoAdm ON c_rrhh.id_informacion_administrativa = infoAdm.id_informacion_administrativa
+                WHERE c_rrhh.id_costos_rrhh_proyectos = %s;
+            '''
+        cursor.execute(query, (c_rrhh_id))
+        data = cursor.fetchone()
+        costosMensual_rrhh = {
+                'id_costos_rrhh_proyectos': data[0],
+                'fecha_registro': data[1],
+                'horas_sistemas': data[2],
+                'salario_sis_prog': data[3],
+                'horas_biomedica': data[4],
+                'salario_biomedica': data[5],
+                'horas_robotica': data[6],
+                'salario_rob_elect': data[7],
+                'horas_industrial': data[8],
+                'salario_ind_prot': data[9],
+                'horas_diseno': data[10],
+                'salario_dis_pub': data[11],
+                'horas_admin': data[12],
+                'costo_administrativo': data[13]
+            }
+        return({'costosMensual_rrhh': costosMensual_rrhh})
+    return redirect('/')
+
+@app.route('/registroCostos/mat/detalles/<string:c_mat_id>', methods=['PUT', 'GET'])
+def detallesCosto_mat(c_mat_id):
+    if not 'login' in session:
+        return redirect('/')
+    if session['cargo'] != 1 and session['cargo'] != 0 :
+        return redirect('/inicio')
+    conexion = mysql.connect()
+    cursor = conexion.cursor()
+    if (request.method == 'PUT'):
+        datos = request.json
+        print(c_mat_id)
+        print(datos)
+        query = '''
+            UPDATE costos_mat_proyectos
+            SET materiales_prototipos = %s, maquila_terceros = %s, software_adicional = %s, tecnologia_adicional = %s, fecha_registro = fecha_registro
+            WHERE id_costos_mat_proyectos = %s;
+        '''
+        cursor.execute(query, (datos['materiales']['matProt'], datos['materiales']['maqTerc'], datos['materiales']['softAd'], datos['materiales']['tec'], c_mat_id))
+        conexion.commit()
+        return({'response': 'success'})
+
+    elif (request.method == 'GET'):
+        query='''
+                SELECT c_mat.id_costos_mat_proyectos, c_mat.fecha_registro, c_mat.materiales_prototipos, c_mat.maquila_terceros,
+                    c_mat.software_adicional, c_mat.tecnologia_adicional,
+                    (infoAdm.costo_locativos * 20 / c_mat.num_proyectos_activos) AS costo_locativos,
+                    (infoAdm.costo_maquinaria * 20 / c_mat.num_proyectos_activos) AS costo_maquinaria
+                FROM costos_mat_proyectos AS c_mat
+                JOIN informacion_administrativa AS infoAdm ON c_mat.id_informacion_administrativa = infoAdm.id_informacion_administrativa
+                WHERE c_mat.id_costos_mat_proyectos = %s;
+            '''
+        cursor.execute(query, (c_mat_id))
+        data = cursor.fetchone()
+        costosMensual_mat = {
+                'id_costos_mat_proyectos': data[0],
+                'fecha_registro': data[1],
+                'materiales_prototipos': data[2],
+                'maquila_terceros': data[3],
+                'software_adicional': data[4],
+                'tecnologia_adicional': data[5],
+                'costo_locativos': data[6],
+                'costo_maquinaria': data[7],
+            }
+        return({'costosMensual_mat': costosMensual_mat})
+    return redirect('/')
 
 @app.route('/registroCostos/rrhh/<string:p_id>', methods=['POST', 'GET'])
 def registroCosto_rrhh(p_id):
@@ -156,33 +250,9 @@ def registroCosto_rrhh(p_id):
         }
         cursor.execute("SELECT COUNT(*) FROM proyectos AS p WHERE p.activo = 1;")
         ultimaInfoAdmin['num_proyectos_activos'] = cursor.fetchone()[0]
-        # cursor.execute("SELECT num_mes FROM proyectos WHERE id_proyecto = %s;", ((p_id)))
-        # mesActual = cursor.fetchone()
-        # if mesActual is None:
-        #     mesActual = 1
-        # else:
-        #     mesActual = mesActual[0] + 1
-
-        # cursor.execute("UPDATE proyectos SET num_mes = %s WHERE id_proyecto = %s;", ((mesActual, p_id)))
 
         datos = request.json
-        # costos = []
         fechaActual = fecha_actualCO()
-        # for key in datos['rrhh'].keys():
-        #     departamentoId = ''
-        #     if(key == 'robElect'):
-        #         departamentoId = constantes['id_dept_robElect']
-        #     elif(key == 'disPub'):
-        #         departamentoId = constantes['id_dept_disPub']
-        #     elif(key == 'biomedica'):
-        #         departamentoId = constantes['id_dept_biomedica']
-        #     elif(key == 'indProt'):
-        #         departamentoId = constantes['id_dept_indProt']
-        #     elif(key == 'sisProg'):
-        #         departamentoId = constantes['id_dept_sisProg']
-        #     costos.append((generarID(), fechaActual, datos['rrhh'][key], p_id, ultimaInfoAdmin['id'], departamentoId))  
-        # #Costos administrativos
-        # costos.append((generarID(), fechaActual, (160/ultimaInfoAdmin['num_proyectos_activos']), p_id, ultimaInfoAdmin['id'], constantes['id_admin']))
         query = "INSERT INTO costos_rrhh_proyectos (id_costos_rrhh_proyectos, fecha_registro, horas_sistemas, horas_biomedica, horas_robotica, horas_industrial, horas_diseno, horas_admin, id_proyecto, id_informacion_administrativa) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         print(datos['rrhh'])
         cursor.execute(query, (generarID(), fechaActual, datos['rrhh']['sisProg'], datos['rrhh']['biomedica'], datos['rrhh']['robElect'], datos['rrhh']['indProt'], datos['rrhh']['disPub'], (160/ultimaInfoAdmin['num_proyectos_activos']), p_id, ultimaInfoAdmin['id']))
@@ -426,13 +496,15 @@ def activarProyecto(p_id):
     conexion = mysql.connect()
     cursor = conexion.cursor()
     cursor.execute("SELECT COUNT(*) FROM proyectos AS p WHERE p.activo = 1;")
+    fechaActual = fecha_actualCO()
+
     numProyectosActivos = cursor.fetchone()[0]
     queryUpdate = '''
         UPDATE proyectos
-        SET activo = 1, num_proyectos_activos = %s
+        SET activo = 1, num_proyectos_activos = %s, fecha_inicio = %s
         WHERE id_proyecto = %s;
     '''
-    cursor.execute(queryUpdate, (numProyectosActivos, p_id))
+    cursor.execute(queryUpdate, (numProyectosActivos, fechaActual, p_id))
     conexion.commit()
     return redirect('/listaProyectos')
 
@@ -492,7 +564,7 @@ def listaProyectos():
                         	)
                 		ELSE (
 							CASE
-                            	WHEN p.num_proyectos_activos > 0 THEN p.num_proyectos_activos
+                            	WHEN p.num_proyectos_activos > 0 THEN p.num_proyectos_activos + 1
                             	ELSE 1
                             END
                         )
@@ -511,7 +583,7 @@ def listaProyectos():
                         )
                     ELSE (
                         CASE
-                            WHEN p.num_proyectos_activos > 0 THEN p.num_proyectos_activos
+                            WHEN p.num_proyectos_activos > 0 THEN p.num_proyectos_activos + 1
                             ELSE 1
                         END
                     )
@@ -529,7 +601,7 @@ def listaProyectos():
                         )
                     ELSE (
                         CASE
-                            WHEN p.num_proyectos_activos > 0 THEN p.num_proyectos_activos
+                            WHEN p.num_proyectos_activos > 0 THEN p.num_proyectos_activos + 1
                             ELSE 1
                         END
                     )
