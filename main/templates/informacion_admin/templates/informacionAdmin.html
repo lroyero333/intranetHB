@@ -60,18 +60,19 @@
             </div>
         </div>
         <hr>
-        <h2>Costos Fijos Mensuales</h2>
+        <h2>Costos Fijos</h2>
+        <p>Ingresar los costos fijos por año. La calculadora usará ese valor para saber los costos fijos diarios teniendo en cuenta que los meses tienen 20 días laborales.</p>
         <div class="row">
             <div class="col-md-4">
                 <div class="form-outline">
                     <label for="costoLoc" class="form-label">Costos Locativos</label>
-                    <input data-type="currency" value="{{datos_admin.costo_loc}}" type="text" class="form-control dinero" id="costoLoc" name="costoLoc" placeholder="">
+                    <input data-type="currency" value="{{datos_admin.costo_loc * 240}}" type="text" class="form-control dinero" id="costoLoc" name="costoLoc" placeholder="">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-outline">
                     <label for="costoMaq" class="form-label">Costos por Maquinaria</label>
-                    <input data-type="currency" value="{{datos_admin.costo_maq}}" type="text" class="form-control dinero" id="costoMaq" name="costoMaq" placeholder="">
+                    <input data-type="currency" value="{{datos_admin.costo_maq * 240}}" type="text" class="form-control dinero" id="costoMaq" name="costoMaq" placeholder="">
                 </div>
             </div>
         </div>
@@ -196,8 +197,8 @@
                 salarioIndProt: parseFormatedToFloat(indProtInput.value),
                 salarioSisProg: parseFormatedToFloat(sisProgInput.value),
                 salarioAdmin: parseFormatedToFloat(adminInput.value),
-                costoLoc: parseFormatedToFloat(locInput.value),
-                costoMaq: parseFormatedToFloat(maqInput.value)
+                costoLoc: (parseFormatedToFloat(locInput.value) / 12),
+                costoMaq: (parseFormatedToFloat(maqInput.value) /12)
             }
         }
 
