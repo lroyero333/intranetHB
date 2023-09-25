@@ -24,6 +24,7 @@ from main.templates.nomina_certificados import nomina_certificado
 from main.templates.register import register
 from main.templates.usersCRUD import usersCRUD
 from main.templates.calculadora_proyectos import calculadora_proyectos
+from main.templates.informacion_admin import informacion_admin
 
 # Route for logging out
 @app.route('/cerrar')

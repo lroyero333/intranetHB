@@ -37,7 +37,7 @@
                   <h1 class="text-center">Estimación de Costos</h1>
                   <hr />
 
-                  <form action="" method="POST" e>
+                  <form action="" method="POST" id="project-form" e>
                     <div class="container-fluid">
                       <div class="row">
                         <div class="col">
@@ -1017,8 +1017,12 @@ datos_admin.num_proyectos_activos
 
   datGenerales.addListener(newVal => {
     actualizarCostosFijos();
-    const infLoc = formatear_Dinero(calcularCostoInf());
-    const maq = formatear_Dinero(calcularCostoMaq());
+    const infLoc = calcularCostoInf();
+    const maq =  calcularCostoMaq();
+    console.log(datGenerales.costoMaterialesPrototipos);
+    console.log(datGenerales.costoMaquilaTerceros);
+    console.log(infLoc);
+    console.log(maq);
     costoMatTotalLbl.textContent = `Costo Recursos Materiales: ${formatear_Dinero(datGenerales.costoMaterialesPrototipos + datGenerales.costoMaquilaTerceros + infLoc + maq)}`;
     costoTecTotalLbl.textContent = `Costo Recursos Tecnológicos: ${formatear_Dinero(datGenerales.costoSoftwareAd + datGenerales.costoTecAd)}`;
   });
@@ -1072,6 +1076,22 @@ datos_admin.num_proyectos_activos
   diasTotalesPorcentaje.addEventListener('input', () => {
     actualizarDiasFinales();
   });
+
+
+  const projectForm = document.getElementById('project-form');
+
+  projectForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    if(duracionProyectoOutput.value === "" || duracionProyectoOutput.value === 0 || duracionProyectoOutput.value < 1) {
+      alert("La duración del proyecto debe ser mayor de 0");
+      return;
+    }
+
+    projectForm.submit();
+    
+
+  })
 
   
 

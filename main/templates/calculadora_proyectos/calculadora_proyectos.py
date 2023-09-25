@@ -254,7 +254,6 @@ def registroCosto_rrhh(p_id):
         datos = request.json
         fechaActual = fecha_actualCO()
         query = "INSERT INTO costos_rrhh_proyectos (id_costos_rrhh_proyectos, fecha_registro, horas_sistemas, horas_biomedica, horas_robotica, horas_industrial, horas_diseno, horas_admin, id_proyecto, id_informacion_administrativa) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-        print(datos['rrhh'])
         cursor.execute(query, (generarID(), fechaActual, datos['rrhh']['sisProg'], datos['rrhh']['biomedica'], datos['rrhh']['robElect'], datos['rrhh']['indProt'], datos['rrhh']['disPub'], (160/ultimaInfoAdmin['num_proyectos_activos']), p_id, ultimaInfoAdmin['id']))
 
         conexion.commit()
