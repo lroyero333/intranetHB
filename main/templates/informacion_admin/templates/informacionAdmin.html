@@ -197,8 +197,8 @@
                 salarioIndProt: parseFormatedToFloat(indProtInput.value),
                 salarioSisProg: parseFormatedToFloat(sisProgInput.value),
                 salarioAdmin: parseFormatedToFloat(adminInput.value),
-                costoLoc: (parseFormatedToFloat(locInput.value) / 12),
-                costoMaq: (parseFormatedToFloat(maqInput.value) /12)
+                costoLoc: (parseFormatedToFloat(locInput.value) / 240),
+                costoMaq: (parseFormatedToFloat(maqInput.value) / 240)
             }
         }
 
@@ -208,6 +208,8 @@
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(salariosJson)
+        }).then(() => {
+            alert('Datos Administrativos actualizados con éxito.')
         })
     })
     </script>
